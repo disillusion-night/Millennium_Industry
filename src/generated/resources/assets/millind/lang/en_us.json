@@ -1,0 +1,10 @@
+{
+  "block.millind.metal_tank": "Metal Tank",
+  "fluid_type.millind.icy_water": "Icy Water",
+  "item.millind.high_purity_wolfsegg_steel": "High-Purity Wolfsegg Steel",
+  "item.millind.low_purity_wolfsegg_steel": "Low-Purity Wolfsegg Steel",
+  "item.millind.wolfsegg_iron": "Wolfsegg Iron",
+  "item.millind.wolfsegg_iron_ore": "Wolfsegg Iron Ore",
+  "item_group.millind.engineering_parts": "Millennium Industry:Engineering Parts",
+  "item_group.millind.ooparts": "Millennium Industry:Oopart"
+}

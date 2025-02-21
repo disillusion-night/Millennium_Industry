@@ -1,0 +1,30 @@
+package kivo.millennium.client.datagen.language;
+
+import kivo.millennium.millind.init.MillenniumBlocks;
+import kivo.millennium.millind.init.MillenniumCreativeTab;
+import kivo.millennium.millind.init.MillenniumFluidTypes;
+import kivo.millennium.millind.init.MillenniumItems;
+import net.minecraft.Util;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.data.PackOutput;
+
+public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
+    public SimplifiedChineseProvider(PackOutput output) {
+        super(output, "zh_cn");
+    }
+
+    @Override
+    protected void addTranslations() {
+        add(MillenniumBlocks.METAL_TANK_BLOCK.get(), "金属液罐");
+
+        add(MillenniumItems.HighPurityWolfseggSteel.get(), "高纯度沃普赛克钢铁");
+        add(MillenniumItems.LowPurityWolfseggSteel.get(), "低纯度沃普赛克钢铁");
+        add(MillenniumItems.WolfseggIron.get(), "沃普赛克铁块");
+        add(MillenniumItems.WolfseggIronOre.get(), "沃普赛克铁矿");
+
+        add(MillenniumFluidTypes.ICY_WATER_FLUID_TYPE.get().getDescriptionId(), "冰水");
+
+        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.OOPARTS.get())), "千年科工 神秘古物");
+        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.ENGINEERING_PARTS.get())), "千年科工 工程组件");
+    }
+}

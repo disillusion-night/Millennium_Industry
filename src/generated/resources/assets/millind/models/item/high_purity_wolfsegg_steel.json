@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "millind:item/oopart/high_purity_wolfsegg_steel"
+  }
+}

@@ -30,7 +30,18 @@ public class OopartBackGround {
         @OnlyIn(Dist.CLIENT)
         private static void renderBABackGround(GuiGraphics graphics, int x, int y, ResourceLocation background) {
             RenderSystem.disableDepthTest();
-            graphics.blit(background, x, y, 16, 16, 0, 0, 64, 64, 64, 64);
+            graphics.blit(background,
+                    x,
+                    y,
+                    16,
+                    16,
+                    0,
+                    0,
+                    64,
+                    64,
+                    64,
+                    64
+            );
         }
     }
 

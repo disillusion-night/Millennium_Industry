@@ -17,7 +17,9 @@ public class EnglishProvider extends MillenniumLanguageProvider {
 
     @Override
     protected void addTranslations() {
-        add(MillenniumBlocks.METAL_TANK_BLOCK.get(), "Metal Tank");
+        add(MillenniumBlocks.METAL_TANK_BL.get(), "Metal Tank");
+        add(MillenniumBlocks.HMI_BL.get(), "Millennium Human-Machine Interface");
+        add(MillenniumBlocks.PROJECTOR_BL.get(), "Millennium Blueprint Projector");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "High-Purity Wolfsegg Steel");
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "Low-Purity Wolfsegg Steel");

@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=east":  { "model": "millind:block/projector", "y": 90 },
+    "facing=north": { "model": "millind:block/projector" },
+    "facing=south": { "model": "millind:block/projector", "y": 180 },
+    "facing=west":  { "model": "millind:block/projector", "y": 270 }
+  }
+}

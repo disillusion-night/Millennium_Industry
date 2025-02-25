@@ -16,9 +16,9 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import org.jetbrains.annotations.Nullable;
 
 
-public class MetalTankBlock extends Block implements EntityBlock {
+public class MetalTankBL extends Block implements EntityBlock {
 
-    public MetalTankBlock() {
+    public MetalTankBL() {
         super(Properties.of().noOcclusion());
     }
 
@@ -28,8 +28,8 @@ public class MetalTankBlock extends Block implements EntityBlock {
     @Override
     public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
         BlockEntity tileentity = world.getBlockEntity(pos);
-        if (tileentity instanceof MetalFluidTankEntity) {
-            MetalFluidTankEntity metalTank = (MetalFluidTankEntity) tileentity;
+        if (tileentity instanceof MetalFluidTankBE) {
+            MetalFluidTankBE metalTank = (MetalFluidTankBE) tileentity;
             InteractionResult result = metalTank.handleInteraction(player, hand);
             if (result.consumesAction()) {
                 return result;
@@ -44,6 +44,6 @@ public class MetalTankBlock extends Block implements EntityBlock {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos blockPos, BlockState blockState) {
-        return new MetalFluidTankEntity(blockPos, blockState);
+        return new MetalFluidTankBE(blockPos, blockState);
     }
 }

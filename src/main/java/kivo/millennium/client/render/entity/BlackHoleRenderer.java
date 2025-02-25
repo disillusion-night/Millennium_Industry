@@ -5,10 +5,8 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
 import kivo.millennium.millind.entity.special.BlackHole;
-import net.minecraft.client.renderer.LightTexture;
-import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
-import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.renderer.*;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.texture.OverlayTexture;
@@ -94,10 +92,10 @@ public class BlackHoleRenderer extends EntityRenderer<BlackHole> {
         poseStack.pushPose();
 
         poseStack.translate(0, entity.getBoundingBox().getYsize() / 2, 0);
-        /*
+
         poseStack.mulPose(Axis.YP.rotationDegrees(entity.yRotO)); // 绕Y轴旋转
         poseStack.mulPose(Axis.XP.rotationDegrees(entity.xRotO)); // 绕X轴旋转
-           */
+
 
         for (int i = 0; i < 8; ++i) {
             poseStack.mulPose(Axis.XP.rotationDegrees(randomSource.nextFloat() * 360.0F));
@@ -119,10 +117,6 @@ public class BlackHoleRenderer extends EntityRenderer<BlackHole> {
         super.render(entity, pEntityYaw, partialTicks, poseStack, bufferSource, pPackedLight);
     }
 
-    @Override
-    public ResourceLocation getTextureLocation(BlackHole pEntity) {
-        return CENTER_TEXTURE;
-    }
 
 
     private static void drawTriangle(VertexConsumer consumer, Matrix4f poseMatrix, Matrix3f normalMatrix, float size) {
@@ -144,5 +138,11 @@ public class BlackHoleRenderer extends EntityRenderer<BlackHole> {
         consumer.vertex(poseMatrix, 0, -5 * size, .5f * size).color(0, 0, 0, 0).uv(1f, 0f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT).normal(normalMatrix, 0f, 1f, 0f).endVertex();
         consumer.vertex(poseMatrix, 0, 0, 0).color(255, 0, 255, 255).uv(1f, 1f).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(LightTexture.FULL_BRIGHT).normal(normalMatrix, 0f, 1f, 0f).endVertex();
 
+    }
+
+
+    @Override
+    public ResourceLocation getTextureLocation(BlackHole pEntity) {
+        return CENTER_TEXTURE;
     }
 }

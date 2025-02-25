@@ -28,6 +28,7 @@ import static kivo.millennium.millind.init.MillenniumEntities.ENTITIES;
 import static kivo.millennium.millind.init.MillenniumFluidTypes.FLUID_TYPES;
 import static kivo.millennium.millind.init.MillenniumFluids.FLUIDS;
 import static kivo.millennium.millind.init.MillenniumItems.ITEMS;
+import static kivo.millennium.millind.init.MillenniumMenuTypes.MENU_TYPES;
 
 @Mod(Main.MODID)
 public class Main {
@@ -38,6 +39,9 @@ public class Main {
         LOGGER.info(string);
     }
 
+    public ResourceLocation modLoc(String name) {
+        return new ResourceLocation(MODID, name);
+    }
     @SuppressWarnings("removal")
     public Main() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -51,6 +55,7 @@ public class Main {
         FLUIDS.register(modEventBus);
         FLUID_TYPES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
+        MENU_TYPES.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
 

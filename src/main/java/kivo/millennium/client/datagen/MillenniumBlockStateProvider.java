@@ -1,17 +1,10 @@
 package kivo.millennium.client.datagen;
 
-import kivo.millennium.millind.block.fluidContainer.MetalTankBlock;
 import kivo.millennium.millind.init.MillenniumBlocks;
-import net.minecraft.core.BlockPos;
-import net.minecraft.data.DataProvider;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.RandomSource;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
-import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 import static kivo.millennium.millind.Main.MODID;
@@ -26,7 +19,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        addWithHaveModel(MillenniumBlocks.METAL_TANK_BLOCK.get(), "metal_tank");
+        addWithHaveModel(MillenniumBlocks.METAL_TANK_BL.get(), "metal_tank");
     }
 
     public void addWithHaveModel(Block block, String name){

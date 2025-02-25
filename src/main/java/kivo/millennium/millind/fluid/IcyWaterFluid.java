@@ -10,7 +10,7 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 public abstract class IcyWaterFluid extends ForgeFlowingFluid {
     public static final ForgeFlowingFluid.Properties PROPERTIES = new ForgeFlowingFluid.Properties(MillenniumFluidTypes.ICY_WATER_FLUID_TYPE, MillenniumFluids.ICY_WATER, MillenniumFluids.FLOWING_ICY_WATER)
-            .explosionResistance(100f).tickRate(5).block(() -> (LiquidBlock) MillenniumBlocks.ICY_WATER_BLOCK.get());
+            .explosionResistance(100f).tickRate(5).block(() -> (LiquidBlock) MillenniumBlocks.ICY_WATER_BL.get());
 
     protected IcyWaterFluid() {
         super(PROPERTIES);

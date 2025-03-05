@@ -1,9 +1,9 @@
+/*
 package kivo.millennium.client.render;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import kivo.millennium.millind.Main;
-import kivo.millennium.millind.block.projector.ProjectorMenu;
 import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -54,8 +54,8 @@ public class ProjectorScreen extends AbstractContainerScreen<ProjectorMenu> {
     @Override
     public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float delta) {
         renderInfo(pGuiGraphics);
-        renderBackground(pGuiGraphics);
+        //renderBackground(pGuiGraphics);
         super.render(pGuiGraphics, mouseX, mouseY, delta);
         renderTooltip(pGuiGraphics, mouseX, mouseY);
     }
-}
+}*/

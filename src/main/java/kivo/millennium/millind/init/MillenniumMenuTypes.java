@@ -1,6 +1,5 @@
 package kivo.millennium.millind.init;
 
-import kivo.millennium.millind.block.projector.ProjectorMenu;
 import kivo.millennium.millind.item.Oopart.Oopart;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.network.chat.Component;
@@ -16,9 +15,6 @@ import static kivo.millennium.millind.Main.MODID;
 public class MillenniumMenuTypes {
 
     public static final DeferredRegister<MenuType<?>> MENU_TYPES = DeferredRegister.create(Registries.MENU, MODID);
-
-    public static final RegistryObject<MenuType<ProjectorMenu>> PROJECTOR_MENU = MENU_TYPES.register("projector_menu",
-            () -> IForgeMenuType.create(ProjectorMenu::new));
 
 
 }

@@ -1,8 +1,8 @@
 package kivo.millennium.millind.init;
 
-import kivo.millennium.millind.block.projector.ProjectorBE;
 import kivo.millennium.millind.block.fluidContainer.MetalFluidTankBE;
-import kivo.millennium.millind.block.multiblock.controller.HMIBE;
+import kivo.millennium.millind.block.hypercube.HDECBE;
+import kivo.millennium.millind.block.laser.NetherStarLaserBE;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -16,11 +16,21 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<MetalFluidTankBE>> METAL_FLUID_TANK_BE = BLOCK_ENTITIES.register(
             "metal_tank_be", () -> BlockEntityType.Builder.of(MetalFluidTankBE::new,
                             MillenniumBlocks.METAL_TANK_BL.get()).build(null));
-    public static final RegistryObject<BlockEntityType<HMIBE>> HMI_BE = BLOCK_ENTITIES.register(
-            "hmi_be", () -> BlockEntityType.Builder.of(HMIBE::new,
-                    MillenniumBlocks.HMI_BL.get()).build(null));
-    public static final RegistryObject<BlockEntityType<ProjectorBE>> PROJECTOR_BE = BLOCK_ENTITIES.register(
-            "projector_be", () -> BlockEntityType.Builder.of(ProjectorBE::new,
-                    MillenniumBlocks.HMI_BL.get()).build(null));
+
+
+    public static final RegistryObject<BlockEntityType<HDECBE>> HDEC_BE = BLOCK_ENTITIES.register(
+            "hdec_be", () -> BlockEntityType.Builder.of(HDECBE::new,
+                    MillenniumBlocks.HDEC_BL.get()).build(null));
+
+
+    public static final RegistryObject<BlockEntityType<NetherStarLaserBE>> NETHER_STAR_LASER_BE = BLOCK_ENTITIES.register(
+            "nether_star_laser_be", () -> BlockEntityType.Builder.of(NetherStarLaserBE::new,
+                    MillenniumBlocks.NETHER_STAR_LASER_BL.get()).build(null));
+
+    /*
+    public static final RegistryObject<BlockEntityType<ArcFurnaceBE>> ARC_FURNACE_BE = BLOCK_ENTITIES.register(
+            "arc_furnace_be", () -> BlockEntityType.Builder.of(ArcFurnaceBE::new,
+                    MillenniumBlocks.ARC_FURNACE_BL.get()).build(null));
+    */
 
 }

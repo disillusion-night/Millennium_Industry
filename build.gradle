@@ -132,6 +132,9 @@ mixin {
 sourceSets.main.resources { srcDir 'src/generated/resources' }
 
 repositories {
+    flatDir {
+        dir 'libs'
+    }
     maven {
         url = 'https://dl.cloudsmith.io/public/geckolib3/geckolib/maven/'
     }
@@ -147,7 +150,11 @@ repositories {
         name = "ModMaven"
         url = "https://modmaven.dev"
     }
-
+    maven {
+        name = "firstdarkdev"
+        url = "https://maven.firstdarkdev.xyz/snapshots"
+    }
+    maven { url 'https://modmaven.dev/' }
 }
 
 dependencies {
@@ -164,10 +171,13 @@ dependencies {
 
     implementation fg.deobf("software.bernie.geckolib:geckolib-forge-${mc_version}:${geckolib_version}")
 
+    implementation fg.deobf("com.lowdragmc.ldlib:ldlib-forge-${mc_version}:${LD_version}") { transitive = false }
+    implementation fg.deobf("com.lowdragmc.multiblocked2:Multiblocked2:${mc_version}-${mbd2_version}") { transitive = false }
+
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
-    //implementation files("libs/wthit-forge-${wthit_version}.jar")
-    //implementation files("libs/badpackets-forge-${badpackets_version}.jar")
-    //runtimeOnly files("libs/appleskin-${mc_version}-forge-${appleskin_version}.jar")
+    //runtimeOnly files("libs/badpackets-forge-${badpackets_version}.jar")
+    //runtimeOnly files("libs/wthit-forge-${wthit_version}.jar")
+    //runtimeOnly files("libs/appleskin-${mc_version}-forge-${appleskin_version}.jar") { transitive = false }
 
     annotationProcessor 'org.spongepowered:mixin:0.8.5:processor'
 }

@@ -1,6 +1,5 @@
 package kivo.millennium.client.datagen;
 
-import kivo.millennium.millind.block.multiblock.controller.HMIBL;
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumItems;
 import kivo.millennium.millind.item.Oopart.Oopart;
@@ -26,9 +25,9 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
             registerOopartModel(oopart);
         }//Registry Ooparts
 
-        blockWithExistingModel(MillenniumBlocks.HMI_BL.get());
-        blockWithExistingModel(MillenniumBlocks.PROJECTOR_BL.get());
-
+        //blockWithExistingModel(MillenniumBlocks.HMI_BL.get());
+        //blockWithExistingModel(MillenniumBlocks.PROJECTOR_BL.get());
+        //blockWithExistingModel(MillenniumBlocks.HDEC_BL.get());
     }
 
     private void blockWithExistingModel(Block block){

@@ -2,11 +2,9 @@ package kivo.millennium.client.datagen;
 
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.util.ShapeUtils;
-import net.minecraft.core.Direction;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;

@@ -1,7 +1,6 @@
 package kivo.millennium.millind.init;
 
 import kivo.millennium.millind.entity.special.BlackHole;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
 import net.minecraftforge.registries.DeferredRegister;

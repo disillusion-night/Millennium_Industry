@@ -1,14 +1,10 @@
 package kivo.millennium.millind.fluid.fluidType;
 
-import kivo.millennium.millind.helper.TintHelper;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidType;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.function.Consumer;
-
-import static kivo.millennium.millind.Main.getRL;
 
 public class IcyWaterFluidType extends FluidType {
     public IcyWaterFluidType(Properties properties) {

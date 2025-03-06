@@ -1,6 +1,5 @@
 package kivo.millennium.client.datagen;
 
-import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumItems;
 import kivo.millennium.millind.item.Oopart.Oopart;
 import net.minecraft.core.registries.BuiltInRegistries;

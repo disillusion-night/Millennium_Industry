@@ -1,12 +1,8 @@
 package kivo.millennium.millind.item.Oopart;
 
 import net.minecraft.ChatFormatting;
-import net.minecraft.network.chat.Style;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
-import java.util.function.UnaryOperator;
 
 public  enum BAItemLevel {
     SSR, SR, R, N;

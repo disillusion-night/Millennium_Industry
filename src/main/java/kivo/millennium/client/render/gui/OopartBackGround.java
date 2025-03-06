@@ -1,12 +1,10 @@
 package kivo.millennium.client.render.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-
 import kivo.millennium.millind.item.Oopart.IBABackground;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;

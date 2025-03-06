@@ -2,16 +2,12 @@ package kivo.millennium.millind.init;
 
 import kivo.millennium.millind.item.Oopart.BAItemLevel;
 import kivo.millennium.millind.item.Oopart.Oopart;
-import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
-import net.minecraft.world.item.Items;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import static kivo.millennium.millind.Main.MODID;
 import static kivo.millennium.millind.item.Oopart.BAItemLevel.*;

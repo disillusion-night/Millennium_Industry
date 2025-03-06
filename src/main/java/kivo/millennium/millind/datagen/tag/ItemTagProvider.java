@@ -1,14 +1,10 @@
 package kivo.millennium.millind.datagen.tag;
 
 import kivo.millennium.millind.init.MillenniumItems;
-import kivo.millennium.millind.item.Oopart.Oopart;
 import net.minecraft.core.HolderLookup;
-import net.minecraft.core.Registry;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
-import net.minecraft.data.tags.ItemTagsProvider;
 import net.minecraft.data.tags.TagsProvider;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagEntry;
 import net.minecraft.tags.TagKey;

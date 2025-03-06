@@ -13,8 +13,6 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
-import java.util.logging.Logger;
-
 import static kivo.millennium.client.render.gui.OopartBackGround.renderCustomBackground;
 
 @OnlyIn(Dist.CLIENT)

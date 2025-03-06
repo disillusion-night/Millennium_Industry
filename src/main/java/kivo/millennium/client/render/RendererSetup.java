@@ -6,6 +6,7 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import kivo.millennium.client.render.blockEntity.HDECBERenderer;
 import kivo.millennium.client.render.blockEntity.NetherStarLaserBERender;
+import kivo.millennium.client.screen.GeneratorScreen;
 import kivo.millennium.millind.entity.special.BlackHole;
 import kivo.millennium.millind.init.*;
 import net.minecraft.client.Camera;
@@ -59,6 +60,7 @@ public class RendererSetup {
             EntityRenderers.register(MillenniumEntities.BLACK_HOLE.get(), BlackHoleRenderer::new);
             BlockEntityRenderers.register(MillenniumBlockEntities.HDEC_BE.get(), HDECBERenderer::new);
             BlockEntityRenderers.register(MillenniumBlockEntities.NETHER_STAR_LASER_BE.get(), NetherStarLaserBERender::new);
+            MenuScreens.register(MillenniumMenuTypes.GENERATOR_MENU.get(), GeneratorScreen::new);
             //IClientItemExtensions.of(MillenniumBlocks.HDEC_BL.get().asItem()).getCustomRenderer();
         });
     }

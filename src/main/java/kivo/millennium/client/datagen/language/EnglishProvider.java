@@ -20,6 +20,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.METAL_TANK_BL.get(), "Metal Tank");
         add(MillenniumBlocks.HDEC_BL.get(), "Hyper-Dimension Engineering Core");
         add(MillenniumBlocks.NETHER_STAR_LASER_BL.get(), "Nether Star Laser");
+        add(MillenniumBlocks.GENERATOR_BL.get(), "Generator");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "High-Purity Wolfsegg Steel");
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "Low-Purity Wolfsegg Steel");

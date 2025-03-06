@@ -1,6 +1,7 @@
 package kivo.millennium.millind.init;
 
 import kivo.millennium.millind.block.fluidContainer.MetalFluidTankBE;
+import kivo.millennium.millind.block.generator.GeneratorBE;
 import kivo.millennium.millind.block.hypercube.HDECBE;
 import kivo.millennium.millind.block.laser.NetherStarLaserBE;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -26,6 +27,10 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<NetherStarLaserBE>> NETHER_STAR_LASER_BE = BLOCK_ENTITIES.register(
             "nether_star_laser_be", () -> BlockEntityType.Builder.of(NetherStarLaserBE::new,
                     MillenniumBlocks.NETHER_STAR_LASER_BL.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<GeneratorBE>> GENERATOR_BE = BLOCK_ENTITIES.register(
+            "generator_be", () -> BlockEntityType.Builder.of(GeneratorBE::new,
+                    MillenniumBlocks.GENERATOR_BL.get()).build(null));
 
     /*
     public static final RegistryObject<BlockEntityType<ArcFurnaceBE>> ARC_FURNACE_BE = BLOCK_ENTITIES.register(

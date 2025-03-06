@@ -1,0 +1,46 @@
+{
+  "variants": {
+    "facing=down,powered=false": {
+      "model": "millind:block/generator"
+    },
+    "facing=down,powered=true": {
+      "model": "millind:block/generator_on"
+    },
+    "facing=east,powered=false": {
+      "model": "millind:block/generator",
+      "y": 90
+    },
+    "facing=east,powered=true": {
+      "model": "millind:block/generator_on",
+      "y": 90
+    },
+    "facing=north,powered=false": {
+      "model": "millind:block/generator"
+    },
+    "facing=north,powered=true": {
+      "model": "millind:block/generator_on"
+    },
+    "facing=south,powered=false": {
+      "model": "millind:block/generator",
+      "y": 180
+    },
+    "facing=south,powered=true": {
+      "model": "millind:block/generator_on",
+      "y": 180
+    },
+    "facing=up,powered=false": {
+      "model": "millind:block/generator"
+    },
+    "facing=up,powered=true": {
+      "model": "millind:block/generator_on"
+    },
+    "facing=west,powered=false": {
+      "model": "millind:block/generator",
+      "y": 270
+    },
+    "facing=west,powered=true": {
+      "model": "millind:block/generator_on",
+      "y": 270
+    }
+  }
+}

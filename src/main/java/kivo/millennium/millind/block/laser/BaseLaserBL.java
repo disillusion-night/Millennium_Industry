@@ -28,13 +28,13 @@ import javax.annotation.Nullable;
 public abstract class BaseLaserBL extends BaseEntityBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
-    public static final BooleanProperty LIT = BlockStateProperties.LIT;
+    public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
 
     private static final VoxelShape SHAPE_UP = Block.box(5, 0, 5, 11, 12, 11);
 
     public BaseLaserBL(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(LIT, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
     }
 
     @Override
@@ -48,13 +48,13 @@ public abstract class BaseLaserBL extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, LIT);
+        builder.add(FACING, POWERED);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getClickedFace()).setValue(LIT, false);
+        return this.defaultBlockState().setValue(FACING, pContext.getClickedFace()).setValue(POWERED, false);
     }
 
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {

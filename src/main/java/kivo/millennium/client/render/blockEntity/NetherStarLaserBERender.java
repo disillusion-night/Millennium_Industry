@@ -3,6 +3,7 @@ package kivo.millennium.client.render.blockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.block.laser.NetherStarLaserBE;
 import kivo.millennium.millind.block.laser.NetherStarLaserBL;
 import kivo.millennium.millind.util.ShapeUtils;
@@ -54,7 +55,7 @@ public class NetherStarLaserBERender implements BlockEntityRenderer<NetherStarLa
 
         ShapeUtils.rotateByFacing(pPoseStack, facing);
 
-        if (blockState.getValue(BlockStateProperties.LIT) || true) {
+        if (blockState.getValue(BlockStateProperties.POWERED) || true) {
             renderCore(blockEntity, partialTick, GameTime, pPoseStack, bufferSource, packedLight, packedOverlay);
 
             float[] color = new float[]{1, 1, 1};
@@ -153,15 +154,18 @@ public class NetherStarLaserBERender implements BlockEntityRenderer<NetherStarLa
         pConsumer.vertex(pPose, pX, (float)pY, pZ).color(pRed, pGreen, pBlue, pAlpha).uv(pU, pV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(pNormal, 0.0F, 1.0F, 0.0F).endVertex();
     }
 
-    public boolean shouldRenderOffScreen(BeaconBlockEntity pBlockEntity) {
+    @Override
+    public boolean shouldRenderOffScreen(NetherStarLaserBE pBlockEntity) {
         return true;
     }
 
+    @Override
     public int getViewDistance() {
         return 256;
     }
 
-    public boolean shouldRender(BeaconBlockEntity pBlockEntity, Vec3 pCameraPos) {
-        return Vec3.atCenterOf(pBlockEntity.getBlockPos()).multiply(1.0D, 0.0D, 1.0D).closerThan(pCameraPos.multiply(1.0D, 0.0D, 1.0D), (double)this.getViewDistance());
+    @Override
+    public boolean shouldRender(NetherStarLaserBE pBlockEntity, Vec3 pCameraPos) {
+        return true;
     }
 }

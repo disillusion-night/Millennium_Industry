@@ -1,53 +1,53 @@
 {
   "variants": {
-    "facing=down,lit=false": {
+    "facing=down,powered=false": {
       "model": "millind:block/nether_star_laser",
       "x": 180
     },
-    "facing=down,lit=true": {
+    "facing=down,powered=true": {
       "model": "millind:block/nether_star_laser_on",
       "x": 180
     },
-    "facing=east,lit=false": {
+    "facing=east,powered=false": {
       "model": "millind:block/nether_star_laser",
       "x": 90,
       "y": 90
     },
-    "facing=east,lit=true": {
+    "facing=east,powered=true": {
       "model": "millind:block/nether_star_laser_on",
       "x": 90,
       "y": 90
     },
-    "facing=north,lit=false": {
+    "facing=north,powered=false": {
       "model": "millind:block/nether_star_laser",
       "x": 90
     },
-    "facing=north,lit=true": {
+    "facing=north,powered=true": {
       "model": "millind:block/nether_star_laser_on",
       "x": 90
     },
-    "facing=south,lit=false": {
+    "facing=south,powered=false": {
       "model": "millind:block/nether_star_laser",
       "x": 90,
       "y": 180
     },
-    "facing=south,lit=true": {
+    "facing=south,powered=true": {
       "model": "millind:block/nether_star_laser_on",
       "x": 90,
       "y": 180
     },
-    "facing=up,lit=false": {
+    "facing=up,powered=false": {
       "model": "millind:block/nether_star_laser"
     },
-    "facing=up,lit=true": {
+    "facing=up,powered=true": {
       "model": "millind:block/nether_star_laser_on"
     },
-    "facing=west,lit=false": {
+    "facing=west,powered=false": {
       "model": "millind:block/nether_star_laser",
       "x": 90,
       "y": 270
     },
-    "facing=west,lit=true": {
+    "facing=west,powered=true": {
       "model": "millind:block/nether_star_laser_on",
       "x": 90,
       "y": 270

@@ -6,6 +6,7 @@ import kivo.millennium.client.render.blockEntity.HDECBERenderer;
 import kivo.millennium.client.render.blockEntity.NetherStarLaserBERender;
 import kivo.millennium.client.render.entity.BlackHoleRenderer;
 import kivo.millennium.client.screen.GeneratorScreen;
+import kivo.millennium.client.screen.InductionFurnaceScreen;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.init.MillenniumEntities;
 import kivo.millennium.millind.init.MillenniumMenuTypes;
@@ -40,6 +41,7 @@ public class RendererSetup {
             BlockEntityRenderers.register(MillenniumBlockEntities.HDEC_BE.get(), HDECBERenderer::new);
             BlockEntityRenderers.register(MillenniumBlockEntities.NETHER_STAR_LASER_BE.get(), NetherStarLaserBERender::new);
             MenuScreens.register(MillenniumMenuTypes.GENERATOR_MENU.get(), GeneratorScreen::new);
+            MenuScreens.register(MillenniumMenuTypes.INDUCTION_FURNACE_MENU.get(), InductionFurnaceScreen::new);
             //IClientItemExtensions.of(MillenniumBlocks.HDEC_BL.get().asItem()).getCustomRenderer();
         });
     }

@@ -15,10 +15,13 @@ import javax.annotation.Nonnull;
 public class InductionFurnaceBE extends AbstractDeviceBE {
     private static final String ITEMS_TAG = "Inventory";
 
-    public static int SLOT_COUNT = 3;
+    public static int SLOT_COUNT = 6;
     public static int INPUT1_SLOT = 0;
     public static int INPUT2_SLOT = 1;
-    public static int OUT_PUT_SLOT = 2;
+    public static int OUTPUT1_SLOT = 2;
+    public static int OUTPUT2_SLOT = 3;
+    public static int OUTPUT3_SLOT = 4;
+    public static int OUTPUT4_SLOT = 5;
 
     private final ItemStackHandler items = createItemHandler();
     private final LazyOptional<IItemHandler> itemHandler = LazyOptional.of(() -> items);

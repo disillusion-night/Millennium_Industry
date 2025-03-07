@@ -1,10 +1,12 @@
 package kivo.millennium.client.datagen;
 
 import kivo.millennium.millind.init.MillenniumBlocks;
+import kivo.millennium.millind.init.MillenniumMenuTypes;
 import kivo.millennium.millind.util.ShapeUtils;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.HorizontalDirectionalBlock;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
@@ -28,6 +30,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
         sixFacing(MillenniumBlocks.NETHER_STAR_LASER_BL.get(), "nether_star_laser");
         simpleOrientable(MillenniumBlocks.GENERATOR_BL.get(), "generator");
+        simpleOrientableWithTop(MillenniumBlocks.INDUCTION_FURNACE_BL.get(), "induction_furnace");
         //simpleOrientableWithTop();
 
     }
@@ -107,7 +110,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
             return ConfiguredModel.builder()
                     .modelFile(blockModel)
-                    .rotationY(ShapeUtils.getYRotation(blockState.getValue(BlockStateProperties.FACING)))
+                    .rotationY(ShapeUtils.getYRotation(blockState.getValue(HorizontalDirectionalBlock.FACING)))
                     .build();
         });
 

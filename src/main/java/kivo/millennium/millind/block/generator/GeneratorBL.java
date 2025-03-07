@@ -1,6 +1,6 @@
 package kivo.millennium.millind.block.generator;
 
-import kivo.millennium.millind.container.GeneratorContainer;
+import kivo.millennium.millind.container.GeneratorMT;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -77,7 +77,7 @@ public class GeneratorBL extends Block implements EntityBlock {
 
                     @Override
                     public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
-                        return new GeneratorContainer(windowId, playerEntity, pos);
+                        return new GeneratorMT(windowId, playerEntity, pos);
                     }
                 };
                 NetworkHooks.openScreen((ServerPlayer) player, containerProvider, be.getBlockPos());

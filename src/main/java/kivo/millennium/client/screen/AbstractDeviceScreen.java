@@ -1,8 +1,7 @@
 package kivo.millennium.client.screen;
 
 import kivo.millennium.millind.block.generator.GeneratorBE;
-import kivo.millennium.millind.container.AbstractDeviceContainer;
-import kivo.millennium.millind.container.GeneratorContainer;
+import kivo.millennium.millind.container.AbstractDeviceMT;
 import kivo.millennium.millind.util.NumberUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -12,17 +11,16 @@ import net.minecraft.world.entity.player.Inventory;
 
 import static kivo.millennium.millind.Main.getRL;
 
-public abstract class AbstractDeviceScreen extends AbstractContainerScreen<AbstractDeviceContainer> {
+public abstract class AbstractDeviceScreen extends AbstractContainerScreen<AbstractDeviceMT> {
 
-    private static final int ENERGY_LEFT = 15;
+    private static final int ENERGY_LEFT = 14;
     private static final int ENERGY_WIDTH = 4;
-    private static final int ENERGY_TOP = 19;
+    private static final int ENERGY_TOP = 18;
     private static final int ENERGY_HEIGHT = 50;
 
-    private final ResourceLocation GUI = getRL("textures/gui/container/heat_furnace.png");
-    private final ResourceLocation POWER = getRL("textures/gui/container/power/power_horizontal");
+    private final ResourceLocation POWER = getRL("textures/gui/container/power/power_horizontal.png");
 
-    public AbstractDeviceScreen(AbstractDeviceContainer container, Inventory inventory, Component title) {
+    public AbstractDeviceScreen(AbstractDeviceMT container, Inventory inventory, Component title) {
         super(container, inventory, title);
         this.inventoryLabelY = this.imageHeight - 110;
     }
@@ -32,15 +30,16 @@ public abstract class AbstractDeviceScreen extends AbstractContainerScreen<Abstr
 
     protected void renderPower(GuiGraphics graphics){
         int power = menu.getPower();
-        int p = (int) ((power / (float) GeneratorBE.CAPACITY) * ENERGY_HEIGHT);
+        int maxPower = menu.getMaxPower();
+        int p = (int) Math.floor((power / (float) maxPower) * ENERGY_HEIGHT);
         int np = ENERGY_HEIGHT - p;
         graphics.blit(
                 POWER,
                 leftPos + ENERGY_LEFT,
                 topPos + ENERGY_TOP + np,
-                0, 0,
+                0, np,
                 ENERGY_WIDTH, p,
-                ENERGY_WIDTH, p
+                ENERGY_WIDTH, ENERGY_HEIGHT
         );
     }
 

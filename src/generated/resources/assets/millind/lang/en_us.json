@@ -1,6 +1,7 @@
 {
   "block.millind.generator": "Generator",
   "block.millind.hdec": "Hyper-Dimension Engineering Core",
+  "block.millind.induction_furnace": "Induction Furnace",
   "block.millind.metal_tank": "Metal Tank",
   "block.millind.nether_star_laser": "Nether Star Laser",
   "fluid_type.millind.icy_water": "Icy Water",

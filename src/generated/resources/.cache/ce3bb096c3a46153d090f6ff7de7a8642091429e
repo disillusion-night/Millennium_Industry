@@ -1,9 +1,13 @@
-// 1.20.1	2025-03-05T23:45:24.8361559	Block States: millind
+// 1.20.1	2025-03-08T01:59:16.5022769	Block States: millind
 e45ff2b211546fb6a7f4d60bb919de588a57cf0e assets/millind/blockstates/generator.json
+bfc1383a1be24f47477ed2d740664fdb8c702a71 assets/millind/blockstates/induction_furnace.json
 5a53ecb6728020a898134a88e1f03098c095b0f3 assets/millind/blockstates/metal_tank.json
 d9637f0642a07d9244e25f28c2c2f1b657ec837d assets/millind/blockstates/nether_star_laser.json
 0792eb1060bc05c59fcce5e586d444fd0d06aeba assets/millind/models/block/generator.json
 86a3430b86dd197bbcaff07dc72a2420cb42a39a assets/millind/models/block/generator_on.json
+881339b1fc04be808272a8422d3adeffb2b0ac78 assets/millind/models/block/induction_furnace.json
+4e256a7892e2ed41596853840e47cc97a186c2dc assets/millind/models/block/induction_furnace_on.json
 31c4197c50b25db558214688cbbb303b5513267a assets/millind/models/item/generator.json
+d8c7939c29aad9aed28d0319ef8b614dc5e98107 assets/millind/models/item/induction_furnace.json
 4711d1d5eaa93b709bb4b1b136cea637e6d045f8 assets/millind/models/item/metal_tank.json
 fe11c227398749bfcba561fc8acffcc86c7c3810 assets/millind/models/item/nether_star_laser.json

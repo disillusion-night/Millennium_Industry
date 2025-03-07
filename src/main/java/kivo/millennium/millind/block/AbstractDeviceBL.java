@@ -1,21 +1,13 @@
 package kivo.millennium.millind.block;
 
-import kivo.millennium.millind.block.generator.GeneratorBE;
-import kivo.millennium.millind.block.laser.BaseLaserBE;
-import kivo.millennium.millind.container.GeneratorContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
-import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
@@ -31,8 +23,6 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractDeviceBL extends Block implements EntityBlock {
@@ -48,7 +38,10 @@ public abstract class AbstractDeviceBL extends Block implements EntityBlock {
         if (pLevel.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
-            this.handleRightClick(pLevel, pPos, (ServerPlayer) pPlayer);
+            BlockEntity be = pLevel.getBlockEntity(pPos);
+            if(be != null){
+                this.handleRightClick(pLevel, pPos,(AbstractDeviceBE) be,  (ServerPlayer) pPlayer);
+            }
 
             return InteractionResult.CONSUME;
         }
@@ -68,7 +61,7 @@ public abstract class AbstractDeviceBL extends Block implements EntityBlock {
             };
         }
     }
-    protected abstract void handleRightClick(Level pLevel, BlockPos pPos, ServerPlayer pPlayer);;
+    protected abstract void handleRightClick(Level pLevel, BlockPos pPos,AbstractDeviceBE pBe, ServerPlayer pPlayer);;
 
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
         return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
@@ -106,32 +99,10 @@ public abstract class AbstractDeviceBL extends Block implements EntityBlock {
         return RenderShape.MODEL;
     }
 
-    /**
-     * Returns the blockstate with the given rotation from the passed blockstate. If inapplicable, returns the passed
-     * blockstate.
-     * @deprecated call via {@link net.minecraft.world.level.block.state.BlockBehaviour.BlockStateBase#rotate} whenever
-     * possible. Implementing/overriding is fine.
-     */
-    public BlockState rotate(BlockState pState, Rotation pRotation) {
-        return pState.setValue(FACING, pRotation.rotate(pState.getValue(FACING)));
-    }
-
-    /**
-     * Returns the blockstate with the given mirror of the passed blockstate. If inapplicable, returns the passed
-     * blockstate.
-     * @deprecated call via {@link net.minecraft.world.level.block.state.BlockBehaviour.BlockStateBase#mirror} whenever
-     * possible. Implementing/overriding is fine.
-     */
-    public BlockState mirror(BlockState pState, Mirror pMirror) {
-        return pState.rotate(pMirror.getRotation(pState.getValue(FACING)));
-    }
-
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
         pBuilder.add(FACING, POWERED);
     }
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return null;
-    }
+    public abstract BlockEntity newBlockEntity(BlockPos pPos, BlockState pState);
 }

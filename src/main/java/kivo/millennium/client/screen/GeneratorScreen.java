@@ -2,7 +2,7 @@ package kivo.millennium.client.screen;
 
 
 import kivo.millennium.millind.block.generator.GeneratorBE;
-import kivo.millennium.millind.container.GeneratorContainer;
+import kivo.millennium.millind.container.GeneratorMT;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
@@ -11,7 +11,7 @@ import net.minecraft.world.entity.player.Inventory;
 
 import static kivo.millennium.millind.Main.getRL;
 
-public class GeneratorScreen extends AbstractContainerScreen<GeneratorContainer> {
+public class GeneratorScreen extends AbstractContainerScreen<GeneratorMT> {
 
 private static final int ENERGY_LEFT = 96;
 private static final int ENERGY_WIDTH = 72;
@@ -20,7 +20,7 @@ private static final int ENERGY_HEIGHT = 8;
 
 private final ResourceLocation GUI = getRL("textures/gui/container/generator.png");
 
-public GeneratorScreen(GeneratorContainer container, Inventory inventory, Component title) {
+public GeneratorScreen(GeneratorMT container, Inventory inventory, Component title) {
     super(container, inventory, title);
     this.inventoryLabelY = this.imageHeight - 110;
 }

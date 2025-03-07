@@ -1,6 +1,7 @@
 {
   "block.millind.generator": "发电机",
   "block.millind.hdec": "高维工程核心",
+  "block.millind.induction_furnace": "感应炉",
   "block.millind.metal_tank": "金属液罐",
   "block.millind.nether_star_laser": "下界之星激光器",
   "fluid_type.millind.icy_water": "冰水",
@@ -9,5 +10,6 @@
   "item.millind.wolfsegg_iron": "沃普赛克铁块",
   "item.millind.wolfsegg_iron_ore": "沃普赛克铁矿",
   "item_group.millind.engineering_parts": "千年科工 工程组件",
-  "item_group.millind.ooparts": "千年科工 神秘古物"
+  "item_group.millind.ooparts": "千年科工 神秘古物",
+  "screen.millind.generator": "感应炉"
 }

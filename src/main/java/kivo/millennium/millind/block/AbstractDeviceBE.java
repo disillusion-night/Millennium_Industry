@@ -22,7 +22,7 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     public static final String ENERGY_TAG = "Energy";
 
     public static final int MAXTRANSFER = 10000;
-    public static final int CAPACITY = 100000;
+    public static final int CAPACITY = 1000000;
 
     protected final EnergyStorage energy = new EnergyStorage(CAPACITY, MAXTRANSFER, 0, 0) {
         @Override

@@ -45,9 +45,10 @@ public abstract class AbstractDeviceBE extends BlockEntity {
 
 
     public void tickServer(Level level, BlockPos pPos, BlockState pState, AbstractDeviceBE be) {
-        acceptEnergy();
+        //acceptEnergy();
     }
 
+    /*
     private void acceptEnergy() {
         for (Direction direction : Direction.values()) {
             BlockEntity be = level.getBlockEntity(getBlockPos().relative(direction));
@@ -63,10 +64,14 @@ public abstract class AbstractDeviceBE extends BlockEntity {
                 });
             }
         }
-    }
+    }*/
 
     public int getStoredPower() {
         return energy.getEnergyStored();
+    }
+
+    public int getMaxPower(){
+        return energy.getMaxEnergyStored();
     }
 
     @Override

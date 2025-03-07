@@ -23,18 +23,8 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     public static final int MAXTRANSFER = 10000;
     public static final int CAPACITY = 100000;
 
-    private final EnergyStorage energy = createEnergyStorage();
-    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> new AbstractDeviceBE.AdaptedEnergyStorage(energy) {
-        @Override
-        public int receiveEnergy(int maxReceive, boolean simulate) {
-            return 0;
-        }
-
-        @Override
-        public int extractEnergy(int maxExtract, boolean simulate) {
-            return 0;
-        }
-
+    protected final EnergyStorage energy = createEnergyStorage();
+    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> new EnergyStorage(CAPACITY, MAXTRANSFER, 0, 0) {
         @Override
         public boolean canExtract() {
             return false;
@@ -42,11 +32,10 @@ public abstract class AbstractDeviceBE extends BlockEntity {
 
         @Override
         public boolean canReceive() {
-            return false;
+            return true;
         }
     });
 
-    private int burnTime;
 
     public AbstractDeviceBE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
@@ -55,33 +44,17 @@ public abstract class AbstractDeviceBE extends BlockEntity {
 
     public void tickServer() {
         acceptEnergy();
-
-    }
-
-
-    private void setBurnTime(int bt) {
-        if (bt == burnTime) {
-            return;
-        }
-        burnTime = bt;
-        if (getBlockState().getValue(BlockStateProperties.POWERED) != burnTime > 0) {
-            level.setBlockAndUpdate(getBlockPos(), getBlockState().setValue(BlockStateProperties.POWERED, burnTime > 0));
-        }
-        setChanged();
     }
 
     private void acceptEnergy() {
         // Check all sides of the block and send energy if that block supports the energy capability
         for (Direction direction : Direction.values()) {
-            if (energy.getEnergyStored() <= 0) {
-                return;
-            }
             BlockEntity be = level.getBlockEntity(getBlockPos().relative(direction));
             if (be != null) {
                 be.getCapability(ForgeCapabilities.ENERGY).map(e -> {
-                    if (e.canReceive()) {
-                        int received = e.receiveEnergy(Math.min(energy.getEnergyStored(), MAXTRANSFER), false);
-                        energy.extractEnergy(received, false);
+                    if (e.canExtract()) {
+                        int received = e.extractEnergy(Math.min(energy.getEnergyStored(), MAXTRANSFER), false);
+                        energy.receiveEnergy(received, false);
                         setChanged();
                         return received;
                     }
@@ -124,9 +97,8 @@ public abstract class AbstractDeviceBE extends BlockEntity {
         }
     }
 
-    private class AdaptedEnergyStorage extends EnergyStorage{
-        public AdaptedEnergyStorage(EnergyStorage storage) {
-            super(storage.getMaxEnergyStored());
-        }
+    @NotNull
+    public void onRemove(){
+
     }
 }

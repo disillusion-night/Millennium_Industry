@@ -22,6 +22,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
@@ -30,11 +31,17 @@ public class GeneratorBL extends Block implements EntityBlock {
 
     public static final String SCREEN_TUTORIAL_GENERATOR = "tutorial.screen.generator";
 
+    private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+
     public GeneratorBL() {
         super(BlockBehaviour.Properties.of()
                 .strength(3.5F)
                 .requiresCorrectToolForDrops()
-                .sound(SoundType.METAL));
+                .sound(SoundType.METAL)
+                .lightLevel(blockState -> {
+                    if(blockState.getValue(POWERED)) return 15;
+                    else return 0;
+                }));
     }
 
     @Nullable

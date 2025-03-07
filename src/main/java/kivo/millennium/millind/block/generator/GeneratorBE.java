@@ -1,5 +1,6 @@
 package kivo.millennium.millind.block.generator;
 
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -23,7 +24,6 @@ import org.jetbrains.annotations.Nullable;
 import javax.annotation.Nonnull;
 
 public class GeneratorBE extends BlockEntity {
-
     public static final String ITEMS_TAG = "Inventory";
     public static final String ENERGY_TAG = "Energy";
 
@@ -45,13 +45,8 @@ public class GeneratorBE extends BlockEntity {
         }
 
         @Override
-        public int extractEnergy(int maxExtract, boolean simulate) {
-            return 0;
-        }
-
-        @Override
         public boolean canExtract() {
-            return false;
+            return true;
         }
 
         @Override

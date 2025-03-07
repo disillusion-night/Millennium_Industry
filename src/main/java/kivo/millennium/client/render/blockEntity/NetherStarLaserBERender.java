@@ -47,7 +47,7 @@ public class NetherStarLaserBERender implements BlockEntityRenderer<NetherStarLa
 
         ShapeUtils.rotateByFacing(pPoseStack, facing);
 
-        if (blockState.getValue(BlockStateProperties.POWERED) || true) {
+        if (blockState.getValue(BlockStateProperties.POWERED)) {
             renderCore(blockEntity, partialTick, GameTime, pPoseStack, bufferSource, packedLight, packedOverlay);
 
             float[] color = new float[]{1, 1, 1};

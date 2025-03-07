@@ -1,12 +1,18 @@
 package kivo.millennium.millind.block;
 
+import kivo.millennium.millind.block.generator.GeneratorBE;
+import kivo.millennium.millind.container.GeneratorContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
+import net.minecraft.world.MenuProvider;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
@@ -23,6 +29,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
 public abstract class AbstractDeviceBL extends Block implements EntityBlock {
@@ -38,17 +45,14 @@ public abstract class AbstractDeviceBL extends Block implements EntityBlock {
         if (pLevel.isClientSide) {
             return InteractionResult.SUCCESS;
         } else {
-            this.openContainer(pLevel, pPos, pPlayer);
+            this.handleRightClick(pLevel, pPos, (ServerPlayer) pPlayer);
+
             return InteractionResult.CONSUME;
         }
     }
 
-    /**
-     * Called to open this furnace's container.
-     *
-     * @see #use
-     */
-    protected abstract void openContainer(Level pLevel, BlockPos pPos, Player pPlayer);
+
+    protected abstract void handleRightClick(Level pLevel, BlockPos pPos, ServerPlayer pPlayer);;
 
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
         return this.defaultBlockState().setValue(FACING, pContext.getHorizontalDirection().getOpposite());
@@ -70,10 +74,9 @@ public abstract class AbstractDeviceBL extends Block implements EntityBlock {
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (!pState.is(pNewState.getBlock())) {
             BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-            if (blockentity instanceof AbstractFurnaceBlockEntity) {
+            if (blockentity instanceof AbstractDeviceBE) {
                 if (pLevel instanceof ServerLevel) {
-                    Containers.dropContents(pLevel, pPos, (AbstractFurnaceBlockEntity)blockentity);
-                    ((AbstractFurnaceBlockEntity)blockentity).getRecipesToAwardAndPopExperience((ServerLevel)pLevel, Vec3.atCenterOf(pPos));
+                    ((AbstractDeviceBE) blockentity).onRemove();
                 }
 
                 pLevel.updateNeighbourForOutputSignal(pPos, this);

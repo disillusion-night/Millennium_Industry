@@ -1,5 +1,7 @@
 package kivo.millennium.millind.block.laser;
 
+import kivo.millennium.millind.Main;
+import kivo.millennium.millind.block.generator.GeneratorBE;
 import kivo.millennium.millind.util.ShapeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -19,6 +21,7 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
@@ -39,10 +42,6 @@ public abstract class BaseLaserBL extends BaseEntityBlock {
         return RenderShape.MODEL;
     }
 
-    @Nullable
-    @Override
-    public abstract  <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType);
-
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(FACING, POWERED);
@@ -60,10 +59,17 @@ public abstract class BaseLaserBL extends BaseEntityBlock {
         return ShapeUtils.rotateUPShape(SHAPE_UP, direction);
     }
 
-    @Nullable
-    protected static <T extends BlockEntity> BlockEntityTicker<T> createLaserTicker(Level pLevel, BlockEntityType<T> pServerType, BlockEntityType<? extends BaseLaserBE> pClientType) {
-        return pLevel.isClientSide ? null : createTickerHelper(pServerType, pClientType, BaseLaserBE::serverTick);
+    @org.jetbrains.annotations.Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState pState, BlockEntityType<T> type) {
+        if (level.isClientSide) {
+            return null;
+        } else {
+            return (lvl, pos, st, be) -> {
+                if (be instanceof BaseLaserBE laserBE) {
+                    laserBE.tickServer(lvl, pos, st, (BaseLaserBE) be);
+                }
+            };
+        }
     }
-
-    public abstract void setPowered(Level pLevel, BlockPos pPos, BlockState pState, boolean powered);
 }

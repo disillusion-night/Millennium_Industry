@@ -11,21 +11,14 @@ import org.jetbrains.annotations.Nullable;
 
 public class NetherStarLaserBL extends BaseLaserBL{
     public NetherStarLaserBL() {
-        super(Properties.of().noOcclusion().destroyTime(40.0F));
+        super(Properties.of().noOcclusion().destroyTime(40.0F).lightLevel(blockstate -> {
+            if (blockstate.getValue(POWERED)) return 15;
+            else return 0;
+        }));
     }
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new NetherStarLaserBE(pPos, pState);
-    }
-
-    @javax.annotation.Nullable
-    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return createLaserTicker(pLevel, pBlockEntityType, MillenniumBlockEntities.NETHER_STAR_LASER_BE.get());
-    }
-
-    @Override
-    public void setPowered(Level pLevel, BlockPos pPos, BlockState pState, boolean powered) {
-
     }
 }

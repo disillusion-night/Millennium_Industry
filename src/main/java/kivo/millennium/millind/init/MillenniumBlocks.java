@@ -4,6 +4,8 @@ import kivo.millennium.millind.block.fluid.IcyWaterBlock;
 import kivo.millennium.millind.block.fluidContainer.MetalTankBL;
 import kivo.millennium.millind.block.generator.GeneratorBL;
 import kivo.millennium.millind.block.hypercube.HDECBL;
+import kivo.millennium.millind.block.inductionFurnace.InductionFurnaceBE;
+import kivo.millennium.millind.block.inductionFurnace.InductionFurnaceBL;
 import kivo.millennium.millind.block.laser.NetherStarLaserBL;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
@@ -29,6 +31,8 @@ public class MillenniumBlocks {
     public static final RegistryObject<NetherStarLaserBL> NETHER_STAR_LASER_BL = registerWithItem("nether_star_laser", NetherStarLaserBL::new);
 
     public static final RegistryObject<GeneratorBL> GENERATOR_BL = registerWithItem("generator", GeneratorBL::new);
+
+    public static final RegistryObject<InductionFurnaceBL> INDUCTION_FURNACE_BL = registerWithItem("induction_furnace", InductionFurnaceBL::new);
 
     //public static final RegistryObject<ArcFurnaceBL> ARC_FURNACE_BL = registerWithItem("arc_furnace", ArcFurnaceBL::new);
 

@@ -39,6 +39,10 @@ public class Main {
         LOGGER.info(string);
     }
 
+    public static void log(Integer integer){
+        LOGGER.info(integer.toString());
+    }
+
     public ResourceLocation modLoc(String name) {
         return new ResourceLocation(MODID, name);
     }

@@ -108,7 +108,7 @@ public class GeneratorBE extends BlockEntity {
             }
             BlockEntity be = level.getBlockEntity(getBlockPos().relative(direction));
             if (be != null) {
-                be.getCapability(ForgeCapabilities.ENERGY).map(e -> {
+                be.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).map(e -> {
                     if (e.canReceive()) {
                         int received = e.receiveEnergy(Math.min(energy.getEnergyStored(), MAXTRANSFER), false);
                         energy.extractEnergy(received, false);

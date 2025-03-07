@@ -1,6 +1,7 @@
 package kivo.millennium.millind.block;
 
 import kivo.millennium.millind.block.generator.GeneratorBE;
+import kivo.millennium.millind.block.laser.BaseLaserBE;
 import kivo.millennium.millind.container.GeneratorContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,6 +22,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityTicker;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
@@ -52,6 +55,19 @@ public abstract class AbstractDeviceBL extends Block implements EntityBlock {
     }
 
 
+    @org.jetbrains.annotations.Nullable
+    @Override
+    public <T extends BlockEntity> BlockEntityTicker<T> getTicker(Level level, BlockState pState, BlockEntityType<T> type) {
+        if (level.isClientSide) {
+            return null;
+        } else {
+            return (lvl, pos, st, be) -> {
+                if (be instanceof AbstractDeviceBE dbe) {
+                    dbe.tickServer(lvl, pos, st, (AbstractDeviceBE) be);
+                }
+            };
+        }
+    }
     protected abstract void handleRightClick(Level pLevel, BlockPos pPos, ServerPlayer pPlayer);;
 
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
@@ -86,32 +102,6 @@ public abstract class AbstractDeviceBL extends Block implements EntityBlock {
         }
     }
 
-    /**
-     * @deprecated call via {@link
-     * net.minecraft.world.level.block.state.BlockBehaviour.BlockStateBase#hasAnalogOutputSignal} whenever possible.
-     * Implementing/overriding is fine.
-     */
-    public boolean hasAnalogOutputSignal(BlockState pState) {
-        return true;
-    }
-
-    /**
-     * Returns the analog signal this block emits. This is the signal a comparator can read from it.
-     *
-     * @deprecated call via {@link
-     * net.minecraft.world.level.block.state.BlockBehaviour.BlockStateBase#getAnalogOutputSignal} whenever possible.
-     * Implementing/overriding is fine.
-     */
-    public int getAnalogOutputSignal(BlockState pBlockState, Level pLevel, BlockPos pPos) {
-        return AbstractContainerMenu.getRedstoneSignalFromBlockEntity(pLevel.getBlockEntity(pPos));
-    }
-
-    /**
-     * The type of render function called. MODEL for mixed tesr and static model, MODELBLOCK_ANIMATED for TESR-only,
-     * LIQUID for vanilla liquids, INVISIBLE to skip all rendering
-     * @deprecated call via {@link net.minecraft.world.level.block.state.BlockBehaviour.BlockStateBase#getRenderShape}
-     * whenever possible. Implementing/overriding is fine.
-     */
     public RenderShape getRenderShape(BlockState pState) {
         return RenderShape.MODEL;
     }

@@ -1,6 +1,7 @@
 package kivo.millennium.millind.block.laser;
 
 import kivo.millennium.millind.Main;
+import kivo.millennium.millind.capability.DeviceEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -18,6 +19,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.spongepowered.asm.mixin.Shadow;
 
 import javax.annotation.Nonnull;
 
@@ -25,24 +27,10 @@ public abstract class BaseLaserBE extends BlockEntity {
     public static final String ENERGY_TAG = "Energy";
 
     public static final int MAXTRANSFER = 10000;
+    public static final int costPerTick = 2000;
     public static final int CAPACITY = 100000;
 
-    protected final EnergyStorage energy = new EnergyStorage(CAPACITY, MAXTRANSFER, 0, 0) {
-        @Override
-        public int receiveEnergy(int maxReceive, boolean simulate) {
-            return super.receiveEnergy(maxReceive, simulate);
-        }
-
-        @Override
-        public boolean canExtract() {
-            return false;
-        }
-
-        @Override
-        public boolean canReceive() {
-            return true;
-        }
-    };
+    protected final DeviceEnergyStorage energy = new DeviceEnergyStorage(CAPACITY);
 
     private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> energy);
 
@@ -51,7 +39,6 @@ public abstract class BaseLaserBE extends BlockEntity {
     }
 
     public void tickServer(Level pLevel, BlockPos pPos, BlockState pState, BaseLaserBE pBlockEntity) {
-        //acceptEnergy(pState);
         checkPower(pLevel, pPos, pState, pBlockEntity);
         onlaser(pLevel, pPos, pState, pBlockEntity);
 
@@ -67,23 +54,7 @@ public abstract class BaseLaserBE extends BlockEntity {
     }
 
     public void onlaser(Level pLevel, BlockPos pPos, BlockState pState, BaseLaserBE pBlockEntity){
-
-    }
-
-    private void acceptEnergy(BlockState pState) {
-        BlockEntity be = level.getBlockEntity(getBlockPos().relative(pState.getValue(BlockStateProperties.FACING).getOpposite()));
-        if (be != null) {
-            be.getCapability(ForgeCapabilities.ENERGY).map(e -> {
-                if (e.canExtract()) {
-                    int received = e.extractEnergy(MAXTRANSFER, false);
-                    energy.receiveEnergy(received, false);
-
-                    setChanged();
-                    return received;
-                }
-                return 0;
-            });
-        }
+        energy.costEnergy(costPerTick);
     }
 
     public int getStoredPower() {
@@ -112,7 +83,7 @@ public abstract class BaseLaserBE extends BlockEntity {
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ENERGY) {
+        if (cap == ForgeCapabilities.ENERGY && side == this.getBlockState().getValue(BaseLaserBL.FACING).getOpposite()) {
             return energyHandler.cast();
         } else {
             return super.getCapability(cap, side);

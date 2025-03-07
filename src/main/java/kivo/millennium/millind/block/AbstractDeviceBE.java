@@ -3,6 +3,7 @@ package kivo.millennium.millind.block;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -23,8 +24,7 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     public static final int MAXTRANSFER = 10000;
     public static final int CAPACITY = 100000;
 
-    protected final EnergyStorage energy = createEnergyStorage();
-    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> new EnergyStorage(CAPACITY, MAXTRANSFER, 0, 0) {
+    protected final EnergyStorage energy = new EnergyStorage(CAPACITY, MAXTRANSFER, 0, 0) {
         @Override
         public boolean canExtract() {
             return false;
@@ -34,7 +34,9 @@ public abstract class AbstractDeviceBE extends BlockEntity {
         public boolean canReceive() {
             return true;
         }
-    });
+    };
+
+    private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> energy);
 
 
     public AbstractDeviceBE(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
@@ -42,12 +44,11 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     }
 
 
-    public void tickServer() {
+    public void tickServer(Level level, BlockPos pPos, BlockState pState, AbstractDeviceBE be) {
         acceptEnergy();
     }
 
     private void acceptEnergy() {
-        // Check all sides of the block and send energy if that block supports the energy capability
         for (Direction direction : Direction.values()) {
             BlockEntity be = level.getBlockEntity(getBlockPos().relative(direction));
             if (be != null) {

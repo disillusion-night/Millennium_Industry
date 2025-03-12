@@ -47,7 +47,7 @@ public class MillenniumBlockEntities {
 
     public static final RegistryObject<BlockEntityType<SolarGeneratorBE>> SOLAR_GENERATOR_BE = BLOCK_ENTITIES.register(
             "solar_generator_be", () -> BlockEntityType.Builder.of(SolarGeneratorBE::new,
-                    MillenniumBlocks.SLOAR_GENERATOR_BL.get()).get()).build(null));
+                    MillenniumBlocks.SLOAR_GENERATOR_BL.get()).build(null));
 
     /*
     public static final RegistryObject<BlockEntityType<ArcFurnaceBE>> ARC_FURNACE_BE = BLOCK_ENTITIES.register(

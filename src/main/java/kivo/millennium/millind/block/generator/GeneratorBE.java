@@ -59,6 +59,7 @@ public class GeneratorBE extends BlockEntity {
 
     public GeneratorBE(BlockPos pos, BlockState state) {
         super(MillenniumBlockEntities.GENERATOR_BE.get(), pos, state);
+        //Main.log( "a"+this.items.getSlots());
     }
 
     public void tickServer() {

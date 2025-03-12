@@ -1,5 +1,6 @@
 package kivo.millennium.millind.block.device;
 
+import kivo.millennium.millind.Main;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;
@@ -68,11 +69,14 @@ public abstract class AbstractDeviceBL extends Block implements EntityBlock {
     @Override
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide()) { // 确保在服务端执行
-            MenuProvider menuProvider = this.getMenuProvider(pState, pLevel, pPos); // 获取 MenuProvider
-            if (menuProvider != null && pPlayer instanceof ServerPlayer) { // 检查 MenuProvider 和玩家类型
-                NetworkHooks.openScreen((ServerPlayer) pPlayer, menuProvider, pPos); // 使用 NetworkHooks 打开 GUI
-            } else {
-                throw new IllegalStateException("容器创建失败!"); // 如果 MenuProvider 为空，抛出异常
+            BlockEntity be = pLevel.getBlockEntity(pPos);
+            if(be instanceof AbstractDeviceBE){
+                MenuProvider menuProvider = this.getMenuProvider(pState, pLevel, be.getBlockPos()); // 获取 MenuProvider
+                if (menuProvider != null && pPlayer instanceof ServerPlayer) { // 检查 MenuProvider 和玩家类型
+                    NetworkHooks.openScreen((ServerPlayer) pPlayer, menuProvider, be.getBlockPos()); // 使用 NetworkHooks 打开 GUI
+                } else {
+                    throw new IllegalStateException("容器创建失败!"); // 如果 MenuProvider 为空，抛出异常
+                }
             }
         }
 

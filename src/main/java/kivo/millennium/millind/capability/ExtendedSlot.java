@@ -2,22 +2,23 @@ package kivo.millennium.millind.capability;
 
 
 import net.minecraft.world.Container;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.IItemHandlerModifiable;
+import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
+import org.joml.Vector2i;
 
-public class TestSlot extends Slot
+public class ExtendedSlot extends Slot
 {
-    private final IItemHandler itemHandler;
+    private final ItemStackHandler itemHandler;
     private final int index;
 
-    public TestSlot(Container container, IItemHandler itemHandler, int index, int xPosition, int yPosition)
+    public ExtendedSlot(Container container, ItemStackHandler itemHandler, int index, Vector2i pos)
     {
-        super(container, index, xPosition, yPosition);
+        super(container, index, pos.x, pos.y);
         this.itemHandler = itemHandler;
         this.index = index;
     }

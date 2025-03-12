@@ -15,7 +15,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.ItemStackHandler;
 import org.joml.Vector2i;
 
-public abstract class AbstractDeviceMT extends AbstractContainerMenu {
+public abstract class AbstractDeviceMenu extends AbstractContainerMenu {
 
     protected int SLOT_COUNT;
     protected int power;
@@ -29,11 +29,11 @@ public abstract class AbstractDeviceMT extends AbstractContainerMenu {
     protected Level level;
 
     /*
-    protected AbstractDeviceMT(int pContainerId, Player player, BlockPos pos) {
+    protected AbstractDeviceMenu(int pContainerId, Player player, BlockPos pos) {
         this(null, pContainerId, player, pos); // 用于客户端创建容器
     }*/
 
-    protected AbstractDeviceMT(MenuType<?> pType, int pContainerId, Player player, BlockPos pos, Container pContainer) {
+    protected AbstractDeviceMenu(MenuType<?> pType, int pContainerId, Player player, BlockPos pos, Container pContainer) {
         super(pType, pContainerId);
         this.player = player;
         this.level = player.level();
@@ -48,7 +48,7 @@ public abstract class AbstractDeviceMT extends AbstractContainerMenu {
 
                 @Override
                 public void set(int pValue) {
-                    AbstractDeviceMT.this.power = (AbstractDeviceMT.this.power & 0xffff0000) | (pValue & 0xffff);
+                    AbstractDeviceMenu.this.power = (AbstractDeviceMenu.this.power & 0xffff0000) | (pValue & 0xffff);
                 }
             });
             addDataSlot(new DataSlot() {
@@ -59,7 +59,7 @@ public abstract class AbstractDeviceMT extends AbstractContainerMenu {
 
                 @Override
                 public void set(int pValue) {
-                    AbstractDeviceMT.this.power = (AbstractDeviceMT.this.power & 0xffff) | ((pValue & 0xffff) << 16);
+                    AbstractDeviceMenu.this.power = (AbstractDeviceMenu.this.power & 0xffff) | ((pValue & 0xffff) << 16);
                 }
             });
             addDataSlot(new DataSlot() {
@@ -70,7 +70,7 @@ public abstract class AbstractDeviceMT extends AbstractContainerMenu {
 
                 @Override
                 public void set(int pValue) {
-                    AbstractDeviceMT.this.maxpower = (AbstractDeviceMT.this.maxpower & 0xffff0000) | (pValue & 0xffff);
+                    AbstractDeviceMenu.this.maxpower = (AbstractDeviceMenu.this.maxpower & 0xffff0000) | (pValue & 0xffff);
                 }
             });
             addDataSlot(new DataSlot() {
@@ -81,7 +81,7 @@ public abstract class AbstractDeviceMT extends AbstractContainerMenu {
 
                 @Override
                 public void set(int pValue) {
-                    AbstractDeviceMT.this.maxpower = (AbstractDeviceMT.this.maxpower & 0xffff) | ((pValue & 0xffff) << 16);
+                    AbstractDeviceMenu.this.maxpower = (AbstractDeviceMenu.this.maxpower & 0xffff) | ((pValue & 0xffff) << 16);
                 }
             });
             setupSlot(pContainer, deviceBE); // 设置容器的物品槽位，由子类实现

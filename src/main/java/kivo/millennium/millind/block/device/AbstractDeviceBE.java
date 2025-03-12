@@ -1,5 +1,6 @@
 package kivo.millennium.millind.block.device;
 
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.capability.DeviceEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,39 +22,38 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 
 public abstract class AbstractDeviceBE extends BlockEntity {
 
-    // 默认的槽位数量和最大传输速率，子类可以在构造函数中覆写
-    protected int SLOT_COUNT;
-    protected int MAX_TRANSFER_RATE = 32; // FE/tick
+    protected int MAX_TRANSFER_RATE = 1024; // FE/tick
 
     // 物品槽位处理器
-    protected ItemStackHandler itemHandler;
-    private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
+    public ItemStackHandler itemHandler;
+    private LazyOptional<ItemStackHandler> lazyItemHandler = LazyOptional.empty();
 
     // 能量存储处理器
     protected DeviceEnergyStorage energyStorage;
     private LazyOptional<IEnergyStorage> lazyEnergyStorage;
 
-    public AbstractDeviceBE(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
+    public AbstractDeviceBE(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState, int slotCount) {
         super(pType, pWorldPosition, pBlockState);
-        this.SLOT_COUNT = 1;
-        this.itemHandler = createItemHandler(); // 创建物品槽位处理器
+        //this
+        this.itemHandler = createItemHandler(slotCount);
         this.energyStorage = createEnergyStorage(); // 创建能量存储处理器
         this.lazyItemHandler = LazyOptional.of(() -> itemHandler); // 初始化物品槽位 Capability 的 LazyOptional
         this.lazyEnergyStorage = LazyOptional.of(() -> energyStorage); // 初始化能量存储 Capability 的 LazyOptional
     }
 
+
     // 创建物品槽位处理器，子类可以覆写以自定义槽位数量
-    protected ItemStackHandler createItemHandler() {
-        return new ItemStackHandler(this.SLOT_COUNT) {
+    protected ItemStackHandler createItemHandler(int slot_count) {
+        return new ItemStackHandler(slot_count) {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
             }
-
+            /*
             @Override
             public boolean isItemValid(int slot, @NotNull ItemStack stack) {
                 return AbstractDeviceBE.this.isItemValid(slot, stack); // 调用 isItemValid 方法进行物品验证
-            }
+            }*/
         };
     }
 
@@ -69,7 +69,7 @@ public abstract class AbstractDeviceBE extends BlockEntity {
 
     // 每 tick 执行的逻辑，由 AbstractDeviceBL 的 Ticker 调用
     public static <T extends BlockEntity> void tick(net.minecraft.world.level.Level pLevel, BlockPos pPos, BlockState pState, AbstractDeviceBE pBlockEntity) {
-        if(pLevel.isClientSide()) {
+        if (pLevel.isClientSide()) {
             return; // 客户端不做逻辑处理
         }
 
@@ -102,8 +102,12 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
-        itemHandler.deserializeNBT(pTag.getCompound("inventory")); // 加载物品槽位数据
-        energyStorage.setEnergy(pTag.getInt("energy")); // 加载能量数据
+        if (pTag.contains("inventory")){
+            itemHandler.deserializeNBT(pTag.getCompound("inventory")); // 加载物品槽位数据
+        }
+        if (pTag.contains("energy")){
+            energyStorage.setEnergy(pTag.getInt("energy")); // 加载能量数据
+        }
     }
 
     // 数据包同步（用于GUI更新等）
@@ -157,7 +161,7 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     }
 
     // 获取物品槽位处理器
-    public IItemHandler getItemHandler() {
+    public ItemStackHandler getItemHandler() {
         return itemHandler;
     }
 
@@ -165,4 +169,8 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     public DeviceEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
+        /*
+    public int getSlotCount(){
+        return slot_count;
+    }*/
 }

@@ -2,14 +2,13 @@ package kivo.millennium.millind.block.device.inductionFurnace;
 
 import kivo.millennium.millind.block.device.AbstractDeviceBE;
 import kivo.millennium.millind.block.laser.HorizontalDeviceBL;
-import kivo.millennium.millind.container.Device.InductionFurnaceMT;
+import kivo.millennium.millind.container.Device.InductionFurnaceMenu;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -39,7 +38,7 @@ public class InductionFurnaceBL extends HorizontalDeviceBL {
 
             @Override
             public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
-                return new InductionFurnaceMT(windowId, playerEntity, pPos);
+                return new InductionFurnaceMenu(windowId, playerEntity, pPos);
             }
         };
         NetworkHooks.openScreen(pPlayer, containerProvider, pPos);
@@ -57,6 +56,6 @@ public class InductionFurnaceBL extends HorizontalDeviceBL {
 
     @Override
     protected AbstractContainerMenu createContainerMenu(int containerId, Inventory playerInventory, BlockPos pos, Player player) {
-        return new InductionFurnaceMT(containerId, player, pos);
+        return new InductionFurnaceMenu(containerId, player, pos);
     }
 }

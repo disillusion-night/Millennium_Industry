@@ -15,23 +15,23 @@ public class CrusherBE extends AbstractDeviceBE {
     private static final int CRUSHER_OUTPUT_SLOT = 2; // 输出槽位索引
 
     public CrusherBE(BlockPos pPos, BlockState pBlockState) {
-        super(MillenniumBlockEntities.Crusher_BE.get(), pPos, pBlockState); // 调用 AbstractDeviceBE 的构造函数，并传入破碎机方块实体类型
+        super(MillenniumBlockEntities.Crusher_BE.get(), pPos, pBlockState, 3); // 调用 AbstractDeviceBE 的构造函数，并传入破碎机方块实体类型
         this.energyStorage = createEnergyStorage(); // 创建能量存储，可以在这里或 createEnergyStorage 方法中自定义容量和速率
-        this.itemHandler = createItemHandler();   // 创建物品槽位处理器，可以在这里或 createItemHandler 方法中自定义槽位数量
-        this.SLOT_COUNT = 3; // 1个电池槽位 (AbstractDeviceMT 默认) + 1个输入槽位 + 1个输出槽位
+        //this.itemHandler = createItemHandler(3);   // 创建物品槽位处理器，可以在这里或 createItemHandler 方法中自定义槽位数量
+        //this.slot_count = 3; // 1个电池槽位 (AbstractDeviceMenu 默认) + 1个输入槽位 + 1个输出槽位
         this.MAX_TRANSFER_RATE = 64; // 设置破碎机最大能量传输速率为 64FE/tick (可以覆写父类的默认值)
     }
 
-
+    /*
     @Override
-    protected ItemStackHandler createItemHandler() {
-        return new ItemStackHandler(SLOT_COUNT) { // 使用 SLOTS_COUNT 定义槽位数量 (3个槽位)
+    protected ItemStackHandler createItemHandler(int ) {
+        return new ItemStackHandler(slot_count) { // 使用 SLOTS_COUNT 定义槽位数量 (3个槽位)
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();/*
                 if(!level.isClientSide()) {
                     PacketListener.sendToClients(CrusherBE.this.level, worldPosition);
-                }*/
+                }
             }
 
             @Override
@@ -44,7 +44,7 @@ public class CrusherBE extends AbstractDeviceBE {
                 };
             }
         };
-    }
+    }*/
 
 
     @Override

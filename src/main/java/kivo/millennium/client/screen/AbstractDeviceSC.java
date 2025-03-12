@@ -1,7 +1,7 @@
 package kivo.millennium.client.screen;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import kivo.millennium.millind.container.Device.AbstractDeviceMT;
+import kivo.millennium.millind.container.Device.AbstractDeviceMenu;
 import kivo.millennium.millind.util.NumberUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
@@ -12,20 +12,20 @@ import org.joml.Vector2i;
 
 import static kivo.millennium.millind.Main.getRL;
 
-public abstract class AbstractDeviceSC<C extends AbstractDeviceMT> extends AbstractContainerScreen<AbstractDeviceMT> {
+public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends AbstractContainerScreen<AbstractDeviceMenu> {
 
     // 默认 GUI 纹理，子类可以覆写
     protected ResourceLocation GUI_TEXTURE;
     protected ResourceLocation BATTERY_TEXTURE;
 
-    protected AbstractDeviceMT menu;
+    protected AbstractDeviceMenu menu;
 
     protected Vector2i EnergyPos;
     protected Vector2i EnergySize;
 
     protected Vector2i BatteryPos;
 
-    protected AbstractDeviceSC(AbstractDeviceMT pMenu, Inventory pPlayerInventory, Component pTitle) {
+    protected AbstractDeviceSC(AbstractDeviceMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         this.menu = pMenu;
         this.BATTERY_TEXTURE = getRL("textures/gui/container/power/battery.png");
@@ -94,8 +94,14 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMT> extends Abstr
         pGuiGraphics.renderTooltip(this.font, Component.literal(NumberUtils.int2String(power) + "/" + NumberUtils.int2String(maxPower) + " FE"), mouseX, mouseY);
     }
 
+    protected void setInvLabelPos(AbstractDeviceMenu pMenu){
+        this.inventoryLabelX = pMenu.getPlayerInvPos().x;
+        this.inventoryLabelY = pMenu.getPlayerInvPos().y - 12;
+    }
+
     @Override
     public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTick) {
+
         this.renderBackground(pGuiGraphics);
         super.render(pGuiGraphics, mouseX, mouseY, partialTick);
         renderTooltip(pGuiGraphics, mouseX, mouseY); // 渲染 Tooltip

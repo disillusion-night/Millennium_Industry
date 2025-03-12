@@ -1,5 +1,6 @@
 package kivo.millennium.millind.block.generator;
 
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.container.Device.GeneratorMT;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -80,6 +81,7 @@ public class GeneratorBL extends Block implements EntityBlock {
                         return new GeneratorMT(windowId, playerEntity, pos);
                     }
                 };
+                //Main.log(((GeneratorBE) be).getItems().getSlots());
                 NetworkHooks.openScreen((ServerPlayer) player, containerProvider, be.getBlockPos());
             } else {
                 throw new IllegalStateException("Our named container provider is missing!");

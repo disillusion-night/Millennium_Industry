@@ -1,18 +1,15 @@
 package kivo.millennium.client.screen;
 
-import kivo.millennium.millind.container.Device.AbstractDeviceMT;
-import kivo.millennium.millind.container.Device.CrusherContainer;
+import kivo.millennium.millind.container.Device.AbstractDeviceMenu;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
-import org.joml.Vector2i;
 
 import static kivo.millennium.millind.Main.getRL;
 
-public class CrusherScreen extends AbstractDeviceSC<AbstractDeviceMT> {
+public class CrusherScreen extends AbstractDeviceSC<AbstractDeviceMenu> {
 
-    public CrusherScreen(AbstractDeviceMT pMenu, Inventory pPlayerInventory, Component pTitle) {
+    public CrusherScreen(AbstractDeviceMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         this.imageWidth = 176; // GUI 宽度 (纹理宽度)
         this.imageHeight = 166; // GUI 高度 (纹理高度)

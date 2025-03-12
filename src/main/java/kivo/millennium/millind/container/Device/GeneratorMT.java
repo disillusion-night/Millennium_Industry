@@ -2,7 +2,7 @@ package kivo.millennium.millind.container.Device;
 
 
 import kivo.millennium.millind.block.generator.GeneratorBE;
-import kivo.millennium.millind.capability.TestSlot;
+import kivo.millennium.millind.capability.ExtendedSlot;
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumMenuTypes;
 import net.minecraft.core.BlockPos;
@@ -12,16 +12,13 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.items.SlotItemHandler;
 import org.joml.Vector2i;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static kivo.millennium.millind.block.generator.GeneratorBE.SLOT;
 import static kivo.millennium.millind.block.generator.GeneratorBE.SLOT_COUNT;
 
 public class GeneratorMT extends AbstractContainerMenu {
-    private static final Logger log = LoggerFactory.getLogger(GeneratorMT.class);
+    //private static final Logger log = LoggerFactory.getLogger(GeneratorMT.class);
     public static Vector2i slotpos1 = new Vector2i(64, 24);
     private final BlockPos pos;
     private int power;
@@ -35,8 +32,7 @@ public class GeneratorMT extends AbstractContainerMenu {
         super(MillenniumMenuTypes.GENERATOR_MENU.get(), windowId);
         this.pos = pos;
         if (player.level().getBlockEntity(pos) instanceof GeneratorBE generator) {
-            addSlot(new TestSlot(pBrewingStandContainer, generator.getItems(), SLOT, slotpos1.x, slotpos1.y));
-            addSlot(new TestSlot(pBrewingStandContainer,generator.getItems(), 1, slotpos1.x + 18, slotpos1.y));
+            addSlot(new ExtendedSlot(pBrewingStandContainer, generator.getItems(), SLOT, slotpos1));
             addDataSlot(new DataSlot() {
                 @Override
                 public int get() {

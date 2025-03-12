@@ -24,47 +24,32 @@ public abstract class AbstractDeviceBE extends BlockEntity {
 
     protected int MAX_TRANSFER_RATE = 1024; // FE/tick
 
-    // 物品槽位处理器
     public ItemStackHandler itemHandler;
     private LazyOptional<ItemStackHandler> lazyItemHandler = LazyOptional.empty();
 
-    // 能量存储处理器
     protected DeviceEnergyStorage energyStorage;
     private LazyOptional<IEnergyStorage> lazyEnergyStorage;
 
     public AbstractDeviceBE(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState, int slotCount) {
         super(pType, pWorldPosition, pBlockState);
-        //this
         this.itemHandler = createItemHandler(slotCount);
-        this.energyStorage = createEnergyStorage(); // 创建能量存储处理器
-        this.lazyItemHandler = LazyOptional.of(() -> itemHandler); // 初始化物品槽位 Capability 的 LazyOptional
-        this.lazyEnergyStorage = LazyOptional.of(() -> energyStorage); // 初始化能量存储 Capability 的 LazyOptional
+        this.energyStorage = createEnergyStorage();
+        this.lazyItemHandler = LazyOptional.of(() -> itemHandler);
+        this.lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
     }
 
-
-    // 创建物品槽位处理器，子类可以覆写以自定义槽位数量
     protected ItemStackHandler createItemHandler(int slot_count) {
         return new ItemStackHandler(slot_count) {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
             }
-            /*
-            @Override
-            public boolean isItemValid(int slot, @NotNull ItemStack stack) {
-                return AbstractDeviceBE.this.isItemValid(slot, stack); // 调用 isItemValid 方法进行物品验证
-            }*/
         };
     }
 
     // 创建能量存储处理器，子类可以覆写以自定义容量和传输速率
     protected DeviceEnergyStorage createEnergyStorage() {
         return new DeviceEnergyStorage(100000, MAX_TRANSFER_RATE);
-    }
-
-    // 子类可以覆写此方法以定义特定槽位的物品验证逻辑
-    protected boolean isItemValid(int slot, @NotNull ItemStack stack) {
-        return true; // 默认所有物品都有效
     }
 
     // 每 tick 执行的逻辑，由 AbstractDeviceBL 的 Ticker 调用
@@ -120,14 +105,14 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     @Override
     public CompoundTag getUpdateTag() {
         CompoundTag tag = new CompoundTag();
-        saveAdditional(tag); // 将数据保存到 NBT
-        return tag; // 返回 NBT 数据
+        saveAdditional(tag);
+        return tag;
     }
 
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket pkt) {
         if (pkt.getTag() != null) {
-            load(pkt.getTag()); // 从数据包中加载数据
+            load(pkt.getTag());
         }
     }
 
@@ -137,12 +122,12 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
         if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return lazyItemHandler.cast(); // 提供物品槽位 Capability
+            return lazyItemHandler.cast();
         }
         if (cap == ForgeCapabilities.ENERGY) {
-            return lazyEnergyStorage.cast(); // 提供能量存储 Capability
+            return lazyEnergyStorage.cast();
         }
-        return super.getCapability(cap, side); // 其他 Capability 交给父类处理
+        return super.getCapability(cap, side);
     }
 
     // 在方块实体失效时，使 LazyOptional 失效，防止内存泄漏
@@ -160,17 +145,11 @@ public abstract class AbstractDeviceBE extends BlockEntity {
         lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
     }
 
-    // 获取物品槽位处理器
     public ItemStackHandler getItemHandler() {
         return itemHandler;
     }
 
-    // 获取能量存储处理器
     public DeviceEnergyStorage getEnergyStorage() {
         return energyStorage;
     }
-        /*
-    public int getSlotCount(){
-        return slot_count;
-    }*/
 }

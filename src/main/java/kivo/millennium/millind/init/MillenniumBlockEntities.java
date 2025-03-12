@@ -6,6 +6,7 @@ import kivo.millennium.millind.block.generator.GeneratorBE;
 import kivo.millennium.millind.block.hypercube.HDECBE;
 import kivo.millennium.millind.block.device.inductionFurnace.InductionFurnaceBE;
 import kivo.millennium.millind.block.laser.NetherStarLaserBE;
+import kivo.millennium.millind.block.laser.SolarGeneratorBE;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -43,6 +44,10 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<CrusherBE>> Crusher_BE = BLOCK_ENTITIES.register(
             "crusher_be", () -> BlockEntityType.Builder.of(CrusherBE::new,
                     MillenniumBlocks.CRUSHER_BL.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<SolarGeneratorBE>> SOLAR_GENERATOR_BE = BLOCK_ENTITIES.register(
+            "solar_generator_be", () -> BlockEntityType.Builder.of(SolarGeneratorBE::new,
+                    MillenniumBlocks.SLOAR_GENERATOR_BL.get()).get()).build(null));
 
     /*
     public static final RegistryObject<BlockEntityType<ArcFurnaceBE>> ARC_FURNACE_BE = BLOCK_ENTITIES.register(

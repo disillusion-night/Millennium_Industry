@@ -1,9 +1,10 @@
 package kivo.millennium.millind.init;
 
+import kivo.millennium.millind.block.device.crusher.CrusherBE;
 import kivo.millennium.millind.block.fluidContainer.MetalFluidTankBE;
 import kivo.millennium.millind.block.generator.GeneratorBE;
 import kivo.millennium.millind.block.hypercube.HDECBE;
-import kivo.millennium.millind.block.inductionFurnace.InductionFurnaceBE;
+import kivo.millennium.millind.block.device.inductionFurnace.InductionFurnaceBE;
 import kivo.millennium.millind.block.laser.NetherStarLaserBE;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -37,6 +38,11 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<InductionFurnaceBE>> INDUCTION_FURNACE_BE = BLOCK_ENTITIES.register(
             "induction_furnace_be", () -> BlockEntityType.Builder.of(InductionFurnaceBE::new,
                     MillenniumBlocks.INDUCTION_FURNACE_BL.get()).build(null));
+
+
+    public static final RegistryObject<BlockEntityType<CrusherBE>> Crusher_BE = BLOCK_ENTITIES.register(
+            "crusher_be", () -> BlockEntityType.Builder.of(CrusherBE::new,
+                    MillenniumBlocks.CRUSHER_BL.get()).build(null));
 
     /*
     public static final RegistryObject<BlockEntityType<ArcFurnaceBE>> ARC_FURNACE_BE = BLOCK_ENTITIES.register(

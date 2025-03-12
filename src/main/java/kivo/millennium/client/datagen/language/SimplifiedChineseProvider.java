@@ -1,6 +1,6 @@
 package kivo.millennium.client.datagen.language;
 
-import kivo.millennium.millind.block.inductionFurnace.InductionFurnaceBL;
+import kivo.millennium.millind.block.device.inductionFurnace.InductionFurnaceBL;
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumCreativeTab;
 import kivo.millennium.millind.init.MillenniumFluidTypes;
@@ -21,6 +21,7 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.NETHER_STAR_LASER_BL.get(), "下界之星激光器");
         add(MillenniumBlocks.GENERATOR_BL.get(), "发电机");
         add(MillenniumBlocks.INDUCTION_FURNACE_BL.get(), "感应炉");
+        add(MillenniumBlocks.CRUSHER_BL.get(), "粉碎机");
         //add(MillenniumBlocks.HMI_BL.get(), "千禧年人机接口");
         //add(MillenniumBlocks.PROJECTOR_BL.get(), "千禧年蓝图投影仪");
 
@@ -28,6 +29,7 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "低纯度沃普赛克钢铁");
         add(MillenniumItems.WolfseggIron.get(), "沃普赛克铁块");
         add(MillenniumItems.WolfseggIronOre.get(), "沃普赛克铁矿");
+        add(MillenniumItems.VRLA.get(), "铅酸蓄电池");
 
         add(MillenniumFluidTypes.ICY_WATER_FLUID_TYPE.get().getDescriptionId(), "冰水");
 

@@ -1,7 +1,8 @@
 package kivo.millennium.millind.init;
 
-import kivo.millennium.millind.container.GeneratorMT;
-import kivo.millennium.millind.container.InductionFurnaceMT;
+import kivo.millennium.millind.container.Device.CrusherContainer;
+import kivo.millennium.millind.container.Device.GeneratorMT;
+import kivo.millennium.millind.container.Device.InductionFurnaceMT;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
 import net.minecraftforge.common.extensions.IForgeMenuType;
@@ -23,5 +24,11 @@ public class MillenniumMenuTypes {
     public static final RegistryObject<MenuType<InductionFurnaceMT>> INDUCTION_FURNACE_MENU = MENU_TYPES.register(
             "induction_furnace_menu",
             () -> IForgeMenuType.create((windowId, inv, data) -> new InductionFurnaceMT(windowId, inv.player, data.readBlockPos()))
+    );
+
+
+    public static final RegistryObject<MenuType<CrusherContainer>> CRUSHER_CONTAINER = MENU_TYPES.register(
+            "crusher_container",
+            () -> IForgeMenuType.create((windowId, inv, data) -> new CrusherContainer(windowId, inv.player, data.readBlockPos()))
     );
 }

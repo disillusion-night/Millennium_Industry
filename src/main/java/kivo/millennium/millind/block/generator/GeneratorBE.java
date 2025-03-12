@@ -31,7 +31,7 @@ public class GeneratorBE extends BlockEntity {
     public static final int MAXTRANSFER = 1000;
     public static final int CAPACITY = 100000;
 
-    public static int SLOT_COUNT = 1;
+    public static int SLOT_COUNT = 2;
     public static int SLOT = 0;
 
     private final ItemStackHandler items = createItemHandler();
@@ -108,6 +108,7 @@ public class GeneratorBE extends BlockEntity {
             }
             BlockEntity be = level.getBlockEntity(getBlockPos().relative(direction));
             if (be != null) {
+                //Main.log(be.getBlockState().toString());
                 be.getCapability(ForgeCapabilities.ENERGY, direction.getOpposite()).map(e -> {
                     if (e.canReceive()) {
                         int received = e.receiveEnergy(Math.min(energy.getEnergyStored(), MAXTRANSFER), false);

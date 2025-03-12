@@ -1,4 +1,5 @@
 {
+  "block.millind.crusher": "粉碎机",
   "block.millind.generator": "发电机",
   "block.millind.hdec": "高维工程核心",
   "block.millind.induction_furnace": "感应炉",
@@ -7,6 +8,7 @@
   "fluid_type.millind.icy_water": "冰水",
   "item.millind.high_purity_wolfsegg_steel": "高纯度沃普赛克钢铁",
   "item.millind.low_purity_wolfsegg_steel": "低纯度沃普赛克钢铁",
+  "item.millind.vrla": "铅酸蓄电池",
   "item.millind.wolfsegg_iron": "沃普赛克铁块",
   "item.millind.wolfsegg_iron_ore": "沃普赛克铁矿",
   "item_group.millind.engineering_parts": "千年科工 工程组件",

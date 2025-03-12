@@ -1,27 +1,22 @@
 package kivo.millennium.client.screen;
 
-import kivo.millennium.millind.container.AbstractDeviceMT;
-import net.minecraft.client.gui.GuiGraphics;
+import kivo.millennium.millind.container.Device.AbstractDeviceMT;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import org.joml.Vector2i;
 
 import static kivo.millennium.millind.Main.getRL;
 
-public class InductionFurnaceScreen extends AbstractDeviceScreen{
-    private int imgWidth = 176;
-    private int imgHeight = 166;
+public class InductionFurnaceScreen extends AbstractDeviceSC<AbstractDeviceMT> {
+    public static Vector2i invlabel = new Vector2i(8, 82);
     public InductionFurnaceScreen(AbstractDeviceMT container, Inventory inventory, Component title) {
         super(container, inventory, title);
+        this.imageHeight = 176;
+        this.imageWidth = 176;
+        this.BatteryPos = new Vector2i(152, 8);
+        this.EnergyPos = new Vector2i(127, 7);
+        this.inventoryLabelX = invlabel.x;
+        this.inventoryLabelY = invlabel.y;
+        this.GUI_TEXTURE = getRL("textures/gui/container/induction_furnace.png");
     }
-
-    private final ResourceLocation GUI = getRL("textures/gui/container/heat_furnace.png");
-
-    @Override
-    protected void renderBg(GuiGraphics graphics, float partialTicks, int mouseX, int mouseY) {
-        graphics.blit(GUI, leftPos, topPos, 0, 0, imgWidth, imgHeight, imgWidth, imgHeight);
-        //renderSlot(graphics, partialTicks, mouseX, mouseY);
-    }
-
-
 }

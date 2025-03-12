@@ -1,34 +1,42 @@
-package kivo.millennium.millind.container;
+package kivo.millennium.millind.container.Device;
 
 
 import kivo.millennium.millind.block.generator.GeneratorBE;
+import kivo.millennium.millind.capability.TestSlot;
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumMenuTypes;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.inventory.ContainerLevelAccess;
-import net.minecraft.world.inventory.DataSlot;
-import net.minecraft.world.inventory.Slot;
+import net.minecraft.world.inventory.*;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.items.SlotItemHandler;
 import org.joml.Vector2i;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static kivo.millennium.millind.block.generator.GeneratorBE.SLOT;
 import static kivo.millennium.millind.block.generator.GeneratorBE.SLOT_COUNT;
 
 public class GeneratorMT extends AbstractContainerMenu {
+    private static final Logger log = LoggerFactory.getLogger(GeneratorMT.class);
     public static Vector2i slotpos1 = new Vector2i(64, 24);
     private final BlockPos pos;
     private int power;
+    protected Vector2i powerSourceSlot;
 
-    public GeneratorMT(int windowId, Player player, BlockPos pos) {
+    public GeneratorMT(int pContainerId, Player player, BlockPos pos) {
+        this(pContainerId, player, pos, new SimpleContainer(1));
+    }
+
+    public GeneratorMT(int windowId, Player player, BlockPos pos, Container pBrewingStandContainer) {
         super(MillenniumMenuTypes.GENERATOR_MENU.get(), windowId);
         this.pos = pos;
         if (player.level().getBlockEntity(pos) instanceof GeneratorBE generator) {
-            addSlot(new SlotItemHandler(generator.getItems(), SLOT, slotpos1.x, slotpos1.y));
+            addSlot(new TestSlot(pBrewingStandContainer, generator.getItems(), SLOT, slotpos1.x, slotpos1.y));
+            addSlot(new TestSlot(pBrewingStandContainer,generator.getItems(), 1, slotpos1.x + 18, slotpos1.y));
             addDataSlot(new DataSlot() {
                 @Override
                 public int get() {
@@ -51,6 +59,8 @@ public class GeneratorMT extends AbstractContainerMenu {
                     GeneratorMT.this.power = (GeneratorMT.this.power & 0xffff) | ((pValue & 0xffff) << 16);
                 }
             });
+
+
         }
         layoutPlayerInventorySlots(player.getInventory(), 10, 70);
     }

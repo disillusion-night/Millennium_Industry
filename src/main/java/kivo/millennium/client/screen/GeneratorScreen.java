@@ -2,7 +2,7 @@ package kivo.millennium.client.screen;
 
 
 import kivo.millennium.millind.block.generator.GeneratorBE;
-import kivo.millennium.millind.container.GeneratorMT;
+import kivo.millennium.millind.container.Device.GeneratorMT;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;

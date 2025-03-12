@@ -22,11 +22,13 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.NETHER_STAR_LASER_BL.get(), "Nether Star Laser");
         add(MillenniumBlocks.GENERATOR_BL.get(), "Generator");
         add(MillenniumBlocks.INDUCTION_FURNACE_BL.get(), "Induction Furnace");
+        add(MillenniumBlocks.CRUSHER_BL.get(), "Crusher");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "High-Purity Wolfsegg Steel");
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "Low-Purity Wolfsegg Steel");
         add(MillenniumItems.WolfseggIron.get(), "Wolfsegg Iron");
         add(MillenniumItems.WolfseggIronOre.get(), "Wolfsegg Iron Ore");
+        add(MillenniumItems.VRLA.get(), "Valve Regulated Lead Acid Battery");
 
         add(MillenniumFluidTypes.ICY_WATER_FLUID_TYPE.get().getDescriptionId(), "Icy Water");
 

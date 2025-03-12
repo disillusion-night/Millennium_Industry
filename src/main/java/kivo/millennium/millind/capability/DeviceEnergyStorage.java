@@ -30,6 +30,17 @@ public class DeviceEnergyStorage extends EnergyStorage {
         }
     }
 
+    public void setEnergy(int energy){
+        this.energy = energy;
+    }
+
+
+    @Override
+    public int receiveEnergy(int maxReceive, boolean simulate)
+    {
+        return super.receiveEnergy(maxReceive, simulate);
+    }
+
     @Override
     public boolean canExtract() {
         return false;

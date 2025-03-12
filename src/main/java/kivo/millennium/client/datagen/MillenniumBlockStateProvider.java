@@ -31,6 +31,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         sixFacing(MillenniumBlocks.NETHER_STAR_LASER_BL.get(), "nether_star_laser");
         simpleOrientable(MillenniumBlocks.GENERATOR_BL.get(), "generator");
         simpleOrientableWithTop(MillenniumBlocks.INDUCTION_FURNACE_BL.get(), "induction_furnace");
+        simpleOrientableWithTop(MillenniumBlocks.CRUSHER_BL.get(), "crusher");
         //simpleOrientableWithTop();
 
     }

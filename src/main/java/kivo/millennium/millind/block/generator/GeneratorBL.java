@@ -1,6 +1,6 @@
 package kivo.millennium.millind.block.generator;
 
-import kivo.millennium.millind.container.GeneratorMT;
+import kivo.millennium.millind.container.Device.GeneratorMT;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerPlayer;

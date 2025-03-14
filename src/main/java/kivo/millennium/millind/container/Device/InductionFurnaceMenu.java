@@ -10,43 +10,45 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.level.block.Block;
 import org.joml.Vector2i;
 
 public class InductionFurnaceMenu extends AbstractDeviceMenu {
-    private static final Vector2i invlabel = new Vector2i(8, 94);
-    private static final Vector2i batteryslot = new Vector2i(152, 71);
-    private static final Vector2i input1pos = new Vector2i(44, 34);
-    private static final Vector2i input2pos = new Vector2i(44, 52);
-    private static final Vector2i output1pos = new Vector2i(103, 34);
-    private static final Vector2i output2pos = new Vector2i(121, 34);
-    private static final Vector2i output3pos = new Vector2i(103, 52);
-    private static final Vector2i output4pos = new Vector2i(121, 52);
+    private static final Vector2i inputpos = new Vector2i(53, 35);
+    private static final Vector2i outputpos = new Vector2i(107, 35);
+    private int progress;
     public InductionFurnaceMenu(int pContainerId, Player player, BlockPos pos) {
         super(MillenniumMenuTypes.INDUCTION_FURNACE_MENU.get(), pContainerId, player, pos, new SimpleContainer(InductionFurnaceBE.SLOT_COUNT));
-        this.BATTERY_SLOT_POS = new Vector2i(152, 71);
     }
 
     @Override
     protected void setupSlot(Container container, AbstractDeviceBE deviceBE) {
         super.setupSlot(container, deviceBE);
-        addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), InductionFurnaceBE.INPUT1_SLOT, input1pos));
-        addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), InductionFurnaceBE.INPUT2_SLOT, input2pos));
-        addSlot(new DeviceOutputSlot(container, deviceBE.getItemHandler(), InductionFurnaceBE.OUTPUT1_SLOT, output1pos));
-        addSlot(new DeviceOutputSlot(container, deviceBE.getItemHandler(), InductionFurnaceBE.OUTPUT2_SLOT, output2pos));
-        addSlot(new DeviceOutputSlot(container, deviceBE.getItemHandler(), InductionFurnaceBE.OUTPUT3_SLOT, output3pos));
-        addSlot(new DeviceOutputSlot(container, deviceBE.getItemHandler(), InductionFurnaceBE.OUTPUT4_SLOT, output4pos));
-    }
-
-    @Override
-    public Vector2i getBatterySlotPos() {
-        return batteryslot;
+        addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), InductionFurnaceBE.INPUT_SLOT, inputpos));
+        addSlot(new DeviceOutputSlot(container, deviceBE.getItemHandler(), InductionFurnaceBE.OUTPUT_SLOT, outputpos));
     }
 
 
     @Override
-    public Vector2i getPlayerInvPos() {
-        return invlabel;
+    protected void setupDataSlot(Container container, AbstractDeviceBE deviceBE) {
+        super.setupDataSlot(container, deviceBE);
+        InductionFurnaceBE be = (InductionFurnaceBE) deviceBE;
+        addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                return be.getProgress() & 0xffff;
+            }
+
+            @Override
+            public void set(int pValue) {
+                InductionFurnaceMenu.this.progress = (InductionFurnaceMenu.this.progress & 0xffff0000) | (pValue & 0xffff);
+            }
+        });
+    }
+
+    public int getProgress(){
+        return progress;
     }
 
     @Override

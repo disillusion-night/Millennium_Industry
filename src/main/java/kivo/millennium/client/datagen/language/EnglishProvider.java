@@ -23,6 +23,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.GENERATOR_BL.get(), "Generator");
         add(MillenniumBlocks.INDUCTION_FURNACE_BL.get(), "Induction Furnace");
         add(MillenniumBlocks.CRUSHER_BL.get(), "Crusher");
+        add(MillenniumBlocks.SOLAR_GENERATOR.get(), "Solar generator");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "High-Purity Wolfsegg Steel");
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "Low-Purity Wolfsegg Steel");

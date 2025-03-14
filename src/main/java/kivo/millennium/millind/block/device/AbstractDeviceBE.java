@@ -6,6 +6,7 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -32,9 +33,9 @@ public abstract class AbstractDeviceBE extends BlockEntity {
 
     public AbstractDeviceBE(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState, int slotCount) {
         super(pType, pWorldPosition, pBlockState);
-        this.itemHandler = createItemHandler(slotCount);
+        this.itemHandler = slotCount > 0?createItemHandler(slotCount):null;
         this.energyStorage = createEnergyStorage();
-        this.lazyItemHandler = LazyOptional.of(() -> itemHandler);
+        this.lazyItemHandler = slotCount > 0?LazyOptional.of(() -> itemHandler):LazyOptional.empty();
         this.lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
     }
 
@@ -53,7 +54,7 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     }
 
     // 每 tick 执行的逻辑，由 AbstractDeviceBL 的 Ticker 调用
-    public static <T extends BlockEntity> void tick(net.minecraft.world.level.Level pLevel, BlockPos pPos, BlockState pState, AbstractDeviceBE pBlockEntity) {
+    public static <T extends BlockEntity> void tick(Level pLevel, BlockPos pPos, BlockState pState, AbstractDeviceBE pBlockEntity) {
         if (pLevel.isClientSide()) {
             return; // 客户端不做逻辑处理
         }
@@ -80,6 +81,10 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     @Override
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
+        saveData(pTag);
+    }
+
+    protected void saveData(CompoundTag pTag){
         pTag.put("inventory", itemHandler.serializeNBT()); // 保存物品槽位数据
         pTag.putInt("energy", energyStorage.getEnergyStored()); // 保存能量数据
     }
@@ -87,6 +92,11 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
+        loadData(pTag);
+    }
+
+
+    public void loadData(CompoundTag pTag) {
         if (pTag.contains("inventory")){
             itemHandler.deserializeNBT(pTag.getCompound("inventory")); // 加载物品槽位数据
         }
@@ -94,7 +104,6 @@ public abstract class AbstractDeviceBE extends BlockEntity {
             energyStorage.setEnergy(pTag.getInt("energy")); // 加载能量数据
         }
     }
-
     // 数据包同步（用于GUI更新等）
     @Nullable
     @Override

@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "powered=false": {
+      "model": "millind:block/solar_generator"
+    },
+    "powered=true": {
+      "model": "millind:block/solar_generator"
+    }
+  }
+}

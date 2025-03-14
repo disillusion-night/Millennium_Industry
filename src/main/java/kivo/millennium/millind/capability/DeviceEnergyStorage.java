@@ -21,7 +21,7 @@ public class DeviceEnergyStorage extends EnergyStorage {
 
     public int costEnergy(int cost){
         int temp = this.energy;
-        if(cost > this.energy){
+        if(cost < this.energy){
             this.energy -= cost;
             return cost;
         }else{

@@ -1,15 +1,16 @@
 package kivo.millennium.client.screen;
 
 import kivo.millennium.millind.container.Device.AbstractDeviceMenu;
+import kivo.millennium.millind.container.Device.CrusherContainer;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 
 import static kivo.millennium.millind.Main.getRL;
 
-public class CrusherScreen extends AbstractDeviceSC<AbstractDeviceMenu> {
+public class CrusherScreen extends AbstractDeviceSC<CrusherContainer> {
 
-    public CrusherScreen(AbstractDeviceMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+    public CrusherScreen(CrusherContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         this.imageWidth = 176; // GUI 宽度 (纹理宽度)
         this.imageHeight = 166; // GUI 高度 (纹理高度)
@@ -21,8 +22,8 @@ public class CrusherScreen extends AbstractDeviceSC<AbstractDeviceMenu> {
     }
 
     @Override
-    public void renderBg(GuiGraphics guiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
-        super.renderBg(guiGraphics, pPartialTick, pMouseX, pMouseY); // 调用父类方法渲染默认背景
+    public void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
+        super.renderBg(pGuiGraphics, pPartialTick, pMouseX, pMouseY); // 调用父类方法渲染默认背景
 
         // 可以在这里添加额外的渲染逻辑，例如渲染破碎进度条等
     }

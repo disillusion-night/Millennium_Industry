@@ -4,6 +4,7 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import kivo.millennium.millind.container.Device.AbstractDeviceMenu;
 import kivo.millennium.millind.util.NumberUtils;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.ImageButton;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -12,35 +13,39 @@ import org.joml.Vector2i;
 
 import static kivo.millennium.millind.Main.getRL;
 
-public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends AbstractContainerScreen<AbstractDeviceMenu> {
+public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends AbstractContainerScreen<C> {
 
     // 默认 GUI 纹理，子类可以覆写
     protected ResourceLocation GUI_TEXTURE;
     protected ResourceLocation BATTERY_TEXTURE;
 
-    protected AbstractDeviceMenu menu;
+    protected C menu;
 
     protected Vector2i EnergyPos;
     protected Vector2i EnergySize;
 
     protected Vector2i BatteryPos;
 
-    protected AbstractDeviceSC(AbstractDeviceMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
+    protected AbstractDeviceSC(C pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         this.menu = pMenu;
         this.BATTERY_TEXTURE = getRL("textures/gui/container/power/battery.png");
-        this.BatteryPos = new Vector2i(152, 8);
-        this.EnergyPos = new Vector2i(128, 7);
+        this.BatteryPos = new Vector2i(153, 9);
+        this.EnergyPos = new Vector2i(128, 8);
         this.EnergySize = new Vector2i(44, 15);
+
+    }
+
+    public void init() {
+        super.init();
+        this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
     }
 
     @Override
-    protected void renderBg(GuiGraphics guiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
-        RenderSystem.setShaderTexture(0, GUI_TEXTURE); // 绑定 GUI 纹理
-        int x = (width - this.imageWidth) / 2;
-        int y = (height - this.imageWidth) / 2;
-
-        guiGraphics.blit(GUI_TEXTURE, x, y, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight); // 绘制 GUI 背景
+    protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
+        int i = this.leftPos;
+        int j = this.topPos;
+        pGuiGraphics.blit(this.GUI_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
 
         //renderEnergyArea(guiGraphics, x, y); // 渲染能量区域，子类可以覆写此方法自定义渲染
     }
@@ -74,8 +79,22 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends Abs
     }
 
     protected void renderBattery(GuiGraphics graphics, float percent, Vector2i pos){
-        int p = percent > 0?(int) Math.ceil(percent / 25.0F):0;
+        int p = getP(percent);
         graphics.blit(BATTERY_TEXTURE, leftPos + pos.x, topPos + pos.y, 0, 9 * p, 16, 9, 16, 45);
+    }
+
+    protected int getP(float percent){
+        if (percent == 0){
+            return 0;
+        } else if (percent < 50) {
+            return 1;
+        } else if (percent < 75) {
+            return 2;
+        } else if (percent < 100) {
+            return 3;
+        } else {
+            return 4;
+        }
     }
 
     protected void checkPowerTip(GuiGraphics pGuiGraphics, int mouseX, int mouseY){

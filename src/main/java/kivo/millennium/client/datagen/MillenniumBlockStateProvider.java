@@ -7,12 +7,15 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.BlockStateProvider;
 import net.minecraftforge.client.model.generators.ConfiguredModel;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.client.model.generators.VariantBlockStateBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
+import net.minecraftforge.registries.DeferredRegister;
+import net.minecraftforge.registries.RegistryObject;
 
 import static kivo.millennium.millind.Main.MODID;
 import static kivo.millennium.millind.Main.getRL;
@@ -28,10 +31,12 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         addWithHaveModel(MillenniumBlocks.METAL_TANK_BL.get(), "metal_tank");
 
-        sixFacing(MillenniumBlocks.NETHER_STAR_LASER_BL.get(), "nether_star_laser");
+        sixFacing(MillenniumBlocks.NETHER_STAR_LASER_BL, "nether_star_laser");
         simpleOrientable(MillenniumBlocks.GENERATOR_BL.get(), "generator");
         simpleOrientableWithTop(MillenniumBlocks.INDUCTION_FURNACE_BL.get(), "induction_furnace");
         simpleOrientableWithTop(MillenniumBlocks.CRUSHER_BL.get(), "crusher");
+
+        solarGenerator(MillenniumBlocks.SOLAR_GENERATOR);
         //simpleOrientableWithTop();
 
     }
@@ -50,8 +55,8 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
      * @param block     要处理的方块实例
      * @param modelPath 模型在资源包下的路径
      */
-    private void sixFacing(Block block, String modelPath) {
-        VariantBlockStateBuilder builder = getVariantBuilder(block);
+    private <T extends Block> void sixFacing(RegistryObject<T> block, String modelPath) {
+        VariantBlockStateBuilder builder = getVariantBuilder(block.get());
 
         builder.forAllStates(blockState -> {
             String poweredSuffix = blockState.getValue(BlockStateProperties.POWERED)? "_on" : "";
@@ -63,7 +68,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
                     .build();
         });
 
-        simpleBlockItem(block, new ConfiguredModel(models().getExistingFile(getRL(modelPath))).model);
+        simpleBlockItem(block.get(), new ConfiguredModel(models().getExistingFile(getRL(modelPath))).model);
     }
 
 
@@ -73,8 +78,8 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
      * @param block     要处理的方块实例
      * @param modelPath 模型在资源包下的路径
      */
-    private void horizontalOrientable(Block block, String modelPath) {
-        VariantBlockStateBuilder builder = getVariantBuilder(block);
+    private <T extends Block> void horizontalOrientable(RegistryObject<T> block, String modelPath) {
+        VariantBlockStateBuilder builder = getVariantBuilder(block.get());
 
         builder.forAllStates(blockState -> {
             boolean IsPowered = blockState.getValue(BlockStateProperties.POWERED);
@@ -85,7 +90,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
                     .build();
         });
 
-        simpleBlockItem(block, new ConfiguredModel(models().getExistingFile(getRL(modelPath))).model);
+        simpleBlockItem(block.get(), new ConfiguredModel(models().getExistingFile(getRL(modelPath))).model);
     }
 
 
@@ -146,4 +151,27 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
         simpleBlockItem(block, new ConfiguredModel(models().getExistingFile(getRL(modelPath))).model);
     }
+
+
+
+    private  <T extends Block> void solarGenerator(RegistryObject<T> block) {
+        VariantBlockStateBuilder builder = getVariantBuilder(block.get());
+
+        builder.forAllStates(blockState -> {
+
+            ModelFile blockModel = models().getBuilder(block.getId().getPath())
+                    .parent(itemModels().getExistingFile(new ResourceLocation("minecraft", "block/template_daylight_detector")))
+                    .texture("side", getRL("block/" + block.getId().getPath() + "_side"))
+                    .texture("top", getRL("block/" + block.getId().getPath() + "_top"));
+
+
+
+            return ConfiguredModel.builder()
+                    .modelFile(blockModel)
+                    .build();
+        });
+
+        simpleBlockItem(block.get(), new ConfiguredModel(models().getExistingFile(getRL(block.getId().getPath()))).model);
+    }
+
 }

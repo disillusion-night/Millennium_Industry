@@ -28,11 +28,6 @@ public abstract class AbstractDeviceMenu extends AbstractContainerMenu {
     protected DeviceEnergyStorage energyStorage;
     protected Level level;
 
-    /*
-    protected AbstractDeviceMenu(int pContainerId, Player player, BlockPos pos) {
-        this(null, pContainerId, player, pos); // 用于客户端创建容器
-    }*/
-
     protected AbstractDeviceMenu(MenuType<?> pType, int pContainerId, Player player, BlockPos pos, Container pContainer) {
         super(pType, pContainerId);
         this.player = player;
@@ -40,65 +35,72 @@ public abstract class AbstractDeviceMenu extends AbstractContainerMenu {
         this.pos = pos;
         BlockEntity entity = level.getBlockEntity(pos);
         if (entity instanceof AbstractDeviceBE deviceBE) {
-            addDataSlot(new DataSlot() {
-                @Override
-                public int get() {
-                    return deviceBE.getEnergyStorage().getEnergyStored() & 0xffff;
-                }
-
-                @Override
-                public void set(int pValue) {
-                    AbstractDeviceMenu.this.power = (AbstractDeviceMenu.this.power & 0xffff0000) | (pValue & 0xffff);
-                }
-            });
-            addDataSlot(new DataSlot() {
-                @Override
-                public int get() {
-                    return (deviceBE.getEnergyStorage().getEnergyStored() >> 16) & 0xffff;
-                }
-
-                @Override
-                public void set(int pValue) {
-                    AbstractDeviceMenu.this.power = (AbstractDeviceMenu.this.power & 0xffff) | ((pValue & 0xffff) << 16);
-                }
-            });
-            addDataSlot(new DataSlot() {
-                @Override
-                public int get() {
-                    return deviceBE.getEnergyStorage().getMaxEnergyStored() & 0xffff;
-                }
-
-                @Override
-                public void set(int pValue) {
-                    AbstractDeviceMenu.this.maxpower = (AbstractDeviceMenu.this.maxpower & 0xffff0000) | (pValue & 0xffff);
-                }
-            });
-            addDataSlot(new DataSlot() {
-                @Override
-                public int get() {
-                    return (deviceBE.getEnergyStorage().getMaxEnergyStored() >> 16) & 0xffff;
-                }
-
-                @Override
-                public void set(int pValue) {
-                    AbstractDeviceMenu.this.maxpower = (AbstractDeviceMenu.this.maxpower & 0xffff) | ((pValue & 0xffff) << 16);
-                }
-            });
-            setupSlot(pContainer, deviceBE); // 设置容器的物品槽位，由子类实现
+            setupDataSlot(pContainer, deviceBE);
+            setupSlot(pContainer, deviceBE);
             layoutPlayerInventorySlots(player.getInventory(), this.getPlayerInvPos());
         } else {
             throw new IllegalStateException("Container Provider is not valid BlockEntity"); // 如果方块实体类型不匹配，抛出异常
         }
     }
 
+    protected void setupDataSlot(Container container, AbstractDeviceBE deviceBE) {
+        addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                return deviceBE.getEnergyStorage().getEnergyStored() & 0xffff;
+            }
+
+            @Override
+            public void set(int pValue) {
+                AbstractDeviceMenu.this.power = (AbstractDeviceMenu.this.power & 0xffff0000) | (pValue & 0xffff);
+            }
+        });
+        addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                return (deviceBE.getEnergyStorage().getEnergyStored() >> 16) & 0xffff;
+            }
+
+            @Override
+            public void set(int pValue) {
+                AbstractDeviceMenu.this.power = (AbstractDeviceMenu.this.power & 0xffff) | ((pValue & 0xffff) << 16);
+            }
+        });
+        addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                return deviceBE.getEnergyStorage().getMaxEnergyStored() & 0xffff;
+            }
+
+            @Override
+            public void set(int pValue) {
+                AbstractDeviceMenu.this.maxpower = (AbstractDeviceMenu.this.maxpower & 0xffff0000) | (pValue & 0xffff);
+            }
+        });
+        addDataSlot(new DataSlot() {
+            @Override
+            public int get() {
+                return (deviceBE.getEnergyStorage().getMaxEnergyStored() >> 16) & 0xffff;
+            }
+
+            @Override
+            public void set(int pValue) {
+                AbstractDeviceMenu.this.maxpower = (AbstractDeviceMenu.this.maxpower & 0xffff) | ((pValue & 0xffff) << 16);
+            }
+        });
+    }
     // 设置容器的物品槽位，子类需要覆写此方法以添加自定义槽位
     protected void setupSlot(Container container, AbstractDeviceBE deviceBE) {
         this.addBatterySlot(container, deviceBE.getItemHandler());
     }
 
-    public abstract Vector2i getBatterySlotPos();
+    public Vector2i getBatterySlotPos(){
+        return new Vector2i(152, 62);
+    }
 
-    public abstract Vector2i getPlayerInvPos();
+    public Vector2i getPlayerInvPos() {
+        return new Vector2i(8, 84);
+    }
 
     // 添加电池槽位
     protected void addBatterySlot(Container container, ItemStackHandler itemHandler) {

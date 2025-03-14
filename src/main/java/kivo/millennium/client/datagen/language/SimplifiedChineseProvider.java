@@ -22,6 +22,7 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.GENERATOR_BL.get(), "发电机");
         add(MillenniumBlocks.INDUCTION_FURNACE_BL.get(), "感应炉");
         add(MillenniumBlocks.CRUSHER_BL.get(), "粉碎机");
+        add(MillenniumBlocks.SOLAR_GENERATOR.get(), "太阳能发电机");
         //add(MillenniumBlocks.HMI_BL.get(), "千禧年人机接口");
         //add(MillenniumBlocks.PROJECTOR_BL.get(), "千禧年蓝图投影仪");
 

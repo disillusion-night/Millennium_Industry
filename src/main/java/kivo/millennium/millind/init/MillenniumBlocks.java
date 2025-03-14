@@ -37,7 +37,7 @@ public class MillenniumBlocks {
 
     public static final RegistryObject<CrusherBL> CRUSHER_BL = registerWithItem("crusher", CrusherBL::new);
 
-    public static final RegistryObject<SolarGeneratorBL> SLOAR_GENERATOR_BL = registerWithItem("sloar_generator_be", SolarGeneratorBL::new);
+    public static final RegistryObject<SolarGeneratorBL> SOLAR_GENERATOR = registerWithItem("solar_generator", SolarGeneratorBL::new);
 
 
     //public static final RegistryObject<ArcFurnaceBL> ARC_FURNACE_BL = registerWithItem("arc_furnace", ArcFurnaceBL::new);

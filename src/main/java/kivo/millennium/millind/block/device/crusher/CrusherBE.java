@@ -1,71 +1,136 @@
 package kivo.millennium.millind.block.device.crusher;
 
 import kivo.millennium.millind.block.device.AbstractDeviceBE;
+import kivo.millennium.millind.block.device.inductionFurnace.InductionFurnaceBL;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.crafting.BlastingRecipe;
+import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class CrusherBE extends AbstractDeviceBE {
+import java.util.Optional;
 
-    // 定义破碎机特定的槽位数量
-    private static final int CRUSHER_INPUT_SLOT = 1; // 输入槽位索引 (用于 CrusherContainer 中槽位定义)
-    private static final int CRUSHER_OUTPUT_SLOT = 2; // 输出槽位索引
+public class CrusherBE extends AbstractDeviceBE {
+    public static int SLOT_COUNT = 3;
+    public static int BATTERY_SLOT = 0;
+    public static int INPUT_SLOT = 1;
+    public static int OUTPUT_SLOT = 2;
+    private final int energyUsagePerTick = 200;
+    private final int maxLitTime = 10;
+    private int progress = 0;
+    private int totalTime = 100;
+    private int litTime = 0;
+
 
     public CrusherBE(BlockPos pPos, BlockState pBlockState) {
-        super(MillenniumBlockEntities.Crusher_BE.get(), pPos, pBlockState, 3); // 调用 AbstractDeviceBE 的构造函数，并传入破碎机方块实体类型
-        this.energyStorage = createEnergyStorage(); // 创建能量存储，可以在这里或 createEnergyStorage 方法中自定义容量和速率
-        //this.itemHandler = createItemHandler(3);   // 创建物品槽位处理器，可以在这里或 createItemHandler 方法中自定义槽位数量
-        //this.slot_count = 3; // 1个电池槽位 (AbstractDeviceMenu 默认) + 1个输入槽位 + 1个输出槽位
-        this.MAX_TRANSFER_RATE = 64; // 设置破碎机最大能量传输速率为 64FE/tick (可以覆写父类的默认值)
+        super(MillenniumBlockEntities.Crusher_BE.get(), pPos, pBlockState, 3);
+        this.MAX_TRANSFER_RATE = 64;
     }
 
-    /*
-    @Override
-    protected ItemStackHandler createItemHandler(int ) {
-        return new ItemStackHandler(slot_count) { // 使用 SLOTS_COUNT 定义槽位数量 (3个槽位)
-            @Override
-            protected void onContentsChanged(int slot) {
-                setChanged();/*
-                if(!level.isClientSide()) {
-                    PacketListener.sendToClients(CrusherBE.this.level, worldPosition);
-                }
-            }
+    private boolean isLit(){
+        return getBlockState().getValue(CrusherBL.POWERED);
+    }
 
-            @Override
-            public boolean isItemValid(int slot, ItemStack stack) {
-                return switch (slot) {
-                    case 0 -> stack.getCapability(ForgeCapabilities.ENERGY).isPresent(); // 槽位 0 (电池槽位): 允许放入可存储能量的物品 (BatterySlot 已经做了限制，这里再次验证)
-                    case 1 -> true; // 槽位 1 (输入槽位): 允许放入任何物品 (可以根据实际破碎机逻辑修改)
-                    case 2 -> false; // 槽位 2 (输出槽位): 不允许手动放入物品 (输出槽位，由机器自动填充)
-                    default -> super.isItemValid(slot, stack); // 其他槽位 (不应该有) 使用默认验证逻辑
-                };
-            }
-        };
-    }*/
+    private int getProgressPercent(){
+        return (int) (((float) progress / totalTime) * 100);
+    }
 
-
-    @Override
-    protected void tickServer() {
-        if(energyStorage.getEnergyStored() > 0) {
-            // TODO: 添加破碎机工作逻辑 (例如，从输入槽位取出物品，进行破碎处理，将产物放入输出槽位，消耗能量)
-            //  示例: 假设破碎机每 tick 消耗 1 FE 能量
-            energyStorage.extractEnergy(1, false);
-            setChanged(); // 标记方块实体数据已更改 (能量值变化)
-            if(!level.isClientSide()) {
-                //PacketListener.sendToClients(CrusherBE.this.level, worldPosition); // 同步能量变化到客户端
-            }
+    public int getProgressAndLit(){
+        if (isLit()){
+            return getProgressPercent() << 1 | 1;
+        }else {
+            return getProgressPercent() << 1;
         }
     }
 
-    public static int getCrusherInputSlot() {
-        return CRUSHER_INPUT_SLOT; // 获取输入槽位索引 (用于 CrusherContainer 中槽位定义)
+    @Override
+    protected void tickServer() {
+        if (itemHandler == null || energyStorage == null) return;
+
+        ItemStack inputStack = itemHandler.getStackInSlot(INPUT_SLOT);
+        ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
+        boolean canStart = false;
+
+        if (!inputStack.isEmpty()) {
+            Optional<BlastingRecipe> recipe = level.getRecipeManager().getRecipeFor(RecipeType.BLASTING, new SimpleContainer(inputStack), level);
+
+            if (recipe.isPresent()) {
+                ItemStack recipeOutput = recipe.get().assemble(new SimpleContainer(inputStack), level.registryAccess());
+                if (canCrush(outputStack, recipeOutput) && energyStorage.getEnergyStored() >= energyUsagePerTick) {
+                    canStart = true;
+                }
+
+                if (canStart) {
+                    if(!getBlockState().getValue(CrusherBL.POWERED)){
+                        level.setBlock(getBlockPos(),getBlockState().setValue(CrusherBL.POWERED, true), 3);
+                    }
+                    progress++;
+                    energyStorage.costEnergy(energyUsagePerTick);
+                    setChanged(level, getBlockPos(), getBlockState());
+
+                    if (progress >= totalTime) {
+                        crushItem(recipeOutput);
+                        resetProgress();
+                        if(itemHandler.getStackInSlot(INPUT_SLOT).isEmpty())
+                            level.setBlock(getBlockPos(),getBlockState().setValue(CrusherBL.POWERED, false), 3);
+                        setChanged(level, getBlockPos(), getBlockState());
+                    }
+                } else {
+                    level.setBlock(getBlockPos(),getBlockState().setValue(CrusherBL.POWERED, false), 3);
+                }
+            }
+        }
+
     }
 
-    public static int getCrusherOutputSlot() {
-        return CRUSHER_OUTPUT_SLOT; // 获取输出槽位索引
+
+    private boolean canCrush(ItemStack outputStack, ItemStack recipeOutput) {
+        if (recipeOutput.isEmpty()) {
+            return false;
+        }
+
+        if (outputStack.isEmpty()) {
+            return true;
+        }
+
+        if (!outputStack.is(recipeOutput.getItem())) {
+            return false;
+        }
+
+        return outputStack.getCount() + recipeOutput.getCount() <= outputStack.getMaxStackSize();
+    }
+
+    private void crushItem(ItemStack recipeOutput) {
+        ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
+
+        if (outputStack.isEmpty()) {
+            itemHandler.setStackInSlot(OUTPUT_SLOT, recipeOutput.copy());
+        } else if (outputStack.is(recipeOutput.getItem())) {
+            outputStack.grow(recipeOutput.getCount());
+        }
+
+        itemHandler.extractItem(INPUT_SLOT, 1, false);
+    }
+
+    private void resetProgress() {
+        progress = 0;
+    }
+
+    @Override
+    protected void saveData(CompoundTag pTag) {
+        super.saveData(pTag);
+        pTag.putInt("progress", progress);
+    }
+
+    @Override
+    public void loadData(CompoundTag pTag) {
+        super.loadData(pTag);
+        progress = pTag.getInt("progress");
     }
 }

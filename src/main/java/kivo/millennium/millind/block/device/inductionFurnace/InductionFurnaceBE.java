@@ -67,8 +67,20 @@ public class InductionFurnaceBE extends AbstractDeviceBE {
 
     }
 
-    public int getProgress(){
+    private boolean isLit(){
+        return getBlockState().getValue(InductionFurnaceBL.POWERED);
+    }
+
+    private int getProgressPercent(){
         return (int) (((float) smeltingProgress / smeltingTotalTime) * 100);
+    }
+
+    public int getProgressAndLit(){
+        if (isLit()){
+            return getProgressPercent() << 1 | 1;
+        }else {
+            return getProgressPercent() << 1;
+        }
     }
 
     private boolean canSmelt(ItemStack outputStack, ItemStack recipeOutput) {

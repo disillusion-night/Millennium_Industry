@@ -31,6 +31,11 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         addWithHaveModel(MillenniumBlocks.METAL_TANK_BL.get(), "metal_tank");
 
+        cubeAllBlockWithItem(MillenniumBlocks.LEAD_BLOCK, "ore");
+        cubeAllBlockWithItem(MillenniumBlocks.LEAD_ORE, "ore");
+        cubeAllBlockWithItem(MillenniumBlocks.DEEPSLATE_LEAD_ORE, "ore");
+        cubeAllBlockWithItem(MillenniumBlocks.RAW_LEAD_BLOCK, "ore");
+
         sixFacing(MillenniumBlocks.NETHER_STAR_LASER_BL, "nether_star_laser");
         simpleOrientable(MillenniumBlocks.GENERATOR_BL.get(), "generator");
         simpleOrientableWithTop(MillenniumBlocks.INDUCTION_FURNACE_BL.get(), "induction_furnace");
@@ -48,6 +53,14 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(block,model_path);
     }
 
+    public <B extends Block> void cubeAllBlockWithItem(RegistryObject<B> block, String prefix) {
+        ModelFile blockModel = models().getBuilder(prefix + "/" + block.getId().getPath())
+                .parent(new ConfiguredModel(models().getExistingFile(new ResourceLocation("minecraft:block/cube_all"))).model)
+                .texture("all", getRL("block/"+ prefix + "/" + block.getId().getPath()));
+
+        getVariantBuilder(block.get()).partialState().setModels(new ConfiguredModel(blockModel));
+        simpleBlockItem(block.get(), blockModel);
+    }
 
     /**
      *  具有六个朝向和亮灭状态的方块的 BlockState 生成.

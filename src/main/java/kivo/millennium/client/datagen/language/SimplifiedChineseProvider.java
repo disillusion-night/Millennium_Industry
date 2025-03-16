@@ -23,6 +23,9 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.INDUCTION_FURNACE_BL.get(), "感应炉");
         add(MillenniumBlocks.CRUSHER_BL.get(), "粉碎机");
         add(MillenniumBlocks.SOLAR_GENERATOR.get(), "太阳能发电机");
+        add(MillenniumBlocks.LEAD_BLOCK.get(), "铅块");
+        add(MillenniumBlocks.LEAD_ORE.get(), "铅矿石");
+        add(MillenniumBlocks.DEEPSLATE_LEAD_ORE.get(), "深板岩铅矿");
         //add(MillenniumBlocks.HMI_BL.get(), "千禧年人机接口");
         //add(MillenniumBlocks.PROJECTOR_BL.get(), "千禧年蓝图投影仪");
 
@@ -31,6 +34,9 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.WolfseggIron.get(), "沃普赛克铁块");
         add(MillenniumItems.WolfseggIronOre.get(), "沃普赛克铁矿");
         add(MillenniumItems.VRLA.get(), "铅酸蓄电池");
+        add(MillenniumItems.LEAD_INGOT.get(), "铅锭");
+        add(MillenniumItems.LEAD_NUGGET.get(), "铅粒");
+        add(MillenniumItems.RAW_LEAD.get(), "粗铅");
 
         add(MillenniumFluidTypes.ICY_WATER_FLUID_TYPE.get().getDescriptionId(), "冰水");
 

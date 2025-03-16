@@ -36,6 +36,18 @@ public class MillenniumCreativeTab {
                         }
                     }).build());
 
+
+
+    public static final RegistryObject<CreativeModeTab> MATERIALS = CREATIVE_MODE_TABS.register("materials",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable(getCreativeTabTranslationKey("materials")))
+                    .icon(() -> MillenniumItems.LEAD_INGOT.get().getDefaultInstance())
+                    .displayItems((parameters, output) -> {
+                        for (RegistryObject<Item> item : MillenniumItems.MATERIALS){
+                            output.accept(item.get());
+                        }
+                    }).build());
+
     public static final String getCreativeTabTranslationKey(String name){
         return "item_group." + MODID + "."+ name;
     }

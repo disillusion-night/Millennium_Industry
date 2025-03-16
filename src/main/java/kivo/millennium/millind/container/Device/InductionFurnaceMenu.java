@@ -1,5 +1,6 @@
 package kivo.millennium.millind.container.Device;
 
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.block.device.AbstractDeviceBE;
 import kivo.millennium.millind.block.device.inductionFurnace.InductionFurnaceBE;
 import kivo.millennium.millind.capability.DeviceOutputSlot;
@@ -17,7 +18,7 @@ import org.joml.Vector2i;
 public class InductionFurnaceMenu extends AbstractDeviceMenu {
     private static final Vector2i inputpos = new Vector2i(53, 35);
     private static final Vector2i outputpos = new Vector2i(107, 35);
-    private int progress;
+    private int progressAndLit;
     public InductionFurnaceMenu(int pContainerId, Player player, BlockPos pos) {
         super(MillenniumMenuTypes.INDUCTION_FURNACE_MENU.get(), pContainerId, player, pos, new SimpleContainer(InductionFurnaceBE.SLOT_COUNT));
     }
@@ -37,20 +38,23 @@ public class InductionFurnaceMenu extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return be.getProgress() & 0xffff;
+                return be.getProgressAndLit() & 0xffff;
             }
 
             @Override
             public void set(int pValue) {
-                InductionFurnaceMenu.this.progress = (InductionFurnaceMenu.this.progress & 0xffff0000) | (pValue & 0xffff);
+                InductionFurnaceMenu.this.progressAndLit = (InductionFurnaceMenu.this.progressAndLit & 0xffff0000) | (pValue & 0xffff);
             }
         });
     }
 
     public int getProgress(){
-        return progress;
+        return progressAndLit >> 1;
     }
 
+    public boolean getLit(){
+        return (progressAndLit & 1) > 0;
+    }
     @Override
     protected Block getBlock() {
         return MillenniumBlocks.INDUCTION_FURNACE_BL.get();

@@ -8,6 +8,7 @@ import kivo.millennium.client.datagen.language.SimplifiedChineseProvider;
 import kivo.millennium.millind.datagen.tag.ItemTagProvider;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.data.DataProvider;
+import net.minecraft.data.recipes.RecipeProvider;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -49,6 +50,12 @@ public class DataGeneratorHandler {
         event.getGenerator().addProvider(
                 event.includeServer(),
                 (DataProvider.Factory<ItemTagProvider>) pOutput -> new ItemTagProvider(pOutput, lookup, efh)
+        );
+
+        event.getGenerator().addProvider(
+                // 告诉生成器仅在生成服务端资源时运行
+                event.includeServer(),
+                (DataProvider.Factory<RecipeProvider>) MillenniumRecipeProvider::new
         );
     }
 }

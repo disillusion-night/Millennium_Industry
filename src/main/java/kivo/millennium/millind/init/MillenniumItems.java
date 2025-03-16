@@ -18,6 +18,7 @@ public class MillenniumItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
     public static ArrayList<RegistryObject<Oopart>> OOPARTS = new ArrayList<>();
     public static ArrayList<RegistryObject<Item>> ENGINEERING_PARTS = new ArrayList<>();
+    public static ArrayList<RegistryObject<Item>> MATERIALS = new ArrayList<>();
 
     public static final RegistryObject<Oopart> HighPurityWolfseggSteel = createOopart("high_purity_wolfsegg_steel", SSR);
     public static final RegistryObject<Oopart> LowPurityWolfseggSteel = createOopart("low_purity_wolfsegg_steel", SR);
@@ -25,6 +26,24 @@ public class MillenniumItems {
     public static final RegistryObject<Oopart> WolfseggIronOre = createOopart("wolfsegg_iron_ore", N);
 
     public static final RegistryObject<BaseBattery> VRLA = createBattery("vrla", 10000, 1000);
+
+
+    public static final RegistryObject<Item> LEAD_INGOT = createMaterial("lead_ingot");
+    public static final RegistryObject<Item> LEAD_NUGGET = createMaterial("lead_nugget");
+    public static final RegistryObject<Item> RAW_LEAD = createMaterial("raw_lead");
+
+    private static RegistryObject<Item> createMaterial(String name){
+        RegistryObject<Item>material = ITEMS.register(name, () -> new Item(new Item.Properties()));
+        MATERIALS.add(material);
+        return material;
+    }
+
+    private static RegistryObject<Item> createMaterial(String name, Item.Properties properties){
+        RegistryObject<Item>material = ITEMS.register(name, () -> new Item(properties));
+        MATERIALS.add(material);
+        return material;
+    }
+
 
     private static RegistryObject<Oopart> createOopart(String name, BAItemLevel level){
          RegistryObject<Oopart> oopart = ITEMS.register(name, () -> new Oopart(new Item.Properties(), level));

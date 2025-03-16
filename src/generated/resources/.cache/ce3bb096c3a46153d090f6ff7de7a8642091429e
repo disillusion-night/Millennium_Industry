@@ -1,9 +1,13 @@
-// 1.20.1	2025-03-14T14:04:28.9345992	Block States: millind
+// 1.20.1	2025-03-16T23:49:55.6850058	Block States: millind
 b31936ed56645b47e694d80a3f726efeb0a73742 assets/millind/blockstates/crusher.json
+34139f788f829fa5b57db655117b0a93987b5c75 assets/millind/blockstates/deepslate_lead_ore.json
 e45ff2b211546fb6a7f4d60bb919de588a57cf0e assets/millind/blockstates/generator.json
 bfc1383a1be24f47477ed2d740664fdb8c702a71 assets/millind/blockstates/induction_furnace.json
+28366e12f2e5c3f387119223e5f7d963158d2992 assets/millind/blockstates/lead_block.json
+deb1d4299274a48a8236f26bb61b85afbaa27c9a assets/millind/blockstates/lead_ore.json
 5a53ecb6728020a898134a88e1f03098c095b0f3 assets/millind/blockstates/metal_tank.json
 d9637f0642a07d9244e25f28c2c2f1b657ec837d assets/millind/blockstates/nether_star_laser.json
+1062da45601e1e42cb94b0a9cb01b5c4d4488df6 assets/millind/blockstates/raw_lead_block.json
 c7111558ee06fcc6c06f144880713668a5841718 assets/millind/blockstates/solar_generator.json
 9ccf19d99713f6250b5643d86ce03bae19e9fcdb assets/millind/models/block/crusher.json
 5d24064057d0d348063a90afd41416bb258c11d8 assets/millind/models/block/crusher_on.json
@@ -13,8 +17,16 @@ c7111558ee06fcc6c06f144880713668a5841718 assets/millind/blockstates/solar_genera
 4e256a7892e2ed41596853840e47cc97a186c2dc assets/millind/models/block/induction_furnace_on.json
 4898221903d5ca92195ad15aa7745b52932e5438 assets/millind/models/block/solar_generator.json
 3d4bd2cb5f8180c85c95053f22b6f7fc1c0fc951 assets/millind/models/item/crusher.json
+26bb538aedaa0494529abdf480977839d3cd3d2d assets/millind/models/item/deepslate_lead_ore.json
 31c4197c50b25db558214688cbbb303b5513267a assets/millind/models/item/generator.json
 d8c7939c29aad9aed28d0319ef8b614dc5e98107 assets/millind/models/item/induction_furnace.json
+a11b818a91733fe8f665969ffbc763f521a56692 assets/millind/models/item/lead_block.json
+5e1526d4aac251d070ca7d73dbca18e2083d6643 assets/millind/models/item/lead_ore.json
 4711d1d5eaa93b709bb4b1b136cea637e6d045f8 assets/millind/models/item/metal_tank.json
 fe11c227398749bfcba561fc8acffcc86c7c3810 assets/millind/models/item/nether_star_laser.json
+1d79b127166e1487d3b74fcb9ecbb29f646aacae assets/millind/models/item/raw_lead_block.json
 f319d5b231892ae5340750fa5880e007b1ffd3e6 assets/millind/models/item/solar_generator.json
+85fe5c985313bd90eae48ec5d1f1cde32d9e7b59 assets/millind/models/ore/deepslate_lead_ore.json
+c64801e557eb3ef369ba94269ef0c880fe41a2f3 assets/millind/models/ore/lead_block.json
+bc6ae789ab6349ef3eb6840d74f8edf3f541f245 assets/millind/models/ore/lead_ore.json
+1ad95ba1a51cbb16578db4d76b17861dd5b8451b assets/millind/models/ore/raw_lead_block.json

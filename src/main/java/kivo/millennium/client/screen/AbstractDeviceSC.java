@@ -45,7 +45,7 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends Abs
     protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         int i = this.leftPos;
         int j = this.topPos;
-        pGuiGraphics.blit(this.GUI_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight);
+        pGuiGraphics.blit(this.GUI_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth, this.imageHeight);
 
         //renderEnergyArea(guiGraphics, x, y); // 渲染能量区域，子类可以覆写此方法自定义渲染
     }

@@ -27,6 +27,10 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.RAW_LEAD_BLOCK.get(), "粗铅块");
         add(MillenniumBlocks.LEAD_ORE.get(), "铅矿石");
         add(MillenniumBlocks.DEEPSLATE_LEAD_ORE.get(), "深板岩铅矿");
+        add(MillenniumBlocks.ALUMINUM_BLOCK.get(), "铝块");
+        add(MillenniumBlocks.RAW_ALUMINUM_BLOCK.get(), "粗铝块");
+        add(MillenniumBlocks.ALUMINUM_ORE.get(), "铝矿石");
+        add(MillenniumBlocks.DEEPSLATE_ALUMINUM_ORE.get(), "深板岩铝矿");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "高纯度沃普赛克钢铁");
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "低纯度沃普赛克钢铁");
@@ -36,6 +40,9 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.LEAD_INGOT.get(), "铅锭");
         add(MillenniumItems.LEAD_NUGGET.get(), "铅粒");
         add(MillenniumItems.RAW_LEAD.get(), "粗铅");
+        add(MillenniumItems.ALUMINUM_INGOT.get(), "铝锭");
+        add(MillenniumItems.ALUMINUM_NUGGET.get(), "铝粒");
+        add(MillenniumItems.RAW_ALUMINUM.get(), "粗铝");
 
         add(MillenniumFluidTypes.ICY_WATER_FLUID_TYPE.get().getDescriptionId(), "冰水");
 

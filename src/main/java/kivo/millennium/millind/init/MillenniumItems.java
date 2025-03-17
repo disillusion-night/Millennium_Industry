@@ -32,6 +32,10 @@ public class MillenniumItems {
     public static final RegistryObject<Item> LEAD_NUGGET = createMaterial("lead_nugget");
     public static final RegistryObject<Item> RAW_LEAD = createMaterial("raw_lead");
 
+    public static final RegistryObject<Item> ALUMINUM_INGOT = createMaterial("aluminum_ingot");
+    public static final RegistryObject<Item> ALUMINUM_NUGGET = createMaterial("aluminum_nugget");
+    public static final RegistryObject<Item> RAW_ALUMINUM = createMaterial("raw_aluminum");
+
     private static RegistryObject<Item> createMaterial(String name){
         RegistryObject<Item>material = ITEMS.register(name, () -> new Item(new Item.Properties()));
         MATERIALS.add(material);

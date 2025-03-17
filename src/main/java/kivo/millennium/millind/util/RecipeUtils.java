@@ -59,7 +59,7 @@ public class RecipeUtils {
 
         private boolean createBlockRecipe = false;
         private boolean createIngotFromBlockRecipe = false;
-        private boolean createRawOreFromOreRecipe = false; // 原矿合成粗矿物品的配方，保持原样
+        private boolean createRawOreFromRawBlockRecipe = false; // 原矿合成粗矿物品的配方，保持原样
         private boolean createNuggetFromIngotRecipe = false;
         private boolean createIngotFromNuggetRecipe = false;
         private boolean createIngotFromSmeltingRawOreRecipe = false;
@@ -117,8 +117,8 @@ public class RecipeUtils {
             return this;
         }
 
-        public MineralRecipeBuilder withRawOreFromOreRecipe() {
-            this.createRawOreFromOreRecipe = true;
+        public MineralRecipeBuilder withRawOreFromRawBlockRecipe() {
+            this.createRawOreFromRawBlockRecipe = true;
             return this;
         }
 
@@ -160,7 +160,8 @@ public class RecipeUtils {
                     .withIngotFromSmeltingRawOreRecipe()
                     .withIngotFromSmeltingOreRecipe()
                     .withIngotFromSmeltingDeepslateOreRecipe()
-                    .withRawBlockFromRawOreRecipe(); // 添加粗矿块合成
+                    .withRawBlockFromRawOreRecipe()
+                    .withRawOreFromRawBlockRecipe();
         }
 
         public void build() {
@@ -188,16 +189,6 @@ public class RecipeUtils {
                         .requires(block)
                         .unlockedBy("has_" + mineralBlockName(block), has(block))
                         .save(writer, new ResourceLocation(getNamespace(block), mineralName + "_ingot_from_block"));
-            }
-
-            if (createRawOreFromOreRecipe) {
-                ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, rawOre) // 注意这里，之前是将 9 个矿石合成 1 个粗矿物品
-                        .pattern("###")
-                        .pattern("###")
-                        .pattern("###")
-                        .define('#', ore)
-                        .unlockedBy("has_" + mineralOreName(ore), has(ore))
-                        .save(writer, new ResourceLocation(getNamespace(ore), "raw_" + mineralName + "_from_ore"));
             }
 
             if (createNuggetFromIngotRecipe) {
@@ -246,6 +237,13 @@ public class RecipeUtils {
                         .define('#', rawOre)
                         .unlockedBy("has_" + mineralRawOreName(rawOre), has(rawOre))
                         .save(writer, new ResourceLocation(getNamespace(rawOre), "raw_" + mineralName + "_block"));
+            }
+
+            if (createRawOreFromRawBlockRecipe) {
+                ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, rawOre, 9)
+                        .requires(rawBlock)
+                        .unlockedBy("has_" + mineralBlockName(rawBlock), has(rawBlock))
+                        .save(writer, new ResourceLocation(getNamespace(rawBlock), mineralName + "_raw_ore_from_raw_block"));
             }
         }
 

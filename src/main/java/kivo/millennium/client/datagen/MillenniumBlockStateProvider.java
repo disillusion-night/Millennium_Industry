@@ -35,6 +35,10 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         cubeAllBlockWithItem(MillenniumBlocks.LEAD_ORE, "ore");
         cubeAllBlockWithItem(MillenniumBlocks.DEEPSLATE_LEAD_ORE, "ore");
         cubeAllBlockWithItem(MillenniumBlocks.RAW_LEAD_BLOCK, "ore");
+        cubeAllBlockWithItem(MillenniumBlocks.ALUMINUM_BLOCK, "ore");
+        cubeAllBlockWithItem(MillenniumBlocks.ALUMINUM_ORE, "ore");
+        cubeAllBlockWithItem(MillenniumBlocks.DEEPSLATE_ALUMINUM_ORE, "ore");
+        cubeAllBlockWithItem(MillenniumBlocks.RAW_ALUMINUM_BLOCK, "ore");
 
         sixFacing(MillenniumBlocks.NETHER_STAR_LASER_BL, "nether_star_laser");
         simpleOrientable(MillenniumBlocks.GENERATOR_BL.get(), "generator");

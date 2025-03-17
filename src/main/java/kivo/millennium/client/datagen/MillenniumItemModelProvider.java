@@ -32,6 +32,9 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
         SimpleItem(MillenniumItems.LEAD_INGOT, "ore");
         SimpleItem(MillenniumItems.LEAD_NUGGET, "ore");
         SimpleItem(MillenniumItems.RAW_LEAD, "ore");
+        SimpleItem(MillenniumItems.ALUMINUM_INGOT, "ore");
+        SimpleItem(MillenniumItems.ALUMINUM_NUGGET, "ore");
+        SimpleItem(MillenniumItems.RAW_ALUMINUM, "ore");
         SimpleItem(MillenniumItems.VRLA);
     }
 

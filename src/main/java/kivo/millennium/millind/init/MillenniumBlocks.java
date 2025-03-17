@@ -51,6 +51,12 @@ public class MillenniumBlocks {
     public static final RegistryObject<Block> LEAD_BLOCK = registerWithItem("lead_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).instrument(NoteBlockInstrument.IRON_XYLOPHONE).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.METAL)));
     public static final RegistryObject<Block> RAW_LEAD_BLOCK = registerWithItem("raw_lead_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 6.0F)));
 
+
+    public static final RegistryObject<Block> ALUMINUM_ORE = registerWithItem("aluminum_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
+    public static final RegistryObject<Block> DEEPSLATE_ALUMINUM_ORE = registerWithItem("deepslate_aluminum_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.copy(ALUMINUM_ORE.get()).mapColor(MapColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE)));
+    public static final RegistryObject<Block> ALUMINUM_BLOCK = registerWithItem("aluminum_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).instrument(NoteBlockInstrument.IRON_XYLOPHONE).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.METAL)));
+    public static final RegistryObject<Block> RAW_ALUMINUM_BLOCK = registerWithItem("raw_aluminum_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.RAW_IRON).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(5.0F, 6.0F)));
+
     //public static final RegistryObject<ArcFurnaceBL> ARC_FURNACE_BL = registerWithItem("arc_furnace", ArcFurnaceBL::new);
 
     //public static final RegistryObject<ProjectorBL> PROJECTOR_BL = registerWithItem("projector", ProjectorBL::new);

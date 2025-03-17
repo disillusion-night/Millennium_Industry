@@ -28,6 +28,10 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.RAW_LEAD_BLOCK.get(), "Raw Lead Block");
         add(MillenniumBlocks.LEAD_ORE.get(), "Lead Ore");
         add(MillenniumBlocks.DEEPSLATE_LEAD_ORE.get(), "Deepslate Lead Ore");
+        add(MillenniumBlocks.ALUMINUM_BLOCK.get(), "Aluminum Block");
+        add(MillenniumBlocks.RAW_ALUMINUM_BLOCK.get(), "Raw Aluminum Block");
+        add(MillenniumBlocks.ALUMINUM_ORE.get(), "Aluminum Ore");
+        add(MillenniumBlocks.DEEPSLATE_ALUMINUM_ORE.get(), "Deepslate Aluminum Ore");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "High-Purity Wolfsegg Steel");
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "Low-Purity Wolfsegg Steel");
@@ -37,6 +41,9 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.LEAD_INGOT.get(), "Lead Ingot");
         add(MillenniumItems.LEAD_NUGGET.get(), "Lead Nugget");
         add(MillenniumItems.RAW_LEAD.get(), "Raw Lead");
+        add(MillenniumItems.ALUMINUM_INGOT.get(), "Aluminum Ingot");
+        add(MillenniumItems.ALUMINUM_NUGGET.get(), "Aluminum Nugget");
+        add(MillenniumItems.RAW_ALUMINUM.get(), "Raw Aluminum");
 
         add(MillenniumFluidTypes.ICY_WATER_FLUID_TYPE.get().getDescriptionId(), "Icy Water");
 

@@ -53,7 +53,6 @@ public class DataGeneratorHandler {
         );
 
         event.getGenerator().addProvider(
-                // 告诉生成器仅在生成服务端资源时运行
                 event.includeServer(),
                 (DataProvider.Factory<RecipeProvider>) MillenniumRecipeProvider::new
         );

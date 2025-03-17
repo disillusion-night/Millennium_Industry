@@ -24,10 +24,9 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.CRUSHER_BL.get(), "粉碎机");
         add(MillenniumBlocks.SOLAR_GENERATOR.get(), "太阳能发电机");
         add(MillenniumBlocks.LEAD_BLOCK.get(), "铅块");
+        add(MillenniumBlocks.RAW_LEAD_BLOCK.get(), "粗铅块");
         add(MillenniumBlocks.LEAD_ORE.get(), "铅矿石");
         add(MillenniumBlocks.DEEPSLATE_LEAD_ORE.get(), "深板岩铅矿");
-        //add(MillenniumBlocks.HMI_BL.get(), "千禧年人机接口");
-        //add(MillenniumBlocks.PROJECTOR_BL.get(), "千禧年蓝图投影仪");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "高纯度沃普赛克钢铁");
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "低纯度沃普赛克钢铁");

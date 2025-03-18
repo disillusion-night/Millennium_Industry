@@ -46,6 +46,10 @@ public class RecipeUtils {
         return new InventoryChangeTrigger.TriggerInstance(ContextAwarePredicate.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, pPredicates);
     }
 
+    public static MineralRecipeBuilder createMineralRecipeBuilder(Consumer<FinishedRecipe> writer, String mineralName){
+        return new MineralRecipeBuilder(writer, mineralName);
+    }
+
     public static class MineralRecipeBuilder {
         private final Consumer<FinishedRecipe> writer;
         private final String mineralName;
@@ -213,6 +217,11 @@ public class RecipeUtils {
                         .unlockedBy("has_" + mineralRawOreName(rawOre), has(rawOre))
                         .group(mineralName)
                         .save(writer, new ResourceLocation(getNamespace(rawOre), mineralName + "_ingot_from_smelting_raw"));
+
+                SimpleCookingRecipeBuilder.blasting(Ingredient.of(rawOre), RecipeCategory.MISC, ingot, 0.7F, 100)
+                        .unlockedBy("has_" + mineralRawOreName(rawOre), has(rawOre))
+                        .group(mineralName)
+                        .save(writer, new ResourceLocation(getNamespace(rawOre), mineralName + "_ingot_from_blasting_raw"));
             }
 
             if (createIngotFromSmeltingOreRecipe) {
@@ -220,6 +229,11 @@ public class RecipeUtils {
                         .unlockedBy("has_" + mineralOreName(ore), has(ore))
                         .group(mineralName)
                         .save(writer, new ResourceLocation(getNamespace(ore), mineralName + "_ingot_from_smelting"));
+
+                SimpleCookingRecipeBuilder.blasting(Ingredient.of(ore), RecipeCategory.MISC, ingot, 0.7F, 100)
+                        .unlockedBy("has_" + mineralOreName(ore), has(ore))
+                        .group(mineralName)
+                        .save(writer, new ResourceLocation(getNamespace(ore), mineralName + "_ingot_from_blasting"));
             }
 
             if (createIngotFromSmeltingDeepslateOreRecipe) {
@@ -227,6 +241,11 @@ public class RecipeUtils {
                         .unlockedBy("has_" + mineralDeepslateOreName(deepslateOre), has(deepslateOre))
                         .group(mineralName)
                         .save(writer, new ResourceLocation(getNamespace(deepslateOre), mineralName + "_ingot_from_smelting_deepslate"));
+
+                SimpleCookingRecipeBuilder.blasting(Ingredient.of(deepslateOre), RecipeCategory.MISC, ingot, 0.7F, 100)
+                        .unlockedBy("has_" + mineralDeepslateOreName(deepslateOre), has(deepslateOre))
+                        .group(mineralName)
+                        .save(writer, new ResourceLocation(getNamespace(deepslateOre), mineralName + "_ingot_from_blasting_deepslate"));
             }
 
             if (createRawBlockFromRawOreRecipe) {

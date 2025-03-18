@@ -5,6 +5,7 @@ import kivo.millennium.millind.init.MillenniumItems;
 import kivo.millennium.millind.util.RecipeUtils;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.function.Consumer;
 
@@ -14,8 +15,8 @@ public class MillenniumRecipeProvider extends RecipeProvider {
     }
 
     @Override
-    protected void buildRecipes(Consumer<FinishedRecipe> pWriter) {
-        new RecipeUtils.MineralRecipeBuilder(pWriter, "lead")
+    protected void buildRecipes(@NotNull Consumer<FinishedRecipe> pWriter) {
+        RecipeUtils.createMineralRecipeBuilder(pWriter, "lead")
                 .block(MillenniumBlocks.LEAD_BLOCK.get())
                 .rawBlock(MillenniumBlocks.RAW_LEAD_BLOCK.get())
                 .ore(MillenniumBlocks.LEAD_ORE.get())
@@ -26,7 +27,7 @@ public class MillenniumRecipeProvider extends RecipeProvider {
                 .withAllRecipe()
                 .build();
 
-        new RecipeUtils.MineralRecipeBuilder(pWriter, "aluminum")
+        RecipeUtils.createMineralRecipeBuilder(pWriter, "aluminum")
                 .block(MillenniumBlocks.ALUMINUM_BLOCK.get())
                 .rawBlock(MillenniumBlocks.RAW_ALUMINUM_BLOCK.get())
                 .ore(MillenniumBlocks.ALUMINUM_ORE.get())

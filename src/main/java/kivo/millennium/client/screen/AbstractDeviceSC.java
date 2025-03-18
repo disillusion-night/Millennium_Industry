@@ -22,12 +22,19 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends Abs
     protected ResourceLocation BATTERY_TEXTURE;
     protected ResourceLocation POWER_TEXTURE;
 
+
+    protected ResourceLocation ENERGY_AREA_BASE_TEXTURE;
+    protected ResourceLocation BATTERY_OVERLAY_TEXTURE;
+    protected ResourceLocation POWER_OVERLAY_TEXTURE;
+
     protected C menu;
 
     protected Vector2i EnergyPos;
     protected Vector2i EnergySize;
     protected Vector2i PowerSlotSize;
     protected Vector2i BatteryPos;
+    protected Vector2i EnergyAreaSize;
+    protected Vector2i EnergyPercentOffset;
 
     protected AbstractDeviceSC(C pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
@@ -36,11 +43,15 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends Abs
         this.imageHeight = getImageSize().y;
         this.BATTERY_TEXTURE = getRL("textures/gui/container/power/battery.png");
         this.POWER_TEXTURE = getRL("textures/gui/container/power/power_slot.png");
+        this.ENERGY_AREA_BASE_TEXTURE = getRL("textures/gui/container/energy/energy_area.png");
+        this.BATTERY_OVERLAY_TEXTURE = getRL("textures/gui/container/energy/battery_overlay.png");
+        this.POWER_OVERLAY_TEXTURE = getRL("textures/gui/container/energy/has_power_supply.png");
         this.BatteryPos = new Vector2i(153, 9);
         this.EnergyPos = getEnergyPos();
         this.PowerSlotSize = getPowerSlotSize();
         this.EnergySize = new Vector2i(44, 15);
-
+        this.EnergyAreaSize = new Vector2i(29, 29);
+        this.EnergyPercentOffset = new Vector2i(3, 18);
     }
 
     protected Vector2i getPowerSlotSize(){
@@ -162,6 +173,29 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends Abs
         graphics.blit(BATTERY_TEXTURE, leftPos + pos.x, topPos + pos.y, 0, 9 * p, 16, 9, 16, 45);
     }*/
 
+    protected void renderEnergyArea(GuiGraphics pGuiGraphics){
+        int power = menu.getPower();
+        int maxPower = menu.getMaxPower();
+        float percent = (float) Math.floor(power / (float) maxPower * 100);
+
+        Vector2i pos = getEnergyAreaPos();
+
+        pGuiGraphics.blit(ENERGY_AREA_BASE_TEXTURE, pos.x, pos.y, 0, 0, EnergyAreaSize.x, EnergyAreaSize.y, EnergyAreaSize.x, EnergyAreaSize.y);
+
+        if (true){
+            pGuiGraphics.blit(POWER_OVERLAY_TEXTURE, pos.x, pos.y, 0, 0, EnergyAreaSize.x, EnergyAreaSize.y, EnergyAreaSize.x, EnergyAreaSize.y);
+        }
+        int p = getP(percent);
+
+        pGuiGraphics.blit(BATTERY_OVERLAY_TEXTURE, pos.x, pos.y, 0, p * EnergyAreaSize.y, EnergyAreaSize.x, EnergyAreaSize.y, EnergyAreaSize.x, 29 * 5);
+
+        pGuiGraphics.drawString(font, (int) Math.floor(percent) + "%",  pos.x + EnergyPercentOffset.x, pos.y + EnergyPercentOffset.y, 0x6dc7dd, false);
+    }
+
+    protected Vector2i getEnergyAreaPos(){
+        return new Vector2i(this.leftPos - this.EnergyAreaSize.x + 1, this.topPos + this.imageHeight - this.EnergyAreaSize.y);
+    }
+
     protected int getP(float percent){
         if (percent == 0){
             return 0;
@@ -203,8 +237,9 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends Abs
         this.renderBackground(pGuiGraphics);
         super.render(pGuiGraphics, mouseX, mouseY, partialTick);
         renderTooltip(pGuiGraphics, mouseX, mouseY); // 渲染 Tooltip
-        renderPowerSlot(pGuiGraphics, this.EnergyPos, this.EnergySize);
-        checkPowerTip(pGuiGraphics, mouseX, mouseY);
+        renderEnergyArea(pGuiGraphics);
+        //renderPowerSlot(pGuiGraphics, this.EnergyPos, this.EnergySize);
+        //checkPowerTip(pGuiGraphics, mouseX, mouseY);
     }
 
 

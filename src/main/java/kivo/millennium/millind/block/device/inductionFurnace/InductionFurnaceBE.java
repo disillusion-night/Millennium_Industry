@@ -19,7 +19,7 @@ public class InductionFurnaceBE extends AbstractDeviceBE {
     public static int OUTPUT_SLOT = 2;
     private final int energyUsagePerTick = 200;
     private final int maxLitTime = 10;
-    private int smeltingProgress = 0;
+    private int progress = 0;
     private int smeltingTotalTime = 100;
     private int litTime = 0;
 
@@ -48,21 +48,22 @@ public class InductionFurnaceBE extends AbstractDeviceBE {
                     if(!getBlockState().getValue(InductionFurnaceBL.POWERED)){
                       level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.POWERED, true), 3);
                     }
-                    smeltingProgress++;
+                    progress++;
                     energyStorage.costEnergy(energyUsagePerTick);
                     setChanged(level, getBlockPos(), getBlockState());
 
-                    if (smeltingProgress >= smeltingTotalTime) {
+                    if (progress >= smeltingTotalTime) {
                         smeltItem(recipeOutput);
-                        resetSmelting();
-                        if(itemHandler.getStackInSlot(INPUT_SLOT).isEmpty())
-                            level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.POWERED, false), 3);
+                        resetProgress();
                         setChanged(level, getBlockPos(), getBlockState());
                     }
                 } else {
                     level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.POWERED, false), 3);
                 }
             }
+        } else {
+            resetProgress();
+            level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.POWERED, false), 3);
         }
 
     }
@@ -72,7 +73,7 @@ public class InductionFurnaceBE extends AbstractDeviceBE {
     }
 
     private int getProgressPercent(){
-        return (int) (((float) smeltingProgress / smeltingTotalTime) * 100);
+        return (int) (((float) progress / smeltingTotalTime) * 100);
     }
 
     public int getProgressAndLit(){
@@ -111,27 +112,21 @@ public class InductionFurnaceBE extends AbstractDeviceBE {
         itemHandler.extractItem(INPUT_SLOT, 1, false);
     }
 
-    private void resetSmelting() {
-        smeltingProgress = 0;
+    private void resetProgress() {
+        progress = 0;
     }
+
+
 
     @Override
     protected void saveData(CompoundTag pTag) {
         super.saveData(pTag);
-        pTag.putInt("smeltingProgress", smeltingProgress);
+        pTag.putInt("progress", progress);
     }
 
     @Override
     public void loadData(CompoundTag pTag) {
         super.loadData(pTag);
-        smeltingProgress = pTag.getInt("smeltingProgress");
-    }
-
-    public int getSmeltingProgress() {
-        return smeltingProgress;
-    }
-
-    public int getSmeltingTotalTime() {
-        return smeltingTotalTime;
+        progress = pTag.getInt("progress");
     }
 }

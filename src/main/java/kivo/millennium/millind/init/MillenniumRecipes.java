@@ -1,14 +1,24 @@
 package kivo.millennium.millind.init;
 
+import kivo.millennium.millind.recipe.CrushingRecipe;
+import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
+import net.minecraftforge.registries.RegistryObject;
 
 import static kivo.millennium.millind.Main.MODID;
+import static kivo.millennium.millind.Main.getRL;
 
 public class MillenniumRecipes {
-    public static final DeferredRegister<RecipeType<?>> RECIPE_TYPE = DeferredRegister.create(ForgeRegistries.Keys.RECIPE_TYPES.registry(), MODID);
+    public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =
+            DeferredRegister.create(ForgeRegistries.RECIPE_SERIALIZERS, MODID);
 
-    //public static final RegistryObject<RecipeType<CrusherRecipe>> ICY_WATER_FLUID_TYPE = RECIPE_TYPE.register("crusher_recipe",  RecipeType.simple(getRL(CrusherRecipe.Serializer.NAME.toString())));
+    public static final RegistryObject<RecipeSerializer<CrushingRecipe>> CRUSHING_RECIPE =
+            SERIALIZERS.register("crushing", () -> CrushingRecipe.Serializer.INSTANCE);
 
+    public static void register(IEventBus eventBus) {
+        SERIALIZERS.register(eventBus);
+    }
 }

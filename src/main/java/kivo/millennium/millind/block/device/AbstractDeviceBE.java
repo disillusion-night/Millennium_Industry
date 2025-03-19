@@ -5,6 +5,8 @@ import kivo.millennium.millind.capability.DeviceEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.Container;
+import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -25,7 +27,7 @@ public abstract class AbstractDeviceBE extends BlockEntity {
 
     protected int MAX_TRANSFER_RATE = 1024; // FE/tick
 
-    public ItemStackHandler itemHandler;
+    public DeviceItemStorage itemHandler;
     private LazyOptional<ItemStackHandler> lazyItemHandler = LazyOptional.empty();
 
     protected DeviceEnergyStorage energyStorage;
@@ -39,8 +41,8 @@ public abstract class AbstractDeviceBE extends BlockEntity {
         this.lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
     }
 
-    protected ItemStackHandler createItemHandler(int slot_count) {
-        return new ItemStackHandler(slot_count) {
+    protected DeviceItemStorage createItemHandler(int slot_count) {
+        return new DeviceItemStorage(slot_count) {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
@@ -67,14 +69,13 @@ public abstract class AbstractDeviceBE extends BlockEntity {
         // 默认的 tick 逻辑，子类可以覆写
     }
 
-    /*
+
     // 从物品槽位中掉落物品
     public void drops() {
-        super.drops();
         if (this.level != null) {
-            Containers.dropContents(this.level, this.worldPosition, this.itemHandler); // 掉落物品槽位中的物品
+            this.itemHandler.drops(level, worldPosition);
         }
-    }*/
+    }
 
 
     // NBT 数据读写
@@ -138,6 +139,7 @@ public abstract class AbstractDeviceBE extends BlockEntity {
         }
         return super.getCapability(cap, side);
     }
+
 
     // 在方块实体失效时，使 LazyOptional 失效，防止内存泄漏
     @Override

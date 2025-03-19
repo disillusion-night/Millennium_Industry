@@ -27,23 +27,6 @@ public class InductionFurnaceBL extends HorizontalDeviceBL {
         }));
     }
 
-    /*
-    @Override
-    protected void handleRightClick(Level pLevel, BlockPos pPos, AbstractDeviceBE pBE, ServerPlayer pPlayer) {
-        MenuProvider containerProvider = new MenuProvider() {
-            @Override
-            public Component getDisplayName() {
-                return SCREEN_INDUCTION_FURNACE;
-            }
-
-            @Override
-            public AbstractContainerMenu createMenu(int windowId, Inventory playerInventory, Player playerEntity) {
-                return new InductionFurnaceMenu(windowId, playerEntity, pPos);
-            }
-        };
-        NetworkHooks.openScreen(pPlayer, containerProvider, pPos);
-    }*/
-
     @Override
     public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new InductionFurnaceBE(pPos, pState);

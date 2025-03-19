@@ -1,6 +1,7 @@
 package kivo.millennium.millind;
 
 import com.mojang.logging.LogUtils;
+import kivo.millennium.millind.init.MillenniumRecipes;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -60,6 +61,7 @@ public class Main {
         FLUID_TYPES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
         MENU_TYPES.register(modEventBus);
+        MillenniumRecipes.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
 

@@ -2,12 +2,25 @@ package kivo.millennium.millind.datagen;
 
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumItems;
+import kivo.millennium.millind.init.MillenniumRecipes;
+import kivo.millennium.millind.recipe.CrushingRecipe;
 import kivo.millennium.millind.util.RecipeUtils;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.AbstractCookingRecipe;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.List;
 import java.util.function.Consumer;
+
+import static kivo.millennium.millind.Main.getRL;
 
 public class MillenniumRecipeProvider extends RecipeProvider {
     public MillenniumRecipeProvider(PackOutput pOutput) {
@@ -43,5 +56,26 @@ public class MillenniumRecipeProvider extends RecipeProvider {
                 .withRawOreFromRawBlockRecipe()
                 .build();
 
+        crushing(pWriter, Items.REDSTONE_BLOCK, RecipeCategory.REDSTONE, Items.REDSTONE, 9, 90);
+        crushing(pWriter, Items.COPPER_INGOT, RecipeCategory.MISC, MillenniumItems.COPPER_DUST.get(), 90);
+        crushing(pWriter, Items.IRON_INGOT, RecipeCategory.MISC, MillenniumItems.IRON_DUST.get(), 90);
+        crushing(pWriter, Items.GOLD_INGOT, RecipeCategory.MISC, MillenniumItems.GOLD_DUST.get(), 90);
+        crushing(pWriter, MillenniumItems.LEAD_INGOT.get(), RecipeCategory.MISC, MillenniumItems.LEAD_DUST.get(), 90);
+        //SimpleSingleRecipeBuilder.crushing()
+        //oneToOneConversionRecipe(pWriter, Blocks.REDSTONE_BLOCK.asItem(), new ItemStack(Items.REDSTONE, 9), "a");
+    }
+
+    protected static void crushing(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredient, RecipeCategory pCategory, ItemLike pResult, int pCookingTime) {
+        SimpleSingleRecipeBuilder
+                .crushing(Ingredient.of(pIngredient), pCategory, new ItemStack(pResult, 1), 0, pCookingTime)
+                .unlockedBy("has_" + getRL(pIngredient).getPath(), has(pIngredient))
+                .save(pFinishedRecipeConsumer,  getRL(getRL(pResult).getPath() + "_from_crushing"));
+    }
+
+    protected static void crushing(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredient, RecipeCategory pCategory, ItemLike pResult, int count, int pCookingTime) {
+        SimpleSingleRecipeBuilder
+                .crushing(Ingredient.of(pIngredient), pCategory, new ItemStack(pResult, count), 0, pCookingTime)
+                .unlockedBy("has_" + getRL(pIngredient).getPath(), has(pIngredient))
+                .save(pFinishedRecipeConsumer,  getRL(getRL(pResult).getPath() + "_from_crushing"));
     }
 }

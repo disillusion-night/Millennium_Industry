@@ -31,5 +31,7 @@ public class ItemTagProvider extends TagsProvider<Item> {
         MillenniumItems.OOPARTS.forEach(oopartRegistryObject -> {
             this.tag(OopartTag).add(TagEntry.element(oopartRegistryObject.getId()));
         });
+
+        //TagKey<Item>
     }
 }

@@ -1,5 +1,6 @@
 package kivo.millennium.client.datagen;
 
+import kivo.millennium.client.datagen.language.SimplifiedChineseProvider;
 import kivo.millennium.millind.init.MillenniumItems;
 import kivo.millennium.millind.item.Oopart.Oopart;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -29,6 +30,13 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
             registerOopartModel(oopart);
         }
 
+        SimpleItem(MillenniumItems.COPPER_DUST, "ore");
+        /*
+        SimpleItem(MillenniumItems.IRON_DUST, "ore");
+        SimpleItem(MillenniumItems.GOLD_DUST, "ore");
+        SimpleItem(MillenniumItems.LEAD_DUST, "ore");
+
+         */
         SimpleItem(MillenniumItems.LEAD_INGOT, "ore");
         SimpleItem(MillenniumItems.LEAD_NUGGET, "ore");
         SimpleItem(MillenniumItems.RAW_LEAD, "ore");

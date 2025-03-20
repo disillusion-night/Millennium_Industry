@@ -1,10 +1,13 @@
 package kivo.millennium.millind.recipe;
 
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.google.gson.JsonSyntaxException;
 import kivo.millennium.millind.Main;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
+import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
@@ -19,12 +22,12 @@ import static kivo.millennium.millind.Main.getRL;
 public class CrushingRecipe implements Recipe<SimpleContainer> {
     private final ResourceLocation id;
     private final ItemStack output;
-    private final NonNullList<Ingredient> recipeItems;
+    private final Ingredient recipeItem;
 
-    public CrushingRecipe(ResourceLocation id, ItemStack output, NonNullList<Ingredient> recipeItems) {
+    public CrushingRecipe(ResourceLocation id, ItemStack output, Ingredient recipeItem) {
         this.id = id;
         this.output = output;
-        this.recipeItems = recipeItems;
+        this.recipeItem = recipeItem;
     }
 
     @Override
@@ -32,10 +35,7 @@ public class CrushingRecipe implements Recipe<SimpleContainer> {
         if(pLevel.isClientSide()) {
             return false;
         }
-        Main.log("a");
-        Main.log(pContainer.getContainerSize());
-        Main.log(pContainer.getItem(0).toString());
-        return recipeItems.get(0).test(pContainer.getItem(0));
+        return recipeItem.test(pContainer.getItem(0));
     }
 
     @Override
@@ -45,7 +45,7 @@ public class CrushingRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public NonNullList<Ingredient> getIngredients() {
-        return recipeItems;
+        return NonNullList.withSize(1, recipeItem);
     }
 
     @Override
@@ -86,18 +86,26 @@ public class CrushingRecipe implements Recipe<SimpleContainer> {
                 getRL("crushing");
 
         @Override
-        public CrushingRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) {
-            ItemStack output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "output"));
-
-
-            JsonArray ingredients = GsonHelper.getAsJsonArray(pSerializedRecipe, "ingredients");
-            NonNullList<Ingredient> inputs = NonNullList.withSize(1, Ingredient.EMPTY);
-
-            for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromJson(ingredients.get(i)));
+        public CrushingRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) { ItemStack output;
+            if (pSerializedRecipe.has("result")) {
+                JsonElement resultElement = pSerializedRecipe.get("result");
+                if (resultElement.isJsonObject()) {
+                    output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "result"));
+                } else if (resultElement.isJsonPrimitive() && resultElement.getAsJsonPrimitive().isString()) {
+                    String itemId = GsonHelper.getAsString(pSerializedRecipe, "result");
+                    ResourceLocation itemLocation = new ResourceLocation(itemId);
+                    output = new ItemStack(BuiltInRegistries.ITEM.getOptional(itemLocation).orElseThrow(() ->
+                            new IllegalStateException("Item: " + itemId + " does not exist")), 1);
+                } else {
+                    throw new JsonSyntaxException("Expected 'result' to be a string or an object");
+                }
+            } else {
+                throw new JsonSyntaxException("Missing 'result', expected to find a string or object");
             }
 
-            return new CrushingRecipe(pRecipeId, output, inputs);
+            Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "ingredient"));
+
+            return new CrushingRecipe(pRecipeId, output, ingredient);
         }
 
         @Override
@@ -109,7 +117,7 @@ public class CrushingRecipe implements Recipe<SimpleContainer> {
             }
 
             ItemStack output = buf.readItem();
-            return new CrushingRecipe(id, output, inputs);
+            return new CrushingRecipe(id, output, inputs.get(0));
         }
 
         @Override

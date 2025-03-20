@@ -27,7 +27,11 @@ public class MillenniumItems {
 
     public static final RegistryObject<BaseBattery> VRLA = createBattery("vrla", 10000, 1000);
 
+    public static final RegistryObject<Item> COPPER_DUST = createMaterial("copper_dust");
+    public static final RegistryObject<Item> IRON_DUST = createMaterial("iron_dust");
+    public static final RegistryObject<Item> GOLD_DUST = createMaterial("gold_dust");
 
+    public static final RegistryObject<Item> LEAD_DUST = createMaterial("lead_dust");
     public static final RegistryObject<Item> LEAD_INGOT = createMaterial("lead_ingot");
     public static final RegistryObject<Item> LEAD_NUGGET = createMaterial("lead_nugget");
     public static final RegistryObject<Item> RAW_LEAD = createMaterial("raw_lead");

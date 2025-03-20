@@ -6,6 +6,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
@@ -110,6 +111,9 @@ public class Main {
 
     public static ResourceLocation getRL(String path){
         return ResourceLocation.fromNamespaceAndPath(MODID, path);
+    }
+    public static ResourceLocation getRL(ItemLike itemLike){
+        return ForgeRegistries.ITEMS.getKey(itemLike.asItem());
     }
     public static ResourceLocation getResourceKey(Item item){
         return BuiltInRegistries.ITEM.getKey(item);

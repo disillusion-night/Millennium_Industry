@@ -4,10 +4,7 @@
   "cookingtime": 90,
   "experience": 0.0,
   "ingredient": {
-    "item": "minecraft:redstone_block"
+    "item": "minecraft:iron_ingot"
   },
-  "result": {
-    "count": 9,
-    "item": "minecraft:redstone"
-  }
+  "result": "millind:iron_dust"
 }

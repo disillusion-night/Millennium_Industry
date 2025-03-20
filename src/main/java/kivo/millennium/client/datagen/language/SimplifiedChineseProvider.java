@@ -37,6 +37,10 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.WolfseggIron.get(), "沃普赛克铁块");
         add(MillenniumItems.WolfseggIronOre.get(), "沃普赛克铁矿");
         add(MillenniumItems.VRLA.get(), "铅酸蓄电池");
+        add(MillenniumItems.COPPER_DUST.get(), "铜粉");
+        add(MillenniumItems.IRON_DUST.get(), "铁粉");
+        add(MillenniumItems.GOLD_DUST.get(), "金粉");
+        add(MillenniumItems.LEAD_DUST.get(), "铅粉");
         add(MillenniumItems.LEAD_INGOT.get(), "铅锭");
         add(MillenniumItems.LEAD_NUGGET.get(), "铅粒");
         add(MillenniumItems.RAW_LEAD.get(), "粗铅");

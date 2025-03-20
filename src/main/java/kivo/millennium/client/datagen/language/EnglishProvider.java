@@ -38,6 +38,10 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.WolfseggIron.get(), "Wolfsegg Iron");
         add(MillenniumItems.WolfseggIronOre.get(), "Wolfsegg Iron Ore");
         add(MillenniumItems.VRLA.get(), "Valve Regulated Lead Acid Battery");
+        add(MillenniumItems.COPPER_DUST.get(), "Copper Dust");
+        add(MillenniumItems.IRON_DUST.get(), "Iron Dust");
+        add(MillenniumItems.GOLD_DUST.get(), "Gold Dust");
+        add(MillenniumItems.LEAD_DUST.get(), "Lead Dust");
         add(MillenniumItems.LEAD_INGOT.get(), "Lead Ingot");
         add(MillenniumItems.LEAD_NUGGET.get(), "Lead Nugget");
         add(MillenniumItems.RAW_LEAD.get(), "Raw Lead");

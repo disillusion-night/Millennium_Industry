@@ -24,6 +24,7 @@ public class CrusherBE extends AbstractDeviceBE {
     private int progress = 0;
     private int totalTime = 100;
     private int litTime = 0;
+    private Item workingItem = null;
 
 
     public CrusherBE(BlockPos pPos, BlockState pBlockState) {
@@ -41,9 +42,13 @@ public class CrusherBE extends AbstractDeviceBE {
 
         if (!inputStack.isEmpty()) {
             Optional<CrushingRecipe> recipe = level.getRecipeManager().getRecipeFor(CrushingRecipe.Type.INSTANCE, new SimpleContainer(inputStack), level);
-
+            //Main.log(recipe.isPresent());
             if (recipe.isPresent()) {
                 ItemStack recipeOutput = recipe.get().assemble(new SimpleContainer(inputStack), level.registryAccess());
+                if(workingItem != inputStack.getItem()){
+                    resetProgress();
+                    workingItem = inputStack.getItem();
+                }
                 if (canCrush(outputStack, recipeOutput) && energyStorage.getEnergyStored() >= energyUsagePerTick) {
                     canStartCrushing = true;
                 }
@@ -119,35 +124,6 @@ public class CrusherBE extends AbstractDeviceBE {
     private void resetProgress() {
         progress = 0;
     }
-
-    private boolean canInsertItemIntoOutputSlot(Item item) {
-        return this.itemHandler.getStackInSlot(OUTPUT_SLOT).isEmpty() || this.itemHandler.getStackInSlot(OUTPUT_SLOT).is(item);
-    }
-
-    private boolean canInsertAmountIntoOutputSlot(int count) {
-        return this.itemHandler.getStackInSlot(OUTPUT_SLOT).getCount() + count <= this.itemHandler.getStackInSlot(OUTPUT_SLOT).getMaxStackSize();
-    }
-
-    private boolean hasRecipe() {
-        Optional<CrushingRecipe> recipe = getCurrentRecipe();
-
-        if(recipe.isEmpty()) {
-            return false;
-        }
-        ItemStack result = recipe.get().getResultItem(getLevel().registryAccess());
-
-        return canInsertAmountIntoOutputSlot(result.getCount()) && canInsertItemIntoOutputSlot(result.getItem());
-    }
-
-    private Optional<CrushingRecipe> getCurrentRecipe() {
-        SimpleContainer inventory = new SimpleContainer(this.itemHandler.getSlots());
-        for(int i = 0; i < itemHandler.getSlots(); i++) {
-            inventory.setItem(i, this.itemHandler.getStackInSlot(i));
-        }
-
-        return this.level.getRecipeManager().getRecipeFor(CrushingRecipe.Type.INSTANCE, inventory, level);
-    }
-
 
     @Override
     protected void saveData(CompoundTag pTag) {

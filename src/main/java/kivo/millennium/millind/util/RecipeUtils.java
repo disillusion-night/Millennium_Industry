@@ -1,19 +1,22 @@
 package kivo.millennium.millind.util;
 
+import kivo.millennium.millind.datagen.SimpleSingleRecipeBuilder;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
 import net.minecraft.advancements.critereon.ItemPredicate;
 import net.minecraft.advancements.critereon.MinMaxBounds;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.recipes.*;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
 
 import java.util.function.Consumer;
+
+import static kivo.millennium.millind.Main.getRL;
 
 public class RecipeUtils {
 
@@ -46,7 +49,7 @@ public class RecipeUtils {
         return new InventoryChangeTrigger.TriggerInstance(ContextAwarePredicate.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, MinMaxBounds.Ints.ANY, pPredicates);
     }
 
-    public static MineralRecipeBuilder createMineralRecipeBuilder(Consumer<FinishedRecipe> writer, String mineralName){
+    public static MineralRecipeBuilder createMineralRecipeBuilder(Consumer<FinishedRecipe> writer, String mineralName) {
         return new MineralRecipeBuilder(writer, mineralName);
     }
 
@@ -59,17 +62,28 @@ public class RecipeUtils {
         private ItemLike rawOre;
         private ItemLike nugget;
         private ItemLike deepslateOre;
-        private ItemLike rawBlock; // 新增粗矿块属性
+        private ItemLike rawBlock;
+        private ItemLike dust;
+        private ItemLike panle;
+        private ItemLike pipe;
+        private ItemLike rod;
+        //private ItemLike
 
         private boolean createBlockRecipe = false;
         private boolean createIngotFromBlockRecipe = false;
-        private boolean createRawOreFromRawBlockRecipe = false; // 原矿合成粗矿物品的配方，保持原样
+        private boolean createRawOreFromRawBlockRecipe = false;
         private boolean createNuggetFromIngotRecipe = false;
         private boolean createIngotFromNuggetRecipe = false;
         private boolean createIngotFromSmeltingRawOreRecipe = false;
         private boolean createIngotFromSmeltingOreRecipe = false;
         private boolean createIngotFromSmeltingDeepslateOreRecipe = false;
-        private boolean createRawBlockFromRawOreRecipe = false; // 新增粗矿块合成配方
+        private boolean createRawBlockFromRawOreRecipe = false;
+        private boolean createDustFromCrushingIngot = false;
+        private boolean createPanleFromPressingIngot = false;
+        private boolean createPanleFromPressingDust = false;
+        private boolean createRodFromPressingIngot = false;
+        private boolean createRodFromPressingDust = false;
+        //private boolean createPipeFrom
 
         public MineralRecipeBuilder(Consumer<FinishedRecipe> writer, String mineralName) {
             this.writer = writer;
@@ -108,6 +122,26 @@ public class RecipeUtils {
 
         public MineralRecipeBuilder rawBlock(ItemLike rawBlock) {
             this.rawBlock = rawBlock;
+            return this;
+        }
+
+        public MineralRecipeBuilder dust(ItemLike dust) {
+            this.dust = dust;
+            return this;
+        }
+
+        public MineralRecipeBuilder panle(ItemLike panle) {
+            this.panle = panle;
+            return this;
+        }
+
+        public MineralRecipeBuilder pipe(ItemLike pipe) {
+            this.pipe = pipe;
+            return this;
+        }
+
+        public MineralRecipeBuilder rod(ItemLike rod) {
+            this.rod = rod;
             return this;
         }
 
@@ -156,6 +190,22 @@ public class RecipeUtils {
             return this;
         }
 
+        public MineralRecipeBuilder withDustFromCrushingIngot() {
+            this.createDustFromCrushingIngot = true;
+            return this;
+        }
+
+
+        public MineralRecipeBuilder withoutSmelting() {
+            return withBlockRecipe()
+                    .withIngotFromBlockRecipe()
+                    .withNuggetFromIngotRecipe()
+                    .withIngotFromNuggetRecipe()
+                    .withRawBlockFromRawOreRecipe()
+                    .withRawOreFromRawBlockRecipe()
+                    .withDustFromCrushingIngot();
+        }
+
         public MineralRecipeBuilder withAllRecipe() {
             return withBlockRecipe()
                     .withIngotFromBlockRecipe()
@@ -165,18 +215,51 @@ public class RecipeUtils {
                     .withIngotFromSmeltingOreRecipe()
                     .withIngotFromSmeltingDeepslateOreRecipe()
                     .withRawBlockFromRawOreRecipe()
-                    .withRawOreFromRawBlockRecipe();
+                    .withRawOreFromRawBlockRecipe()
+                    .withDustFromCrushingIngot();
+        }
+
+        private void checkIngot() {
+            if (ingot == null) throw new IllegalStateException("Ingot must be set for mineral: " + mineralName);
+        }
+
+        private void checkNugget() {
+            if (nugget == null && (
+                    (createNuggetFromIngotRecipe || createIngotFromNuggetRecipe)
+            )) throw new IllegalStateException("Nugget must be set for mineral: " + mineralName);
+        }
+
+        private void checkDust() {
+            if (dust == null &&
+                    createDustFromCrushingIngot
+            ) throw new IllegalStateException("Dust must be set for mineral: " + mineralName);
+        }
+
+        private void checkOre() {
+            if (ore == null &&
+                    (createIngotFromSmeltingOreRecipe || createRawOreFromRawBlockRecipe || createRawBlockFromRawOreRecipe)
+            ) throw new IllegalStateException("Ore must be set for mineral: " + mineralName);
+        }
+
+        private void checkRawOre() {
+            if (ore == null &&
+                    createIngotFromSmeltingRawOreRecipe
+            ) throw new IllegalStateException("Ore must be set for mineral: " + mineralName);
+        }
+
+        private void checkDeepSlateOre() {
+            if (ore == null && createIngotFromSmeltingDeepslateOreRecipe
+            ) throw new IllegalStateException("Deepslate Ore must be set for mineral: " + mineralName);
         }
 
         public void build() {
-            if (ingot == null) throw new IllegalStateException("Ingot must be set for mineral: " + mineralName);
+            checkIngot();
+            checkNugget();
             if (block == null) throw new IllegalStateException("Block must be set for mineral: " + mineralName);
-            if (ore == null) throw new IllegalStateException("Ore must be set for mineral: " + mineralName);
-            if (rawOre == null) throw new IllegalStateException("Raw Ore must be set for mineral: " + mineralName);
-            if (nugget == null) throw new IllegalStateException("Nugget must be set for mineral: " + mineralName);
-            if (deepslateOre == null)
-                throw new IllegalStateException("Deepslate Ore must be set for mineral: " + mineralName);
-            if (rawBlock == null) throw new IllegalStateException("Raw Block must be set for mineral: " + mineralName);
+            checkOre();
+            checkRawOre();
+            checkDeepSlateOre();
+            checkDust();
 
             if (createBlockRecipe) {
                 ShapedRecipeBuilder.shaped(RecipeCategory.BUILDING_BLOCKS, block)
@@ -184,22 +267,22 @@ public class RecipeUtils {
                         .pattern("###")
                         .pattern("###")
                         .define('#', ingot)
-                        .unlockedBy("has_" + mineralItemName(ingot), has(ingot))
-                        .save(writer, new ResourceLocation(getNamespace(ingot), mineralName + "_block"));
+                        .unlockedBy("has_" + getItemName(ingot), has(ingot))
+                        .save(writer, getRL(mineralName + "_block_from_ingot"));
             }
 
             if (createIngotFromBlockRecipe) {
                 ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ingot, 9)
                         .requires(block)
-                        .unlockedBy("has_" + mineralBlockName(block), has(block))
-                        .save(writer, new ResourceLocation(getNamespace(block), mineralName + "_ingot_from_block"));
+                        .unlockedBy("has_" + getBlockName(block), has(block))
+                        .save(writer, getRL(mineralName + "_ingot_from_block"));
             }
 
             if (createNuggetFromIngotRecipe) {
                 ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, nugget, 9)
                         .requires(ingot)
-                        .unlockedBy("has_" + mineralItemName(ingot), has(ingot))
-                        .save(writer, new ResourceLocation(getNamespace(ingot), mineralName + "_nugget_from_ingot"));
+                        .unlockedBy("has_" + getItemName(ingot), has(ingot))
+                        .save(writer, getRL(mineralName + "_nugget_from_ingot"));
             }
 
             if (createIngotFromNuggetRecipe) {
@@ -208,44 +291,51 @@ public class RecipeUtils {
                         .pattern("###")
                         .pattern("###")
                         .define('#', nugget)
-                        .unlockedBy("has_" + mineralNuggetName(nugget), has(nugget))
-                        .save(writer, new ResourceLocation(getNamespace(nugget), mineralName + "_ingot_from_nugget"));
+                        .unlockedBy("has_" + getItemName(nugget), has(nugget))
+                        .save(writer, getRL(mineralName + "_ingot_from_nugget"));
             }
 
             if (createIngotFromSmeltingRawOreRecipe) {
                 SimpleCookingRecipeBuilder.smelting(Ingredient.of(rawOre), RecipeCategory.MISC, ingot, 0.7F, 200)
-                        .unlockedBy("has_" + mineralRawOreName(rawOre), has(rawOre))
+                        .unlockedBy("has_" + getItemName(rawOre), has(rawOre))
                         .group(mineralName)
-                        .save(writer, new ResourceLocation(getNamespace(rawOre), mineralName + "_ingot_from_smelting_raw"));
+                        .save(writer, getRL(mineralName + "_ingot_from_smelting_raw"));
 
                 SimpleCookingRecipeBuilder.blasting(Ingredient.of(rawOre), RecipeCategory.MISC, ingot, 0.7F, 100)
-                        .unlockedBy("has_" + mineralRawOreName(rawOre), has(rawOre))
+                        .unlockedBy("has_" + getItemName(rawOre), has(rawOre))
                         .group(mineralName)
-                        .save(writer, new ResourceLocation(getNamespace(rawOre), mineralName + "_ingot_from_blasting_raw"));
+                        .save(writer, getRL(mineralName + "_ingot_from_blasting_raw"));
             }
 
             if (createIngotFromSmeltingOreRecipe) {
                 SimpleCookingRecipeBuilder.smelting(Ingredient.of(ore), RecipeCategory.MISC, ingot, 0.7F, 200)
-                        .unlockedBy("has_" + mineralOreName(ore), has(ore))
+                        .unlockedBy("has_" + getItemName(ore), has(ore))
                         .group(mineralName)
-                        .save(writer, new ResourceLocation(getNamespace(ore), mineralName + "_ingot_from_smelting"));
+                        .save(writer, getRL(mineralName + "_ingot_from_smelting"));
 
                 SimpleCookingRecipeBuilder.blasting(Ingredient.of(ore), RecipeCategory.MISC, ingot, 0.7F, 100)
-                        .unlockedBy("has_" + mineralOreName(ore), has(ore))
+                        .unlockedBy("has_" + getItemName(ore), has(ore))
                         .group(mineralName)
-                        .save(writer, new ResourceLocation(getNamespace(ore), mineralName + "_ingot_from_blasting"));
+                        .save(writer, getRL(mineralName + "_ingot_from_blasting"));
             }
 
             if (createIngotFromSmeltingDeepslateOreRecipe) {
                 SimpleCookingRecipeBuilder.smelting(Ingredient.of(deepslateOre), RecipeCategory.MISC, ingot, 0.7F, 200)
-                        .unlockedBy("has_" + mineralDeepslateOreName(deepslateOre), has(deepslateOre))
+                        .unlockedBy("has_" + getBlockName(deepslateOre), has(deepslateOre))
                         .group(mineralName)
-                        .save(writer, new ResourceLocation(getNamespace(deepslateOre), mineralName + "_ingot_from_smelting_deepslate"));
+                        .save(writer, getRL(mineralName + "_ingot_from_smelting_deepslate"));
 
                 SimpleCookingRecipeBuilder.blasting(Ingredient.of(deepslateOre), RecipeCategory.MISC, ingot, 0.7F, 100)
-                        .unlockedBy("has_" + mineralDeepslateOreName(deepslateOre), has(deepslateOre))
+                        .unlockedBy("has_" + getBlockName(deepslateOre), has(deepslateOre))
                         .group(mineralName)
-                        .save(writer, new ResourceLocation(getNamespace(deepslateOre), mineralName + "_ingot_from_blasting_deepslate"));
+                        .save(writer, getRL(mineralName + "_ingot_from_blasting_deepslate"));
+            }
+
+            if (createDustFromCrushingIngot) {
+                SimpleSingleRecipeBuilder.crushing(Ingredient.of(ingot), RecipeCategory.MISC, new ItemStack(dust, 1), 0.7F, 100)
+                        .unlockedBy("has_" + getRL(ingot).getPath(), has(ingot))
+                        .group(mineralName)
+                        .save(writer, getRL(mineralName + "_dust_from_crushing_ingot"));
             }
 
             if (createRawBlockFromRawOreRecipe) {
@@ -254,44 +344,25 @@ public class RecipeUtils {
                         .pattern("###")
                         .pattern("###")
                         .define('#', rawOre)
-                        .unlockedBy("has_" + mineralRawOreName(rawOre), has(rawOre))
-                        .save(writer, new ResourceLocation(getNamespace(rawOre), "raw_" + mineralName + "_block"));
+                        .unlockedBy("has_" + getBlockName(rawOre), has(rawOre))
+                        .save(writer, getRL("raw_" + mineralName + "_block_from_ore"));
             }
 
             if (createRawOreFromRawBlockRecipe) {
                 ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, rawOre, 9)
                         .requires(rawBlock)
-                        .unlockedBy("has_" + mineralBlockName(rawBlock), has(rawBlock))
-                        .save(writer, new ResourceLocation(getNamespace(rawBlock), mineralName + "_raw_ore_from_raw_block"));
+                        .unlockedBy("has_" + getBlockName(rawBlock), has(rawBlock))
+                        .save(writer, getRL(mineralName + "_raw_ore_from_raw_block"));
             }
         }
 
-        private String mineralItemName(ItemLike itemLike) {
+        private String getItemName(ItemLike itemLike) {
             return BuiltInRegistries.ITEM.getKey(itemLike.asItem()).getPath();
         }
 
-        private String mineralBlockName(ItemLike itemLike) {
+        private String getBlockName(ItemLike itemLike) {
             return BuiltInRegistries.BLOCK.getKey(Block.byItem(itemLike.asItem())).getPath();
         }
 
-        private String mineralOreName(ItemLike itemLike) {
-            return BuiltInRegistries.BLOCK.getKey(Block.byItem(itemLike.asItem())).getPath();
-        }
-
-        private String mineralRawOreName(ItemLike itemLike) {
-            return BuiltInRegistries.ITEM.getKey(itemLike.asItem()).getPath();
-        }
-
-        private String mineralNuggetName(ItemLike itemLike) {
-            return BuiltInRegistries.ITEM.getKey(itemLike.asItem()).getPath();
-        }
-
-        private String mineralDeepslateOreName(ItemLike itemLike) {
-            return BuiltInRegistries.BLOCK.getKey(Block.byItem(itemLike.asItem())).getPath();
-        }
-
-        private String getNamespace(ItemLike itemLike) {
-            return BuiltInRegistries.ITEM.getKey(itemLike.asItem()).getNamespace();
-        }
     }
 }

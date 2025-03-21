@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "millind:item/ore/copper_dust"
+    "layer0": "millind:item/material/copper_dust"
   }
 }

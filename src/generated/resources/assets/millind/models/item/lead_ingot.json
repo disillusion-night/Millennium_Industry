@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "millind:item/ore/lead_ingot"
+    "layer0": "millind:item/material/lead_ingot"
   }
 }

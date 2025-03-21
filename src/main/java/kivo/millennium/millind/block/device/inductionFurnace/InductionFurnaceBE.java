@@ -5,6 +5,7 @@ import kivo.millennium.millind.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.SimpleContainer;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.BlastingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -22,6 +23,7 @@ public class InductionFurnaceBE extends AbstractDeviceBE {
     private int progress = 0;
     private int smeltingTotalTime = 100;
     private int litTime = 0;
+    private Item workingItem;
 
     public InductionFurnaceBE(BlockPos pPos, BlockState pBlockState) {
         super(MillenniumBlockEntities.INDUCTION_FURNACE_BE.get(), pPos, pBlockState, SLOT_COUNT);
@@ -66,6 +68,16 @@ public class InductionFurnaceBE extends AbstractDeviceBE {
             level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.POWERED, false), 3);
         }
 
+    }
+
+    @Override
+    protected void onContentChange(int slot){
+        if(slot == INPUT_SLOT){
+            if(workingItem != itemHandler.getStackInSlot(INPUT_SLOT).getItem()){
+                resetProgress();
+                workingItem = itemHandler.getStackInSlot(INPUT_SLOT).getItem();
+            }
+        }
     }
 
     private boolean isLit(){

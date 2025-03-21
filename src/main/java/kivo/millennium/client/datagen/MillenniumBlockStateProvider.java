@@ -31,14 +31,16 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
     protected void registerStatesAndModels() {
         addWithHaveModel(MillenniumBlocks.METAL_TANK_BL.get(), "metal_tank");
 
-        cubeAllBlockWithItem(MillenniumBlocks.LEAD_BLOCK, "ore");
-        cubeAllBlockWithItem(MillenniumBlocks.LEAD_ORE, "ore");
-        cubeAllBlockWithItem(MillenniumBlocks.DEEPSLATE_LEAD_ORE, "ore");
-        cubeAllBlockWithItem(MillenniumBlocks.RAW_LEAD_BLOCK, "ore");
-        cubeAllBlockWithItem(MillenniumBlocks.ALUMINUM_BLOCK, "ore");
-        cubeAllBlockWithItem(MillenniumBlocks.ALUMINUM_ORE, "ore");
-        cubeAllBlockWithItem(MillenniumBlocks.DEEPSLATE_ALUMINUM_ORE, "ore");
-        cubeAllBlockWithItem(MillenniumBlocks.RAW_ALUMINUM_BLOCK, "ore");
+        cubeAllBlockWithItem(MillenniumBlocks.STEEL_BLOCK, "material");
+        cubeAllBlockWithItem(MillenniumBlocks.LEAD_BLOCK, "material");
+        cubeAllBlockWithItem(MillenniumBlocks.LEAD_ORE, "material");
+        cubeAllBlockWithItem(MillenniumBlocks.DEEPSLATE_LEAD_ORE, "material");
+        cubeAllBlockWithItem(MillenniumBlocks.RAW_LEAD_BLOCK, "material");
+        cubeAllBlockWithItem(MillenniumBlocks.ALUMINUM_BLOCK, "material");
+        cubeAllBlockWithItem(MillenniumBlocks.ALUMINUM_ALLOY_BLOCK, "material");
+        cubeAllBlockWithItem(MillenniumBlocks.ALUMINUM_ORE, "material");
+        cubeAllBlockWithItem(MillenniumBlocks.DEEPSLATE_ALUMINUM_ORE, "material");
+        cubeAllBlockWithItem(MillenniumBlocks.RAW_ALUMINUM_BLOCK, "material");
 
         sixFacing(MillenniumBlocks.NETHER_STAR_LASER_BL, "nether_star_laser");
         simpleOrientable(MillenniumBlocks.GENERATOR_BL.get(), "generator");

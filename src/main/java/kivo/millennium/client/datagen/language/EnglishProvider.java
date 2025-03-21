@@ -10,6 +10,8 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 
+import static kivo.millennium.millind.Main.getRL;
+
 public class EnglishProvider extends MillenniumLanguageProvider {
     public EnglishProvider(PackOutput output) {
         super(output, "en_us");
@@ -24,11 +26,13 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.INDUCTION_FURNACE_BL.get(), "Induction Furnace");
         add(MillenniumBlocks.CRUSHER_BL.get(), "Crusher");
         add(MillenniumBlocks.SOLAR_GENERATOR.get(), "Solar Generator");
+        add(MillenniumBlocks.STEEL_BLOCK.get(), "Steal Block");
         add(MillenniumBlocks.LEAD_BLOCK.get(), "Lead Block");
         add(MillenniumBlocks.RAW_LEAD_BLOCK.get(), "Raw Lead Block");
         add(MillenniumBlocks.LEAD_ORE.get(), "Lead Ore");
         add(MillenniumBlocks.DEEPSLATE_LEAD_ORE.get(), "Deepslate Lead Ore");
         add(MillenniumBlocks.ALUMINUM_BLOCK.get(), "Aluminum Block");
+        add(MillenniumBlocks.ALUMINUM_ALLOY_BLOCK.get(), "Aluminum Alloy Block");
         add(MillenniumBlocks.RAW_ALUMINUM_BLOCK.get(), "Raw Aluminum Block");
         add(MillenniumBlocks.ALUMINUM_ORE.get(), "Aluminum Ore");
         add(MillenniumBlocks.DEEPSLATE_ALUMINUM_ORE.get(), "Deepslate Aluminum Ore");
@@ -40,23 +44,42 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.VRLA.get(), "Valve Regulated Lead Acid Battery");
         add(MillenniumItems.COPPER_DUST.get(), "Copper Dust");
         add(MillenniumItems.IRON_DUST.get(), "Iron Dust");
+        add(MillenniumItems.IRON_PANEL.get(), "Iron Panel");
+        add(MillenniumItems.IRON_PIPE.get(), "Iron Pipe");
+        add(MillenniumItems.IRON_ROD.get(), "Iron Rod");
         add(MillenniumItems.GOLD_DUST.get(), "Gold Dust");
+        add(MillenniumItems.GOLD_PANEL.get(), "Gold Panel");
+        add(MillenniumItems.STEEL_DUST.get(), "Steel Dust");
+        add(MillenniumItems.STEEL_INGOT.get(), "Steel Ingot");
+        add(MillenniumItems.STEEL_NUGGET.get(), "Steel Nugget");
+        add(MillenniumItems.STEEL_PANEL.get(), "Steel Panel");
+        add(MillenniumItems.STEEL_PIPE.get(), "Steel Pipe");
+        add(MillenniumItems.STEEL_ROD.get(), "Steel Rod");
         add(MillenniumItems.LEAD_DUST.get(), "Lead Dust");
         add(MillenniumItems.LEAD_INGOT.get(), "Lead Ingot");
         add(MillenniumItems.LEAD_NUGGET.get(), "Lead Nugget");
+        add(MillenniumItems.LEAD_PANEL.get(), "Lead Panel");
+        add(MillenniumItems.LEAD_PIPE.get(), "Lead Pipe");
+        add(MillenniumItems.LEAD_ROD.get(), "Lead Rod");
         add(MillenniumItems.RAW_LEAD.get(), "Raw Lead");
+        add(MillenniumItems.ALUMINIUM_DUST.get(), "Aluminum Dust");
         add(MillenniumItems.ALUMINUM_INGOT.get(), "Aluminum Ingot");
         add(MillenniumItems.ALUMINUM_NUGGET.get(), "Aluminum Nugget");
+        add(MillenniumItems.ALUMINUM_ALLOY_INGOT.get(), "Aluminum Alloy Ingot");
+        add(MillenniumItems.ALUMINUM_ALLOY_PANEL.get(), "Aluminum Alloy Panel");
+        add(MillenniumItems.ALUMINUM_ALLOY_PIPE.get(), "Aluminum Alloy Pipe");
+        add(MillenniumItems.ALUMINUM_ALLOY_ROD.get(), "Aluminum Alloy Rod");
         add(MillenniumItems.RAW_ALUMINUM.get(), "Raw Aluminum");
 
         add(MillenniumFluidTypes.ICY_WATER_FLUID_TYPE.get().getDescriptionId(), "Icy Water");
 
         add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.OOPARTS.get())), "Millennium Industry:Oopart");
         add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.ENGINEERING_PARTS.get())), "Millennium Industry:Engineering Parts");
+        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.MATERIALS.get())), "Millennium Industry:Materials");
     }
 
 
     private void addEnglishFromId(Item item){
-        add(item, item.getDescriptionId());
+        add(item, getRL(item).getPath());
     }
 }

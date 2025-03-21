@@ -1,6 +1,6 @@
 {
   "parent": "minecraft:item/generated",
   "textures": {
-    "layer0": "millind:item/ore/raw_lead"
+    "layer0": "millind:item/material/raw_lead"
   }
 }

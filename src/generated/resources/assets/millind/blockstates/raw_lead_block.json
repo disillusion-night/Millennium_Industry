@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "millind:ore/raw_lead_block"
+      "model": "millind:material/raw_lead_block"
     }
   }
 }

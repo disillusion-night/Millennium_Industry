@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "millind:ore/deepslate_aluminum_ore"
+      "model": "millind:material/deepslate_aluminum_ore"
     }
   }
 }

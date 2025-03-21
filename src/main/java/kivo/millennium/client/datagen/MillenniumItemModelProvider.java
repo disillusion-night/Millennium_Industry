@@ -1,18 +1,14 @@
 package kivo.millennium.client.datagen;
 
-import kivo.millennium.client.datagen.language.SimplifiedChineseProvider;
 import kivo.millennium.millind.init.MillenniumItems;
 import kivo.millennium.millind.item.Oopart.Oopart;
 import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.core.registries.Registries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.DeferredRegister;
-import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import static kivo.millennium.millind.Main.MODID;
@@ -30,19 +26,38 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
             registerOopartModel(oopart);
         }
 
-        SimpleItem(MillenniumItems.COPPER_DUST, "ore");
-        /*
-        SimpleItem(MillenniumItems.IRON_DUST, "ore");
-        SimpleItem(MillenniumItems.GOLD_DUST, "ore");
-        SimpleItem(MillenniumItems.LEAD_DUST, "ore");
+        SimpleMaterialItem(MillenniumItems.COPPER_DUST);
 
-         */
-        SimpleItem(MillenniumItems.LEAD_INGOT, "ore");
-        SimpleItem(MillenniumItems.LEAD_NUGGET, "ore");
-        SimpleItem(MillenniumItems.RAW_LEAD, "ore");
-        SimpleItem(MillenniumItems.ALUMINUM_INGOT, "ore");
-        SimpleItem(MillenniumItems.ALUMINUM_NUGGET, "ore");
-        SimpleItem(MillenniumItems.RAW_ALUMINUM, "ore");
+        SimpleMaterialItem(MillenniumItems.IRON_DUST);
+        SimpleMaterialItem(MillenniumItems.IRON_PIPE);
+        SimpleMaterialItem(MillenniumItems.IRON_ROD);
+        SimpleMaterialItem(MillenniumItems.IRON_PANEL);
+        SimpleMaterialItem(MillenniumItems.GOLD_DUST);
+        SimpleMaterialItem(MillenniumItems.GOLD_PANEL);
+
+        SimpleMaterialItem(MillenniumItems.STEEL_DUST);
+        SimpleMaterialItem(MillenniumItems.STEEL_INGOT);
+        SimpleMaterialItem(MillenniumItems.STEEL_NUGGET);
+        SimpleMaterialItem(MillenniumItems.STEEL_PANEL);
+        SimpleMaterialItem(MillenniumItems.STEEL_PIPE);
+        SimpleMaterialItem(MillenniumItems.STEEL_ROD);
+
+        SimpleMaterialItem(MillenniumItems.LEAD_DUST);
+        SimpleMaterialItem(MillenniumItems.LEAD_INGOT);
+        SimpleMaterialItem(MillenniumItems.LEAD_NUGGET);
+        SimpleMaterialItem(MillenniumItems.LEAD_PANEL);
+        //SimpleMaterialItem(MillenniumItems.LEAD_PIPE);
+        SimpleMaterialItem(MillenniumItems.LEAD_ROD);
+
+        SimpleMaterialItem(MillenniumItems.RAW_LEAD);
+        SimpleMaterialItem(MillenniumItems.ALUMINIUM_DUST);
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_INGOT);
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_NUGGET);
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_INGOT);
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_PANEL);
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_PIPE);
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_ROD);
+        SimpleMaterialItem(MillenniumItems.RAW_ALUMINUM);
         SimpleItem(MillenniumItems.VRLA);
     }
 
@@ -84,6 +99,11 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
                 .texture("layer0", "item/" + prefix + "/" + item.getId().getPath());
     }
 
+    private <I extends Item> void SimpleMaterialItem(RegistryObject<I> item){
+        getBuilder(MODID + ":" + item.getId().getPath())
+                .parent(new ModelFile.UncheckedModelFile("item/generated"))
+                .texture("layer0", "item/material/" + item.getId().getPath());
+    }
 
     private void registerBlockItemModel(RegistryObject<Oopart> oopart){
         getBuilder(oopart.getId().toString())

@@ -29,17 +29,37 @@ public class MillenniumItems {
 
     public static final RegistryObject<Item> COPPER_DUST = createMaterial("copper_dust");
     public static final RegistryObject<Item> IRON_DUST = createMaterial("iron_dust");
+    public static final RegistryObject<Item> IRON_PANEL = createMaterial("iron_panel");
+    public static final RegistryObject<Item> IRON_ROD = createMaterial("iron_rod");
+    public static final RegistryObject<Item> IRON_PIPE = createMaterial("iron_pipe");
     public static final RegistryObject<Item> GOLD_DUST = createMaterial("gold_dust");
+    public static final RegistryObject<Item> GOLD_PANEL = createMaterial("gold_panel");
 
     public static final RegistryObject<Item> LEAD_DUST = createMaterial("lead_dust");
     public static final RegistryObject<Item> LEAD_INGOT = createMaterial("lead_ingot");
     public static final RegistryObject<Item> LEAD_NUGGET = createMaterial("lead_nugget");
+    public static final RegistryObject<Item> LEAD_PANEL = createMaterial("lead_panel");
+    public static final RegistryObject<Item> LEAD_ROD = createMaterial("lead_rod");
+    public static final RegistryObject<Item> LEAD_PIPE = createMaterial("lead_pipe");
     public static final RegistryObject<Item> RAW_LEAD = createMaterial("raw_lead");
 
-    public static final RegistryObject<Item> ALUMINUM_INGOT = createMaterial("aluminum_ingot");
+
+    public static final RegistryObject<Item> ALUMINIUM_DUST = createMaterial("aluminum_dust");
     public static final RegistryObject<Item> ALUMINUM_NUGGET = createMaterial("aluminum_nugget");
+    public static final RegistryObject<Item> ALUMINUM_INGOT = createMaterial("aluminum_ingot");
+    public static final RegistryObject<Item> ALUMINUM_ALLOY_INGOT = createMaterial("aluminum_alloy_ingot");
+    public static final RegistryObject<Item> ALUMINUM_ALLOY_PANEL = createMaterial("aluminum_alloy_panel");
+    public static final RegistryObject<Item> ALUMINUM_ALLOY_ROD = createMaterial("aluminum_alloy_rod");
+    public static final RegistryObject<Item> ALUMINUM_ALLOY_PIPE = createMaterial("aluminum_alloy_pipe");
     public static final RegistryObject<Item> RAW_ALUMINUM = createMaterial("raw_aluminum");
 
+    public static final RegistryObject<Item> STEEL_DUST = createMaterial("steel_dust");
+    public static final RegistryObject<Item> STEEL_INGOT = createMaterial("steel_ingot");
+    public static final RegistryObject<Item> STEEL_NUGGET = createMaterial("steel_nugget");
+    public static final RegistryObject<Item> STEEL_PANEL = createMaterial("steel_panel");
+    public static final RegistryObject<Item> STEEL_ROD = createMaterial("steel_rod");
+    public static final RegistryObject<Item> STEEL_PIPE = createMaterial("steel_pipe");
+    
     private static RegistryObject<Item> createMaterial(String name){
         RegistryObject<Item>material = ITEMS.register(name, () -> new Item(new Item.Properties()));
         MATERIALS.add(material);

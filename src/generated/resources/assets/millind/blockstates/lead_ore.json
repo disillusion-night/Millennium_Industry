@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "millind:ore/lead_ore"
+      "model": "millind:material/lead_ore"
     }
   }
 }

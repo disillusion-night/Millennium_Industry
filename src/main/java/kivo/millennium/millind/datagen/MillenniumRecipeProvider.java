@@ -37,6 +37,7 @@ public class MillenniumRecipeProvider extends RecipeProvider {
                 .rawOre(MillenniumItems.RAW_LEAD.get())
                 .nugget(MillenniumItems.LEAD_NUGGET.get())
                 .ingot(MillenniumItems.LEAD_INGOT.get())
+                .dust(MillenniumItems.LEAD_DUST.get())
                 .withAllRecipe()
                 .build();
 
@@ -56,11 +57,30 @@ public class MillenniumRecipeProvider extends RecipeProvider {
                 .withRawOreFromRawBlockRecipe()
                 .build();
 
+
+        RecipeUtils.createMineralRecipeBuilder(pWriter, "steel")
+                .block(MillenniumBlocks.STEEL_BLOCK.get())
+                .nugget(MillenniumItems.STEEL_NUGGET.get())
+                .ingot(MillenniumItems.STEEL_INGOT.get())
+                .dust(MillenniumItems.STEEL_DUST.get())
+                .withBlockRecipe()
+                .withIngotFromBlockRecipe()
+                .withIngotFromNuggetRecipe()
+                .withNuggetFromIngotRecipe()
+                .withDustFromCrushingIngot()
+                .build();
+
+        RecipeUtils.createMineralRecipeBuilder(pWriter, "aluminum_alloy")
+                .block(MillenniumBlocks.ALUMINUM_ALLOY_BLOCK.get())
+                .ingot(MillenniumItems.ALUMINUM_ALLOY_INGOT.get())
+                .withBlockRecipe()
+                .withIngotFromBlockRecipe()
+                .build();
+
         crushing(pWriter, Items.REDSTONE_BLOCK, RecipeCategory.REDSTONE, Items.REDSTONE, 9, 90);
         crushing(pWriter, Items.COPPER_INGOT, RecipeCategory.MISC, MillenniumItems.COPPER_DUST.get(), 90);
         crushing(pWriter, Items.IRON_INGOT, RecipeCategory.MISC, MillenniumItems.IRON_DUST.get(), 90);
         crushing(pWriter, Items.GOLD_INGOT, RecipeCategory.MISC, MillenniumItems.GOLD_DUST.get(), 90);
-        crushing(pWriter, MillenniumItems.LEAD_INGOT.get(), RecipeCategory.MISC, MillenniumItems.LEAD_DUST.get(), 90);
         //SimpleSingleRecipeBuilder.crushing()
         //oneToOneConversionRecipe(pWriter, Blocks.REDSTONE_BLOCK.asItem(), new ItemStack(Items.REDSTONE, 9), "a");
     }

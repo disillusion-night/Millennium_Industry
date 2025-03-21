@@ -46,8 +46,13 @@ public abstract class AbstractDeviceBE extends BlockEntity {
             @Override
             protected void onContentsChanged(int slot) {
                 setChanged();
+                onContentChange(slot);
             }
         };
+    }
+
+    protected void onContentChange(int slot){
+
     }
 
     // 创建能量存储处理器，子类可以覆写以自定义容量和传输速率

@@ -2,7 +2,6 @@ package kivo.millennium.millind.block.device.crusher;
 
 import kivo.millennium.millind.Main;
 import kivo.millennium.millind.block.device.AbstractDeviceBE;
-import kivo.millennium.millind.block.device.inductionFurnace.InductionFurnaceBL;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.recipe.CrushingRecipe;
 import net.minecraft.core.BlockPos;
@@ -42,20 +41,16 @@ public class CrusherBE extends AbstractDeviceBE {
 
         if (!inputStack.isEmpty()) {
             Optional<CrushingRecipe> recipe = level.getRecipeManager().getRecipeFor(CrushingRecipe.Type.INSTANCE, new SimpleContainer(inputStack), level);
-            //Main.log(recipe.isPresent());
+
             if (recipe.isPresent()) {
                 ItemStack recipeOutput = recipe.get().assemble(new SimpleContainer(inputStack), level.registryAccess());
-                if(workingItem != inputStack.getItem()){
-                    resetProgress();
-                    workingItem = inputStack.getItem();
-                }
                 if (canCrush(outputStack, recipeOutput) && energyStorage.getEnergyStored() >= energyUsagePerTick) {
                     canStartCrushing = true;
                 }
 
                 if (canStartCrushing) {
-                    if(!getBlockState().getValue(CrusherBL.POWERED)){
-                        level.setBlock(getBlockPos(),getBlockState().setValue(CrusherBL.POWERED, true), 3);
+                    if (!getBlockState().getValue(CrusherBL.POWERED)) {
+                        level.setBlock(getBlockPos(), getBlockState().setValue(CrusherBL.POWERED, true), 3);
                     }
                     progress++;
                     energyStorage.costEnergy(energyUsagePerTick);
@@ -67,28 +62,40 @@ public class CrusherBE extends AbstractDeviceBE {
                         setChanged(level, getBlockPos(), getBlockState());
                     }
                 } else {
-                    level.setBlock(getBlockPos(),getBlockState().setValue(CrusherBL.POWERED, false), 3);
+                    level.setBlock(getBlockPos(), getBlockState().setValue(CrusherBL.POWERED, false), 3);
                 }
             }
         } else {
             resetProgress();
-            level.setBlock(getBlockPos(),getBlockState().setValue(CrusherBL.POWERED, false), 3);
+            level.setBlock(getBlockPos(), getBlockState().setValue(CrusherBL.POWERED, false), 3);
         }
 
     }
 
-    private boolean isLit(){
+    @Override
+    protected void onContentChange(int slot) {
+        if (slot == INPUT_SLOT) {
+            ItemStack inputStack = itemHandler.getStackInSlot(INPUT_SLOT);
+            if (workingItem != inputStack.getItem()) {
+                if(workingItem != null) Main.log(workingItem.toString()+" \\"+ inputStack.getItem());
+                resetProgress();
+                workingItem = inputStack.getItem();
+            }
+        }
+    }
+
+    private boolean isLit() {
         return getBlockState().getValue(CrusherBL.POWERED);
     }
 
-    private int getProgressPercent(){
+    private int getProgressPercent() {
         return (int) (((float) progress / totalTime) * 100);
     }
 
-    public int getProgressAndLit(){
-        if (isLit()){
+    public int getProgressAndLit() {
+        if (isLit()) {
             return getProgressPercent() << 1 | 1;
-        }else {
+        } else {
             return getProgressPercent() << 1;
         }
     }

@@ -1,6 +1,6 @@
 package kivo.millennium.millind.block.device.inductionFurnace;
 
-import kivo.millennium.millind.block.device.AbstractDeviceBE;
+import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
 
-public class InductionFurnaceBE extends AbstractDeviceBE {
+public class InductionFurnaceBE extends AbstractMachineBE {
     public static int SLOT_COUNT = 3;
     public static int BATTERY_SLOT = 0;
     public static int INPUT_SLOT = 1;

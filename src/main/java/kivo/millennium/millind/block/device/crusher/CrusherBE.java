@@ -1,7 +1,6 @@
 package kivo.millennium.millind.block.device.crusher;
 
-import kivo.millennium.millind.Main;
-import kivo.millennium.millind.block.device.AbstractDeviceBE;
+import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.recipe.CrushingRecipe;
 import net.minecraft.core.BlockPos;
@@ -13,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
 
-public class CrusherBE extends AbstractDeviceBE {
+public class CrusherBE extends AbstractMachineBE {
     public static int SLOT_COUNT = 3;
     public static int BATTERY_SLOT = 0;
     public static int INPUT_SLOT = 1;
@@ -76,8 +75,7 @@ public class CrusherBE extends AbstractDeviceBE {
     protected void onContentChange(int slot) {
         if (slot == INPUT_SLOT) {
             ItemStack inputStack = itemHandler.getStackInSlot(INPUT_SLOT);
-            if (workingItem != inputStack.getItem()) {
-                if(workingItem != null) Main.log(workingItem.toString()+" \\"+ inputStack.getItem());
+            if (workingItem != inputStack.getItem() && ! inputStack.isEmpty()) {
                 resetProgress();
                 workingItem = inputStack.getItem();
             }

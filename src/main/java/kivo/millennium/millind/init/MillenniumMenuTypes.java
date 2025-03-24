@@ -2,6 +2,7 @@ package kivo.millennium.millind.init;
 
 import kivo.millennium.millind.container.Device.CrusherContainer;
 import kivo.millennium.millind.container.Device.GeneratorMT;
+import kivo.millennium.millind.container.Device.HydraulicPressMenu;
 import kivo.millennium.millind.container.Device.InductionFurnaceMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;
@@ -24,6 +25,11 @@ public class MillenniumMenuTypes {
     public static final RegistryObject<MenuType<InductionFurnaceMenu>> INDUCTION_FURNACE_MENU = MENU_TYPES.register(
             "induction_furnace_menu",
             () -> IForgeMenuType.create((windowId, inv, data) -> new InductionFurnaceMenu(windowId, inv.player, data.readBlockPos()))
+    );
+
+    public static final RegistryObject<MenuType<HydraulicPressMenu>> HYDRAULIC_PRESS_MENU = MENU_TYPES.register(
+            "hydraulic_press_menu",
+            () -> IForgeMenuType.create((windowId, inv, data) -> new HydraulicPressMenu(windowId, inv.player, data.readBlockPos()))
     );
 
 

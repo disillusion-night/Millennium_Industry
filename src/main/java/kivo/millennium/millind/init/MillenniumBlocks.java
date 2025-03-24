@@ -1,5 +1,7 @@
 package kivo.millennium.millind.init;
 
+import kivo.millennium.millind.block.device.HydraulicPress.HydraulicPressBL;
+import kivo.millennium.millind.block.device.MeltingFurnace.MeltingFurnaceBL;
 import kivo.millennium.millind.block.device.crusher.CrusherBL;
 import kivo.millennium.millind.block.fluid.IcyWaterBlock;
 import kivo.millennium.millind.block.fluidContainer.MetalTankBL;
@@ -40,6 +42,10 @@ public class MillenniumBlocks {
     public static final RegistryObject<GeneratorBL> GENERATOR_BL = registerWithItem("generator", GeneratorBL::new,  MillenniumItems.ENGINEERING_PARTS);
 
     public static final RegistryObject<InductionFurnaceBL> INDUCTION_FURNACE_BL = registerWithItem("induction_furnace", InductionFurnaceBL::new,  MillenniumItems.ENGINEERING_PARTS);
+
+    public static final RegistryObject<MeltingFurnaceBL> MELTING_FURNACE_BL = registerWithItem("melting_furnace", MeltingFurnaceBL::new,  MillenniumItems.ENGINEERING_PARTS);
+
+    public static final RegistryObject<HydraulicPressBL> HYDRAULIC_PRESS_BL = registerWithItem("hydraulic_press", HydraulicPressBL::new,  MillenniumItems.ENGINEERING_PARTS);
 
     public static final RegistryObject<CrusherBL> CRUSHER_BL = registerWithItem("crusher", CrusherBL::new, MillenniumItems.ENGINEERING_PARTS);
 

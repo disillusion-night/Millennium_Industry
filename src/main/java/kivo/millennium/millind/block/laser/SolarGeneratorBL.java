@@ -1,6 +1,6 @@
 package kivo.millennium.millind.block.laser;
 
-import kivo.millennium.millind.block.device.AbstractDeviceBE;
+import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.block.device.AbstractDeviceBL;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
@@ -33,7 +33,7 @@ public class SolarGeneratorBL extends AbstractDeviceBL {
     }
 
     @Override
-    protected BlockEntityType<? extends AbstractDeviceBE> blockEntityType() {
+    protected BlockEntityType<? extends AbstractMachineBE> blockEntityType() {
         return MillenniumBlockEntities.SOLAR_GENERATOR_BE.get();
     }
 

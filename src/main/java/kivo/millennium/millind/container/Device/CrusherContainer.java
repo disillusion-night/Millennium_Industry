@@ -1,8 +1,7 @@
 package kivo.millennium.millind.container.Device;
 
-import kivo.millennium.millind.block.device.AbstractDeviceBE;
+import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.block.device.crusher.CrusherBE;
-import kivo.millennium.millind.block.device.inductionFurnace.InductionFurnaceBE;
 import kivo.millennium.millind.capability.DeviceOutputSlot;
 import kivo.millennium.millind.capability.ExtendedSlot;
 import kivo.millennium.millind.init.MillenniumBlocks;
@@ -24,7 +23,7 @@ public class CrusherContainer extends AbstractDeviceMenu {
     }
 
     @Override
-    protected void setupSlot(Container container, AbstractDeviceBE deviceBE) {
+    protected void setupSlot(Container container, AbstractMachineBE deviceBE) {
         super.setupSlot(container, deviceBE);
         addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), CrusherBE.INPUT_SLOT, inputpos));
         addSlot(new DeviceOutputSlot(container, deviceBE.getItemHandler(), CrusherBE.OUTPUT_SLOT, outputpos));
@@ -32,7 +31,7 @@ public class CrusherContainer extends AbstractDeviceMenu {
 
 
     @Override
-    protected void setupDataSlot(Container container, AbstractDeviceBE deviceBE) {
+    protected void setupDataSlot(Container container, AbstractMachineBE deviceBE) {
         super.setupDataSlot(container, deviceBE);
         CrusherBE be = (CrusherBE) deviceBE;
         addDataSlot(new DataSlot() {

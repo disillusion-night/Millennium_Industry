@@ -3,6 +3,7 @@ package kivo.millennium.millind.capability;
 import net.minecraftforge.energy.EnergyStorage;
 
 public class DeviceEnergyStorage extends EnergyStorage {
+
     public DeviceEnergyStorage(int capacity) {
         super(capacity);
     }

@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "millind:material/raw_aluminum_block"
+      "model": "millind:block/material/raw_aluminum_block"
     }
   }
 }

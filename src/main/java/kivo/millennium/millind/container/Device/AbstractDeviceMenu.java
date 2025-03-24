@@ -1,6 +1,6 @@
 package kivo.millennium.millind.container.Device;
 
-import kivo.millennium.millind.block.device.AbstractDeviceBE;
+import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.capability.DeviceEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
@@ -21,7 +21,7 @@ public abstract class AbstractDeviceMenu extends AbstractContainerMenu {
     protected int power;
     protected int maxpower;
     protected Vector2i BATTERY_SLOT_POS;
-    protected AbstractDeviceBE blockEntity;
+    protected AbstractMachineBE blockEntity;
     protected Player player;
     protected BlockPos pos;
     protected ItemStackHandler itemHandler;
@@ -34,7 +34,7 @@ public abstract class AbstractDeviceMenu extends AbstractContainerMenu {
         this.level = player.level();
         this.pos = pos;
         BlockEntity entity = level.getBlockEntity(pos);
-        if (entity instanceof AbstractDeviceBE deviceBE) {
+        if (entity instanceof AbstractMachineBE deviceBE) {
             setupDataSlot(pContainer, deviceBE);
             setupSlot(pContainer, deviceBE);
             layoutPlayerInventorySlots(player.getInventory(), this.getPlayerInvPos());
@@ -43,7 +43,7 @@ public abstract class AbstractDeviceMenu extends AbstractContainerMenu {
         }
     }
 
-    protected void setupDataSlot(Container container, AbstractDeviceBE deviceBE) {
+    protected void setupDataSlot(Container container, AbstractMachineBE deviceBE) {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
@@ -90,7 +90,7 @@ public abstract class AbstractDeviceMenu extends AbstractContainerMenu {
         });
     }
     // 设置容器的物品槽位，子类需要覆写此方法以添加自定义槽位
-    protected void setupSlot(Container container, AbstractDeviceBE deviceBE) {
+    protected void setupSlot(Container container, AbstractMachineBE deviceBE) {
         this.addBatterySlot(container, deviceBE.getItemHandler());
     }
 

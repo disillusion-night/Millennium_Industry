@@ -1,5 +1,7 @@
 package kivo.millennium.millind.init;
 
+import kivo.millennium.millind.block.device.HydraulicPress.HydraulicPressBE;
+import kivo.millennium.millind.block.device.MeltingFurnace.MeltingFurnaceBE;
 import kivo.millennium.millind.block.device.crusher.CrusherBE;
 import kivo.millennium.millind.block.fluidContainer.MetalFluidTankBE;
 import kivo.millennium.millind.block.generator.GeneratorBE;
@@ -44,6 +46,14 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<CrusherBE>> Crusher_BE = BLOCK_ENTITIES.register(
             "crusher_be", () -> BlockEntityType.Builder.of(CrusherBE::new,
                     MillenniumBlocks.CRUSHER_BL.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<MeltingFurnaceBE>> MELTING_FURNACE_BE = BLOCK_ENTITIES.register(
+            "melting_furnace_be", () -> BlockEntityType.Builder.of(MeltingFurnaceBE::new,
+                    MillenniumBlocks.MELTING_FURNACE_BL.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<HydraulicPressBE>> HYDRAULIC_PRESS_BE = BLOCK_ENTITIES.register(
+            "hydraulic_press_be", () -> BlockEntityType.Builder.of(HydraulicPressBE::new,
+                    MillenniumBlocks.HYDRAULIC_PRESS_BL.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<SolarGeneratorBE>> SOLAR_GENERATOR_BE = BLOCK_ENTITIES.register(
             "solar_generator_be", () -> BlockEntityType.Builder.of(SolarGeneratorBE::new,

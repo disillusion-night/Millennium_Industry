@@ -7,6 +7,7 @@ import kivo.millennium.client.render.blockEntity.NetherStarLaserBERender;
 import kivo.millennium.client.render.entity.BlackHoleRenderer;
 import kivo.millennium.client.screen.CrusherScreen;
 import kivo.millennium.client.screen.GeneratorScreen;
+import kivo.millennium.client.screen.HydraulicPressScreen;
 import kivo.millennium.client.screen.InductionFurnaceScreen;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.init.MillenniumEntities;
@@ -43,6 +44,7 @@ public class RendererSetup {
             BlockEntityRenderers.register(MillenniumBlockEntities.NETHER_STAR_LASER_BE.get(), NetherStarLaserBERender::new);
             MenuScreens.register(MillenniumMenuTypes.GENERATOR_MENU.get(), GeneratorScreen::new);
             MenuScreens.register(MillenniumMenuTypes.INDUCTION_FURNACE_MENU.get(), InductionFurnaceScreen::new);
+            MenuScreens.register(MillenniumMenuTypes.HYDRAULIC_PRESS_MENU.get(), HydraulicPressScreen::new);
             MenuScreens.register(MillenniumMenuTypes.CRUSHER_CONTAINER.get(), CrusherScreen::new);
             //IClientItemExtensions.of(MillenniumBlocks.HDEC_BL.get().asItem()).getCustomRenderer();
         });

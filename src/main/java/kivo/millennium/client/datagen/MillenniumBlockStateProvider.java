@@ -60,12 +60,12 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
     }
 
     public <B extends Block> void cubeAllBlockWithItem(RegistryObject<B> block, String prefix) {
-        ModelFile blockModel = models().getBuilder(prefix + "/" + block.getId().getPath())
+        ModelFile blockModel = models().getBuilder("block/" + prefix + "/" + block.getId().getPath())
                 .parent(new ConfiguredModel(models().getExistingFile(new ResourceLocation("minecraft:block/cube_all"))).model)
                 .texture("all", getRL("block/"+ prefix + "/" + block.getId().getPath()));
 
         getVariantBuilder(block.get()).partialState().setModels(new ConfiguredModel(blockModel));
-        simpleBlockItem(block.get(), blockModel);
+        itemModels().getBuilder(block.getId().getPath()).parent(blockModel);
     }
 
     /**

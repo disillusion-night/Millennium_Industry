@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "millind:material/steel_block"
+      "model": "millind:block/material/steel_block"
     }
   }
 }

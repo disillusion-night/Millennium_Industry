@@ -1,13 +1,9 @@
 package kivo.millennium.millind.block.device;
 
-import kivo.millennium.millind.Main;
 import kivo.millennium.millind.capability.DeviceEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.Container;
-import net.minecraft.world.Containers;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -16,16 +12,15 @@ import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.items.IItemHandler;
 import net.minecraftforge.items.ItemStackHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 
-public abstract class AbstractDeviceBE extends BlockEntity {
+public abstract class AbstractMachineBE extends BlockEntity {
 
-    protected int MAX_TRANSFER_RATE = 1024; // FE/tick
+    protected int MAX_TRANSFER_RATE = 1024;
 
     public DeviceItemStorage itemHandler;
     private LazyOptional<ItemStackHandler> lazyItemHandler = LazyOptional.empty();
@@ -33,7 +28,7 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     protected DeviceEnergyStorage energyStorage;
     private LazyOptional<IEnergyStorage> lazyEnergyStorage;
 
-    public AbstractDeviceBE(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState, int slotCount) {
+    public AbstractMachineBE(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState, int slotCount) {
         super(pType, pWorldPosition, pBlockState);
         this.itemHandler = slotCount > 0?createItemHandler(slotCount):null;
         this.energyStorage = createEnergyStorage();
@@ -61,7 +56,7 @@ public abstract class AbstractDeviceBE extends BlockEntity {
     }
 
     // 每 tick 执行的逻辑，由 AbstractDeviceBL 的 Ticker 调用
-    public static <T extends BlockEntity> void tick(Level pLevel, BlockPos pPos, BlockState pState, AbstractDeviceBE pBlockEntity) {
+    public static <T extends BlockEntity> void tick(Level pLevel, BlockPos pPos, BlockState pState, AbstractMachineBE pBlockEntity) {
         if (pLevel.isClientSide()) {
             return; // 客户端不做逻辑处理
         }
@@ -130,7 +125,6 @@ public abstract class AbstractDeviceBE extends BlockEntity {
             load(pkt.getTag());
         }
     }
-
 
     // Capability 处理
     @NotNull

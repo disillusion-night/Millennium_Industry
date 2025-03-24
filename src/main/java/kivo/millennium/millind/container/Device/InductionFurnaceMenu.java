@@ -1,7 +1,6 @@
 package kivo.millennium.millind.container.Device;
 
-import kivo.millennium.millind.Main;
-import kivo.millennium.millind.block.device.AbstractDeviceBE;
+import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.block.device.inductionFurnace.InductionFurnaceBE;
 import kivo.millennium.millind.capability.DeviceOutputSlot;
 import kivo.millennium.millind.capability.ExtendedSlot;
@@ -24,7 +23,7 @@ public class InductionFurnaceMenu extends AbstractDeviceMenu {
     }
 
     @Override
-    protected void setupSlot(Container container, AbstractDeviceBE deviceBE) {
+    protected void setupSlot(Container container, AbstractMachineBE deviceBE) {
         super.setupSlot(container, deviceBE);
         addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), InductionFurnaceBE.INPUT_SLOT, inputpos));
         addSlot(new DeviceOutputSlot(container, deviceBE.getItemHandler(), InductionFurnaceBE.OUTPUT_SLOT, outputpos));
@@ -32,7 +31,7 @@ public class InductionFurnaceMenu extends AbstractDeviceMenu {
 
 
     @Override
-    protected void setupDataSlot(Container container, AbstractDeviceBE deviceBE) {
+    protected void setupDataSlot(Container container, AbstractMachineBE deviceBE) {
         super.setupDataSlot(container, deviceBE);
         InductionFurnaceBE be = (InductionFurnaceBE) deviceBE;
         addDataSlot(new DataSlot() {

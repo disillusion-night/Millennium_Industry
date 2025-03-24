@@ -1,6 +1,6 @@
 package kivo.millennium.millind.block.device.inductionFurnace;
 
-import kivo.millennium.millind.block.device.AbstractDeviceBE;
+import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.block.laser.HorizontalDeviceBL;
 import kivo.millennium.millind.container.Device.InductionFurnaceMenu;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
@@ -33,7 +33,7 @@ public class InductionFurnaceBL extends HorizontalDeviceBL {
     }
 
     @Override
-    protected BlockEntityType<? extends AbstractDeviceBE> blockEntityType() {
+    protected BlockEntityType<? extends AbstractMachineBE> blockEntityType() {
         return MillenniumBlockEntities.INDUCTION_FURNACE_BE.get();
     }
 

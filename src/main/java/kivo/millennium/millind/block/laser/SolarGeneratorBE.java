@@ -1,20 +1,18 @@
 package kivo.millennium.millind.block.laser;
 
-import kivo.millennium.millind.Main;
-import kivo.millennium.millind.block.device.AbstractDeviceBE;
+import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.capability.DeviceEnergyStorage;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LightLayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
-public class SolarGeneratorBE extends AbstractDeviceBE {
+public class SolarGeneratorBE extends AbstractMachineBE {
     public static int basicPowerPerTick = 10;
     public static int MaxCapability = (int) 1e7;;
     public static int MaxTransferRate = 100;

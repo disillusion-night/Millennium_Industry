@@ -1,7 +1,7 @@
 {
   "variants": {
     "": {
-      "model": "millind:material/deepslate_lead_ore"
+      "model": "millind:block/material/deepslate_lead_ore"
     }
   }
 }

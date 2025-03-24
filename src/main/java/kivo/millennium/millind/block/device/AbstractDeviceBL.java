@@ -1,11 +1,9 @@
 package kivo.millennium.millind.block.device;
 
-import kivo.millennium.millind.Main;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
-import net.minecraft.world.Containers;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.MenuProvider;
@@ -15,7 +13,6 @@ import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
-import net.minecraft.world.level.block.entity.AbstractFurnaceBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -24,7 +21,6 @@ import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
@@ -59,14 +55,14 @@ public abstract class AbstractDeviceBL extends Block implements EntityBlock {
     @Nullable
     @Override
     public <T extends BlockEntity> BlockEntityTicker<T> getTicker(net.minecraft.world.level.Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide() ? null : this.createTickerHelper(pBlockEntityType, blockEntityType(), AbstractDeviceBE::tick); // 服务端每 tick 调用 BlockEntity 的 tick 方法
+        return pLevel.isClientSide() ? null : this.createTickerHelper(pBlockEntityType, blockEntityType(), AbstractMachineBE::tick); // 服务端每 tick 调用 BlockEntity 的 tick 方法
     }
 
     protected <E extends BlockEntity, A extends BlockEntity> BlockEntityTicker<A> createTickerHelper(BlockEntityType<A> pServerType, BlockEntityType<E> pExpectedType, BlockEntityTicker<? super E> pTicker) {
         return pExpectedType == pServerType ? (BlockEntityTicker<A>)pTicker : null;
     }
 
-    protected abstract BlockEntityType<? extends AbstractDeviceBE> blockEntityType(); // 强制子类提供其 BlockEntityType
+    protected abstract BlockEntityType<? extends AbstractMachineBE> blockEntityType(); // 强制子类提供其 BlockEntityType
 
 
     // 添加默认的 use 方法以打开 GUI
@@ -74,7 +70,7 @@ public abstract class AbstractDeviceBL extends Block implements EntityBlock {
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
         if (!pLevel.isClientSide()) { // 确保在服务端执行
             BlockEntity be = pLevel.getBlockEntity(pPos);
-            if(be instanceof AbstractDeviceBE){
+            if(be instanceof AbstractMachineBE){
                 MenuProvider menuProvider = this.getMenuProvider(pState, pLevel, be.getBlockPos()); // 获取 MenuProvider
                 if (menuProvider != null && pPlayer instanceof ServerPlayer) { // 检查 MenuProvider 和玩家类型
                     NetworkHooks.openScreen((ServerPlayer) pPlayer, menuProvider, be.getBlockPos()); // 使用 NetworkHooks 打开 GUI
@@ -109,9 +105,9 @@ public abstract class AbstractDeviceBL extends Block implements EntityBlock {
     public void onRemove(BlockState pState, Level pLevel, BlockPos pPos, BlockState pNewState, boolean pIsMoving) {
         if (!pState.is(pNewState.getBlock())) {
             BlockEntity blockentity = pLevel.getBlockEntity(pPos);
-            if (blockentity instanceof AbstractDeviceBE) {
+            if (blockentity instanceof AbstractMachineBE) {
                 if (pLevel instanceof ServerLevel) {
-                    ((AbstractDeviceBE) blockentity).drops();
+                    ((AbstractMachineBE) blockentity).drops();
                 }
 
                 pLevel.updateNeighbourForOutputSignal(pPos, this);

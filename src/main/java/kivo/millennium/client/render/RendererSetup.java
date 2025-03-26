@@ -43,6 +43,7 @@ public class RendererSetup {
             MenuScreens.register(MillenniumMenuTypes.INDUCTION_FURNACE_MENU.get(), InductionFurnaceScreen::new);
             MenuScreens.register(MillenniumMenuTypes.HYDRAULIC_PRESS_MENU.get(), HydraulicPressScreen::new);
             MenuScreens.register(MillenniumMenuTypes.CRUSHER_CONTAINER.get(), CrusherScreen::new);
+            MenuScreens.register(MillenniumMenuTypes.FUSION_FURNACE_MENU.get(), FusionFurnaceScreen::new);
             MenuScreens.register(MillenniumMenuTypes.MELTING_FURNACE_MENU.get(), MeltingFurnaceScreen::new);
             //IClientItemExtensions.of(MillenniumBlocks.HDEC_BL.get().asItem()).getCustomRenderer();
         });

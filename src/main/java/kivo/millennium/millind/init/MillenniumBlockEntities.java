@@ -1,5 +1,7 @@
 package kivo.millennium.millind.init;
 
+import kivo.millennium.millind.block.device.FusionFurnace.FusionFurnaceBE;
+import kivo.millennium.millind.block.device.FusionFurnace.FusionFurnaceBL;
 import kivo.millennium.millind.block.device.HydraulicPress.HydraulicPressBE;
 import kivo.millennium.millind.block.device.MeltingFurnace.MeltingFurnaceBE;
 import kivo.millennium.millind.block.device.crusher.CrusherBE;
@@ -50,6 +52,10 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<MeltingFurnaceBE>> MELTING_FURNACE_BE = BLOCK_ENTITIES.register(
             "melting_furnace_be", () -> BlockEntityType.Builder.of(MeltingFurnaceBE::new,
                     MillenniumBlocks.MELTING_FURNACE_BL.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<FusionFurnaceBE>> FUSION_FURNACE_BE = BLOCK_ENTITIES.register(
+            "fusion_furnace_be", () -> BlockEntityType.Builder.of(FusionFurnaceBE::new,
+                    MillenniumBlocks.FUSION_FURNACE_BL.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<HydraulicPressBE>> HYDRAULIC_PRESS_BE = BLOCK_ENTITIES.register(
             "hydraulic_press_be", () -> BlockEntityType.Builder.of(HydraulicPressBE::new,

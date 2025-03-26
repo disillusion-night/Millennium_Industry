@@ -1,5 +1,6 @@
 package kivo.millennium.client.screen;
 
+import kivo.millennium.millind.container.Device.FusionFurnaceContainer;
 import kivo.millennium.millind.container.Device.MeltingFurnaceContainer;
 import kivo.millennium.millind.util.NumberUtils;
 import kivo.millennium.millind.util.RenderUtils;
@@ -11,7 +12,7 @@ import org.joml.Vector2i;
 
 import static kivo.millennium.millind.Main.getRL;
 
-public class FusionFurnaceScreen extends AbstractDeviceSC<MeltingFurnaceContainer> {
+public class FusionFurnaceScreen extends AbstractDeviceSC<FusionFurnaceContainer> {
     private static final Vector2i ProgressPos = new Vector2i(78, 38);
     private static final Vector2i fluidSlot1Pos = new Vector2i(25, 15);
     private static final Vector2i fluidSlot2Pos = new Vector2i(115, 15);
@@ -20,13 +21,13 @@ public class FusionFurnaceScreen extends AbstractDeviceSC<MeltingFurnaceContaine
     @Override
     public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(pGuiGraphics, mouseX, mouseY, partialTick);
-        FluidStack fluidStack1 = getMenu().getFluid();
-        //if(!fluidStack1.isEmpty()) checkfluid1Tip(pGuiGraphics,fluidStack1,getMenu().getFluid1Capacity() mouseX, mouseY);
-        FluidStack fluidStack2 = getMenu().getFluid();
-        //if(!fluidStack2.isEmpty()) checkfluid2Tip(pGuiGraphics,fluidStack2,getMenu().getFluid2Capacity(), mouseX, mouseY);
+        FluidStack fluidStackIn = getMenu().getFluidIn();
+        if(!fluidStackIn.isEmpty()) checkfluid1Tip(pGuiGraphics,fluidStackIn,getMenu().getFluidCapacityIn(), mouseX, mouseY);
+        FluidStack fluidStackOut = getMenu().getFluidOut();
+        if(!fluidStackOut.isEmpty()) checkfluid2Tip(pGuiGraphics,fluidStackOut,getMenu().getFluidCapacityOut(), mouseX, mouseY);
     }
 
-    public FusionFurnaceScreen(MeltingFurnaceContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
+    public FusionFurnaceScreen(FusionFurnaceContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
         this.GUI_TEXTURE = getRL( "textures/gui/container/fusion_furnace_gui.png");
     }
@@ -37,13 +38,13 @@ public class FusionFurnaceScreen extends AbstractDeviceSC<MeltingFurnaceContaine
 
         RenderUtils.renderProgress(pGuiGraphics, 76 + leftPos, 36 + topPos, menu.getProgress());
 
-        FluidStack fluidStack1 = getMenu().getFluid();
+        FluidStack fluidStack1 = getMenu().getFluidIn();
 
-        RenderUtils.renderFluid(pGuiGraphics, fluidStack1, fluidSlot1Pos.x + leftPos, fluidSlot1Pos.y + topPos, fluidSlotSize.x, fluidSlotSize.y,0, menu.getFluidCapacity());
+        RenderUtils.renderFluid(pGuiGraphics, fluidStack1, fluidSlot1Pos.x + leftPos, fluidSlot1Pos.y + topPos, fluidSlotSize.x, fluidSlotSize.y,0, menu.getFluidCapacityIn());
 
-        FluidStack fluidStack2 = getMenu().getFluid();
+        FluidStack fluidStack2 = getMenu().getFluidOut();
 
-        RenderUtils.renderFluid(pGuiGraphics, fluidStack2, fluidSlot2Pos.x + leftPos, fluidSlot2Pos.y + topPos, fluidSlotSize.x, fluidSlotSize.y,0, menu.getFluidCapacity());
+        RenderUtils.renderFluid(pGuiGraphics, fluidStack2, fluidSlot2Pos.x + leftPos, fluidSlot2Pos.y + topPos, fluidSlotSize.x, fluidSlotSize.y,0, menu.getFluidCapacityOut());
 
     }
 

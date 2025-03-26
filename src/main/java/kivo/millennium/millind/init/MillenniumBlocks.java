@@ -1,5 +1,6 @@
 package kivo.millennium.millind.init;
 
+import kivo.millennium.millind.block.device.FusionFurnace.FusionFurnaceBL;
 import kivo.millennium.millind.block.device.HydraulicPress.HydraulicPressBL;
 import kivo.millennium.millind.block.device.MeltingFurnace.MeltingFurnaceBL;
 import kivo.millennium.millind.block.device.crusher.CrusherBL;
@@ -35,29 +36,20 @@ public class MillenniumBlocks {
     public static final RegistryObject<LiquidBlock> ICY_WATER_BL = BLOCKS.register("icy_water", IcyWaterBlock::new);
 
     public static final RegistryObject<LiquidBlock> MOLTEN_ALUMINUM_BL = BLOCKS.register("molten_aluminum", MoltenAluminumBL::new);
-
     public static final RegistryObject<LiquidBlock> MOLTEN_ALUMINUM_ALLOY_BL = BLOCKS.register("molten_aluminum_alloy", MoltenAluminumAlloyBL::new);
-
     public static final RegistryObject<LiquidBlock> MOLTEN_IRON_BL = BLOCKS.register("molten_iron", MoltenIronBL::new);
-
     public static final RegistryObject<LiquidBlock> MOLTEN_STEEL_BL = BLOCKS.register("molten_steel", MoltenSteelBL::new);
-
     public static final RegistryObject<LiquidBlock> MOLTEN_CRYOLITE_BL = BLOCKS.register("molten_cryolite", MoltenCryoliteBL::new);
-
     public static final RegistryObject<LiquidBlock> RAW_MOLTEN_ALUMINUM_BL = BLOCKS.register("raw_molten_aluminum", RawMoltenAluminumBL::new);
 
     public static final RegistryObject<MetalTankBL> METAL_TANK_BL = registerWithItem("metal_tank", MetalTankBL::new, MillenniumItems.ENGINEERING_PARTS);
-
     public static final RegistryObject<HDECBL> HDEC_BL = registerWithItem("hdec", HDECBL::new,  MillenniumItems.ENGINEERING_PARTS);
 
     public static final RegistryObject<NetherStarLaserBL> NETHER_STAR_LASER_BL = registerWithItem("nether_star_laser", NetherStarLaserBL::new,  MillenniumItems.ENGINEERING_PARTS);
-
     public static final RegistryObject<GeneratorBL> GENERATOR_BL = registerWithItem("generator", GeneratorBL::new,  MillenniumItems.ENGINEERING_PARTS);
-
     public static final RegistryObject<InductionFurnaceBL> INDUCTION_FURNACE_BL = registerWithItem("induction_furnace", InductionFurnaceBL::new,  MillenniumItems.ENGINEERING_PARTS);
-
     public static final RegistryObject<MeltingFurnaceBL> MELTING_FURNACE_BL = registerWithItem("melting_furnace", MeltingFurnaceBL::new,  MillenniumItems.ENGINEERING_PARTS);
-
+    public static final RegistryObject<FusionFurnaceBL> FUSION_FURNACE_BL = registerWithItem("fusion_furnace", FusionFurnaceBL::new,  MillenniumItems.ENGINEERING_PARTS);
     public static final RegistryObject<HydraulicPressBL> HYDRAULIC_PRESS_BL = registerWithItem("hydraulic_press", HydraulicPressBL::new,  MillenniumItems.ENGINEERING_PARTS);
 
     public static final RegistryObject<CrusherBL> CRUSHER_BL = registerWithItem("crusher", CrusherBL::new, MillenniumItems.ENGINEERING_PARTS);

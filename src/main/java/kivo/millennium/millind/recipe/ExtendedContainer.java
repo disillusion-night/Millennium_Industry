@@ -16,6 +16,9 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 
 import javax.annotation.Nullable;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,7 +27,7 @@ import java.util.stream.Collectors;
 public class ExtendedContainer implements Container, StackedContentsCompatible {
     private final int size;
     private final NonNullList<ItemStack> items;
-    private final List<FluidStack> fluids;
+    private final ArrayList<FluidStack> fluids;
     //private final List<ItemStack> items;
     @Nullable
     private List<ContainerListener> listeners;
@@ -32,13 +35,15 @@ public class ExtendedContainer implements Container, StackedContentsCompatible {
     public ExtendedContainer(int pSize) {
         this.size = pSize;
         this.items = NonNullList.withSize(pSize, ItemStack.EMPTY);
-        this.fluids = List.of(null);
+        this.fluids = new ArrayList<FluidStack>();
+        fluids.add(FluidStack.EMPTY);
     }
 
     public ExtendedContainer(ItemStack... pItems) {
         this.size = pItems.length;
         this.items = NonNullList.of(ItemStack.EMPTY, pItems);
-        this.fluids = List.of(null);
+        this.fluids = new ArrayList<FluidStack>();
+        fluids.add(FluidStack.EMPTY);
     }
 
     public void addListener(ContainerListener pListener) {
@@ -102,6 +107,20 @@ public class ExtendedContainer implements Container, StackedContentsCompatible {
 
         return $$2;
     }
+    public FluidStack addFluid(FluidStack pStack) {
+        if (pStack.isEmpty()) {
+            return FluidStack.EMPTY;
+        } else {
+            FluidStack stack = pStack.copy();
+            this.moveFluidToOccupiedSlotsWithSameType(stack);
+            if (stack.isEmpty()) {
+                return FluidStack.EMPTY;
+            } else {
+                this.moveFluidToEmptySlots(stack);
+                return stack.isEmpty() ? FluidStack.EMPTY : stack;
+            }
+        }
+    }
 
     public ItemStack addItem(ItemStack pStack) {
         if (pStack.isEmpty()) {
@@ -143,6 +162,14 @@ public class ExtendedContainer implements Container, StackedContentsCompatible {
         }
     }
 
+    public void setFluid(int pIndex, FluidStack pStack) {
+        this.fluids.set(pIndex, pStack);
+        //if (!pStack.isEmpty() && pStack.getCount() > this.getMaxStackSize()) {
+            //pStack.setCount(this.getMaxStackSize());
+        //}
+
+        this.setChanged();
+    }
     public void setItem(int pIndex, ItemStack pStack) {
         this.items.set(pIndex, pStack);
         if (!pStack.isEmpty() && pStack.getCount() > this.getMaxStackSize()) {
@@ -208,6 +235,16 @@ public class ExtendedContainer implements Container, StackedContentsCompatible {
         }).collect(Collectors.toList())).toString();
     }
 
+    private void moveFluidToEmptySlots(FluidStack fluidStack) {
+        for(int $$1 = 0; $$1 < this.size; ++$$1) {
+            ItemStack $$2 = this.getItem($$1);
+            if ($$2.isEmpty()) {
+                this.setFluid($$1, fluidStack.copy());
+                return;
+            }
+        }
+
+    }
     private void moveItemToEmptySlots(ItemStack pStack) {
         for(int $$1 = 0; $$1 < this.size; ++$$1) {
             ItemStack $$2 = this.getItem($$1);
@@ -219,6 +256,18 @@ public class ExtendedContainer implements Container, StackedContentsCompatible {
 
     }
 
+    private void moveFluidToOccupiedSlotsWithSameType(FluidStack fluidStack) {
+        for(int i = 0; i < this.size; ++i) {
+            FluidStack tgt = this.getFluid(i);
+            if (fluidStack.containsFluid(tgt)) {
+                this.moveFluidsBetweenStacks(fluidStack, tgt);
+                if (fluidStack.isEmpty()) {
+                    return;
+                }
+            }
+        }
+
+    }
     private void moveItemToOccupiedSlotsWithSameType(ItemStack pStack) {
         for(int $$1 = 0; $$1 < this.size; ++$$1) {
             ItemStack $$2 = this.getItem($$1);
@@ -231,6 +280,18 @@ public class ExtendedContainer implements Container, StackedContentsCompatible {
         }
 
     }
+
+    private void moveFluidsBetweenStacks(FluidStack pStack, FluidStack pOther) {
+        //int $$2 = Math.min(this.getMaxStackSize(), pOther.getMaxStackSize());
+        int $$3 = pStack.getAmount();
+        if ($$3 > 0) {
+            pOther.grow($$3);
+            pStack.shrink($$3);
+            this.setChanged();
+        }
+
+    }
+
 
     private void moveItemsBetweenStacks(ItemStack pStack, ItemStack pOther) {
         int $$2 = Math.min(this.getMaxStackSize(), pOther.getMaxStackSize());

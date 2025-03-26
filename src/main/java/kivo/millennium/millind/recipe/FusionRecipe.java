@@ -2,9 +2,9 @@ package kivo.millennium.millind.recipe;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import kivo.millennium.millind.Main;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -19,18 +19,18 @@ import static kivo.millennium.millind.Main.getRL;
 
 public class FusionRecipe extends GenericRecipe {
     public FusionRecipe(ResourceLocation id, ItemComponent inputItem, FluidComponent inputFluid, FluidComponent output, int time) {
-        super(id, Arrays.asList(inputFluid, inputItem), Arrays.asList(output), time);
+        super(id, Arrays.asList(inputItem, inputFluid), Arrays.asList(output), time);
         if (!(inputItem instanceof ItemComponent) || !(inputFluid instanceof FluidComponent) || !(output instanceof FluidComponent)) {
             throw new IllegalArgumentException("MeltingRecipe input item must be an ItemComponent,input fluid must be an FluidComponent and output must be a FluidComponent.");
         }
     }
 
     public ItemComponent getInputItem() {
-        return (ItemComponent) this.inputs.get(1);
+        return (ItemComponent) this.inputs.get(0);
     }
 
     public FluidComponent getInputFluid() {
-        return (FluidComponent) this.inputs.get(0);
+        return (FluidComponent) this.inputs.get(1);
     }
 
     public FluidComponent getOutput() {
@@ -42,7 +42,7 @@ public class FusionRecipe extends GenericRecipe {
         if (pLevel.isClientSide()) {
             return false;
         }
-        return getInputItem().getItemStack().is(container.getItem(0).getItem()) && getInputFluid().getFluidStack().containsFluid(container.getFluid(0));
+        return getInputItem().getItemStack().is(container.getItem(0).getItem()) && getInputFluid().getFluidStack().getFluid() == container.getFluid(0).getFluid();
     }
 
 
@@ -72,7 +72,7 @@ public class FusionRecipe extends GenericRecipe {
     }
 
     public static class Serializer extends GenericRecipe.Serializer<FusionRecipe> {
-        public static final Serializer INSTANCE = new Serializer(new MeltingRecipeFactory());
+        public static final Serializer INSTANCE = new Serializer(new FusionRecipeFactory());
         public static final ResourceLocation ID = getRL("fusion");
 
         public Serializer(RecipeFactory<FusionRecipe> factory) {
@@ -113,10 +113,10 @@ public class FusionRecipe extends GenericRecipe {
         }
     }
 
-    public static class MeltingRecipeFactory implements GenericRecipe.Serializer.RecipeFactory<FusionRecipe> {
+    public static class FusionRecipeFactory implements GenericRecipe.Serializer.RecipeFactory<FusionRecipe> {
         @Override
         public FusionRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time) {
-            if (inputs.size() != 1 || !(inputs.get(0) instanceof ItemComponent)) {
+            if (inputs.size() != 2 || !(inputs.get(0) instanceof ItemComponent)) {
                 throw new IllegalArgumentException("MeltingRecipe must have exactly one ItemComponent as input.");
             }
             if (outputs.size() != 1 || !(outputs.get(0) instanceof FluidComponent)) {

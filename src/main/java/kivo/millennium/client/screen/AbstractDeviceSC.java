@@ -13,6 +13,7 @@ import static kivo.millennium.millind.Main.getRL;
 
 public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends AbstractContainerScreen<C> {
 
+    protected Vector2i renderPos;
     // 默认 GUI 纹理，子类可以覆写
     protected ResourceLocation GUI_TEXTURE;
 
@@ -35,6 +36,7 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends Abs
         this.POWER_OVERLAY_TEXTURE = getRL("textures/gui/container/energy/has_power_supply.png");
         this.EnergyAreaSize = new Vector2i(29, 29);
         this.EnergyPercentOffset = new Vector2i(3, 18);
+        this.renderPos = new Vector2i(leftPos, topPos);
     }
 
     protected Vector2i getPowerSlotSize(){

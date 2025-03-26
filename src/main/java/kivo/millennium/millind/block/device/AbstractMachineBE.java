@@ -28,26 +28,34 @@ public abstract class AbstractMachineBE extends BlockEntity {
     protected DeviceEnergyStorage energyStorage;
     private LazyOptional<IEnergyStorage> lazyEnergyStorage;
 
-    public AbstractMachineBE(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState, int slotCount) {
+    public AbstractMachineBE(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
         super(pType, pWorldPosition, pBlockState);
-        this.itemHandler = slotCount > 0?createItemHandler(slotCount):null;
+        this.itemHandler = createItemHandler();
+        this.lazyItemHandler = itemHandler != null ?  LazyOptional.of(() -> itemHandler): LazyOptional.empty();
         this.energyStorage = createEnergyStorage();
-        this.lazyItemHandler = slotCount > 0?LazyOptional.of(() -> itemHandler):LazyOptional.empty();
         this.lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
-    }
-
-    protected DeviceItemStorage createItemHandler(int slot_count) {
-        return new DeviceItemStorage(slot_count) {
-            @Override
-            protected void onContentsChanged(int slot) {
-                setChanged();
-                onContentChange(slot);
-            }
-        };
     }
 
     protected void onContentChange(int slot){
 
+    }
+
+    public int getSlotCount(){
+        return 0;
+    }
+
+    protected DeviceItemStorage createItemHandler() {
+        if(getSlotCount() > 0){
+            return new DeviceItemStorage(getSlotCount()) {
+                @Override
+                protected void onContentsChanged(int slot) {
+                    setChanged();
+                    onContentChange(slot);
+                }
+            };
+        }else {
+            return null;
+        }
     }
 
     // 创建能量存储处理器，子类可以覆写以自定义容量和传输速率
@@ -84,6 +92,7 @@ public abstract class AbstractMachineBE extends BlockEntity {
         super.saveAdditional(pTag);
         saveData(pTag);
     }
+
 
     protected void saveData(CompoundTag pTag){
         pTag.put("inventory", itemHandler.serializeNBT()); // 保存物品槽位数据

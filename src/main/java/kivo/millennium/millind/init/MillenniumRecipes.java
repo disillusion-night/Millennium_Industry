@@ -1,6 +1,7 @@
 package kivo.millennium.millind.init;
 
 import kivo.millennium.millind.recipe.CrushingRecipe;
+import kivo.millennium.millind.recipe.MeltingRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -17,6 +18,9 @@ public class MillenniumRecipes {
 
     public static final RegistryObject<RecipeSerializer<CrushingRecipe>> CRUSHING_RECIPE =
             SERIALIZERS.register("crushing", () -> CrushingRecipe.Serializer.INSTANCE);
+
+    public static final RegistryObject<RecipeSerializer<MeltingRecipe>> MELTING_RECIPE =
+            SERIALIZERS.register("melting", () -> MeltingRecipe.Serializer.INSTANCE);
 
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);

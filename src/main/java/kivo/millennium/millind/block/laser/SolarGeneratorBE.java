@@ -18,7 +18,7 @@ public class SolarGeneratorBE extends AbstractMachineBE {
     public static int MaxTransferRate = 100;
 
     public SolarGeneratorBE(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(MillenniumBlockEntities.SOLAR_GENERATOR_BE.get(), pWorldPosition, pBlockState, 0);
+        super(MillenniumBlockEntities.SOLAR_GENERATOR_BE.get(), pWorldPosition, pBlockState);
     }
 
     @Override
@@ -27,6 +27,7 @@ public class SolarGeneratorBE extends AbstractMachineBE {
         distributeEnergy();
 
     }
+
     @Override
     protected DeviceEnergyStorage createEnergyStorage() {
         return new DeviceEnergyStorage(MaxCapability, MaxTransferRate);

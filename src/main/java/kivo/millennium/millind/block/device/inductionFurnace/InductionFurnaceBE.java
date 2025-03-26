@@ -1,6 +1,7 @@
 package kivo.millennium.millind.block.device.inductionFurnace;
 
 import kivo.millennium.millind.block.device.AbstractMachineBE;
+import kivo.millennium.millind.block.device.DeviceItemStorage;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
@@ -14,7 +15,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.Optional;
 
 public class InductionFurnaceBE extends AbstractMachineBE {
-    public static int SLOT_COUNT = 3;
+    public static final int SLOT_COUNT = 3;
     public static int BATTERY_SLOT = 0;
     public static int INPUT_SLOT = 1;
     public static int OUTPUT_SLOT = 2;
@@ -23,10 +24,9 @@ public class InductionFurnaceBE extends AbstractMachineBE {
     private int progress = 0;
     private int smeltingTotalTime = 100;
     private int litTime = 0;
-    private Item workingItem;
 
     public InductionFurnaceBE(BlockPos pPos, BlockState pBlockState) {
-        super(MillenniumBlockEntities.INDUCTION_FURNACE_BE.get(), pPos, pBlockState, SLOT_COUNT);
+        super(MillenniumBlockEntities.INDUCTION_FURNACE_BE.get(), pPos, pBlockState);
     }
 
     @Override
@@ -71,13 +71,18 @@ public class InductionFurnaceBE extends AbstractMachineBE {
     }
 
     @Override
-    protected void onContentChange(int slot){
-        if(slot == INPUT_SLOT){
-            if(workingItem != itemHandler.getStackInSlot(INPUT_SLOT).getItem()){
+    protected void onContentChange(int slot) {
+        if (slot == INPUT_SLOT) {
+            ItemStack inputStack = itemHandler.getStackInSlot(INPUT_SLOT);
+            if (inputStack.isEmpty()) {
                 resetProgress();
-                workingItem = itemHandler.getStackInSlot(INPUT_SLOT).getItem();
             }
         }
+    }
+
+    @Override
+    public int getSlotCount(){
+        return SLOT_COUNT;
     }
 
     private boolean isLit(){

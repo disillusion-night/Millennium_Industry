@@ -5,10 +5,7 @@ import com.mojang.blaze3d.vertex.VertexFormat;
 import kivo.millennium.client.render.blockEntity.HDECBERenderer;
 import kivo.millennium.client.render.blockEntity.NetherStarLaserBERender;
 import kivo.millennium.client.render.entity.BlackHoleRenderer;
-import kivo.millennium.client.screen.CrusherScreen;
-import kivo.millennium.client.screen.GeneratorScreen;
-import kivo.millennium.client.screen.HydraulicPressScreen;
-import kivo.millennium.client.screen.InductionFurnaceScreen;
+import kivo.millennium.client.screen.*;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.init.MillenniumEntities;
 import kivo.millennium.millind.init.MillenniumMenuTypes;
@@ -46,6 +43,7 @@ public class RendererSetup {
             MenuScreens.register(MillenniumMenuTypes.INDUCTION_FURNACE_MENU.get(), InductionFurnaceScreen::new);
             MenuScreens.register(MillenniumMenuTypes.HYDRAULIC_PRESS_MENU.get(), HydraulicPressScreen::new);
             MenuScreens.register(MillenniumMenuTypes.CRUSHER_CONTAINER.get(), CrusherScreen::new);
+            MenuScreens.register(MillenniumMenuTypes.MELTING_FURNACE_MENU.get(), MeltingFurnaceScreen::new);
             //IClientItemExtensions.of(MillenniumBlocks.HDEC_BL.get().asItem()).getCustomRenderer();
         });
     }

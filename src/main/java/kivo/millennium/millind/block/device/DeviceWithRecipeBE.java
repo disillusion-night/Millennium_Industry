@@ -28,7 +28,7 @@ public abstract class DeviceWithRecipeBE<R extends Recipe> extends AbstractMachi
 
 
     public DeviceWithRecipeBE(BlockPos pPos, BlockState pBlockState) {
-        super(MillenniumBlockEntities.Crusher_BE.get(), pPos, pBlockState, 3);
+        super(MillenniumBlockEntities.Crusher_BE.get(), pPos, pBlockState);
         this.MAX_TRANSFER_RATE = 1000;
     }
     @Override

@@ -8,23 +8,27 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fluids.FluidStack;
+
 import java.util.Arrays;
 import java.util.List;
 
 import static kivo.millennium.millind.Main.getRL;
-import static kivo.millennium.millind.Main.log;
 
-public class CrushingRecipe extends GenericRecipe {
-    public CrushingRecipe(ResourceLocation id, ItemComponent input, ItemComponent output) {
+public class MeltingRecipe extends GenericRecipe {
+    public MeltingRecipe(ResourceLocation id, ItemComponent input, FluidComponent output) {
         super(id, Arrays.asList(input), Arrays.asList(output));
+        if (!(input instanceof ItemComponent) || !(output instanceof FluidComponent)) {
+            throw new IllegalArgumentException("MeltingRecipe input must be an ItemComponent and output must be a FluidComponent.");
+        }
     }
 
     public ItemComponent getInput() {
         return (ItemComponent) this.inputs.get(0);
     }
 
-    public ItemComponent getOutput() {
-        return (ItemComponent) this.outputs.get(0);
+    public FluidComponent getOutput() {
+        return (FluidComponent) this.outputs.get(0);
     }
 
     @Override
@@ -37,13 +41,16 @@ public class CrushingRecipe extends GenericRecipe {
 
     @Override
     public ItemStack assemble(SimpleContainer pContainer, RegistryAccess pRegistryAccess) {
-        log(getOutput().getItemStack().getItem().toString());
-        return getOutput().getItemStack().copy();
+        return ItemStack.EMPTY; // Melting produces a fluid, not an item in the traditional sense for assemble
     }
 
     @Override
     public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
-        return getOutput().getItemStack().copy();
+        return ItemStack.EMPTY; // Similar to assemble, represents the recipe output for display purposes (can be empty)
+    }
+
+    public FluidStack getResultFluid() {
+        return getOutput().getFluidStack().copy();
     }
 
     @Override
@@ -56,18 +63,17 @@ public class CrushingRecipe extends GenericRecipe {
         return Type.INSTANCE;
     }
 
-    public static class Type implements RecipeType<CrushingRecipe> {
+    public static class Type implements RecipeType<MeltingRecipe> {
         private Type() { }
-        public static final CrushingRecipe.Type INSTANCE = new CrushingRecipe.Type();
-        public static final String ID = "crushing";
+        public static final MeltingRecipe.Type INSTANCE = new MeltingRecipe.Type();
+        public static final String ID = "melting";
     }
 
+    public static class Serializer extends GenericRecipe.Serializer<MeltingRecipe> {
+        public static final Serializer INSTANCE = new Serializer(new MeltingRecipeFactory());
+        public static final ResourceLocation ID = getRL("melting");
 
-    public static class Serializer extends GenericRecipe.Serializer<CrushingRecipe> {
-        public static final Serializer INSTANCE = new Serializer(new CrushingRecipeFactory());
-        public static final ResourceLocation ID = getRL("crushing");
-
-        public Serializer(CrushingRecipeFactory factory) {
+        public Serializer(RecipeFactory<MeltingRecipe> factory) {
             super(factory);
         }
 
@@ -79,6 +85,10 @@ public class CrushingRecipe extends GenericRecipe {
                     ItemComponent component = new ItemComponent(ItemStack.EMPTY);
                     component.readFromJson(jsonObject);
                     return component;
+                } else if (jsonObject.has("fluid")) {
+                    FluidComponent component = new FluidComponent(null);
+                    component.readFromJson(jsonObject);
+                    return component;
                 }
             } else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
                 ItemComponent component = new ItemComponent(ItemStack.EMPTY);
@@ -87,28 +97,30 @@ public class CrushingRecipe extends GenericRecipe {
                 component.readFromJson(tempJson);
                 return component;
             }
-            return null; // 或者抛出异常
+            return null;
         }
 
         @Override
         protected RecipeComponent createComponentFromNetwork(String type) {
             if ("item".equals(type)) {
                 return new ItemComponent(ItemStack.EMPTY);
+            } else if ("fluid".equals(type)) {
+                return new FluidComponent(null);
             }
-            return null; // 或者抛出异常
+            return null;
         }
     }
 
-    public static class CrushingRecipeFactory implements GenericRecipe.Serializer.RecipeFactory<CrushingRecipe> {
+    public static class MeltingRecipeFactory implements GenericRecipe.Serializer.RecipeFactory<MeltingRecipe> {
         @Override
-        public CrushingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs) {
+        public MeltingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs) {
             if (inputs.size() != 1 || !(inputs.get(0) instanceof ItemComponent)) {
-                throw new IllegalArgumentException("CrushingRecipe must have exactly one ItemComponent as input.");
+                throw new IllegalArgumentException("MeltingRecipe must have exactly one ItemComponent as input.");
             }
-            if (outputs.size() != 1 || !(outputs.get(0) instanceof ItemComponent)) {
-                throw new IllegalArgumentException("CrushingRecipe must have exactly one ItemComponent as output.");
+            if (outputs.size() != 1 || !(outputs.get(0) instanceof FluidComponent)) {
+                throw new IllegalArgumentException("MeltingRecipe must have exactly one FluidComponent as output.");
             }
-            return new CrushingRecipe(id, (ItemComponent) inputs.get(0), (ItemComponent) outputs.get(0));
+            return new MeltingRecipe(id, (ItemComponent) inputs.get(0), (FluidComponent) outputs.get(0));
         }
     }
 }

@@ -22,11 +22,10 @@ public class CrusherBE extends AbstractMachineBE {
     private int progress = 0;
     private int totalTime = 100;
     private int litTime = 0;
-    private Item workingItem = null;
 
 
     public CrusherBE(BlockPos pPos, BlockState pBlockState) {
-        super(MillenniumBlockEntities.Crusher_BE.get(), pPos, pBlockState, 3);
+        super(MillenniumBlockEntities.Crusher_BE.get(), pPos, pBlockState);
         this.MAX_TRANSFER_RATE = 1000;
     }
 
@@ -75,11 +74,15 @@ public class CrusherBE extends AbstractMachineBE {
     protected void onContentChange(int slot) {
         if (slot == INPUT_SLOT) {
             ItemStack inputStack = itemHandler.getStackInSlot(INPUT_SLOT);
-            if (workingItem != inputStack.getItem() && ! inputStack.isEmpty()) {
+            if (inputStack.isEmpty()) {
                 resetProgress();
-                workingItem = inputStack.getItem();
             }
         }
+    }
+
+    @Override
+    public int getSlotCount() {
+        return SLOT_COUNT;
     }
 
     private boolean isLit() {

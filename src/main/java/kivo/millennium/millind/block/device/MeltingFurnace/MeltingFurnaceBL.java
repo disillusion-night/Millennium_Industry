@@ -1,7 +1,11 @@
 package kivo.millennium.millind.block.device.MeltingFurnace;
 
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.block.laser.HorizontalDeviceBL;
+import kivo.millennium.millind.container.Device.MeltingFurnaceContainer;
+import kivo.millennium.millind.init.MillenniumBlockEntities;
+import kivo.millennium.millind.init.MillenniumBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -25,16 +29,17 @@ public class MeltingFurnaceBL extends HorizontalDeviceBL {
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return null;
+        return new MeltingFurnaceBE(pPos, pState);
     }
 
     @Override
     protected BlockEntityType<? extends AbstractMachineBE> blockEntityType() {
-        return null;
+        return MillenniumBlockEntities.MELTING_FURNACE_BE.get();
     }
 
     @Override
     protected AbstractContainerMenu createContainerMenu(int containerId, Inventory playerInventory, BlockPos pos, Player player) {
-        return null;
+        Main.log("A");
+        return new MeltingFurnaceContainer(containerId, player, pos);
     }
 }

@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import java.util.Optional;
 
 public class HydraulicPressBE extends AbstractMachineBE {
-    public static int SLOT_COUNT = 4;
+    public static final int SLOT_COUNT = 4;
     public static int BATTERY_SLOT = 0;
     public static int INPUT1_SLOT = 1;
     public static int INPUT2_SLOT = 2;
@@ -24,7 +24,7 @@ public class HydraulicPressBE extends AbstractMachineBE {
     private int litTime = 0;
 
     public HydraulicPressBE(BlockPos pPos, BlockState pBlockState) {
-        super(MillenniumBlockEntities.HYDRAULIC_PRESS_BE.get(), pPos, pBlockState, SLOT_COUNT);
+        super(MillenniumBlockEntities.HYDRAULIC_PRESS_BE.get(), pPos, pBlockState);
         this.MAX_TRANSFER_RATE = 1000;
     }
 
@@ -64,7 +64,6 @@ public class HydraulicPressBE extends AbstractMachineBE {
                 }
             }
         } else {
-            //resetProgress();
             level.setBlock(getBlockPos(), getBlockState().setValue(HydraulicPressBL.POWERED, false), 3);
         }
 
@@ -84,6 +83,11 @@ public class HydraulicPressBE extends AbstractMachineBE {
                 resetProgress();
             }
         }
+    }
+
+    @Override
+    public int getSlotCount() {
+        return SLOT_COUNT;
     }
 
     private boolean isLit() {

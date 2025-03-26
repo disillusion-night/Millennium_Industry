@@ -57,6 +57,6 @@ public class CrusherContainer extends AbstractDeviceMenu {
 
     @Override
     protected Block getBlock() {
-        return MillenniumBlocks.CRUSHER_BL.get(); // 返回破碎机方块实例  (请确保你已注册 ModBlocks.CRUSHER_BLOCK)
+        return MillenniumBlocks.CRUSHER_BL.get();
     }
 }

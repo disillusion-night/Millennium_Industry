@@ -1,6 +1,6 @@
 package kivo.millennium.millind.init;
 
-import kivo.millennium.millind.block.device.FusionFurnace.FusionFurnaceBL;
+import kivo.millennium.millind.block.device.FusionFurnace.FusionChamberBL;
 import kivo.millennium.millind.block.device.HydraulicPress.HydraulicPressBL;
 import kivo.millennium.millind.block.device.MeltingFurnace.MeltingFurnaceBL;
 import kivo.millennium.millind.block.device.crusher.CrusherBL;
@@ -49,7 +49,7 @@ public class MillenniumBlocks {
     public static final RegistryObject<GeneratorBL> GENERATOR_BL = registerWithItem("generator", GeneratorBL::new,  MillenniumItems.ENGINEERING_PARTS);
     public static final RegistryObject<InductionFurnaceBL> INDUCTION_FURNACE_BL = registerWithItem("induction_furnace", InductionFurnaceBL::new,  MillenniumItems.ENGINEERING_PARTS);
     public static final RegistryObject<MeltingFurnaceBL> MELTING_FURNACE_BL = registerWithItem("melting_furnace", MeltingFurnaceBL::new,  MillenniumItems.ENGINEERING_PARTS);
-    public static final RegistryObject<FusionFurnaceBL> FUSION_FURNACE_BL = registerWithItem("fusion_furnace", FusionFurnaceBL::new,  MillenniumItems.ENGINEERING_PARTS);
+    public static final RegistryObject<FusionChamberBL> FUSION_CHAMBER_BL = registerWithItem("fusion_chamber", FusionChamberBL::new,  MillenniumItems.ENGINEERING_PARTS);
     public static final RegistryObject<HydraulicPressBL> HYDRAULIC_PRESS_BL = registerWithItem("hydraulic_press", HydraulicPressBL::new,  MillenniumItems.ENGINEERING_PARTS);
 
     public static final RegistryObject<CrusherBL> CRUSHER_BL = registerWithItem("crusher", CrusherBL::new, MillenniumItems.ENGINEERING_PARTS);

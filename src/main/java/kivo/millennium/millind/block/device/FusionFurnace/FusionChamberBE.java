@@ -1,6 +1,5 @@
 package kivo.millennium.millind.block.device.FusionFurnace;
 
-import kivo.millennium.millind.Main;
 import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.capability.DeviceEnergyStorage;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
@@ -18,17 +17,18 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Optional;
 
 
-public class FusionFurnaceBE extends AbstractMachineBE {
+public class FusionChamberBE extends AbstractMachineBE {
     public static final int SLOT_COUNT = 2;
     public static final int BATTERY_SLOT = 0;
     public static final int INPUT_SLOT = 1;
+    public static final int INPUT_FLUID = 0;
+    public static final int OUTPUT_FLUID = 1;
     private int progress = 0;
     private int totalTime = 100;
     private FluidStack currentRecipeOutput = FluidStack.EMPTY;
@@ -36,7 +36,7 @@ public class FusionFurnaceBE extends AbstractMachineBE {
     private static final int FLUID_CAPACITY_OUT = 12000; // 毫升
 
     // 输出流体槽
-    private final FusionFurnaceTank fluidTank = new FusionFurnaceTank(FLUID_CAPACITY_OUT);
+    private final MultiFluidTank fluidTank = new MultiFluidTank(2,FLUID_CAPACITY_IN, FLUID_CAPACITY_OUT);
 
     @Override
     public int getSlotCount() {
@@ -55,14 +55,14 @@ public class FusionFurnaceBE extends AbstractMachineBE {
     private static final int FLUID_INTAKE_INTERVAL = 20; // 每隔 20 ticks (1 秒) 尝试吸取流体
     private static final int FLUID_INTAKE_AMOUNT = 100; // 每次尝试吸取的流体数量 (以毫升为单位)
 
-    public FusionFurnaceBE(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(MillenniumBlockEntities.FUSION_FURNACE_BE.get(), pWorldPosition, pBlockState);
+    public FusionChamberBE(BlockPos pWorldPosition, BlockState pBlockState) {
+        super(MillenniumBlockEntities.FUSION_CHAMBER_BE.get(), pWorldPosition, pBlockState);
+        this.fluidTank.setFluidInTank(INPUT_FLUID, new FluidStack(MillenniumFluids.MOLTEN_CRYOLITE.get(), 10000));
     }
 
     @Override
     public void tickServer() {
         handleFluidIntake();
-        this.fluidTank.setFluidIn(new FluidStack(MillenniumFluids.MOLTEN_CRYOLITE.get(), 10000));
         // 1. 从电池槽充电
         ItemStack batteryStack = itemHandler.getStackInSlot(BATTERY_SLOT);
         batteryStack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
@@ -78,7 +78,7 @@ public class FusionFurnaceBE extends AbstractMachineBE {
 
         if (!inputStack.isEmpty()) {
             ExtendedContainer container = new ExtendedContainer(inputStack);
-            container.setFluid(0, this.fluidTank.getFluidIn());
+            container.setFluid(0, fluidTank.getFluidInTank(INPUT_FLUID));
             Optional<FusionRecipe> recipe = level.getRecipeManager().getRecipeFor(FusionRecipe.Type.INSTANCE, container, level);
 
             recipe.ifPresent(fusionRecipe -> {
@@ -92,7 +92,7 @@ public class FusionFurnaceBE extends AbstractMachineBE {
                     this.setChanged();
                     if (this.progress >= this.totalTime) {
                         this.progress = 0;
-                        this.meltItem(recipeOutput);
+                        this.fusionItem(fusionRecipe.getInputFluid().getFluidStack().getAmount(), recipeOutput);
                     }
                 } else {
                     this.resetProgress();
@@ -104,15 +104,16 @@ public class FusionFurnaceBE extends AbstractMachineBE {
     }
 
     private boolean canProcess(FluidStack recipeOutput) {
-        if (this.currentRecipeOutput.isEmpty() || (this.currentRecipeOutput.isFluidEqual(recipeOutput) && this.fluidTank.getFluidAmountIn() + recipeOutput.getAmount() <= this.fluidTank.getCapacityOut())) {
+        if (this.currentRecipeOutput.isEmpty() || (this.currentRecipeOutput.isFluidEqual(recipeOutput) && this.fluidTank.getFluidAmount(OUTPUT_FLUID) + recipeOutput.getAmount() <= this.fluidTank.getTankCapacity(OUTPUT_FLUID))) {
             return true;
         }
         return false;
     }
 
-    private void meltItem(FluidStack recipeOutput) {
-        this.itemHandler.extractItem(0, 1, false); // 移除一个输入物品
-        this.fluidTank.addToOut(new FluidStack(recipeOutput.getFluid(), recipeOutput.getAmount()), IFluidHandler.FluidAction.EXECUTE);
+    private void fusionItem(int cost, FluidStack recipeOutput) {
+        this.itemHandler.extractItem(0, 1, false);
+        this.fluidTank.drainFluidFromTank(INPUT_FLUID, cost);
+        this.fluidTank.addFluidToTank(OUTPUT_FLUID, new FluidStack(recipeOutput.getFluid(), recipeOutput.getAmount()), IFluidHandler.FluidAction.EXECUTE);
         this.currentRecipeOutput = FluidStack.EMPTY; // 重置当前配方输出
         this.setChanged();
     }
@@ -161,7 +162,7 @@ public class FusionFurnaceBE extends AbstractMachineBE {
     }
 
     private boolean isLit() {
-        return getBlockState().getValue(FusionFurnaceBL.POWERED);
+        return getBlockState().getValue(FusionChamberBL.POWERED);
     }
 
     public int getProgressAndLit() {
@@ -189,12 +190,12 @@ public class FusionFurnaceBE extends AbstractMachineBE {
     @Override
     public void loadData(CompoundTag pTag) {
         super.loadData(pTag);
-        if (pTag.contains("fluid")){
-            fluidTank.readFromNBT(pTag.getCompound("fluid"));
+        if (pTag.contains("fluids")){
+            fluidTank.readFromNBT(pTag.getCompound("fluids"));
         }
     }
 
-    public FusionFurnaceTank getFluidTank() {
+    public MultiFluidTank getFluidTank() {
         return fluidTank;
     }
 

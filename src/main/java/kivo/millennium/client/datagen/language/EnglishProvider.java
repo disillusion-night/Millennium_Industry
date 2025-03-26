@@ -25,6 +25,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.GENERATOR_BL.get(), "Generator");
         add(MillenniumBlocks.INDUCTION_FURNACE_BL.get(), "Induction Furnace");
         add(MillenniumBlocks.CRUSHER_BL.get(), "Crusher");
+        add(MillenniumBlocks.FUSION_CHAMBER_BL.get(), "Fusion Chamber");
         add(MillenniumBlocks.MELTING_FURNACE_BL.get(), "Melting Furnace");
         add(MillenniumBlocks.SOLAR_GENERATOR.get(), "Solar Generator");
 

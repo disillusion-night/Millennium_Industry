@@ -28,9 +28,9 @@ public class MillenniumMenuTypes {
             "melting_furnace_menu",
             () -> IForgeMenuType.create((windowId, inv, data) -> new MeltingFurnaceContainer(windowId, inv.player, data.readBlockPos()))
     );
-    public static final RegistryObject<MenuType<FusionFurnaceContainer>> FUSION_FURNACE_MENU = MENU_TYPES.register(
+    public static final RegistryObject<MenuType<FusionChamberContainer>> FUSION_FURNACE_MENU = MENU_TYPES.register(
             "fusion_furnace_menu",
-            () -> IForgeMenuType.create((windowId, inv, data) -> new FusionFurnaceContainer(windowId, inv.player, data.readBlockPos()))
+            () -> IForgeMenuType.create((windowId, inv, data) -> new FusionChamberContainer(windowId, inv.player, data.readBlockPos()))
     );
 
     public static final RegistryObject<MenuType<HydraulicPressMenu>> HYDRAULIC_PRESS_MENU = MENU_TYPES.register(

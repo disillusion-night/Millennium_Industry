@@ -5,13 +5,10 @@ import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 
 public interface RecipeComponent {
-
     /**
-     * 将此成分写入 JSON 对象。
-     *
-     * @param jsonObject 要写入的 JSON 对象。
+     * 将此成分写为 JSON 对象。
      */
-    void writeToJson(JsonObject jsonObject);
+    JsonObject toJson();
 
     /**
      * 从 JSON 对象中读取此成分。

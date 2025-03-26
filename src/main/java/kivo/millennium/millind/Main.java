@@ -8,12 +8,14 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -114,6 +116,9 @@ public class Main {
     }
     public static ResourceLocation getRL(ItemLike itemLike){
         return ForgeRegistries.ITEMS.getKey(itemLike.asItem());
+    }
+    public static ResourceLocation getRL(Fluid fluid){
+        return ForgeRegistries.FLUIDS.getKey(fluid);
     }
     public static ResourceLocation getResourceKey(Item item){
         return BuiltInRegistries.ITEM.getKey(item);

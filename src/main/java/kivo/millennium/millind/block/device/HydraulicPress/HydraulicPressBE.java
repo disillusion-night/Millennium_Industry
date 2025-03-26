@@ -3,6 +3,8 @@ package kivo.millennium.millind.block.device.HydraulicPress;
 import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.recipe.CrushingRecipe;
+import kivo.millennium.millind.recipe.ExtendedContainer;
+import kivo.millennium.millind.recipe.ItemComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.SimpleContainer;
@@ -38,10 +40,10 @@ public class HydraulicPressBE extends AbstractMachineBE {
         boolean canStartCrushing = false;
 
         if (!inputStack1.isEmpty()) {
-            Optional<CrushingRecipe> recipe = level.getRecipeManager().getRecipeFor(CrushingRecipe.Type.INSTANCE, new SimpleContainer(inputStack1, inputStack2), level);
+            Optional<CrushingRecipe> recipe = level.getRecipeManager().getRecipeFor(CrushingRecipe.Type.INSTANCE, new ExtendedContainer(inputStack2), level);
 
             if (recipe.isPresent()) {
-                ItemStack recipeOutput = recipe.get().assemble(getInputs(), level.registryAccess());
+                ItemStack recipeOutput = recipe.get().assemble(new ExtendedContainer(inputStack2), level.registryAccess());
                 if (canCrush(outputStack, recipeOutput) && energyStorage.getEnergyStored() >= energyUsagePerTick) {
                     canStartCrushing = true;
                 }

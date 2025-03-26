@@ -1,0 +1,13 @@
+{
+  "type": "millind:melting",
+  "category": "misc",
+  "experience": 0.0,
+  "ingredient": {
+    "item": "millind:aluminum_block"
+  },
+  "result": {
+    "amount": 900,
+    "fluid": "millind:molten_aluminum"
+  },
+  "time": 100
+}

@@ -1,0 +1,12 @@
+{
+  "type": "millind:crushing",
+  "category": "misc",
+  "experience": 0.0,
+  "ingredient": {
+    "item": "minecraft:gold_ingot"
+  },
+  "result": {
+    "item": "millind:gold_dust"
+  },
+  "time": 100
+}

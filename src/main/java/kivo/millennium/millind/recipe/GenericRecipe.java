@@ -17,19 +17,21 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class GenericRecipe implements Recipe<SimpleContainer> {
+public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
     protected final ResourceLocation id;
     protected final NonNullList<RecipeComponent> inputs;
     protected final NonNullList<RecipeComponent> outputs;
+    protected int time;
 
-    public GenericRecipe(ResourceLocation id, List<RecipeComponent> inputs, List<RecipeComponent> outputs) {
+    public GenericRecipe(ResourceLocation id, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time) {
         this.id = id;
         this.inputs = NonNullList.of(null, inputs.toArray(new RecipeComponent[0]));
         this.outputs = NonNullList.of(null, outputs.toArray(new RecipeComponent[0]));
+        this.time = time;
     }
 
     @Override
-    public boolean matches(SimpleContainer pContainer, Level pLevel) {
+    public boolean matches(ExtendedContainer pContainer, Level pLevel) {
         if (pLevel.isClientSide()) {
             return false;
         }
@@ -43,7 +45,7 @@ public abstract class GenericRecipe implements Recipe<SimpleContainer> {
     }
 
     @Override
-    public ItemStack assemble(SimpleContainer pContainer, RegistryAccess pRegistryAccess) {
+    public ItemStack assemble(ExtendedContainer pContainer, RegistryAccess pRegistryAccess) {
         // 默认只处理物品输出的第一个成分
         for (RecipeComponent output : outputs) {
             if (output instanceof ItemComponent) {
@@ -101,6 +103,10 @@ public abstract class GenericRecipe implements Recipe<SimpleContainer> {
 
     @Override
     public abstract RecipeType<?> getType();
+
+    public int getTime(){
+        return 200;
+    }
 
     // 抽象的 Serializer
      public abstract static class Serializer<T extends GenericRecipe> implements RecipeSerializer<T> {
@@ -162,7 +168,9 @@ public abstract class GenericRecipe implements Recipe<SimpleContainer> {
                 throw new JsonSyntaxException("Missing 'result' or 'results', expected to find one for output");
             }
 
-            return factory.create(recipeId, GsonHelper.getAsString(json, "group", ""), CookingBookCategory.MISC, inputs, outputs);
+            int time = json.get("time").getAsInt();
+
+            return factory.create(recipeId, GsonHelper.getAsString(json, "group", ""), CookingBookCategory.MISC, inputs, outputs, time);
         }
 
         @Override
@@ -191,7 +199,7 @@ public abstract class GenericRecipe implements Recipe<SimpleContainer> {
                 outputs.add(component);
             }
 
-            return factory.create(id, buf.readUtf(), buf.readEnum(CookingBookCategory.class), inputs, outputs);
+            return factory.create(id, buf.readUtf(), buf.readEnum(CookingBookCategory.class), inputs, outputs, buf.readInt());
         }
 
         @Override
@@ -210,6 +218,7 @@ public abstract class GenericRecipe implements Recipe<SimpleContainer> {
                 buf.writeUtf(output.getType()); // 仍然写入类型以便网络传输
                 output.writeToNetwork(buf);
             }
+            buf.writeInt(recipe.time);
         }
 
         // 修改后的 createComponentFromJson
@@ -241,7 +250,7 @@ public abstract class GenericRecipe implements Recipe<SimpleContainer> {
         protected abstract RecipeComponent createComponentFromNetwork(String type);
 
         public interface RecipeFactory<T extends GenericRecipe> {
-            T create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs);
+            T create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time);
         }
     }
 }

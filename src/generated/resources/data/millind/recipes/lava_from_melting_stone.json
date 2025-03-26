@@ -1,0 +1,13 @@
+{
+  "type": "millind:melting",
+  "category": "misc",
+  "experience": 0.0,
+  "ingredient": {
+    "item": "minecraft:stone"
+  },
+  "result": {
+    "amount": 1000,
+    "fluid": "minecraft:lava"
+  },
+  "time": 100
+}

@@ -1,0 +1,19 @@
+{
+  "type": "millind:fusion",
+  "category": "misc",
+  "experience": 0.0,
+  "ingredients": [
+    {
+      "item": "millind:raw_aluminum_dust"
+    },
+    {
+      "amount": 100,
+      "fluid": "millind:molten_cryolite"
+    }
+  ],
+  "result": {
+    "amount": 100,
+    "fluid": "millind:raw_molten_aluminum"
+  },
+  "time": 200
+}

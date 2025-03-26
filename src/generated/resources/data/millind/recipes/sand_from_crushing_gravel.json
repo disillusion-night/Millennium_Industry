@@ -1,10 +1,12 @@
 {
   "type": "millind:crushing",
   "category": "misc",
-  "cookingtime": 90,
   "experience": 0.0,
   "ingredient": {
-    "item": "minecraft:gold_ingot"
+    "item": "minecraft:gravel"
   },
-  "result": "millind:gold_dust"
+  "result": {
+    "item": "minecraft:sand"
+  },
+  "time": 100
 }

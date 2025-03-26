@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_copper_ingot": {
+    "has_raw_aluminum_dust": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:copper_ingot"
+              "millind:raw_aluminum_dust"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "millind:copper_dust_from_crushing"
+        "recipe": "millind:raw_molten_aluminum_from_fusion_raw_aluminum_dust_and_molten_cryolite"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_copper_ingot",
+      "has_raw_aluminum_dust",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "millind:copper_dust_from_crushing"
+      "millind:raw_molten_aluminum_from_fusion_raw_aluminum_dust_and_molten_cryolite"
     ]
   },
   "sends_telemetry_event": false

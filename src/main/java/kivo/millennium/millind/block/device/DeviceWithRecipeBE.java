@@ -3,6 +3,8 @@ package kivo.millennium.millind.block.device;
 import kivo.millennium.millind.block.device.crusher.CrusherBL;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.recipe.CrushingRecipe;
+import kivo.millennium.millind.recipe.ExtendedContainer;
+import kivo.millennium.millind.recipe.ItemComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.SimpleContainer;
@@ -40,10 +42,10 @@ public abstract class DeviceWithRecipeBE<R extends Recipe> extends AbstractMachi
         boolean canStartCrushing = false;
 
         if (!inputStack.isEmpty()) {
-            Optional<CrushingRecipe> recipe = level.getRecipeManager().getRecipeFor(CrushingRecipe.Type.INSTANCE, new SimpleContainer(inputStack), level);
+            Optional<CrushingRecipe> recipe = level.getRecipeManager().getRecipeFor(CrushingRecipe.Type.INSTANCE, new ExtendedContainer(inputStack), level);
 
             if (recipe.isPresent()) {
-                ItemStack recipeOutput = recipe.get().assemble(new SimpleContainer(inputStack), level.registryAccess());
+                ItemStack recipeOutput = recipe.get().assemble(new ExtendedContainer(inputStack), level.registryAccess());
                 if (canProcess(outputStack, recipeOutput) && energyStorage.getEnergyStored() >= energyUsagePerTick) {
                     canStartCrushing = true;
                 }

@@ -1,0 +1,13 @@
+{
+  "type": "millind:melting",
+  "category": "misc",
+  "experience": 0.0,
+  "ingredient": {
+    "item": "millind:steel_block"
+  },
+  "result": {
+    "amount": 900,
+    "fluid": "millind:molten_steel"
+  },
+  "time": 100
+}

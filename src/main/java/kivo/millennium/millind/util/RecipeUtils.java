@@ -332,7 +332,7 @@ public class RecipeUtils {
             }
 
             if (createDustFromCrushingIngot) {
-                SimpleSingleRecipeBuilder.crushing(Ingredient.of(ingot), RecipeCategory.MISC, new ItemStack(dust, 1), 0.7F, 100)
+                SimpleSingleRecipeBuilder.crushing(new ItemStack(ingot), RecipeCategory.MISC, new ItemStack(dust, 1), 0.7F, 100)
                         .unlockedBy("has_" + getRL(ingot).getPath(), has(ingot))
                         .group(mineralName)
                         .save(writer, getRL(mineralName + "_dust_from_crushing_ingot"));

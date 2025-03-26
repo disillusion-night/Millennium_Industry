@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_iron_ingot": {
+    "has_smooth_stone": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:iron_ingot"
+              "minecraft:smooth_stone"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "millind:iron_dust_from_crushing"
+        "recipe": "millind:lava_from_melting_smooth_stone"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_iron_ingot",
+      "has_smooth_stone",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "millind:iron_dust_from_crushing"
+      "millind:lava_from_melting_smooth_stone"
     ]
   },
   "sends_telemetry_event": false

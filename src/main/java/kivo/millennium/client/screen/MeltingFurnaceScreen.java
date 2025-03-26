@@ -23,16 +23,15 @@ import org.joml.Vector2i;
 import static kivo.millennium.millind.Main.getRL;
 
 public class MeltingFurnaceScreen extends AbstractDeviceSC<MeltingFurnaceContainer> {
-    private static final Vector2i ProgressPos = new Vector2i(77, 34);
+    private static final Vector2i ProgressPos = new Vector2i(78, 38);
     private static final Vector2i fluidSlotPos = new Vector2i(107, 16);
     private static final Vector2i fluidSlotSize = new Vector2i(16,57);
-
-    private static final ResourceLocation PROGRESS_TEXTURE = getRL("textures/gui/container/progress_arrow.png");
 
     @Override
     public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(pGuiGraphics, mouseX, mouseY, partialTick);
-        checkfluidTip(pGuiGraphics, mouseX, mouseY);
+        FluidStack fluidStack = getMenu().getFluid();
+        if(!fluidStack.isEmpty()) checkfluidTip(pGuiGraphics, mouseX, mouseY);
     }
 
     public MeltingFurnaceScreen(MeltingFurnaceContainer pMenu, Inventory pPlayerInventory, Component pTitle) {
@@ -44,7 +43,7 @@ public class MeltingFurnaceScreen extends AbstractDeviceSC<MeltingFurnaceContain
     public void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         super.renderBg(pGuiGraphics, pPartialTick, pMouseX, pMouseY); // 调用父类方法渲染默认背景
 
-        RenderUtils.renderProgress(pGuiGraphics, 77 + leftPos, 34 + topPos, menu.getProgress());
+        RenderUtils.renderProgress(pGuiGraphics, 76 + leftPos, 36 + topPos, menu.getProgress());
 
         FluidStack fluidStack = getMenu().getFluid();
 

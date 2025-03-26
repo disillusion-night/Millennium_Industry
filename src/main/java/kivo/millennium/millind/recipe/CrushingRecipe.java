@@ -15,8 +15,8 @@ import static kivo.millennium.millind.Main.getRL;
 import static kivo.millennium.millind.Main.log;
 
 public class CrushingRecipe extends GenericRecipe {
-    public CrushingRecipe(ResourceLocation id, ItemComponent input, ItemComponent output) {
-        super(id, Arrays.asList(input), Arrays.asList(output));
+    public CrushingRecipe(ResourceLocation id, ItemComponent input, ItemComponent output, int time) {
+        super(id, Arrays.asList(input), Arrays.asList(output), time);
     }
 
     public ItemComponent getInput() {
@@ -28,7 +28,7 @@ public class CrushingRecipe extends GenericRecipe {
     }
 
     @Override
-    public boolean matches(SimpleContainer pContainer, Level pLevel) {
+    public boolean matches(ExtendedContainer pContainer, Level pLevel) {
         if (pLevel.isClientSide()) {
             return false;
         }
@@ -36,7 +36,7 @@ public class CrushingRecipe extends GenericRecipe {
     }
 
     @Override
-    public ItemStack assemble(SimpleContainer pContainer, RegistryAccess pRegistryAccess) {
+    public ItemStack assemble(ExtendedContainer pContainer, RegistryAccess pRegistryAccess) {
         log(getOutput().getItemStack().getItem().toString());
         return getOutput().getItemStack().copy();
     }
@@ -101,14 +101,14 @@ public class CrushingRecipe extends GenericRecipe {
 
     public static class CrushingRecipeFactory implements GenericRecipe.Serializer.RecipeFactory<CrushingRecipe> {
         @Override
-        public CrushingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs) {
+        public CrushingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time) {
             if (inputs.size() != 1 || !(inputs.get(0) instanceof ItemComponent)) {
                 throw new IllegalArgumentException("CrushingRecipe must have exactly one ItemComponent as input.");
             }
             if (outputs.size() != 1 || !(outputs.get(0) instanceof ItemComponent)) {
                 throw new IllegalArgumentException("CrushingRecipe must have exactly one ItemComponent as output.");
             }
-            return new CrushingRecipe(id, (ItemComponent) inputs.get(0), (ItemComponent) outputs.get(0));
+            return new CrushingRecipe(id, (ItemComponent) inputs.get(0), (ItemComponent) outputs.get(0), time);
         }
     }
 }

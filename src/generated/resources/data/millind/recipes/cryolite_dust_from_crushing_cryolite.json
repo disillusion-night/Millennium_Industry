@@ -1,0 +1,12 @@
+{
+  "type": "millind:crushing",
+  "category": "misc",
+  "experience": 0.0,
+  "ingredient": {
+    "item": "millind:cryolite"
+  },
+  "result": {
+    "item": "millind:cryolite_dust"
+  },
+  "time": 100
+}

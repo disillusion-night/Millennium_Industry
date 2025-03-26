@@ -1,11 +1,13 @@
 {
   "type": "millind:crushing",
   "category": "misc",
-  "cookingtime": 100,
   "experience": 0.7,
   "group": "lead",
   "ingredient": {
     "item": "millind:lead_ingot"
   },
-  "result": "millind:lead_dust"
+  "result": {
+    "item": "millind:lead_dust"
+  },
+  "time": 100
 }

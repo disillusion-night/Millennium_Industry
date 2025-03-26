@@ -39,7 +39,6 @@ public class MeltingFurnaceBL extends HorizontalDeviceBL {
 
     @Override
     protected AbstractContainerMenu createContainerMenu(int containerId, Inventory playerInventory, BlockPos pos, Player player) {
-        Main.log("A");
         return new MeltingFurnaceContainer(containerId, player, pos);
     }
 }

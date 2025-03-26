@@ -25,6 +25,21 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
         for (RegistryObject<Oopart> oopart : MillenniumItems.OOPARTS){
             registerOopartModel(oopart);
         }
+        SimpleMaterialItem(MillenniumItems.ALUMINIUM_DUST);
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_INGOT);
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_NUGGET);
+        SimpleMaterialItem(MillenniumItems.RAW_ALUMINUM);
+        SimpleMaterialItem(MillenniumItems.RAW_ALUMINUM_DUST);
+
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_INGOT);
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_PANEL);
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_PIPE);
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_ROD);
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_DUST);
+        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_NUGGET);
+
+        SimpleMaterialItem(MillenniumItems.CRYOLITE);
+        SimpleMaterialItem(MillenniumItems.CRYOLITE_DUST);
 
         SimpleMaterialItem(MillenniumItems.COPPER_DUST);
 
@@ -34,6 +49,8 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
         SimpleMaterialItem(MillenniumItems.IRON_PANEL);
         SimpleMaterialItem(MillenniumItems.GOLD_DUST);
         SimpleMaterialItem(MillenniumItems.GOLD_PANEL);
+
+        SimpleMaterialItem(MillenniumItems.STONE_DUST);
 
         SimpleMaterialItem(MillenniumItems.STEEL_DUST);
         SimpleMaterialItem(MillenniumItems.STEEL_INGOT);
@@ -48,16 +65,9 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
         SimpleMaterialItem(MillenniumItems.LEAD_PANEL);
         //SimpleMaterialItem(MillenniumItems.LEAD_PIPE);
         SimpleMaterialItem(MillenniumItems.LEAD_ROD);
-
         SimpleMaterialItem(MillenniumItems.RAW_LEAD);
-        SimpleMaterialItem(MillenniumItems.ALUMINIUM_DUST);
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_INGOT);
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_NUGGET);
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_INGOT);
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_PANEL);
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_PIPE);
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_ROD);
-        SimpleMaterialItem(MillenniumItems.RAW_ALUMINUM);
+
+
         SimpleItem(MillenniumItems.VRLA);
     }
 

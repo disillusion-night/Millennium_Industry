@@ -1,0 +1,13 @@
+{
+  "type": "millind:melting",
+  "category": "misc",
+  "experience": 0.0,
+  "ingredient": {
+    "item": "millind:cryolite_dust"
+  },
+  "result": {
+    "amount": 100,
+    "fluid": "millind:molten_cryolite"
+  },
+  "time": 100
+}

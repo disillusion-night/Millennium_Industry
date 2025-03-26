@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_redstone_block": {
+    "has_copper_ingot": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:redstone_block"
+              "minecraft:copper_ingot"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "millind:redstone_from_crushing"
+        "recipe": "millind:copper_dust_from_crushing_copper_ingot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_redstone_block",
+      "has_copper_ingot",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "millind:redstone_from_crushing"
+      "millind:copper_dust_from_crushing_copper_ingot"
     ]
   },
   "sends_telemetry_event": false

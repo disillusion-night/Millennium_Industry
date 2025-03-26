@@ -17,6 +17,7 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import net.minecraftforge.registries.ForgeRegistries;
 import org.joml.Vector2i;
 
 public class MeltingFurnaceContainer extends AbstractDeviceMenu {
@@ -99,13 +100,13 @@ public class MeltingFurnaceContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
+                //MeltingFurnaceContainer.this.fluidId =
                 return BuiltInRegistries.FLUID.getId(be.getFluidTank().getFluid().getFluid());
             }
 
             @Override
             public void set(int pValue) {
-                MeltingFurnaceContainer.this.fluidId = BuiltInRegistries.FLUID.getId(be.getFluidTank().getFluid().getFluid());
-                // 注意：不要在客户端直接设置服务器端的流体类型
+                MeltingFurnaceContainer.this.fluidId = pValue;
             }
         });
     }
@@ -136,7 +137,6 @@ public class MeltingFurnaceContainer extends AbstractDeviceMenu {
         if (fluidId == -1 || amount <= 0) {
             return FluidStack.EMPTY;
         }
-        Main.log(BuiltInRegistries.FLUID.byId(fluidId).toString());
         return new FluidStack(BuiltInRegistries.FLUID.byId(fluidId), amount);
     }
 

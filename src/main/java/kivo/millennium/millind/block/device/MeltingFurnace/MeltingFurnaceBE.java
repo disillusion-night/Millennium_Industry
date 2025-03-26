@@ -1,9 +1,14 @@
 package kivo.millennium.millind.block.device.MeltingFurnace;
 
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.block.device.crusher.CrusherBL;
 import kivo.millennium.millind.capability.DeviceEnergyStorage;
+import kivo.millennium.millind.datagen.MillenniumRecipeProvider;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
+import kivo.millennium.millind.init.MillenniumRecipes;
+import kivo.millennium.millind.recipe.ExtendedContainer;
+import kivo.millennium.millind.recipe.ItemComponent;
 import kivo.millennium.millind.recipe.MeltingRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -32,6 +37,7 @@ public class MeltingFurnaceBE extends AbstractMachineBE {
     public static final int INPUT_SLOT = 1;
     private int progress = 0;
     private int totalTime = 100;
+    private FluidStack currentRecipeOutput = FluidStack.EMPTY;
     private static final int FLUID_CAPACITY = 12000; // 毫升
 
     private final FluidTank fluidTank = new FluidTank(FLUID_CAPACITY) {
@@ -40,7 +46,6 @@ public class MeltingFurnaceBE extends AbstractMachineBE {
             setChanged();
         }
     };
-
 
     @Override
     public int getSlotCount() {
@@ -55,7 +60,6 @@ public class MeltingFurnaceBE extends AbstractMachineBE {
 
     public MeltingFurnaceBE(BlockPos pWorldPosition, BlockState pBlockState) {
         super(MillenniumBlockEntities.MELTING_FURNACE_BE.get(), pWorldPosition, pBlockState);
-        this.fluidTank.fill(new FluidStack(Fluids.LAVA, 12000), IFluidHandler.FluidAction.EXECUTE);
     }
 
     @Override
@@ -71,23 +75,52 @@ public class MeltingFurnaceBE extends AbstractMachineBE {
             }
         });
 
-        /**
-         * @todo
-        // 2. 尝试熔炼
-        ItemStack inputStack = itemHandler.getStackInSlot(INPUT_SLOT);
-        if (!inputStack.isEmpty() && energyStorage.getEnergyStored() >= 10) { // 假设每次熔炼消耗 10 能量
-            Optional<MeltingRecipe> recipe = getLevel().getRecipeManager().getRecipeFor(MeltingRecipe.Type.INSTANCE, new SimpleContainer(inputStack.copy()), getLevel());
+        ItemStack inputStack = this.itemHandler.getStackInSlot(INPUT_SLOT);
+
+        if (!inputStack.isEmpty()) {
+            Optional<MeltingRecipe> recipe = level.getRecipeManager().getRecipeFor(MeltingRecipe.Type.INSTANCE, new ExtendedContainer(inputStack), level);
 
             recipe.ifPresent(meltingRecipe -> {
-                FluidStack outputFluid = meltingRecipe.getResultFluid();
-                if (fluidTank.getFluidAmount() + outputFluid.getAmount() <= fluidTank.getCapacity()) {
-                    fluidTank.fill(outputFluid, IFluidHandler.FluidAction.EXECUTE);
-                    itemHandler.extractItem(INPUT_SLOT, 1, false);
-                    energyStorage.extractEnergy(10, false);
-                    setChanged();
+                FluidStack recipeOutput = meltingRecipe.getResultFluid();
+                int recipeMeltingTime = meltingRecipe.getTime();
+
+                if (this.canProcess(recipeOutput)) {
+                    this.totalTime = recipeMeltingTime; // 从配方中获取熔融时间
+                    this.currentRecipeOutput = recipeOutput;
+                    this.progress++;
+                    this.setChanged();
+                    if (this.progress >= this.totalTime) {
+                        this.progress = 0;
+                        this.meltItem(recipeOutput);
+                    }
+                } else {
+                    this.resetProgress();
                 }
             });
-        }*/
+        } else {
+            this.resetProgress();
+        }
+    }
+
+    private boolean canProcess(FluidStack recipeOutput) {
+        if (this.currentRecipeOutput.isEmpty() || (this.currentRecipeOutput.isFluidEqual(recipeOutput) && this.fluidTank.getFluidAmount() + recipeOutput.getAmount() <= this.fluidTank.getCapacity())) {
+            return true;
+        }
+        return false;
+    }
+
+    private void meltItem(FluidStack recipeOutput) {
+        this.itemHandler.extractItem(0, 1, false); // 移除一个输入物品
+        this.fluidTank.fill(new FluidStack(recipeOutput.getFluid(), recipeOutput.getAmount()), IFluidHandler.FluidAction.EXECUTE);
+        this.currentRecipeOutput = FluidStack.EMPTY; // 重置当前配方输出
+        this.setChanged();
+    }
+
+    private void resetProgress() {
+        this.progress = 0;
+        this.totalTime = 0;
+        this.currentRecipeOutput = FluidStack.EMPTY;
+        this.setChanged();
     }
 
     private int getProgressPercent() {

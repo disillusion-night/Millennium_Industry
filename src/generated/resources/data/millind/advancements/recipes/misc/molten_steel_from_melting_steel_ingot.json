@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_gold_ingot": {
+    "has_steel_ingot": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:gold_ingot"
+              "millind:steel_ingot"
             ]
           }
         ]
@@ -15,20 +15,20 @@
     },
     "has_the_recipe": {
       "conditions": {
-        "recipe": "millind:gold_dust_from_crushing"
+        "recipe": "millind:molten_steel_from_melting_steel_ingot"
       },
       "trigger": "minecraft:recipe_unlocked"
     }
   },
   "requirements": [
     [
-      "has_gold_ingot",
+      "has_steel_ingot",
       "has_the_recipe"
     ]
   ],
   "rewards": {
     "recipes": [
-      "millind:gold_dust_from_crushing"
+      "millind:molten_steel_from_melting_steel_ingot"
     ]
   },
   "sends_telemetry_event": false

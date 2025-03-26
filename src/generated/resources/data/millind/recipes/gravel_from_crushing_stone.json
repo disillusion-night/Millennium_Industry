@@ -1,10 +1,12 @@
 {
   "type": "millind:crushing",
   "category": "misc",
-  "cookingtime": 90,
   "experience": 0.0,
   "ingredient": {
-    "item": "minecraft:copper_ingot"
+    "item": "minecraft:stone"
   },
-  "result": "millind:copper_dust"
+  "result": {
+    "item": "minecraft:gravel"
+  },
+  "time": 100
 }

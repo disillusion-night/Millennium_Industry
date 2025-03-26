@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/generated",
+  "textures": {
+    "layer0": "millind:item/material/raw_aluminum_dust"
+  }
+}

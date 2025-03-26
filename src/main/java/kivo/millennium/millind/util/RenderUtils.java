@@ -48,9 +48,9 @@ public class RenderUtils {
             innerBlit(guiGraphics, sprite.atlasLocation(), x, x + width, yOffset, yOffset + 16, blitOffset, u0, u1, v0, v1);
         }
 
-        // 绘制顶部的剩余部分，保持原始比例
+        // 绘制顶部的剩余部分
         if (remainingHeight > 0) {
-            int topY = y;
+            int topY = y + height - numFullTiles * 16 - remainingHeight;
             float vTop = v1;
             float vBottom = v1 + (v0 - v1) * ((float) remainingHeight / 16.0f);
 

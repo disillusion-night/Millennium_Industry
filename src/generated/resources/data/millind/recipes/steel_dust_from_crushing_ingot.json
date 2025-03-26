@@ -1,11 +1,13 @@
 {
   "type": "millind:crushing",
   "category": "misc",
-  "cookingtime": 100,
   "experience": 0.7,
   "group": "steel",
   "ingredient": {
     "item": "millind:steel_ingot"
   },
-  "result": "millind:steel_dust"
+  "result": {
+    "item": "millind:steel_dust"
+  },
+  "time": 100
 }

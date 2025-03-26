@@ -1,13 +1,12 @@
 {
   "type": "millind:crushing",
   "category": "misc",
-  "cookingtime": 90,
   "experience": 0.0,
   "ingredient": {
-    "item": "minecraft:redstone_block"
+    "item": "minecraft:copper_ingot"
   },
   "result": {
-    "count": 9,
-    "item": "minecraft:redstone"
-  }
+    "item": "millind:copper_dust"
+  },
+  "time": 100
 }

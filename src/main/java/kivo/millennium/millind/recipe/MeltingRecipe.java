@@ -2,6 +2,7 @@ package kivo.millennium.millind.recipe;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import kivo.millennium.millind.Main;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.SimpleContainer;
@@ -16,8 +17,8 @@ import java.util.List;
 import static kivo.millennium.millind.Main.getRL;
 
 public class MeltingRecipe extends GenericRecipe {
-    public MeltingRecipe(ResourceLocation id, ItemComponent input, FluidComponent output) {
-        super(id, Arrays.asList(input), Arrays.asList(output));
+    public MeltingRecipe(ResourceLocation id, ItemComponent input, FluidComponent output, int time) {
+        super(id, Arrays.asList(input), Arrays.asList(output), time);
         if (!(input instanceof ItemComponent) || !(output instanceof FluidComponent)) {
             throw new IllegalArgumentException("MeltingRecipe input must be an ItemComponent and output must be a FluidComponent.");
         }
@@ -32,7 +33,7 @@ public class MeltingRecipe extends GenericRecipe {
     }
 
     @Override
-    public boolean matches(SimpleContainer pContainer, Level pLevel) {
+    public boolean matches(ExtendedContainer pContainer, Level pLevel) {
         if (pLevel.isClientSide()) {
             return false;
         }
@@ -40,7 +41,7 @@ public class MeltingRecipe extends GenericRecipe {
     }
 
     @Override
-    public ItemStack assemble(SimpleContainer pContainer, RegistryAccess pRegistryAccess) {
+    public ItemStack assemble(ExtendedContainer pContainer, RegistryAccess pRegistryAccess) {
         return ItemStack.EMPTY; // Melting produces a fluid, not an item in the traditional sense for assemble
     }
 
@@ -113,14 +114,14 @@ public class MeltingRecipe extends GenericRecipe {
 
     public static class MeltingRecipeFactory implements GenericRecipe.Serializer.RecipeFactory<MeltingRecipe> {
         @Override
-        public MeltingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs) {
+        public MeltingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time) {
             if (inputs.size() != 1 || !(inputs.get(0) instanceof ItemComponent)) {
                 throw new IllegalArgumentException("MeltingRecipe must have exactly one ItemComponent as input.");
             }
             if (outputs.size() != 1 || !(outputs.get(0) instanceof FluidComponent)) {
                 throw new IllegalArgumentException("MeltingRecipe must have exactly one FluidComponent as output.");
             }
-            return new MeltingRecipe(id, (ItemComponent) inputs.get(0), (FluidComponent) outputs.get(0));
+            return new MeltingRecipe(id, (ItemComponent) inputs.get(0), (FluidComponent) outputs.get(0), time);
         }
     }
 }

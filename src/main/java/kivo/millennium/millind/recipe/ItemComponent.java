@@ -8,6 +8,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.fluids.FluidStack;
 
 public class ItemComponent implements RecipeComponent {
 
@@ -17,12 +18,17 @@ public class ItemComponent implements RecipeComponent {
         this.itemStack = itemStack.copy();
     }
 
+    public static ItemComponent of(ItemStack itemStack){
+        return new ItemComponent(itemStack);
+    }
+
     public ItemStack getItemStack() {
         return itemStack;
     }
 
     @Override
-    public void writeToJson(JsonObject jsonObject) {
+    public JsonObject toJson() {
+        JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("item", BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toString());
         if (itemStack.getCount() > 1) {
             jsonObject.addProperty("count", itemStack.getCount());
@@ -30,6 +36,7 @@ public class ItemComponent implements RecipeComponent {
         if (itemStack.hasTag()) {
             jsonObject.addProperty("nbt", itemStack.getTag().toString());
         }
+        return jsonObject;
     }
 
     @Override

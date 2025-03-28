@@ -31,7 +31,6 @@ public class FusionChamberBE extends AbstractMachineBE {
     public static final int INPUT_SLOT = 1;
     public static final int INPUT_FLUID = 0;
     public static final int OUTPUT_FLUID = 1;
-    private int progress = 0;
     private int totalTime = 100;
     private FluidStack currentRecipeOutput = FluidStack.EMPTY;
     private static final int FLUID_CAPACITY_IN = 20000; // 毫升
@@ -82,24 +81,38 @@ public class FusionChamberBE extends AbstractMachineBE {
                 FluidStack recipeOutput = fusionRecipe.getResultFluid();
                 int recipeMeltingTime = fusionRecipe.getTime();
 
-                if (this.canProcess(recipeOutput)) {
+                if (canProcess(recipeOutput)) {
                     this.totalTime = recipeMeltingTime; // 从配方中获取熔融时间
                     this.currentRecipeOutput = recipeOutput;
-                    this.progress++;
-                    this.setChanged();
-                    if (this.progress >= this.totalTime) {
-                        this.progress = 0;
+                    addProgress();
+                    if (getProgress() >= this.totalTime) {
+                        resetProgress();
                         this.fusionItem(fusionRecipe.getInputFluid().getFluidStack().getAmount(), recipeOutput);
                     }
+                    setChanged();
                 } else {
-                    this.resetProgress();
+                    resetProgress();
                 }
             });
         } else {
-            this.resetProgress();
+            resetProgress();
         }
     }
 
+    private void addProgress(){
+        cache.addProgress(1);
+    }
+
+    private int getProgress(){
+        return cache.getProgress();
+    }
+    private void resetProgress() {
+        cache.setProgress(0);
+    }
+
+    /*
+
+     */
     private boolean canProcess(FluidStack recipeOutput) {
         if (this.currentRecipeOutput.isEmpty() || (this.currentRecipeOutput.isFluidEqual(recipeOutput) && this.fluidTank.getFluidAmount(OUTPUT_FLUID) + recipeOutput.getAmount() <= this.fluidTank.getTankCapacity(OUTPUT_FLUID))) {
             return true;
@@ -115,12 +128,6 @@ public class FusionChamberBE extends AbstractMachineBE {
         this.setChanged();
     }
 
-    private void resetProgress() {
-        this.progress = 0;
-        this.totalTime = 0;
-        this.currentRecipeOutput = FluidStack.EMPTY;
-        this.setChanged();
-    }
 
     // 处理流体吸取逻辑
     private void handleFluidIntake() {
@@ -156,7 +163,7 @@ public class FusionChamberBE extends AbstractMachineBE {
     }
 
     public int getProgressPercent() {
-        return (int) (((float) progress / totalTime) * 100);
+        return (int) (((float) getProgress() / totalTime) * 100);
     }
 
     public boolean isWorking() {
@@ -173,17 +180,5 @@ public class FusionChamberBE extends AbstractMachineBE {
             return fluidHandler.cast();
         }
         return super.getCapability(cap, side);
-    }
-    // NBT 数据读写
-    @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
-        pTag.putInt("progress", progress);
-    }
-
-    @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
-        progress = pTag.getInt("progress");
     }
 }

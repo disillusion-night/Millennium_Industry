@@ -1,11 +1,9 @@
 package kivo.millennium.millind.block.device.MeltingFurnace;
 
-import kivo.millennium.millind.Main;
 import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.block.laser.HorizontalDeviceBL;
 import kivo.millennium.millind.container.Device.MeltingFurnaceContainer;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
-import kivo.millennium.millind.init.MillenniumBlocks;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
@@ -19,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class MeltingFurnaceBL extends HorizontalDeviceBL {
     public MeltingFurnaceBL() {
         super(Properties.of().destroyTime(40.0F).sound(SoundType.METAL).lightLevel(blockState -> {
-            if(blockState.getValue(POWERED)){
+            if(blockState.getValue(WORKING)){
                 return 15;
             }else {
                 return 0;

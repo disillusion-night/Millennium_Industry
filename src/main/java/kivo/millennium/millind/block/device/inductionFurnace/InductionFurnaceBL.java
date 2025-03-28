@@ -19,7 +19,7 @@ public class InductionFurnaceBL extends HorizontalDeviceBL {
 
     public InductionFurnaceBL() {
         super(Properties.of().destroyTime(40.0F).sound(SoundType.METAL).lightLevel(blockState -> {
-            if(blockState.getValue(POWERED)){
+            if(blockState.getValue(WORKING)){
                 return 15;
             }else {
                 return 0;

@@ -1,5 +1,6 @@
 package kivo.millennium.client.datagen;
 
+import kivo.millennium.millind.block.device.MillenniumBlockProperty;
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumMenuTypes;
 import kivo.millennium.millind.util.ShapeUtils;
@@ -43,6 +44,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         cubeAllBlockWithItem(MillenniumBlocks.RAW_ALUMINUM_BLOCK, "material");
 
         sixFacing(MillenniumBlocks.NETHER_STAR_LASER_BL, "nether_star_laser");
+        simpleOrientableWithTop(MillenniumBlocks.MELTING_FURNACE_BL.get(), "melting_furnace");
         simpleOrientable(MillenniumBlocks.GENERATOR_BL.get(), "generator");
         simpleOrientableWithTop(MillenniumBlocks.INDUCTION_FURNACE_BL.get(), "induction_furnace");
         simpleOrientableWithTop(MillenniumBlocks.CRUSHER_BL.get(), "crusher");
@@ -78,7 +80,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         VariantBlockStateBuilder builder = getVariantBuilder(block.get());
 
         builder.forAllStates(blockState -> {
-            String poweredSuffix = blockState.getValue(BlockStateProperties.POWERED)? "_on" : "";
+            String poweredSuffix = blockState.getValue(MillenniumBlockProperty.WORKING)? "_on" : "";
 
             return ConfiguredModel.builder()
                     .modelFile(new ConfiguredModel(models().getExistingFile(getRL(modelPath + poweredSuffix))).model)
@@ -101,7 +103,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         VariantBlockStateBuilder builder = getVariantBuilder(block.get());
 
         builder.forAllStates(blockState -> {
-            boolean IsPowered = blockState.getValue(BlockStateProperties.POWERED);
+            boolean IsPowered = blockState.getValue(MillenniumBlockProperty.WORKING);
 
             return ConfiguredModel.builder()
                     .modelFile(new ConfiguredModel(models().getExistingFile(getRL(modelPath + (IsPowered ? "_on" : "")))).model)
@@ -114,7 +116,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
 
     /**
-     *  具有四个朝向和亮灭状态的方块的 BlockState 生成.
+     *  具有四个朝向和亮灭状态的方块的 BlockState 生成，左右侧，后方和底部共用.
      *
      * @param block     要处理的方块实例
      * @param modelPath 模型在资源包下的路径
@@ -123,7 +125,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         VariantBlockStateBuilder builder = getVariantBuilder(block);
 
         builder.forAllStates(blockState -> {
-            boolean IsPowered = blockState.getValue(BlockStateProperties.POWERED);
+            boolean IsPowered = blockState.getValue(MillenniumBlockProperty.WORKING);
 
             ModelFile blockModel = models().getBuilder(modelPath + (IsPowered ? "_on" : ""))
                     .parent(itemModels().getExistingFile(getRL("block/orientable_with_top")))
@@ -152,7 +154,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         VariantBlockStateBuilder builder = getVariantBuilder(block);
 
         builder.forAllStates(blockState -> {
-            boolean IsPowered = blockState.getValue(BlockStateProperties.POWERED);
+            boolean IsPowered = blockState.getValue(MillenniumBlockProperty.WORKING);
 
             ModelFile blockModel = models().getBuilder(modelPath + (IsPowered ? "_on" : ""))
                     .parent(itemModels().getExistingFile(new ResourceLocation("minecraft", "block/orientable")))

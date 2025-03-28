@@ -1,9 +1,12 @@
 package kivo.millennium.millind.block.device;
 
-import kivo.millennium.millind.capability.DeviceEnergyStorage;
+import kivo.millennium.millind.block.IWorkingMachine;
+import kivo.millennium.millind.capability.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.protocol.Packet;
+import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -18,49 +21,12 @@ import org.jetbrains.annotations.Nullable;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 
-public abstract class AbstractMachineBE extends BlockEntity {
+public abstract class AbstractMachineBE extends BlockEntity implements IWorkingMachine {
+    public CapabilityCache cache;
 
-    protected int MAX_TRANSFER_RATE = 1024;
-
-    public DeviceItemStorage itemHandler;
-    private LazyOptional<ItemStackHandler> lazyItemHandler = LazyOptional.empty();
-
-    protected DeviceEnergyStorage energyStorage;
-    private LazyOptional<IEnergyStorage> lazyEnergyStorage;
-
-    public AbstractMachineBE(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState) {
+    public<T extends AbstractMachineBE> AbstractMachineBE(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState, CapabilityCache.Builder builder) {
         super(pType, pWorldPosition, pBlockState);
-        this.itemHandler = createItemHandler();
-        this.lazyItemHandler = itemHandler != null ?  LazyOptional.of(() -> itemHandler): LazyOptional.empty();
-        this.energyStorage = createEnergyStorage();
-        this.lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
-    }
-
-    protected void onContentChange(int slot){
-
-    }
-
-    public int getSlotCount(){
-        return 0;
-    }
-
-    protected DeviceItemStorage createItemHandler() {
-        if(getSlotCount() > 0){
-            return new DeviceItemStorage(getSlotCount()) {
-                @Override
-                protected void onContentsChanged(int slot) {
-                    setChanged();
-                    onContentChange(slot);
-                }
-            };
-        }else {
-            return null;
-        }
-    }
-
-    // 创建能量存储处理器，子类可以覆写以自定义容量和传输速率
-    protected DeviceEnergyStorage createEnergyStorage() {
-        return new DeviceEnergyStorage(100000, MAX_TRANSFER_RATE);
+        this.cache = builder.build(this::setCapabilityChanged);
     }
 
     // 每 tick 执行的逻辑，由 AbstractDeviceBL 的 Ticker 调用
@@ -80,8 +46,8 @@ public abstract class AbstractMachineBE extends BlockEntity {
 
     // 从物品槽位中掉落物品
     public void drops() {
-        if (this.level != null) {
-            this.itemHandler.drops(level, worldPosition);
+        if (this.level != null && getItemHandler() != null) {
+            getItemHandler().drops(level, worldPosition);
         }
     }
 
@@ -90,29 +56,21 @@ public abstract class AbstractMachineBE extends BlockEntity {
     @Override
     protected void saveAdditional(CompoundTag pTag) {
         super.saveAdditional(pTag);
-        saveData(pTag);
+        this.cache.writeToNBT(pTag);
     }
 
 
-    protected void saveData(CompoundTag pTag){
-        pTag.put("inventory", itemHandler.serializeNBT()); // 保存物品槽位数据
-        pTag.putInt("energy", energyStorage.getEnergyStored()); // 保存能量数据
-    }
 
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
-        loadData(pTag);
+        this.cache.readFromNBT(pTag);
     }
 
+    public abstract boolean isWorking();
 
-    public void loadData(CompoundTag pTag) {
-        if (pTag.contains("inventory")){
-            itemHandler.deserializeNBT(pTag.getCompound("inventory")); // 加载物品槽位数据
-        }
-        if (pTag.contains("energy")){
-            energyStorage.setEnergy(pTag.getInt("energy")); // 加载能量数据
-        }
+    protected void setCapabilityChanged(CapabilityType type){
+        setChanged();
     }
     // 数据包同步（用于GUI更新等）
     @Nullable
@@ -122,9 +80,9 @@ public abstract class AbstractMachineBE extends BlockEntity {
     }
 
     @Override
-    public CompoundTag getUpdateTag() {
-        CompoundTag tag = new CompoundTag();
-        saveAdditional(tag);
+    public CompoundTag getUpdateTag(){
+        CompoundTag tag = super.getUpdateTag();
+        cache.writeToNBT(tag);
         return tag;
     }
 
@@ -139,11 +97,9 @@ public abstract class AbstractMachineBE extends BlockEntity {
     @NotNull
     @Override
     public <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.ITEM_HANDLER) {
-            return lazyItemHandler.cast();
-        }
-        if (cap == ForgeCapabilities.ENERGY) {
-            return lazyEnergyStorage.cast();
+        LazyOptional a = this.cache.getCapability(cap, side);
+        if(a != LazyOptional.empty()){
+            return a;
         }
         return super.getCapability(cap, side);
     }
@@ -153,22 +109,26 @@ public abstract class AbstractMachineBE extends BlockEntity {
     @Override
     public void invalidateCaps() {
         super.invalidateCaps();
-        lazyItemHandler.invalidate();
-        lazyEnergyStorage.invalidate();
+        cache.inValidCaps();
     }
+
+    @Override
+    public void handleUpdateTag(CompoundTag compoundTag){
+        super.handleUpdateTag(compoundTag);
+        cache.readFromNBT(compoundTag);
+    }
+
 
     @Override
     public void reviveCaps() {
         super.reviveCaps();
-        lazyItemHandler = LazyOptional.of(() -> itemHandler);
-        lazyEnergyStorage = LazyOptional.of(() -> energyStorage);
     }
 
-    public ItemStackHandler getItemHandler() {
-        return itemHandler;
+    public MillenniumItemStorage getItemHandler() {
+        return cache.getItemCapability();
     }
 
-    public DeviceEnergyStorage getEnergyStorage() {
-        return energyStorage;
+    public MillenniumEnergyStorage getEnergyStorage() {
+        return cache.getEnergyCapability();
     }
 }

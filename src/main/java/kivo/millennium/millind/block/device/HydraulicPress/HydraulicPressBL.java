@@ -17,7 +17,7 @@ public class HydraulicPressBL extends HorizontalDeviceBL {
 
     public HydraulicPressBL() {
         super(Properties.of().lightLevel(state -> {
-            if(state.getValue(POWERED)) return 15;
+            if(state.getValue(WORKING)) return 15;
             return 0;
         }));
     }

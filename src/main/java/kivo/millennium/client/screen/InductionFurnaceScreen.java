@@ -13,7 +13,6 @@ import static kivo.millennium.millind.Main.getRL;
 
 public class InductionFurnaceScreen extends AbstractDeviceSC<InductionFurnaceMenu> {
     private static final Vector2i FlamePos = new Vector2i(82, 53);
-    private static final ResourceLocation STATUS_TEXTURE = getRL("textures/gui/container/furnace_flame.png");
     public InductionFurnaceScreen(InductionFurnaceMenu container, Inventory inventory, Component title) {
         super(container, inventory, title);
         this.GUI_TEXTURE = getRL("textures/gui/container/induction_furnace_gui.png");
@@ -23,12 +22,6 @@ public class InductionFurnaceScreen extends AbstractDeviceSC<InductionFurnaceMen
     public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(pGuiGraphics, mouseX, mouseY, partialTick);
         RenderUtils.renderProgress(pGuiGraphics, 77 + leftPos, 34 + topPos, menu.getProgress());
-        renderFlame(pGuiGraphics);
-    }
-
-    private void renderFlame(GuiGraphics pGuiGraphics) {
-        if(this.menu.getLit()) {
-            pGuiGraphics.blit(STATUS_TEXTURE, leftPos + FlamePos.x, topPos + FlamePos.y, 0, 0, 14, 14, 14, 14);
-        }
+        if(this.menu.getLit()) RenderUtils.renderFlame(pGuiGraphics, leftPos + FlamePos.x, topPos + FlamePos.y);
     }
 }

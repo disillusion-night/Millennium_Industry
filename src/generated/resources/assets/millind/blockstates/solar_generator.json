@@ -1,9 +1,9 @@
 {
   "variants": {
-    "powered=false": {
+    "working=false": {
       "model": "millind:block/solar_generator"
     },
-    "powered=true": {
+    "working=true": {
       "model": "millind:block/solar_generator"
     }
   }

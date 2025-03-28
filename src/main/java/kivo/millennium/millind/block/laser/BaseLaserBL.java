@@ -1,7 +1,6 @@
 package kivo.millennium.millind.block.laser;
 
-import kivo.millennium.millind.Main;
-import kivo.millennium.millind.block.generator.GeneratorBE;
+import kivo.millennium.millind.block.device.MillenniumBlockProperty;
 import kivo.millennium.millind.util.ShapeUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -21,20 +20,19 @@ import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.jetbrains.annotations.NotNull;
 
 import javax.annotation.Nullable;
 
 public abstract class BaseLaserBL extends BaseEntityBlock {
 
     public static final DirectionProperty FACING = BlockStateProperties.FACING;
-    public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+    public static final BooleanProperty WORKING = MillenniumBlockProperty.WORKING;
 
     private static final VoxelShape SHAPE_UP = Block.box(5, 0, 5, 11, 12, 11);
 
     public BaseLaserBL(Properties properties) {
         super(properties);
-        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(POWERED, false));
+        this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH).setValue(WORKING, false));
     }
 
     @Override
@@ -44,13 +42,13 @@ public abstract class BaseLaserBL extends BaseEntityBlock {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, POWERED);
+        builder.add(FACING, WORKING);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(FACING, pContext.getClickedFace()).setValue(POWERED, false);
+        return this.defaultBlockState().setValue(FACING, pContext.getClickedFace()).setValue(WORKING, false);
     }
 
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {

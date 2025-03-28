@@ -1,7 +1,9 @@
 package kivo.millennium.millind.block.device.FusionFurnace;
 
 import kivo.millennium.millind.block.device.AbstractMachineBE;
-import kivo.millennium.millind.capability.DeviceEnergyStorage;
+import kivo.millennium.millind.capability.CapabilityCache;
+import kivo.millennium.millind.capability.MillenniumEnergyStorage;
+import kivo.millennium.millind.capability.MillenniumFluidStorage;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.init.MillenniumFluids;
 import kivo.millennium.millind.recipe.ExtendedContainer;
@@ -36,16 +38,7 @@ public class FusionChamberBE extends AbstractMachineBE {
     private static final int FLUID_CAPACITY_OUT = 12000; // 毫升
 
     // 输出流体槽
-    private final MultiFluidTank fluidTank = new MultiFluidTank(2,FLUID_CAPACITY_IN, FLUID_CAPACITY_OUT);
-
-    @Override
-    public int getSlotCount() {
-        return SLOT_COUNT;
-    }
-
-    protected DeviceEnergyStorage createEnergyStorage() {
-        return new DeviceEnergyStorage(200000, MAX_TRANSFER_RATE);
-    }
+    private final MillenniumFluidStorage fluidTank = new MillenniumFluidStorage(2,FLUID_CAPACITY_IN, FLUID_CAPACITY_OUT);
 
     private LazyOptional<IFluidHandler> fluidHandler = LazyOptional.of(() -> fluidTank);
 
@@ -56,7 +49,11 @@ public class FusionChamberBE extends AbstractMachineBE {
     private static final int FLUID_INTAKE_AMOUNT = 100; // 每次尝试吸取的流体数量 (以毫升为单位)
 
     public FusionChamberBE(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(MillenniumBlockEntities.FUSION_CHAMBER_BE.get(), pWorldPosition, pBlockState);
+        super(MillenniumBlockEntities.FUSION_CHAMBER_BE.get(), pWorldPosition, pBlockState, new CapabilityCache.Builder()
+                .withFluid(2, 12000)
+                .withEnergy(200000, 10000)
+                .withItems(2)
+        );
         this.fluidTank.setFluidInTank(INPUT_FLUID, new FluidStack(MillenniumFluids.MOLTEN_CRYOLITE.get(), 10000));
     }
 
@@ -64,17 +61,17 @@ public class FusionChamberBE extends AbstractMachineBE {
     public void tickServer() {
         handleFluidIntake();
         // 1. 从电池槽充电
-        ItemStack batteryStack = itemHandler.getStackInSlot(BATTERY_SLOT);
+        ItemStack batteryStack = getItemHandler().getStackInSlot(BATTERY_SLOT);
         batteryStack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
-            if (energyStorage.canReceive()) {
-                int received = energyStorage.receiveEnergy(energy.extractEnergy(energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored(), false), false);
+            if (getEnergyStorage().canReceive()) {
+                int received = getEnergyStorage().receiveEnergy(energy.extractEnergy(getEnergyStorage().getMaxEnergyStored() - getEnergyStorage().getEnergyStored(), false), false);
                 if (received > 0) {
                     setChanged();
                 }
             }
         });
 
-        ItemStack inputStack = this.itemHandler.getStackInSlot(INPUT_SLOT);
+        ItemStack inputStack = getItemHandler().getStackInSlot(INPUT_SLOT);
 
         if (!inputStack.isEmpty()) {
             ExtendedContainer container = new ExtendedContainer(inputStack);
@@ -111,7 +108,7 @@ public class FusionChamberBE extends AbstractMachineBE {
     }
 
     private void fusionItem(int cost, FluidStack recipeOutput) {
-        this.itemHandler.extractItem(0, 1, false);
+        getItemHandler().extractItem(0, 1, false);
         this.fluidTank.drainFluidFromTank(INPUT_FLUID, cost);
         this.fluidTank.addFluidToTank(OUTPUT_FLUID, new FluidStack(recipeOutput.getFluid(), recipeOutput.getAmount()), IFluidHandler.FluidAction.EXECUTE);
         this.currentRecipeOutput = FluidStack.EMPTY; // 重置当前配方输出
@@ -157,20 +154,17 @@ public class FusionChamberBE extends AbstractMachineBE {
             });
         }
     }
-    private int getProgressPercent() {
+
+    public int getProgressPercent() {
         return (int) (((float) progress / totalTime) * 100);
     }
 
-    private boolean isLit() {
-        return getBlockState().getValue(FusionChamberBL.POWERED);
+    public boolean isWorking() {
+        return getBlockState().getValue(FusionChamberBL.WORKING);
     }
 
-    public int getProgressAndLit() {
-        if (isLit()) {
-            return getProgressPercent() << 1 | 1;
-        } else {
-            return getProgressPercent() << 1;
-        }
+    public MillenniumFluidStorage getFluidTank(){
+        return this.cache.getFluidCapability();
     }
 
     @Override
@@ -180,26 +174,16 @@ public class FusionChamberBE extends AbstractMachineBE {
         }
         return super.getCapability(cap, side);
     }
+    // NBT 数据读写
+    @Override
+    protected void saveAdditional(CompoundTag pTag) {
+        super.saveAdditional(pTag);
+        pTag.putInt("progress", progress);
+    }
 
     @Override
-    protected void saveData(CompoundTag pTag) {
-        super.saveData(pTag);
-        fluidTank.writeToNBT(pTag);
-    }
-
-    @Override
-    public void loadData(CompoundTag pTag) {
-        super.loadData(pTag);
-        if (pTag.contains("fluids")){
-            fluidTank.readFromNBT(pTag.getCompound("fluids"));
-        }
-    }
-
-    public MultiFluidTank getFluidTank() {
-        return fluidTank;
-    }
-
-    public DeviceEnergyStorage getEnergyStorage() {
-        return energyStorage;
+    public void load(CompoundTag pTag) {
+        super.load(pTag);
+        progress = pTag.getInt("progress");
     }
 }

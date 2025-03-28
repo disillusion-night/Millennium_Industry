@@ -26,12 +26,14 @@ public class MeltingFurnaceScreen extends AbstractDeviceSC<MeltingFurnaceContain
     private static final Vector2i ProgressPos = new Vector2i(78, 38);
     private static final Vector2i fluidSlotPos = new Vector2i(107, 16);
     private static final Vector2i fluidSlotSize = new Vector2i(16,57);
+    private static final Vector2i FlamePos = new Vector2i(82, 53);
 
     @Override
     public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(pGuiGraphics, mouseX, mouseY, partialTick);
         FluidStack fluidStack = getMenu().getFluid();
         if(!fluidStack.isEmpty()) checkfluidTip(pGuiGraphics, mouseX, mouseY);
+        if(this.menu.getLit()) RenderUtils.renderFlame(pGuiGraphics, leftPos + FlamePos.x, topPos + FlamePos.y);
     }
 
     public MeltingFurnaceScreen(MeltingFurnaceContainer pMenu, Inventory pPlayerInventory, Component pTitle) {

@@ -1,6 +1,6 @@
 package kivo.millennium.millind.block.generator;
 
-import kivo.millennium.millind.Main;
+import kivo.millennium.millind.block.device.MillenniumBlockProperty;
 import kivo.millennium.millind.container.Device.GeneratorMT;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -32,7 +32,7 @@ public class GeneratorBL extends Block implements EntityBlock {
 
     public static final String SCREEN_TUTORIAL_GENERATOR = "tutorial.screen.generator";
 
-    private static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+    private static final BooleanProperty WORKING = MillenniumBlockProperty.WORKING;
 
     public GeneratorBL() {
         super(BlockBehaviour.Properties.of()
@@ -40,7 +40,7 @@ public class GeneratorBL extends Block implements EntityBlock {
                 .requiresCorrectToolForDrops()
                 .sound(SoundType.METAL)
                 .lightLevel(blockState -> {
-                    if(blockState.getValue(POWERED)) return 15;
+                    if(blockState.getValue(WORKING)) return 15;
                     else return 0;
                 }));
     }
@@ -95,12 +95,12 @@ public class GeneratorBL extends Block implements EntityBlock {
     public BlockState getStateForPlacement(BlockPlaceContext context) {
         return this.defaultBlockState()
                 .setValue(BlockStateProperties.FACING, context.getNearestLookingDirection().getOpposite())
-                .setValue(BlockStateProperties.POWERED, false);
+                .setValue(MillenniumBlockProperty.WORKING, false);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         super.createBlockStateDefinition(builder);
-        builder.add(BlockStateProperties.POWERED, BlockStateProperties.FACING);
+        builder.add(MillenniumBlockProperty.WORKING, BlockStateProperties.FACING);
     }
 }

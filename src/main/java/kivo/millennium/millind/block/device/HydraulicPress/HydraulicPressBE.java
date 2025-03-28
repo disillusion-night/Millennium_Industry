@@ -1,10 +1,10 @@
 package kivo.millennium.millind.block.device.HydraulicPress;
 
 import kivo.millennium.millind.block.device.AbstractMachineBE;
+import kivo.millennium.millind.capability.CapabilityCache;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.recipe.CrushingRecipe;
 import kivo.millennium.millind.recipe.ExtendedContainer;
-import kivo.millennium.millind.recipe.ItemComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.SimpleContainer;
@@ -20,23 +20,21 @@ public class HydraulicPressBE extends AbstractMachineBE {
     public static int INPUT2_SLOT = 2;
     public static int OUTPUT_SLOT = 3;
     private final int energyUsagePerTick = 200;
-    private final int maxLitTime = 10;
     private int progress = 0;
     private int totalTime = 100;
-    private int litTime = 0;
+    private boolean isWorking;
 
     public HydraulicPressBE(BlockPos pPos, BlockState pBlockState) {
-        super(MillenniumBlockEntities.HYDRAULIC_PRESS_BE.get(), pPos, pBlockState);
-        this.MAX_TRANSFER_RATE = 1000;
+        super(MillenniumBlockEntities.HYDRAULIC_PRESS_BE.get(), pPos, pBlockState, new CapabilityCache.Builder()
+                .withEnergy(100000, 2000)
+                .withItems(4));
     }
 
     @Override
-    protected void tickServer() {
-        if (itemHandler == null || energyStorage == null) return;
-
-        ItemStack inputStack1 = itemHandler.getStackInSlot(INPUT1_SLOT);
-        ItemStack inputStack2 = itemHandler.getStackInSlot(INPUT2_SLOT);
-        ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
+    protected void tickServer(){
+        ItemStack inputStack1 = getItemHandler().getStackInSlot(INPUT1_SLOT);
+        ItemStack inputStack2 = getItemHandler().getStackInSlot(INPUT2_SLOT);
+        ItemStack outputStack = getItemHandler().getStackInSlot(OUTPUT_SLOT);
         boolean canStartCrushing = false;
 
         if (!inputStack1.isEmpty()) {
@@ -44,16 +42,17 @@ public class HydraulicPressBE extends AbstractMachineBE {
 
             if (recipe.isPresent()) {
                 ItemStack recipeOutput = recipe.get().assemble(new ExtendedContainer(inputStack2), level.registryAccess());
-                if (canCrush(outputStack, recipeOutput) && energyStorage.getEnergyStored() >= energyUsagePerTick) {
+                if (canCrush(outputStack, recipeOutput) && getEnergyStorage().getEnergyStored() >= energyUsagePerTick) {
                     canStartCrushing = true;
                 }
 
                 if (canStartCrushing) {
-                    if (!getBlockState().getValue(HydraulicPressBL.POWERED)) {
-                        level.setBlock(getBlockPos(), getBlockState().setValue(HydraulicPressBL.POWERED, true), 3);
+                    if(!isWorking){
+                        isWorking = true;
+                        level.setBlock(getBlockPos(),getBlockState().setValue(HydraulicPressBL.WORKING, true), 3);
                     }
                     progress++;
-                    energyStorage.costEnergy(energyUsagePerTick);
+                    getEnergyStorage().costEnergy(energyUsagePerTick);
                     setChanged(level, getBlockPos(), getBlockState());
 
                     if (progress >= totalTime) {
@@ -62,11 +61,14 @@ public class HydraulicPressBE extends AbstractMachineBE {
                         setChanged(level, getBlockPos(), getBlockState());
                     }
                 } else {
-                    level.setBlock(getBlockPos(), getBlockState().setValue(HydraulicPressBL.POWERED, false), 3);
+                    isWorking = false;
+                    level.setBlock(getBlockPos(), getBlockState().setValue(HydraulicPressBL.WORKING, false), 3);
                 }
             }
         } else {
-            level.setBlock(getBlockPos(), getBlockState().setValue(HydraulicPressBL.POWERED, false), 3);
+            isWorking = false;
+            resetProgress();
+            level.setBlock(getBlockPos(),getBlockState().setValue(HydraulicPressBL.WORKING, false), 3);
         }
 
     }
@@ -75,33 +77,29 @@ public class HydraulicPressBE extends AbstractMachineBE {
         return new SimpleContainer();
     }
 
-
+    /*
     @Override
     protected void onContentChange(int slot) {
         if (slot == INPUT1_SLOT || slot == INPUT2_SLOT) {
-            ItemStack inputStack1 = itemHandler.getStackInSlot(INPUT1_SLOT);
+            ItemStack inputStack1 = getItemHandler().getStackInSlot(INPUT1_SLOT);
             ItemStack inputStack2 = itemHandler.getStackInSlot(INPUT2_SLOT);
             if (inputStack1.isEmpty() || inputStack2.isEmpty()) {
                 resetProgress();
             }
         }
+    }*/
+
+
+    public boolean isWorking() {
+        return getBlockState().getValue(HydraulicPressBL.WORKING);
     }
 
-    @Override
-    public int getSlotCount() {
-        return SLOT_COUNT;
-    }
-
-    private boolean isLit() {
-        return getBlockState().getValue(HydraulicPressBL.POWERED);
-    }
-
-    private int getProgressPercent() {
+    public int getProgressPercent() {
         return (int) (((float) progress / totalTime) * 100);
     }
 
     public int getProgressAndLit() {
-        if (isLit()) {
+        if (isWorking()) {
             return getProgressPercent() << 1 | 1;
         } else {
             return getProgressPercent() << 1;
@@ -125,31 +123,32 @@ public class HydraulicPressBE extends AbstractMachineBE {
     }
 
     private void crushItem(ItemStack recipeOutput) {
-        ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
+        ItemStack outputStack = getItemHandler().getStackInSlot(OUTPUT_SLOT);
 
         if (outputStack.isEmpty()) {
-            itemHandler.setStackInSlot(OUTPUT_SLOT, recipeOutput.copy());
+            getItemHandler().setStackInSlot(OUTPUT_SLOT, recipeOutput.copy());
         } else if (outputStack.is(recipeOutput.getItem())) {
             outputStack.grow(recipeOutput.getCount());
         }
 
-        itemHandler.extractItem(INPUT1_SLOT, 1, false);
-        itemHandler.extractItem(INPUT2_SLOT, 1, false);
+        getItemHandler().extractItem(INPUT1_SLOT, 1, false);
+        getItemHandler().extractItem(INPUT2_SLOT, 1, false);
     }
 
     private void resetProgress() {
         progress = 0;
     }
 
+    // NBT 数据读写
     @Override
-    protected void saveData(CompoundTag pTag) {
-        super.saveData(pTag);
+    protected void saveAdditional(CompoundTag pTag) {
+        super.saveAdditional(pTag);
         pTag.putInt("progress", progress);
     }
 
     @Override
-    public void loadData(CompoundTag pTag) {
-        super.loadData(pTag);
+    public void load(CompoundTag pTag) {
+        super.load(pTag);
         progress = pTag.getInt("progress");
     }
 }

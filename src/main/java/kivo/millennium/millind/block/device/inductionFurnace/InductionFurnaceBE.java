@@ -1,12 +1,12 @@
 package kivo.millennium.millind.block.device.inductionFurnace;
 
+import kivo.millennium.millind.block.IWorkingMachine;
 import kivo.millennium.millind.block.device.AbstractMachineBE;
-import kivo.millennium.millind.block.device.DeviceItemStorage;
+import kivo.millennium.millind.capability.CapabilityCache;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.BlastingRecipe;
 import net.minecraft.world.item.crafting.RecipeType;
@@ -14,27 +14,27 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
 
-public class InductionFurnaceBE extends AbstractMachineBE {
+public class InductionFurnaceBE extends AbstractMachineBE implements IWorkingMachine {
     public static final int SLOT_COUNT = 3;
     public static int BATTERY_SLOT = 0;
     public static int INPUT_SLOT = 1;
     public static int OUTPUT_SLOT = 2;
     private final int energyUsagePerTick = 200;
-    private final int maxLitTime = 10;
     private int progress = 0;
     private int smeltingTotalTime = 100;
-    private int litTime = 0;
+    private boolean isWorking;
 
     public InductionFurnaceBE(BlockPos pPos, BlockState pBlockState) {
-        super(MillenniumBlockEntities.INDUCTION_FURNACE_BE.get(), pPos, pBlockState);
+        super(MillenniumBlockEntities.INDUCTION_FURNACE_BE.get(), pPos, pBlockState, new CapabilityCache.Builder()
+                .withItems(3)
+                .withEnergy(100000, 2000)
+        );
     }
 
     @Override
     protected void tickServer() {
-        if (itemHandler == null || energyStorage == null) return;
-
-        ItemStack inputStack = itemHandler.getStackInSlot(INPUT_SLOT);
-        ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
+        ItemStack inputStack = getItemHandler().getStackInSlot(INPUT_SLOT);
+        ItemStack outputStack = getItemHandler().getStackInSlot(OUTPUT_SLOT);
         boolean canStartSmelting = false;
 
         if (!inputStack.isEmpty()) {
@@ -42,16 +42,17 @@ public class InductionFurnaceBE extends AbstractMachineBE {
 
             if (recipe.isPresent()) {
                 ItemStack recipeOutput = recipe.get().assemble(new SimpleContainer(inputStack), level.registryAccess());
-                if (canSmelt(outputStack, recipeOutput) && energyStorage.getEnergyStored() >= energyUsagePerTick) {
+                if (canSmelt(outputStack, recipeOutput) && getEnergyStorage().getEnergyStored() >= energyUsagePerTick) {
                     canStartSmelting = true;
                 }
 
                 if (canStartSmelting) {
-                    if(!getBlockState().getValue(InductionFurnaceBL.POWERED)){
-                      level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.POWERED, true), 3);
+                    if(!isWorking){
+                        isWorking = true;
+                        level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.WORKING, true), 3);
                     }
                     progress++;
-                    energyStorage.costEnergy(energyUsagePerTick);
+                    getEnergyStorage().costEnergy(energyUsagePerTick);
                     setChanged(level, getBlockPos(), getBlockState());
 
                     if (progress >= smeltingTotalTime) {
@@ -60,45 +61,36 @@ public class InductionFurnaceBE extends AbstractMachineBE {
                         setChanged(level, getBlockPos(), getBlockState());
                     }
                 } else {
-                    level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.POWERED, false), 3);
+                    isWorking = false;
+                    level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.WORKING, false), 3);
                 }
             }
         } else {
+            isWorking = false;
             resetProgress();
-            level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.POWERED, false), 3);
+            level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.WORKING, false), 3);
         }
 
     }
 
+    /*
     @Override
     protected void onContentChange(int slot) {
         if (slot == INPUT_SLOT) {
-            ItemStack inputStack = itemHandler.getStackInSlot(INPUT_SLOT);
+            ItemStack inputStack = getItemHandler().getStackInSlot(INPUT_SLOT);
             if (inputStack.isEmpty()) {
                 resetProgress();
             }
         }
+    }*/
+
+    public boolean isWorking(){
+        return getBlockState().getValue(InductionFurnaceBL.WORKING);
     }
 
-    @Override
-    public int getSlotCount(){
-        return SLOT_COUNT;
-    }
 
-    private boolean isLit(){
-        return getBlockState().getValue(InductionFurnaceBL.POWERED);
-    }
-
-    private int getProgressPercent(){
+    public int getProgressPercent(){
         return (int) (((float) progress / smeltingTotalTime) * 100);
-    }
-
-    public int getProgressAndLit(){
-        if (isLit()){
-            return getProgressPercent() << 1 | 1;
-        }else {
-            return getProgressPercent() << 1;
-        }
     }
 
     private boolean canSmelt(ItemStack outputStack, ItemStack recipeOutput) {
@@ -118,32 +110,19 @@ public class InductionFurnaceBE extends AbstractMachineBE {
     }
 
     private void smeltItem(ItemStack recipeOutput) {
-        ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
+        ItemStack outputStack = getItemHandler().getStackInSlot(OUTPUT_SLOT);
 
         if (outputStack.isEmpty()) {
-            itemHandler.setStackInSlot(OUTPUT_SLOT, recipeOutput.copy());
+            getItemHandler().setStackInSlot(OUTPUT_SLOT, recipeOutput.copy());
         } else if (outputStack.is(recipeOutput.getItem())) {
             outputStack.grow(recipeOutput.getCount());
         }
 
-        itemHandler.extractItem(INPUT_SLOT, 1, false);
+        getItemHandler().extractItem(INPUT_SLOT, 1, false);
     }
 
     private void resetProgress() {
         progress = 0;
     }
 
-
-
-    @Override
-    protected void saveData(CompoundTag pTag) {
-        super.saveData(pTag);
-        pTag.putInt("progress", progress);
-    }
-
-    @Override
-    public void loadData(CompoundTag pTag) {
-        super.loadData(pTag);
-        progress = pTag.getInt("progress");
-    }
 }

@@ -1,32 +1,32 @@
 {
   "variants": {
-    "facing=east,powered=false": {
+    "facing=east,working=false": {
       "model": "millind:block/crusher",
       "y": 90
     },
-    "facing=east,powered=true": {
+    "facing=east,working=true": {
       "model": "millind:block/crusher_on",
       "y": 90
     },
-    "facing=north,powered=false": {
+    "facing=north,working=false": {
       "model": "millind:block/crusher"
     },
-    "facing=north,powered=true": {
+    "facing=north,working=true": {
       "model": "millind:block/crusher_on"
     },
-    "facing=south,powered=false": {
+    "facing=south,working=false": {
       "model": "millind:block/crusher",
       "y": 180
     },
-    "facing=south,powered=true": {
+    "facing=south,working=true": {
       "model": "millind:block/crusher_on",
       "y": 180
     },
-    "facing=west,powered=false": {
+    "facing=west,working=false": {
       "model": "millind:block/crusher",
       "y": 270
     },
-    "facing=west,powered=true": {
+    "facing=west,working=true": {
       "model": "millind:block/crusher_on",
       "y": 270
     }

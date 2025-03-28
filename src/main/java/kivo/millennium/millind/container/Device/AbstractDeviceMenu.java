@@ -1,7 +1,7 @@
 package kivo.millennium.millind.container.Device;
 
 import kivo.millennium.millind.block.device.AbstractMachineBE;
-import kivo.millennium.millind.capability.DeviceEnergyStorage;
+import kivo.millennium.millind.capability.MillenniumEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Inventory;
@@ -25,7 +25,7 @@ public abstract class AbstractDeviceMenu extends AbstractContainerMenu {
     protected Player player;
     protected BlockPos pos;
     protected ItemStackHandler itemHandler;
-    protected DeviceEnergyStorage energyStorage;
+    protected MillenniumEnergyStorage energyStorage;
     protected Level level;
 
     protected AbstractDeviceMenu(MenuType<?> pType, int pContainerId, Player player, BlockPos pos, Container pContainer) {

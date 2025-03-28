@@ -1,7 +1,6 @@
 package kivo.millennium.millind.block.laser;
 
-import kivo.millennium.millind.Main;
-import kivo.millennium.millind.capability.DeviceEnergyStorage;
+import kivo.millennium.millind.capability.MillenniumEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -9,7 +8,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
@@ -17,9 +15,6 @@ import net.minecraftforge.energy.EnergyStorage;
 import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-import org.spongepowered.asm.mixin.Shadow;
 
 import javax.annotation.Nonnull;
 
@@ -30,7 +25,7 @@ public abstract class BaseLaserBE extends BlockEntity {
     public static final int costPerTick = 2000;
     public static final int CAPACITY = 100000;
 
-    protected final DeviceEnergyStorage energy = new DeviceEnergyStorage(CAPACITY);
+    protected final MillenniumEnergyStorage energy = new MillenniumEnergyStorage(CAPACITY);
 
     private final LazyOptional<IEnergyStorage> energyHandler = LazyOptional.of(() -> energy);
 
@@ -46,10 +41,10 @@ public abstract class BaseLaserBE extends BlockEntity {
 
     private void checkPower(Level pLevel, BlockPos pPos, BlockState pState, BaseLaserBE pBlockEntity){
         if(getStoredPower() > 0){
-            level.setBlockAndUpdate(pPos, pState.setValue(BaseLaserBL.POWERED, true));
+            level.setBlockAndUpdate(pPos, pState.setValue(BaseLaserBL.WORKING, true));
             onlaser(pLevel, pPos, pState, pBlockEntity);
         }else {
-            level.setBlockAndUpdate(pPos, pState.setValue(BaseLaserBL.POWERED, false));
+            level.setBlockAndUpdate(pPos, pState.setValue(BaseLaserBL.WORKING, false));
         }
     }
 

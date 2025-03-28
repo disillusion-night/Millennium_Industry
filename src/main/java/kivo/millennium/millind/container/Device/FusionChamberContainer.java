@@ -16,7 +16,7 @@ import net.minecraftforge.fluids.FluidStack;
 import org.joml.Vector2i;
 
 public class FusionChamberContainer extends AbstractDeviceMenu {
-    private static final Vector2i inputpos = new Vector2i(53, 37);
+    private static final Vector2i inputpos = new Vector2i(56, 37);
     private static final Vector2i outputpos = new Vector2i(107, 35);
     private int fluidCapacityIn;
     private int fluidAmountIn;
@@ -35,6 +35,13 @@ public class FusionChamberContainer extends AbstractDeviceMenu {
         addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), FusionChamberBE.INPUT_SLOT, inputpos));
     }
 
+    public Vector2i getBatterySlotPos(){
+        return new Vector2i(152, 66);
+    }
+
+    public Vector2i getPlayerInvPos() {
+        return new Vector2i(8, 88);
+    }
 
     @Override
     protected void setupDataSlot(Container container, AbstractMachineBE deviceBE) {

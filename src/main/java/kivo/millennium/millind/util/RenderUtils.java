@@ -20,6 +20,8 @@ import static kivo.millennium.millind.Main.getRL;
 public class RenderUtils {
     private static final ResourceLocation PROGRESS_TEXTURE = getRL("textures/gui/container/progress_arrow.png");
 
+    private static final ResourceLocation FLAME_TEXTURE = getRL("textures/gui/container/furnace_flame.png");
+
     public static void renderFluid(GuiGraphics guiGraphics, FluidStack fluidStack, int x, int y, int width, int height, int blitOffset, int capacity) {
         if (fluidStack.isEmpty()) return;
 
@@ -77,5 +79,9 @@ public class RenderUtils {
     public static void renderProgress(GuiGraphics pGuiGraphics, int x, int y, int progress) {
         int l = (int) ((float) progress / 100 * 24);
         pGuiGraphics.blit(PROGRESS_TEXTURE, x, y, 0, 0, l + 1, 16, 24, 17);
+    }
+
+    public static void renderFlame(GuiGraphics pGuiGraphics, int x, int y) {
+            pGuiGraphics.blit(FLAME_TEXTURE, x, y, 0, 0, 14, 14, 14, 14);
     }
 }

@@ -1,37 +1,22 @@
 package kivo.millennium.millind.block.device.MeltingFurnace;
 
-import kivo.millennium.millind.Main;
 import kivo.millennium.millind.block.device.AbstractMachineBE;
-import kivo.millennium.millind.block.device.crusher.CrusherBL;
-import kivo.millennium.millind.capability.DeviceEnergyStorage;
-import kivo.millennium.millind.datagen.MillenniumRecipeProvider;
+import kivo.millennium.millind.capability.CapabilityCache;
+import kivo.millennium.millind.capability.CapabilityType;
+import kivo.millennium.millind.capability.MillenniumFluidStorage;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
-import kivo.millennium.millind.init.MillenniumRecipes;
 import kivo.millennium.millind.recipe.ExtendedContainer;
-import kivo.millennium.millind.recipe.ItemComponent;
 import kivo.millennium.millind.recipe.MeltingRecipe;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.NonNullList;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.Containers;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
-import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
-import net.minecraftforge.fluids.capability.templates.FluidTank;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-
 import java.util.Optional;
 
-public class MeltingFurnaceBE extends AbstractMachineBE {
+public class MeltingFurnaceBE extends AbstractMachineBE{
     public static final int SLOT_COUNT = 2;
     public static final int BATTERY_SLOT = 0;
     public static final int INPUT_SLOT = 1;
@@ -39,43 +24,31 @@ public class MeltingFurnaceBE extends AbstractMachineBE {
     private int totalTime = 100;
     private FluidStack currentRecipeOutput = FluidStack.EMPTY;
     private static final int FLUID_CAPACITY = 12000; // 毫升
+    private boolean isWorking;
 
-    private final FluidTank fluidTank = new FluidTank(FLUID_CAPACITY) {
-        @Override
-        protected void onContentsChanged() {
-            setChanged();
-        }
-    };
-
-    @Override
-    public int getSlotCount() {
-        return SLOT_COUNT;
-    }
-
-    protected DeviceEnergyStorage createEnergyStorage() {
-        return new DeviceEnergyStorage(200000, MAX_TRANSFER_RATE);
-    }
-
-    private LazyOptional<IFluidHandler> fluidHandlerLazy = LazyOptional.of(() -> fluidTank);
 
     public MeltingFurnaceBE(BlockPos pWorldPosition, BlockState pBlockState) {
-        super(MillenniumBlockEntities.MELTING_FURNACE_BE.get(), pWorldPosition, pBlockState);
+        super(MillenniumBlockEntities.MELTING_FURNACE_BE.get(), pWorldPosition, pBlockState, new CapabilityCache.Builder()
+                .withEnergy(100000, 2000)
+                .withFluid(1, FLUID_CAPACITY)
+                .withItems(2)
+        );
     }
 
     @Override
     public void tickServer() {
         // 1. 从电池槽充电
-        ItemStack batteryStack = itemHandler.getStackInSlot(BATTERY_SLOT);
+        ItemStack batteryStack = getItemHandler().getStackInSlot(BATTERY_SLOT);
         batteryStack.getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {
-            if (energyStorage.canReceive()) {
-                int received = energyStorage.receiveEnergy(energy.extractEnergy(energyStorage.getMaxEnergyStored() - energyStorage.getEnergyStored(), false), false);
+            if (getEnergyStorage().canReceive()) {
+                int received = getEnergyStorage().receiveEnergy(energy.extractEnergy(getEnergyStorage().getMaxEnergyStored() - getEnergyStorage().getEnergyStored(), false), false);
                 if (received > 0) {
                     setChanged();
                 }
             }
         });
 
-        ItemStack inputStack = this.itemHandler.getStackInSlot(INPUT_SLOT);
+        ItemStack inputStack = getItemHandler().getStackInSlot(INPUT_SLOT);
 
         if (!inputStack.isEmpty()) {
             Optional<MeltingRecipe> recipe = level.getRecipeManager().getRecipeFor(MeltingRecipe.Type.INSTANCE, new ExtendedContainer(inputStack), level);
@@ -85,6 +58,10 @@ public class MeltingFurnaceBE extends AbstractMachineBE {
                 int recipeMeltingTime = meltingRecipe.getTime();
 
                 if (this.canProcess(recipeOutput)) {
+                    if(!isWorking){
+                        isWorking = true;
+                        level.setBlock(getBlockPos(),getBlockState().setValue(MeltingFurnaceBL.WORKING, true), 3);
+                    }
                     this.totalTime = recipeMeltingTime; // 从配方中获取熔融时间
                     this.currentRecipeOutput = recipeOutput;
                     this.progress++;
@@ -94,26 +71,30 @@ public class MeltingFurnaceBE extends AbstractMachineBE {
                         this.meltItem(recipeOutput);
                     }
                 } else {
-                    this.resetProgress();
+                    isWorking = false;
+                    level.setBlock(getBlockPos(),getBlockState().setValue(MeltingFurnaceBL.WORKING, false), 3);
                 }
             });
         } else {
-            this.resetProgress();
+            isWorking = false;
+            resetProgress();
+            level.setBlock(getBlockPos(),getBlockState().setValue(MeltingFurnaceBL.WORKING, false), 3);
         }
     }
 
     private boolean canProcess(FluidStack recipeOutput) {
-        if (this.currentRecipeOutput.isEmpty() || (this.currentRecipeOutput.isFluidEqual(recipeOutput) && this.fluidTank.getFluidAmount() + recipeOutput.getAmount() <= this.fluidTank.getCapacity())) {
+        if (this.currentRecipeOutput.isEmpty() || (this.currentRecipeOutput.isFluidEqual(recipeOutput) && this.cache.getFluidCapability().getFluidAmount(0) + recipeOutput.getAmount() <= this.cache.getFluidCapability().getTankCapacity(0))) {
             return true;
         }
         return false;
     }
 
     private void meltItem(FluidStack recipeOutput) {
-        this.itemHandler.extractItem(0, 1, false); // 移除一个输入物品
-        this.fluidTank.fill(new FluidStack(recipeOutput.getFluid(), recipeOutput.getAmount()), IFluidHandler.FluidAction.EXECUTE);
+        getItemHandler().extractItem(0, 1, false); // 移除一个输入物品
+        this.cache.getFluidCapability().fill(new FluidStack(recipeOutput.getFluid(), recipeOutput.getAmount()), IFluidHandler.FluidAction.EXECUTE);
         this.currentRecipeOutput = FluidStack.EMPTY; // 重置当前配方输出
         this.setChanged();
+        level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
     }
 
     private void resetProgress() {
@@ -123,49 +104,36 @@ public class MeltingFurnaceBE extends AbstractMachineBE {
         this.setChanged();
     }
 
-    private int getProgressPercent() {
+    public int getProgressPercent() {
         return (int) (((float) progress / totalTime) * 100);
     }
 
-    private boolean isLit() {
-        return getBlockState().getValue(MeltingFurnaceBL.POWERED);
+    @Override
+    public boolean isWorking() {
+        return isWorking;
     }
 
-    public int getProgressAndLit() {
-        if (isLit()) {
-            return getProgressPercent() << 1 | 1;
-        } else {
-            return getProgressPercent() << 1;
-        }
+
+    // NBT 数据读写
+    @Override
+    protected void saveAdditional(CompoundTag pTag) {
+        super.saveAdditional(pTag);
+        pTag.putInt("progress", progress);
     }
 
     @Override
-    public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
-        if (cap == ForgeCapabilities.FLUID_HANDLER) {
-            return fluidHandlerLazy.cast();
-        }
-        return super.getCapability(cap, side);
+    public void load(CompoundTag pTag) {
+        super.load(pTag);
+        progress = pTag.getInt("progress");
     }
 
     @Override
-    protected void saveData(CompoundTag pTag) {
-        super.saveData(pTag);
-        fluidTank.writeToNBT(pTag);
+    public void setCapabilityChanged(CapabilityType type) {
+        super.setCapabilityChanged(type);
+        if(type == CapabilityType.FLUID) level.sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), 3);
     }
 
-    @Override
-    public void loadData(CompoundTag pTag) {
-        super.loadData(pTag);
-        if (pTag.contains("fluid")){
-            fluidTank.readFromNBT(pTag.getCompound("fluid"));
-        }
-    }
-
-    public FluidTank getFluidTank() {
-        return fluidTank;
-    }
-
-    public DeviceEnergyStorage getEnergyStorage() {
-        return energyStorage;
+    public MillenniumFluidStorage getFluidTank(){
+        return this.cache.getFluidCapability();
     }
 }

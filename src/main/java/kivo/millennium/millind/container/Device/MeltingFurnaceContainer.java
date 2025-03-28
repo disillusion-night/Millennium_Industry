@@ -56,7 +56,7 @@ public class MeltingFurnaceContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return be.getFluidTank().getFluidAmount() & 0xffff;
+                return be.getFluidTank().getFluidAmount(0) & 0xffff;
             }
 
             @Override
@@ -67,7 +67,7 @@ public class MeltingFurnaceContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return (be.getFluidTank().getFluidAmount() >> 16) & 0xffff;
+                return (be.getFluidTank().getFluidAmount(0) >> 16) & 0xffff;
             }
 
             @Override
@@ -78,7 +78,7 @@ public class MeltingFurnaceContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return be.getFluidTank().getCapacity() & 0xffff;
+                return be.getFluidTank().getTankCapacity(0) & 0xffff;
             }
 
             @Override
@@ -89,7 +89,7 @@ public class MeltingFurnaceContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return (be.getFluidTank().getCapacity() >> 16) & 0xffff;
+                return (be.getFluidTank().getTankCapacity(0) >> 16) & 0xffff;
             }
 
             @Override
@@ -101,7 +101,7 @@ public class MeltingFurnaceContainer extends AbstractDeviceMenu {
             @Override
             public int get() {
                 //MeltingFurnaceContainer.this.fluidId =
-                return BuiltInRegistries.FLUID.getId(be.getFluidTank().getFluid().getFluid());
+                return BuiltInRegistries.FLUID.getId(be.getFluidTank().getFluidInTank(0).getFluid());
             }
 
             @Override

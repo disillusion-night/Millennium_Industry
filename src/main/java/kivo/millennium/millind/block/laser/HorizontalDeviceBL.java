@@ -21,12 +21,12 @@ public abstract class HorizontalDeviceBL extends AbstractDeviceBL {
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
-        builder.add(FACING, POWERED);
+        builder.add(FACING, WORKING);
     }
 
     @Nullable
     @Override
     public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        return this.defaultBlockState().setValue(POWERED, false).setValue(FACING, pContext.getHorizontalDirection().getOpposite());
+        return this.defaultBlockState().setValue(WORKING, false).setValue(FACING, pContext.getHorizontalDirection().getOpposite());
     }
 }

@@ -1,7 +1,6 @@
 package kivo.millennium.millind.init;
 
 import kivo.millennium.millind.fluid.*;
-import kivo.millennium.millind.fluid.fluidType.MoltenAluminumAlloyFT;
 import net.minecraft.world.level.material.FlowingFluid;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.registries.DeferredRegister;

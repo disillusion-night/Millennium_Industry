@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 public class FusionChamberBL extends HorizontalDeviceBL {
     public FusionChamberBL() {
         super(Properties.of().destroyTime(40.0F).sound(SoundType.METAL).lightLevel(blockState -> {
-            if(blockState.getValue(POWERED)){
+            if(blockState.getValue(WORKING)){
                 return 15;
             }else {
                 return 0;

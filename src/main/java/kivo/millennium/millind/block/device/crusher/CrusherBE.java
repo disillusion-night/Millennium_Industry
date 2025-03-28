@@ -1,14 +1,12 @@
 package kivo.millennium.millind.block.device.crusher;
 
 import kivo.millennium.millind.block.device.AbstractMachineBE;
+import kivo.millennium.millind.capability.CapabilityCache;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.recipe.CrushingRecipe;
 import kivo.millennium.millind.recipe.ExtendedContainer;
-import kivo.millennium.millind.recipe.ItemComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.SimpleContainer;
-import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
@@ -24,19 +22,20 @@ public class CrusherBE extends AbstractMachineBE {
     private int progress = 0;
     private int totalTime = 100;
     private int litTime = 0;
+    private boolean isWorking;
 
 
     public CrusherBE(BlockPos pPos, BlockState pBlockState) {
-        super(MillenniumBlockEntities.Crusher_BE.get(), pPos, pBlockState);
-        this.MAX_TRANSFER_RATE = 1000;
+        super(MillenniumBlockEntities.Crusher_BE.get(), pPos, pBlockState, new CapabilityCache.Builder()
+                .withEnergy(100000, 2000)
+                .withItems(3)
+        );
     }
 
     @Override
     protected void tickServer() {
-        if (itemHandler == null || energyStorage == null) return;
-
-        ItemStack inputStack = itemHandler.getStackInSlot(INPUT_SLOT);
-        ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
+        ItemStack inputStack = getItemHandler().getStackInSlot(INPUT_SLOT);
+        ItemStack outputStack = getItemHandler().getStackInSlot(OUTPUT_SLOT);
         boolean canStartCrushing = false;
 
         if (!inputStack.isEmpty()) {
@@ -44,16 +43,17 @@ public class CrusherBE extends AbstractMachineBE {
 
             if (recipe.isPresent()) {
                 ItemStack recipeOutput = recipe.get().assemble(new ExtendedContainer(inputStack), level.registryAccess());
-                if (canCrush(outputStack, recipeOutput) && energyStorage.getEnergyStored() >= energyUsagePerTick) {
+                if (canCrush(outputStack, recipeOutput) && getEnergyStorage().getEnergyStored() >= energyUsagePerTick) {
                     canStartCrushing = true;
                 }
 
                 if (canStartCrushing) {
-                    if (!getBlockState().getValue(CrusherBL.POWERED)) {
-                        level.setBlock(getBlockPos(), getBlockState().setValue(CrusherBL.POWERED, true), 3);
+                    if (!isWorking) {
+                        isWorking = true;
+                        level.setBlock(getBlockPos(), getBlockState().setValue(CrusherBL.WORKING, true), 3);
                     }
                     progress++;
-                    energyStorage.costEnergy(energyUsagePerTick);
+                    getEnergyStorage().costEnergy(energyUsagePerTick);
                     setChanged(level, getBlockPos(), getBlockState());
 
                     if (progress >= totalTime) {
@@ -62,46 +62,38 @@ public class CrusherBE extends AbstractMachineBE {
                         setChanged(level, getBlockPos(), getBlockState());
                     }
                 } else {
-                    level.setBlock(getBlockPos(), getBlockState().setValue(CrusherBL.POWERED, false), 3);
+                    isWorking = false;
+                    level.setBlock(getBlockPos(), getBlockState().setValue(CrusherBL.WORKING, false), 3);
                 }
             }
         } else {
+            isWorking = false;
             resetProgress();
-            level.setBlock(getBlockPos(), getBlockState().setValue(CrusherBL.POWERED, false), 3);
+            level.setBlock(getBlockPos(), getBlockState().setValue(CrusherBL.WORKING, false), 3);
         }
 
     }
 
+    /*
     @Override
     protected void onContentChange(int slot) {
         if (slot == INPUT_SLOT) {
-            ItemStack inputStack = itemHandler.getStackInSlot(INPUT_SLOT);
+            ItemStack inputStack = getItemHandler().getStackInSlot(INPUT_SLOT);
             if (inputStack.isEmpty()) {
                 resetProgress();
             }
         }
+    }*/
+
+
+    public boolean isWorking() {
+        return isWorking;
     }
 
-    @Override
-    public int getSlotCount() {
-        return SLOT_COUNT;
-    }
-
-    private boolean isLit() {
-        return getBlockState().getValue(CrusherBL.POWERED);
-    }
-
-    private int getProgressPercent() {
+    public int getProgressPercent() {
         return (int) (((float) progress / totalTime) * 100);
     }
 
-    public int getProgressAndLit() {
-        if (isLit()) {
-            return getProgressPercent() << 1 | 1;
-        } else {
-            return getProgressPercent() << 1;
-        }
-    }
 
     private boolean canCrush(ItemStack outputStack, ItemStack recipeOutput) {
         if (recipeOutput.isEmpty()) {
@@ -120,30 +112,30 @@ public class CrusherBE extends AbstractMachineBE {
     }
 
     private void crushItem(ItemStack recipeOutput) {
-        ItemStack outputStack = itemHandler.getStackInSlot(OUTPUT_SLOT);
+        ItemStack outputStack = getItemHandler().getStackInSlot(OUTPUT_SLOT);
 
         if (outputStack.isEmpty()) {
-            itemHandler.setStackInSlot(OUTPUT_SLOT, recipeOutput.copy());
+            getItemHandler().setStackInSlot(OUTPUT_SLOT, recipeOutput.copy());
         } else if (outputStack.is(recipeOutput.getItem())) {
             outputStack.grow(recipeOutput.getCount());
         }
 
-        itemHandler.extractItem(INPUT_SLOT, 1, false);
+        getItemHandler().extractItem(INPUT_SLOT, 1, false);
     }
 
     private void resetProgress() {
         progress = 0;
     }
-
+    // NBT 数据读写
     @Override
-    protected void saveData(CompoundTag pTag) {
-        super.saveData(pTag);
+    protected void saveAdditional(CompoundTag pTag) {
+        super.saveAdditional(pTag);
         pTag.putInt("progress", progress);
     }
 
     @Override
-    public void loadData(CompoundTag pTag) {
-        super.loadData(pTag);
+    public void load(CompoundTag pTag) {
+        super.load(pTag);
         progress = pTag.getInt("progress");
     }
 }

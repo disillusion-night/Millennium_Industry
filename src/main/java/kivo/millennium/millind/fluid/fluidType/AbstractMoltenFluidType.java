@@ -8,10 +8,13 @@ import java.util.function.Consumer;
 
 import static kivo.millennium.millind.Main.getRL;
 
-public class MoltenCryoliteFT extends FluidType {
-    public MoltenCryoliteFT(Properties properties) {
-        super(properties.temperature(800));
+public abstract class AbstractMoltenFluidType extends FluidType {
+    private final int tintColor;
+    public AbstractMoltenFluidType(FluidType.Properties properties, int rgb) {
+        super(properties);
+        this.tintColor = 0xff000000 | rgb;
     }
+
 
     @Override
     public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
@@ -37,9 +40,8 @@ public class MoltenCryoliteFT extends FluidType {
 
             @Override
             public int getTintColor() {
-                return 0xA190c2ff;
+                return tintColor;
             }
-
         });
     }
 }

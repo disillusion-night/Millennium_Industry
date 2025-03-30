@@ -1,5 +1,6 @@
 package kivo.millennium.millind.fluid;
 
+import kivo.millennium.millind.fluid.fluidType.AbstractMoltenFluidType;
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumFluidTypes;
 import kivo.millennium.millind.init.MillenniumFluids;
@@ -49,40 +50,9 @@ public abstract class MoltenAluminumAlloyFL extends ForgeFlowingFluid {
     }
 
 
-    public static class FT extends FluidType {
-        public FT(Properties properties) {
-            super(properties.temperature(2000));
-        }
-
-        @Override
-        public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
-            consumer.accept(new IClientFluidTypeExtensions() {
-                private static final ResourceLocation STILL_TEXTURE = getRL("block/fluid/lava_still_gray");
-                private static final ResourceLocation FLOWING_TEXTURE =  getRL("block/fluid/lava_flow_gray");
-                private static final ResourceLocation OVERLAY_TEXTURE = ResourceLocation.parse("minecraft:block/lava_overlay");
-
-                @Override
-                public ResourceLocation getStillTexture() {
-                    return STILL_TEXTURE;
-                }
-
-                @Override
-                public ResourceLocation getFlowingTexture() {
-                    return FLOWING_TEXTURE;
-                }
-
-                @Override
-                public ResourceLocation getOverlayTexture() {
-                    return OVERLAY_TEXTURE;
-                }
-
-                @Override
-                public int getTintColor() {
-                    return 0xA190c2ff;
-                }
-
-            });
+    public static class FT extends AbstractMoltenFluidType {
+        public FT() {
+            super(FluidType.Properties.create().temperature(2000), 0xe9dad7);
         }
     }
-
 }

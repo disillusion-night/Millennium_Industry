@@ -1,5 +1,6 @@
 package kivo.millennium.millind.fluid;
 
+import kivo.millennium.millind.fluid.fluidType.AbstractMoltenFluidType;
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumFluidTypes;
 import kivo.millennium.millind.init.MillenniumFluids;
@@ -7,6 +8,7 @@ import net.minecraft.world.level.block.LiquidBlock;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 public abstract class MoltenIronFL extends ForgeFlowingFluid {
@@ -40,5 +42,12 @@ public abstract class MoltenIronFL extends ForgeFlowingFluid {
         public boolean isSource(FluidState state) {
             return false;
         }
+    }
+
+    public static class FT extends AbstractMoltenFluidType {
+        public FT() {
+            super(FluidType.Properties.create().temperature(2000), 0xa8a8a8);
+        }
+
     }
 }

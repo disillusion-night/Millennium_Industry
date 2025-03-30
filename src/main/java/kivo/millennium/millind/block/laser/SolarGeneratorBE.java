@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 public class SolarGeneratorBE extends AbstractMachineBE {
-    public static int basicPowerPerTick = 10;
+    public static int basicPowerPerTick = 100;
     public static int MaxCapability = (int) 1e7;;
     public static int MaxTransferRate = 100;
 

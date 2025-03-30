@@ -24,20 +24,13 @@ public class MeltingRecipe extends GenericRecipe {
         }
     }
 
-    public ItemComponent getInput() {
-        return (ItemComponent) this.inputs.get(0);
-    }
-
     public FluidComponent getOutput() {
         return (FluidComponent) this.outputs.get(0);
     }
 
     @Override
-    public boolean matches(ExtendedContainer pContainer, Level pLevel) {
-        if (pLevel.isClientSide()) {
-            return false;
-        }
-        return getInput().getItemStack().is(pContainer.getItem(0).getItem());
+    public ComponentCollection getCollection(ExtendedContainer container) {
+        return new ComponentCollection().addItemStack(container.getItem(0));
     }
 
     @Override
@@ -76,39 +69,6 @@ public class MeltingRecipe extends GenericRecipe {
 
         public Serializer(RecipeFactory<MeltingRecipe> factory) {
             super(factory);
-        }
-
-        @Override
-        protected RecipeComponent createComponentFromJson(JsonElement element) {
-            if (element.isJsonObject()) {
-                JsonObject jsonObject = element.getAsJsonObject();
-                if (jsonObject.has("item")) {
-                    ItemComponent component = new ItemComponent(ItemStack.EMPTY);
-                    component.readFromJson(jsonObject);
-                    return component;
-                } else if (jsonObject.has("fluid")) {
-                    FluidComponent component = new FluidComponent(null);
-                    component.readFromJson(jsonObject);
-                    return component;
-                }
-            } else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
-                ItemComponent component = new ItemComponent(ItemStack.EMPTY);
-                JsonObject tempJson = new JsonObject();
-                tempJson.addProperty("item", element.getAsString());
-                component.readFromJson(tempJson);
-                return component;
-            }
-            return null;
-        }
-
-        @Override
-        protected RecipeComponent createComponentFromNetwork(String type) {
-            if ("item".equals(type)) {
-                return new ItemComponent(ItemStack.EMPTY);
-            } else if ("fluid".equals(type)) {
-                return new FluidComponent(null);
-            }
-            return null;
         }
     }
 

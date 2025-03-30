@@ -1,4 +1,4 @@
-// 1.20.1	2025-03-27T17:20:56.8955276	Block States: millind
+// 1.20.1	2025-03-30T15:04:19.3077916	Block States: millind
 1912dac34d7503392544ce3f7cd97f1f75493a66 assets/millind/blockstates/aluminum_alloy_block.json
 aa4df048cfb75522f7fa5a02ab880c23bce992fc assets/millind/blockstates/aluminum_block.json
 7f7b678c7a77442cdb5569f507be864098de3734 assets/millind/blockstates/aluminum_ore.json
@@ -14,6 +14,7 @@ e3727a16bcc34a293fc40bb756f704dc122d34e3 assets/millind/blockstates/melting_furn
 c9fddb41282bf821072e5022c9c951548948ad13 assets/millind/blockstates/nether_star_laser.json
 fc1d779db0f8bbe263ef639079523206332ce16d assets/millind/blockstates/raw_aluminum_block.json
 b400654875b0906bf4b5998d09203a38be86ae47 assets/millind/blockstates/raw_lead_block.json
+f3ea852db214403dd99d29331d3c878a29340d72 assets/millind/blockstates/resonance_chamber.json
 688476e184d616dda53289dc78c93bd6b4447e98 assets/millind/blockstates/solar_generator.json
 de0c7770c8cf0c4fe11ee4dd5d9cac5a9e93ac3e assets/millind/blockstates/steel_block.json
 9ccf19d99713f6250b5643d86ce03bae19e9fcdb assets/millind/models/block/crusher.json
@@ -50,5 +51,6 @@ d5da5b2a67c20279f1ad1a8c3afce8fe5d363273 assets/millind/models/item/melting_furn
 fe11c227398749bfcba561fc8acffcc86c7c3810 assets/millind/models/item/nether_star_laser.json
 749928b1732fb0c475ccd99042d7cfa448bf2ba1 assets/millind/models/item/raw_aluminum_block.json
 f27c63796a3dbf4ad6003e3597ac8577b61b6152 assets/millind/models/item/raw_lead_block.json
+392d61d0a74a46fc6775cff091929ea2ac0d0484 assets/millind/models/item/resonance_chamber.json
 f319d5b231892ae5340750fa5880e007b1ffd3e6 assets/millind/models/item/solar_generator.json
 95913c4977d388f7a03175e615182bb41e0702d8 assets/millind/models/item/steel_block.json

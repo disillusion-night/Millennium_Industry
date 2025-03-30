@@ -4,7 +4,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
@@ -12,38 +11,25 @@ import java.util.Arrays;
 import java.util.List;
 
 import static kivo.millennium.millind.Main.getRL;
-import static kivo.millennium.millind.Main.log;
 
 public class CrushingRecipe extends GenericRecipe {
     public CrushingRecipe(ResourceLocation id, ItemComponent input, ItemComponent output, int time) {
         super(id, Arrays.asList(input), Arrays.asList(output), time);
     }
 
-    public ItemComponent getInput() {
-        return (ItemComponent) this.inputs.get(0);
-    }
-
-    public ItemComponent getOutput() {
-        return (ItemComponent) this.outputs.get(0);
-    }
-
     @Override
-    public boolean matches(ExtendedContainer pContainer, Level pLevel) {
-        if (pLevel.isClientSide()) {
-            return false;
-        }
-        return getInput().getItemStack().is(pContainer.getItem(0).getItem());
+    public ComponentCollection getCollection(ExtendedContainer container) {
+        return new ComponentCollection().addItemStack(container.getItem(0));
     }
 
     @Override
     public ItemStack assemble(ExtendedContainer pContainer, RegistryAccess pRegistryAccess) {
-        log(getOutput().getItemStack().getItem().toString());
-        return getOutput().getItemStack().copy();
+        return ((ItemComponent) this.outputs.get(0)).getItemStack().copy();
     }
 
     @Override
     public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
-        return getOutput().getItemStack().copy();
+        return ((ItemComponent) this.outputs.get(0)).getItemStack().copy();
     }
 
     @Override
@@ -69,33 +55,6 @@ public class CrushingRecipe extends GenericRecipe {
 
         public Serializer(CrushingRecipeFactory factory) {
             super(factory);
-        }
-
-        @Override
-        protected RecipeComponent createComponentFromJson(JsonElement element) {
-            if (element.isJsonObject()) {
-                JsonObject jsonObject = element.getAsJsonObject();
-                if (jsonObject.has("item")) {
-                    ItemComponent component = new ItemComponent(ItemStack.EMPTY);
-                    component.readFromJson(jsonObject);
-                    return component;
-                }
-            } else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
-                ItemComponent component = new ItemComponent(ItemStack.EMPTY);
-                JsonObject tempJson = new JsonObject();
-                tempJson.addProperty("item", element.getAsString());
-                component.readFromJson(tempJson);
-                return component;
-            }
-            return null; // 或者抛出异常
-        }
-
-        @Override
-        protected RecipeComponent createComponentFromNetwork(String type) {
-            if ("item".equals(type)) {
-                return new ItemComponent(ItemStack.EMPTY);
-            }
-            return null; // 或者抛出异常
         }
     }
 

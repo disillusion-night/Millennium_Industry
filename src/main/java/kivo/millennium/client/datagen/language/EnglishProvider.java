@@ -1,6 +1,7 @@
 package kivo.millennium.client.datagen.language;
 
 
+import kivo.millennium.millind.capability.MillenniumItemStorage;
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumCreativeTab;
 import kivo.millennium.millind.init.MillenniumFluidTypes;
@@ -27,6 +28,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.CRUSHER_BL.get(), "Crusher");
         add(MillenniumBlocks.FUSION_CHAMBER_BL.get(), "Fusion Chamber");
         add(MillenniumBlocks.MELTING_FURNACE_BL.get(), "Melting Furnace");
+        add(MillenniumBlocks.RESONANCE_CHAMBER_BL.get(), "Resonance Chamber");
         add(MillenniumBlocks.SOLAR_GENERATOR.get(), "Solar Generator");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "High-Purity Wolfsegg Steel");

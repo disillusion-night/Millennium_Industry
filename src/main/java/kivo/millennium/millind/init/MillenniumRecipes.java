@@ -3,6 +3,7 @@ package kivo.millennium.millind.init;
 import kivo.millennium.millind.recipe.CrushingRecipe;
 import kivo.millennium.millind.recipe.FusionRecipe;
 import kivo.millennium.millind.recipe.MeltingRecipe;
+import kivo.millennium.millind.recipe.ResonanceRecipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -25,6 +26,9 @@ public class MillenniumRecipes {
 
     public static final RegistryObject<RecipeSerializer<FusionRecipe>> FUSION_RECIPE =
             SERIALIZERS.register("fusion", () -> FusionRecipe.Serializer.INSTANCE);
+
+    public static final RegistryObject<RecipeSerializer<ResonanceRecipe>> RESONANCE_RECIPE =
+            SERIALIZERS.register("resonance", () -> ResonanceRecipe.Serializer.INSTANCE);
 
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);

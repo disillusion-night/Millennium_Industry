@@ -1,4 +1,4 @@
-package kivo.millennium.millind.block.device.FusionFurnace;
+package kivo.millennium.millind.block.device.FusionChamber;
 
 import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.block.laser.HorizontalDeviceBL;

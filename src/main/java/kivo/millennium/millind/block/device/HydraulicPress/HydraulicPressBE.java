@@ -13,6 +13,8 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
 
+import static kivo.millennium.millind.block.device.MillenniumBlockProperty.WORKING;
+
 public class HydraulicPressBE extends AbstractMachineBE {
     public static final int SLOT_COUNT = 4;
     public static int BATTERY_SLOT = 0;
@@ -20,7 +22,6 @@ public class HydraulicPressBE extends AbstractMachineBE {
     public static int INPUT2_SLOT = 2;
     public static int OUTPUT_SLOT = 3;
     private final int energyUsagePerTick = 200;
-    private int progress = 0;
     private int totalTime = 100;
     private boolean isWorking;
 
@@ -48,30 +49,56 @@ public class HydraulicPressBE extends AbstractMachineBE {
 
                 if (canStartCrushing) {
                     if(!isWorking){
-                        isWorking = true;
-                        level.setBlock(getBlockPos(),getBlockState().setValue(HydraulicPressBL.WORKING, true), 3);
+                        startWorking();
                     }
-                    progress++;
+                    addProgress();
                     getEnergyStorage().costEnergy(energyUsagePerTick);
-                    setChanged(level, getBlockPos(), getBlockState());
 
-                    if (progress >= totalTime) {
+                    if (getProgress() >= totalTime) {
                         crushItem(recipeOutput);
                         resetProgress();
-                        setChanged(level, getBlockPos(), getBlockState());
                     }
+                    setChanged();
                 } else {
-                    isWorking = false;
-                    level.setBlock(getBlockPos(), getBlockState().setValue(HydraulicPressBL.WORKING, false), 3);
+                    resetProgress();
+                    stopWorking();
                 }
             }
         } else {
-            isWorking = false;
             resetProgress();
-            level.setBlock(getBlockPos(),getBlockState().setValue(HydraulicPressBL.WORKING, false), 3);
+            stopWorking();
         }
 
     }
+
+
+    private void addProgress(){
+        cache.addProgress(1);
+    }
+
+    private int getProgress(){
+        return cache.getProgress();
+    }
+    private void resetProgress() {
+        cache.setProgress(0);
+    }
+
+    public int getProgressPercent() {
+        return (int) (((float) getProgress() / totalTime) * 100);
+    }
+
+
+    private void startWorking(){
+        isWorking = true;
+        level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, true), 3);
+    }
+
+    private void stopWorking(){
+        isWorking = false;
+        level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, false), 3);
+
+    }
+    /*
 
     protected SimpleContainer getInputs(){
         return new SimpleContainer();
@@ -94,9 +121,6 @@ public class HydraulicPressBE extends AbstractMachineBE {
         return getBlockState().getValue(HydraulicPressBL.WORKING);
     }
 
-    public int getProgressPercent() {
-        return (int) (((float) progress / totalTime) * 100);
-    }
 
     public int getProgressAndLit() {
         if (isWorking()) {
@@ -133,22 +157,5 @@ public class HydraulicPressBE extends AbstractMachineBE {
 
         getItemHandler().extractItem(INPUT1_SLOT, 1, false);
         getItemHandler().extractItem(INPUT2_SLOT, 1, false);
-    }
-
-    private void resetProgress() {
-        progress = 0;
-    }
-
-    // NBT 数据读写
-    @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
-        pTag.putInt("progress", progress);
-    }
-
-    @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
-        progress = pTag.getInt("progress");
     }
 }

@@ -24,6 +24,7 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.CRUSHER_BL.get(), "粉碎机");
         add(MillenniumBlocks.FUSION_CHAMBER_BL.get(), "混融室");
         add(MillenniumBlocks.MELTING_FURNACE_BL.get(), "熔融炉");
+        add(MillenniumBlocks.RESONANCE_CHAMBER_BL.get(), "谐振仓");
         add(MillenniumBlocks.SOLAR_GENERATOR.get(), "太阳能发电机");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "高纯度沃普赛克钢铁");

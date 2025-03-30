@@ -16,11 +16,12 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import java.util.Optional;
 
+import static kivo.millennium.millind.block.device.MillenniumBlockProperty.WORKING;
+
 public class MeltingFurnaceBE extends AbstractMachineBE{
     public static final int SLOT_COUNT = 2;
     public static final int BATTERY_SLOT = 0;
     public static final int INPUT_SLOT = 1;
-    private int progress = 0;
     private int totalTime = 100;
     private FluidStack currentRecipeOutput = FluidStack.EMPTY;
     private static final int FLUID_CAPACITY = 12000; // 毫升
@@ -32,6 +33,7 @@ public class MeltingFurnaceBE extends AbstractMachineBE{
                 .withEnergy(100000, 2000)
                 .withFluid(1, FLUID_CAPACITY)
                 .withItems(2)
+                .withProgress()
         );
     }
 
@@ -59,27 +61,43 @@ public class MeltingFurnaceBE extends AbstractMachineBE{
 
                 if (this.canProcess(recipeOutput)) {
                     if(!isWorking){
-                        isWorking = true;
-                        level.setBlock(getBlockPos(),getBlockState().setValue(MeltingFurnaceBL.WORKING, true), 3);
+                        startWorking();
                     }
                     this.totalTime = recipeMeltingTime; // 从配方中获取熔融时间
                     this.currentRecipeOutput = recipeOutput;
-                    this.progress++;
                     this.setChanged();
-                    if (this.progress >= this.totalTime) {
-                        this.progress = 0;
+                    addProgress();
+                    if (getProgress() >= this.totalTime) {
+                        resetProgress();
                         this.meltItem(recipeOutput);
                     }
                 } else {
-                    isWorking = false;
-                    level.setBlock(getBlockPos(),getBlockState().setValue(MeltingFurnaceBL.WORKING, false), 3);
+                    stopWorking();
                 }
             });
         } else {
-            isWorking = false;
             resetProgress();
-            level.setBlock(getBlockPos(),getBlockState().setValue(MeltingFurnaceBL.WORKING, false), 3);
+            stopWorking();
         }
+    }
+
+    private void addProgress(){
+        cache.addProgress(1);
+    }
+
+    private int getProgress(){
+        return cache.getProgress();
+    }
+
+    private void startWorking(){
+        isWorking = true;
+        level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, true), 3);
+    }
+
+    private void stopWorking(){
+        isWorking = false;
+        level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, false), 3);
+
     }
 
     private boolean canProcess(FluidStack recipeOutput) {
@@ -98,14 +116,13 @@ public class MeltingFurnaceBE extends AbstractMachineBE{
     }
 
     private void resetProgress() {
-        this.progress = 0;
-        this.totalTime = 0;
+        cache.setProgress(0);
         this.currentRecipeOutput = FluidStack.EMPTY;
         this.setChanged();
     }
 
     public int getProgressPercent() {
-        return (int) (((float) progress / totalTime) * 100);
+        return (int) (((float) getProgress() / totalTime) * 100);
     }
 
     @Override
@@ -113,19 +130,6 @@ public class MeltingFurnaceBE extends AbstractMachineBE{
         return isWorking;
     }
 
-
-    // NBT 数据读写
-    @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
-        pTag.putInt("progress", progress);
-    }
-
-    @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
-        progress = pTag.getInt("progress");
-    }
 
     @Override
     public void setCapabilityChanged(CapabilityType type) {

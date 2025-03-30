@@ -72,7 +72,8 @@ public abstract class AbstractMachineBE extends BlockEntity implements IWorkingM
     protected void setCapabilityChanged(CapabilityType type){
         setChanged();
     }
-    // 数据包同步（用于GUI更新等）
+
+    // 数据包同步（用于GUI更新 等）
     @Nullable
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {
@@ -122,6 +123,10 @@ public abstract class AbstractMachineBE extends BlockEntity implements IWorkingM
     @Override
     public void reviveCaps() {
         super.reviveCaps();
+    }
+
+    public MillenniumFluidStorage getFluidHandler() {
+        return cache.getFluidCapability();
     }
 
     public MillenniumItemStorage getItemHandler() {

@@ -1,6 +1,7 @@
 package kivo.millennium.millind.container.Device;
 
 import kivo.millennium.millind.block.device.AbstractMachineBE;
+import kivo.millennium.millind.capability.CapabilityCache;
 import kivo.millennium.millind.capability.MillenniumEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.Container;
@@ -12,10 +13,13 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemStackHandler;
 import org.joml.Vector2i;
 
-public abstract class AbstractDeviceMenu extends AbstractContainerMenu {
+import java.util.List;
+
+public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends AbstractContainerMenu {
 
     protected int SLOT_COUNT;
     protected int power;
@@ -27,6 +31,7 @@ public abstract class AbstractDeviceMenu extends AbstractContainerMenu {
     protected ItemStackHandler itemHandler;
     protected MillenniumEnergyStorage energyStorage;
     protected Level level;
+    protected FluidStack[] fluidStacks;
 
     protected AbstractDeviceMenu(MenuType<?> pType, int pContainerId, Player player, BlockPos pos, Container pContainer) {
         super(pType, pContainerId);
@@ -35,15 +40,27 @@ public abstract class AbstractDeviceMenu extends AbstractContainerMenu {
         this.pos = pos;
         BlockEntity entity = level.getBlockEntity(pos);
         if (entity instanceof AbstractMachineBE deviceBE) {
-            setupDataSlot(pContainer, deviceBE);
-            setupSlot(pContainer, deviceBE);
+            setupDataSlot(pContainer, (M) deviceBE);
+            setupSlot(pContainer,(M) deviceBE);
             layoutPlayerInventorySlots(player.getInventory(), this.getPlayerInvPos());
         } else {
             throw new IllegalStateException("Container Provider is not valid BlockEntity"); // 如果方块实体类型不匹配，抛出异常
         }
     }
 
-    protected void setupDataSlot(Container container, AbstractMachineBE deviceBE) {
+    protected void setupDataSlot(Container container, M deviceBE) {
+        addEnergySlot(deviceBE);
+        /*
+        CapabilityCache cache = deviceBE.cache;
+        if (cache.getFluidCapability() != null){
+            for (int i = 0; i < cache.getFluidCapability().getFluids().size(); i++) {
+                addFluidSlot();
+            }
+        }*/
+    }
+
+
+    protected void addEnergySlot(M deviceBE){
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
@@ -89,8 +106,9 @@ public abstract class AbstractDeviceMenu extends AbstractContainerMenu {
             }
         });
     }
+
     // 设置容器的物品槽位，子类需要覆写此方法以添加自定义槽位
-    protected void setupSlot(Container container, AbstractMachineBE deviceBE) {
+    protected void setupSlot(Container container, M deviceBE) {
         this.addBatterySlot(container, deviceBE.getItemHandler());
     }
 

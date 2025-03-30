@@ -1,0 +1,12 @@
+{
+  "type": "millind:crushing",
+  "category": "misc",
+  "experience": 0.0,
+  "ingredient": {
+    "item": "millind:raw_aluminum"
+  },
+  "result": {
+    "item": "millind:raw_aluminum_dust"
+  },
+  "time": 100
+}

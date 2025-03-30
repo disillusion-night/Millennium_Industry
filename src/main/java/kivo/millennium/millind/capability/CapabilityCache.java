@@ -1,5 +1,6 @@
 package kivo.millennium.millind.capability;
 
+import kivo.millennium.millind.init.MillenniumItems;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraftforge.common.capabilities.Capability;
@@ -10,6 +11,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.items.IItemHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.spongepowered.asm.util.IConsumer;
 
 import java.util.function.Consumer;
 
@@ -17,13 +19,15 @@ import static kivo.millennium.millind.capability.CapabilityType.*;
 
 
 public class CapabilityCache {
-    private boolean hasFluidCapability;
+    private final boolean hasFluidCapability;
     private final boolean hasItemCapability;
     private final boolean hasEnergyCapability;
+    private final boolean hasProgress;
 
     private MillenniumFluidStorage fluidCapability;
     private MillenniumItemStorage itemCapability;
     private MillenniumEnergyStorage energyCapability;
+    private int progress;
 
     private LazyOptional<IFluidHandler> fluidHandlerLazy;
     private LazyOptional<IItemHandler> itemHandlerLazy;
@@ -34,12 +38,14 @@ public class CapabilityCache {
         this.hasFluidCapability = builder.hasFluidCapability;
         this.hasItemCapability = builder.hasItemCapability;
         this.hasEnergyCapability = builder.hasEnergyCapability;
+        this.hasProgress = builder.hasProgress;
         this.fluidCapability = builder.fluidCapability;
         this.fluidHandlerLazy = LazyOptional.of(() -> this.fluidCapability);
         this.itemCapability = builder.itemCapability;
         this.itemHandlerLazy = LazyOptional.of(() -> this.itemCapability);
         this.energyCapability = builder.energyCapability;
         this.energyHandlerLazy = LazyOptional.of(() -> this.energyCapability);
+        this.progress = builder.progress;
     }
 
     public @NotNull <T> LazyOptional<T> getCapability(@NotNull Capability<T> cap, @Nullable Direction side) {
@@ -55,14 +61,21 @@ public class CapabilityCache {
         return LazyOptional.empty();
     }
 
-    public CapabilityCache withItems() {
-        this.itemCapability = new MillenniumItemStorage(){
-            @Override
-            protected void onContentsChanged(int slot){
-               CapabilityCache.this.onContentsChanged(ITEM);
-            }
-        };
-        return this;
+
+    public int addProgress(int count){
+        if (!hasProgress) return -1;
+        this.progress += count;
+        return this.progress;
+    }
+
+    public void setProgress(int progress){
+        if (!hasProgress) return;
+        this.progress = progress;
+    }
+
+    public int getProgress(){
+        if (!hasProgress) return -1;
+        return progress;
     }
 
     public void onContentsChanged(CapabilityType capabilityType) {
@@ -72,10 +85,12 @@ public class CapabilityCache {
         private boolean hasFluidCapability = false;
         private boolean hasItemCapability = false;
         private boolean hasEnergyCapability = false;
+        private boolean hasProgress = false;
 
         private MillenniumFluidStorage fluidCapability = null;
         private MillenniumItemStorage itemCapability = null;
         private MillenniumEnergyStorage energyCapability = null;
+        private int progress = 0;
 
         private Consumer<CapabilityType> capabilityTypeConsumer;
 
@@ -111,10 +126,22 @@ public class CapabilityCache {
             return this;
         }
 
+        public Builder withItems(MillenniumItemStorage storage){
+            this.hasItemCapability = true;
+            this.itemCapability = storage;
+            return this;
+        }
+
         public Builder withEnergy(int capacity, int maxTransfer) {
              this.hasEnergyCapability = true;
              this.energyCapability = new MillenniumEnergyStorage(capacity, maxTransfer);
              return this;
+        }
+
+        public Builder withProgress(){
+            this.progress = 0;
+            this.hasProgress = true;
+            return this;
         }
 
         public CapabilityCache build(Consumer<CapabilityType> consumer) {
@@ -146,6 +173,9 @@ public class CapabilityCache {
         if(hasItemCapability){
             tag.put(ITEM.toString(), itemCapability.serializeNBT());
         }
+        if(hasProgress){
+            tag.putInt(PROGRESS.toString(), progress);
+        }
         nbt.put(CACHE.toString(), tag);
     }
 
@@ -160,6 +190,9 @@ public class CapabilityCache {
         if(tag.contains(ITEM.toString())){
             itemCapability.deserializeNBT(tag.getCompound(ITEM.toString()));
         }
+        if(tag.contains(PROGRESS.toString())){
+           progress = tag.getInt(PROGRESS.toString());
+        }
     }
 
     public void inValidCaps(){
@@ -171,6 +204,9 @@ public class CapabilityCache {
         }
         if(hasItemCapability){
             itemHandlerLazy.invalidate();
+        }
+        if (hasProgress){
+            progress = 0;
         }
     }
 }

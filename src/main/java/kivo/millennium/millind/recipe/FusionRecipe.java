@@ -12,6 +12,7 @@ import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fluids.FluidStack;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -25,10 +26,6 @@ public class FusionRecipe extends GenericRecipe {
         }
     }
 
-    public ItemComponent getInputItem() {
-        return (ItemComponent) this.inputs.get(0);
-    }
-
     public FluidComponent getInputFluid() {
         return (FluidComponent) this.inputs.get(1);
     }
@@ -38,11 +35,10 @@ public class FusionRecipe extends GenericRecipe {
     }
 
     @Override
-    public boolean matches(ExtendedContainer container, Level pLevel) {
-        if (pLevel.isClientSide()) {
-            return false;
-        }
-        return getInputItem().getItemStack().is(container.getItem(0).getItem()) && getInputFluid().getFluidStack().getFluid() == container.getFluid(0).getFluid();
+    public ComponentCollection getCollection(ExtendedContainer container) {
+        return new ComponentCollection()
+                .addItemStack(container.getItem(0))
+                .addFluid(container.getFluid(0));
     }
 
 
@@ -77,39 +73,6 @@ public class FusionRecipe extends GenericRecipe {
 
         public Serializer(RecipeFactory<FusionRecipe> factory) {
             super(factory);
-        }
-
-        @Override
-        protected RecipeComponent createComponentFromJson(JsonElement element) {
-            if (element.isJsonObject()) {
-                JsonObject jsonObject = element.getAsJsonObject();
-                if (jsonObject.has("item")) {
-                    ItemComponent component = new ItemComponent(ItemStack.EMPTY);
-                    component.readFromJson(jsonObject);
-                    return component;
-                } else if (jsonObject.has("fluid")) {
-                    FluidComponent component = new FluidComponent(null);
-                    component.readFromJson(jsonObject);
-                    return component;
-                }
-            } else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
-                ItemComponent component = new ItemComponent(ItemStack.EMPTY);
-                JsonObject tempJson = new JsonObject();
-                tempJson.addProperty("item", element.getAsString());
-                component.readFromJson(tempJson);
-                return component;
-            }
-            return null;
-        }
-
-        @Override
-        protected RecipeComponent createComponentFromNetwork(String type) {
-            if ("item".equals(type)) {
-                return new ItemComponent(ItemStack.EMPTY);
-            } else if ("fluid".equals(type)) {
-                return new FluidComponent(null);
-            }
-            return null;
         }
     }
 

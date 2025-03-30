@@ -1,9 +1,12 @@
 package kivo.millennium.millind.init;
 
-import kivo.millennium.millind.block.device.FusionFurnace.FusionChamberBL;
+import kivo.millennium.millind.block.device.FusionChamber.FusionChamberBL;
 import kivo.millennium.millind.block.device.HydraulicPress.HydraulicPressBL;
 import kivo.millennium.millind.block.device.MeltingFurnace.MeltingFurnaceBL;
+import kivo.millennium.millind.block.device.MolecularReformer.MolecularReformerBL;
+import kivo.millennium.millind.block.device.ResonanceChamber.ResonanceChamberBL;
 import kivo.millennium.millind.block.device.crusher.CrusherBL;
+import kivo.millennium.millind.block.device.crylizer.CrystallizerBL;
 import kivo.millennium.millind.block.fluid.*;
 import kivo.millennium.millind.block.fluidContainer.MetalTankBL;
 import kivo.millennium.millind.block.generator.GeneratorBL;
@@ -53,6 +56,12 @@ public class MillenniumBlocks {
     public static final RegistryObject<HydraulicPressBL> HYDRAULIC_PRESS_BL = registerWithItem("hydraulic_press", HydraulicPressBL::new,  MillenniumItems.ENGINEERING_PARTS);
 
     public static final RegistryObject<CrusherBL> CRUSHER_BL = registerWithItem("crusher", CrusherBL::new, MillenniumItems.ENGINEERING_PARTS);
+
+    public static final RegistryObject<ResonanceChamberBL> RESONANCE_CHAMBER_BL = registerWithItem("resonance_chamber", ResonanceChamberBL::new, MillenniumItems.ENGINEERING_PARTS);
+
+    public static final RegistryObject<MolecularReformerBL> MOLECULAR_REFORMER_BL = registerWithItem("molecular_reformer", MolecularReformerBL::new, MillenniumItems.ENGINEERING_PARTS);
+
+    public static final RegistryObject<CrystallizerBL> CRYSTALLIZER_BL = registerWithItem("crystallizer", CrystallizerBL::new, MillenniumItems.ENGINEERING_PARTS);
 
     public static final RegistryObject<SolarGeneratorBL> SOLAR_GENERATOR = registerWithItem("solar_generator", SolarGeneratorBL::new, MillenniumItems.ENGINEERING_PARTS);
 

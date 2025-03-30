@@ -1,8 +1,7 @@
-package kivo.millennium.millind.block.device.FusionFurnace;
+package kivo.millennium.millind.block.device.FusionChamber;
 
 import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.capability.CapabilityCache;
-import kivo.millennium.millind.capability.MillenniumEnergyStorage;
 import kivo.millennium.millind.capability.MillenniumFluidStorage;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.init.MillenniumFluids;
@@ -10,7 +9,6 @@ import kivo.millennium.millind.recipe.ExtendedContainer;
 import kivo.millennium.millind.recipe.FusionRecipe;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;

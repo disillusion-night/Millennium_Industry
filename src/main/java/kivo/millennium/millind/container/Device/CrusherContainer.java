@@ -14,7 +14,7 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.level.block.Block;
 import org.joml.Vector2i;
 
-public class CrusherContainer extends AbstractDeviceMenu {
+public class CrusherContainer extends AbstractDeviceMenu<CrusherBE> {
     private static final Vector2i inputpos = new Vector2i(53, 35);
     private static final Vector2i outputpos = new Vector2i(107, 35);
     private int progressAndLit;
@@ -23,7 +23,7 @@ public class CrusherContainer extends AbstractDeviceMenu {
     }
 
     @Override
-    protected void setupSlot(Container container, AbstractMachineBE deviceBE) {
+    protected void setupSlot(Container container, CrusherBE deviceBE) {
         super.setupSlot(container, deviceBE);
         addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), CrusherBE.INPUT_SLOT, inputpos));
         addSlot(new DeviceOutputSlot(container, deviceBE.getItemHandler(), CrusherBE.OUTPUT_SLOT, outputpos));
@@ -31,13 +31,12 @@ public class CrusherContainer extends AbstractDeviceMenu {
 
 
     @Override
-    protected void setupDataSlot(Container container, AbstractMachineBE deviceBE) {
+    protected void setupDataSlot(Container container, CrusherBE deviceBE) {
         super.setupDataSlot(container, deviceBE);
-        CrusherBE be = (CrusherBE) deviceBE;
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return be.getProgressAndLit() & 0xffff;
+                return deviceBE.getProgressAndLit() & 0xffff;
             }
 
             @Override

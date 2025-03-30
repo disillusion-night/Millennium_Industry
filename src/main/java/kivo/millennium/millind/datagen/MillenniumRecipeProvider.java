@@ -77,66 +77,67 @@ public class MillenniumRecipeProvider extends RecipeProvider {
                 .withIngotFromBlockRecipe()
                 .build();
 
-        crushing(pWriter, Items.STONE, RecipeCategory.MISC, Items.GRAVEL, 100);
-        crushing(pWriter, Items.GRAVEL, RecipeCategory.MISC, Items.SAND, 100);
+        crushing(pWriter, Items.STONE, RecipeCategory.MISC, Items.GRAVEL, 100, 1000);
+        crushing(pWriter, Items.GRAVEL, RecipeCategory.MISC, Items.SAND, 100, 1000);
 
-        crushing(pWriter, MillenniumItems.CRYOLITE.get(), RecipeCategory.MISC, MillenniumItems.CRYOLITE_DUST.get(), 100);
+        crushing(pWriter, MillenniumItems.CRYOLITE.get(), RecipeCategory.MISC, MillenniumItems.CRYOLITE_DUST.get(), 100, 1000);
+        crushing(pWriter, MillenniumItems.RAW_ALUMINUM.get(), RecipeCategory.MISC, MillenniumItems.RAW_ALUMINUM_DUST.get(), 100, 1000);
 
         crushing(pWriter, Items.REDSTONE_BLOCK, RecipeCategory.REDSTONE, Items.REDSTONE, 9, 100);
-        crushing(pWriter, Items.COPPER_INGOT, RecipeCategory.MISC, MillenniumItems.COPPER_DUST.get(), 100);
-        crushing(pWriter, Items.IRON_INGOT, RecipeCategory.MISC, MillenniumItems.IRON_DUST.get(), 100);
-        crushing(pWriter, Items.GOLD_INGOT, RecipeCategory.MISC, MillenniumItems.GOLD_DUST.get(), 100);
+        crushing(pWriter, Items.COPPER_INGOT, RecipeCategory.MISC, MillenniumItems.COPPER_DUST.get(), 100, 1000);
+        crushing(pWriter, Items.IRON_INGOT, RecipeCategory.MISC, MillenniumItems.IRON_DUST.get(), 100, 1000);
+        crushing(pWriter, Items.GOLD_INGOT, RecipeCategory.MISC, MillenniumItems.GOLD_DUST.get(), 100, 1000);
 
-        melting(pWriter, Items.ICE, RecipeCategory.MISC, new FluidStack(Fluids.WATER, 1000), 100);
-        melting(pWriter, Items.BLUE_ICE, RecipeCategory.MISC, new FluidStack(Fluids.WATER, 1000), 100);
-        melting(pWriter, Items.PACKED_ICE, RecipeCategory.MISC, new FluidStack(Fluids.WATER, 1000), 100);
+        melting(pWriter, Items.ICE, RecipeCategory.MISC, new FluidStack(Fluids.WATER, 1000), 100, 1000);
+        melting(pWriter, Items.BLUE_ICE, RecipeCategory.MISC, new FluidStack(Fluids.WATER, 1000), 100, 1000);
+        melting(pWriter, Items.PACKED_ICE, RecipeCategory.MISC, new FluidStack(Fluids.WATER, 1000), 100, 1000);
 
-        melting(pWriter, Items.STONE, RecipeCategory.MISC, new FluidStack(Fluids.LAVA, 1000), 100);
-        melting(pWriter, Items.SMOOTH_STONE, RecipeCategory.MISC, new FluidStack(Fluids.LAVA, 1000), 100);
-        melting(pWriter, Items.COBBLESTONE, RecipeCategory.MISC, new FluidStack(Fluids.LAVA, 1000), 100);
+        melting(pWriter, Items.STONE, RecipeCategory.MISC, new FluidStack(Fluids.LAVA, 1000), 100, 1000);
+        melting(pWriter, Items.SMOOTH_STONE, RecipeCategory.MISC, new FluidStack(Fluids.LAVA, 1000), 100, 1000);
+        melting(pWriter, Items.COBBLESTONE, RecipeCategory.MISC, new FluidStack(Fluids.LAVA, 1000), 100, 1000);
 
-        melting(pWriter, MillenniumItems.ALUMINUM_INGOT.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM.get(), 100), 100);
-        melting(pWriter, MillenniumBlocks.ALUMINUM_BLOCK.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM.get(), 900), 100);
+        melting(pWriter, MillenniumItems.ALUMINUM_INGOT.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM.get(), 100), 100, 1000);
+        melting(pWriter, MillenniumBlocks.ALUMINUM_BLOCK.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM.get(), 900), 100, 1000);
 
-        melting(pWriter, Items.IRON_INGOT, RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_IRON.get(), 100), 100);
-        melting(pWriter, Items.IRON_BLOCK, RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_IRON.get(), 900), 100);
+        melting(pWriter, Items.IRON_INGOT, RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_IRON.get(), 100), 100, 1000);
+        melting(pWriter, Items.IRON_BLOCK, RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_IRON.get(), 900), 100, 1000);
 
-        melting(pWriter, MillenniumItems.STEEL_INGOT.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_STEEL.get(), 100), 100);
-        melting(pWriter, MillenniumBlocks.STEEL_BLOCK.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_STEEL.get(), 900), 100);
+        melting(pWriter, MillenniumItems.STEEL_INGOT.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_STEEL.get(), 100), 100, 1000);
+        melting(pWriter, MillenniumBlocks.STEEL_BLOCK.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_STEEL.get(), 900), 100, 1000);
 
-        melting(pWriter, MillenniumItems.ALUMINUM_ALLOY_INGOT.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM_ALLOY.get(), 100), 100);
-        melting(pWriter, MillenniumBlocks.ALUMINUM_ALLOY_BLOCK.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM_ALLOY.get(), 900), 100);
+        melting(pWriter, MillenniumItems.ALUMINUM_ALLOY_INGOT.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM_ALLOY.get(), 100), 100, 1000);
+        melting(pWriter, MillenniumBlocks.ALUMINUM_ALLOY_BLOCK.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM_ALLOY.get(), 900), 100, 1000);
 
-        melting(pWriter, MillenniumItems.CRYOLITE_DUST.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_CRYOLITE.get(), 100), 100);
+        melting(pWriter, MillenniumItems.CRYOLITE_DUST.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_CRYOLITE.get(), 100), 100, 1000);
 
-        fusion(pWriter, MillenniumItems.RAW_ALUMINUM_DUST.get(), new FluidStack(MillenniumFluids.MOLTEN_CRYOLITE.get(), 100), RecipeCategory.MISC, new FluidStack(MillenniumFluids.RAW_MOLTEN_ALUMINUM.get(), 100), 200);
+        fusion(pWriter, MillenniumItems.RAW_ALUMINUM_DUST.get(), new FluidStack(MillenniumFluids.MOLTEN_CRYOLITE.get(), 100), RecipeCategory.MISC, new FluidStack(MillenniumFluids.RAW_MOLTEN_ALUMINUM.get(), 100), 200, 1000);
         //SimpleSingleRecipeBuilder.crushing()
         //oneToOneConversionRecipe(pWriter, Blocks.REDSTONE_BLOCK.asItem(), new ItemStack(Items.REDSTONE, 9), "a");
     }
-    protected static void fusion(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredientItem, FluidStack pIngredientFluid, RecipeCategory pCategory, FluidStack pResult, int pCookingTime) {
+    protected static void fusion(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredientItem, FluidStack pIngredientFluid, RecipeCategory pCategory, FluidStack pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
-                .fusion(new ItemStack(pIngredientItem),pIngredientFluid, pCategory, pResult, 0, pCookingTime)
+                .fusion(new ItemStack(pIngredientItem),pIngredientFluid, pCategory, pResult, 0, pCookingTime, energy)
                 .unlockedBy("has_" + getRL(pIngredientItem).getPath(), has(pIngredientItem))
                 .save(pFinishedRecipeConsumer,  getRL(getRL(pResult.getFluid()).getPath() + "_from_fusion_" + getRL(pIngredientItem).getPath()+ "_and_" + getRL(pIngredientFluid.getFluid()).getPath()));
     }
-    protected static void melting(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredient, RecipeCategory pCategory, FluidStack pResult, int pCookingTime) {
+    protected static void melting(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredient, RecipeCategory pCategory, FluidStack pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
-                .melting(new ItemStack(pIngredient), pCategory, pResult, 0, pCookingTime)
+                .melting(new ItemStack(pIngredient), pCategory, pResult, 0, pCookingTime, energy)
                 .unlockedBy("has_" + getRL(pIngredient).getPath(), has(pIngredient))
                 .save(pFinishedRecipeConsumer,  getRL(getRL(pResult.getFluid()).getPath() + "_from_melting_" + getRL(pIngredient).getPath()));
     }
 
 
-    protected static void crushing(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredient, RecipeCategory pCategory, ItemLike pResult, int pCookingTime) {
+    protected static void crushing(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredient, RecipeCategory pCategory, ItemLike pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
-                .crushing(new ItemStack(pIngredient), pCategory, new ItemStack(pResult, 1), 0, pCookingTime)
+                .crushing(new ItemStack(pIngredient), pCategory, new ItemStack(pResult, 1), 0, pCookingTime,energy)
                 .unlockedBy("has_" + getRL(pIngredient).getPath(), has(pIngredient))
                 .save(pFinishedRecipeConsumer,  getRL(getRL(pResult).getPath() + "_from_crushing_" + getRL(pIngredient).getPath()));
     }
 
-    protected static void crushing(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredient, RecipeCategory pCategory, ItemLike pResult, int count, int pCookingTime) {
+    protected static void crushing(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredient, RecipeCategory pCategory, ItemLike pResult, int count, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
-                .crushing(new ItemStack(pIngredient), pCategory, new ItemStack(pResult, count), 0, pCookingTime)
+                .crushing(new ItemStack(pIngredient), pCategory, new ItemStack(pResult, count), 0, pCookingTime, energy)
                 .unlockedBy("has_" + getRL(pIngredient).getPath(), has(pIngredient))
                 .save(pFinishedRecipeConsumer,  getRL(getRL(pResult).getPath() + "_from_crushing_" + getRL(pIngredient).getPath()));
     }

@@ -13,19 +13,20 @@ import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
 import net.minecraft.world.level.Level;
+import net.minecraftforge.fluids.FluidStack;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
     protected final ResourceLocation id;
-    protected final NonNullList<RecipeComponent> inputs;
-    protected final NonNullList<RecipeComponent> outputs;
+    protected final ComponentCollection inputs;
+    protected final NonNullList<? extends RecipeComponent> outputs;
     protected int time;
 
-    public GenericRecipe(ResourceLocation id, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time) {
+    public GenericRecipe(ResourceLocation id, List<RecipeComponent> inputs, List<? extends RecipeComponent> outputs, int time) {
         this.id = id;
-        this.inputs = NonNullList.of(null, inputs.toArray(new RecipeComponent[0]));
+        this.inputs = new ComponentCollection(inputs);
         this.outputs = NonNullList.of(null, outputs.toArray(new RecipeComponent[0]));
         this.time = time;
     }
@@ -35,13 +36,13 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
         if (pLevel.isClientSide()) {
             return false;
         }
-        // 这里需要更复杂的匹配逻辑，根据具体的机器和输入槽位来判断
-        // 简单的实现可以假设输入槽位 0 对应第一个输入成分，以此类推
-        if (inputs.size() > 0 && inputs.get(0) instanceof ItemComponent) {
-            return ((ItemComponent) inputs.get(0)).getItemStack().is(pContainer.getItem(0).getItem());
-        }
-        // 对于更复杂的匹配，子类需要覆盖这个方法
-        return false;
+        return serverMatches(getCollection(pContainer));
+    }
+
+    public abstract ComponentCollection getCollection(ExtendedContainer container);
+
+    protected boolean serverMatches(ComponentCollection target){
+        return inputs.matches(target);
     }
 
     @Override
@@ -58,19 +59,19 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
     @Override
     public NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> ingredients = NonNullList.create();
-        for (RecipeComponent input : inputs) {
-            if (input instanceof ItemComponent) {
-                ingredients.add(Ingredient.of(((ItemComponent) input).getItemStack()));
+        inputs.getRecipeComponents().forEach(input -> {
+            if (input instanceof ItemComponent itemComponent){
+                ingredients.add(Ingredient.of((itemComponent).getItemStack()));
             }
-        }
+        });
         return ingredients;
     }
 
-    public List<RecipeComponent> getRecipeInputs() {
+    public ComponentCollection getRecipeInputs() {
         return this.inputs;
     }
 
-    public List<RecipeComponent> getRecipeOutputs() {
+    public List<? extends RecipeComponent> getRecipeOutputs() {
         return this.outputs;
     }
 
@@ -121,6 +122,7 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
         public T fromJson(ResourceLocation recipeId, JsonObject json) {
             List<RecipeComponent> inputs = new ArrayList<>();
             List<RecipeComponent> outputs = new ArrayList<>();
+            int time = 200;
 
             // 解析输入成分 (支持单个 "ingredient" 或 "ingredients" 数组)
             if (json.has("ingredient")) {
@@ -167,8 +169,10 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
             } else {
                 throw new JsonSyntaxException("Missing 'result' or 'results', expected to find one for output");
             }
+            if (json.has("time")){
+                time = json.get("time").getAsInt();
+            }
 
-            int time = json.get("time").getAsInt();
 
             return factory.create(recipeId, GsonHelper.getAsString(json, "group", ""), CookingBookCategory.MISC, inputs, outputs, time);
         }
@@ -207,11 +211,12 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
             buf.writeUtf(recipe.getGroup());
             buf.writeEnum(recipe.category());
 
-            buf.writeVarInt(recipe.getRecipeInputs().size());
-            for (RecipeComponent input : recipe.getRecipeInputs()) {
-                buf.writeUtf(input.getType()); // 仍然写入类型以便网络传输
+            buf.writeVarInt(recipe.getRecipeInputs().getSize());
+            List<RecipeComponent> a = recipe.getRecipeInputs().getRecipeComponents();
+            a.forEach(input -> {
+                buf.writeUtf(input.getType()); // 写入类型以便网络传输
                 input.writeToNetwork(buf);
-            }
+            });
 
             buf.writeVarInt(recipe.getRecipeOutputs().size());
             for (RecipeComponent output : recipe.getRecipeOutputs()) {
@@ -231,7 +236,7 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
                     return component;
                 } else if (jsonObject.has("fluid")) {
                     // 假设 FluidComponent 存在并且有 readFromJson 方法
-                    FluidComponent component = new FluidComponent(null); // 你可能需要根据你的 FluidComponent 的构造函数进行调整
+                    FluidComponent component = new FluidComponent(FluidStack.EMPTY); // 你可能需要根据你的 FluidComponent 的构造函数进行调整
                     component.readFromJson(jsonObject);
                     return component;
                 }
@@ -246,8 +251,14 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
             return null;
         }
 
-        // createComponentFromNetwork 方法保持不变，因为网络传输仍然需要类型信息
-        protected abstract RecipeComponent createComponentFromNetwork(String type);
+        protected RecipeComponent createComponentFromNetwork(String type) {
+            if ("item".equals(type)) {
+                return new ItemComponent(ItemStack.EMPTY);
+            } else if ("fluid".equals(type)) {
+                return new FluidComponent(FluidStack.EMPTY);
+            }
+            return null;
+        }
 
         public interface RecipeFactory<T extends GenericRecipe> {
             T create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time);

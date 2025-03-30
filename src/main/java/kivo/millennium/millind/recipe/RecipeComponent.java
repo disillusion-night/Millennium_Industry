@@ -5,6 +5,16 @@ import com.google.gson.JsonObject;
 import net.minecraft.network.FriendlyByteBuf;
 
 public interface RecipeComponent {
+
+    /**
+     *
+     * @param component
+     * @return
+     * @param <R>
+     */
+
+    <R extends RecipeComponent> boolean matches(R component);
+
     /**
      * 将此成分写为 JSON 对象。
      */

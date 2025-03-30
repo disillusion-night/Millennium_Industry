@@ -29,6 +29,15 @@ public class FluidComponent implements RecipeComponent {
     }
 
     @Override
+    public <R extends RecipeComponent> boolean matches(R component) {
+        if(component instanceof FluidComponent fluidComponent){
+            FluidStack stack = fluidComponent.getFluidStack();
+            return stack.containsFluid(fluidStack);
+        }
+        return false;
+    }
+
+    @Override
     public JsonObject toJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("fluid", BuiltInRegistries.FLUID.getKey(fluidStack.getFluid()).toString());

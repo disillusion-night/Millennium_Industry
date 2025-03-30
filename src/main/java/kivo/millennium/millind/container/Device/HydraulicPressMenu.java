@@ -14,7 +14,7 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.level.block.Block;
 import org.joml.Vector2i;
 
-public class HydraulicPressMenu extends AbstractDeviceMenu {
+public class HydraulicPressMenu extends AbstractDeviceMenu<HydraulicPressBE> {
     private static final Vector2i input1pos = new Vector2i(53, 17);
     private static final Vector2i input2pos = new Vector2i(53, 53);
     private static final Vector2i outputpos = new Vector2i(107, 35);
@@ -24,7 +24,7 @@ public class HydraulicPressMenu extends AbstractDeviceMenu {
     }
 
     @Override
-    protected void setupSlot(Container container, AbstractMachineBE deviceBE) {
+    protected void setupSlot(Container container, HydraulicPressBE deviceBE) {
         super.setupSlot(container, deviceBE);
         addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), HydraulicPressBE.INPUT1_SLOT, input1pos));
         addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), HydraulicPressBE.INPUT2_SLOT, input2pos));
@@ -33,13 +33,12 @@ public class HydraulicPressMenu extends AbstractDeviceMenu {
 
 
     @Override
-    protected void setupDataSlot(Container container, AbstractMachineBE deviceBE) {
+    protected void setupDataSlot(Container container, HydraulicPressBE deviceBE) {
         super.setupDataSlot(container, deviceBE);
-        HydraulicPressBE be = (HydraulicPressBE) deviceBE;
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return be.getProgressAndLit() & 0xffff;
+                return deviceBE.getProgressAndLit() & 0xffff;
             }
 
             @Override

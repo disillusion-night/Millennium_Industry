@@ -1,9 +1,12 @@
 package kivo.millennium.millind.init;
 
-import kivo.millennium.millind.block.device.FusionFurnace.FusionChamberBE;
+import kivo.millennium.millind.block.device.FusionChamber.FusionChamberBE;
 import kivo.millennium.millind.block.device.HydraulicPress.HydraulicPressBE;
 import kivo.millennium.millind.block.device.MeltingFurnace.MeltingFurnaceBE;
+import kivo.millennium.millind.block.device.MolecularReformer.MolecularReformerBE;
+import kivo.millennium.millind.block.device.ResonanceChamber.ResonanceChamberBE;
 import kivo.millennium.millind.block.device.crusher.CrusherBE;
+import kivo.millennium.millind.block.device.crylizer.CrystallizerBE;
 import kivo.millennium.millind.block.fluidContainer.MetalFluidTankBE;
 import kivo.millennium.millind.block.generator.GeneratorBE;
 import kivo.millennium.millind.block.hypercube.HDECBE;
@@ -47,6 +50,18 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<CrusherBE>> Crusher_BE = BLOCK_ENTITIES.register(
             "crusher_be", () -> BlockEntityType.Builder.of(CrusherBE::new,
                     MillenniumBlocks.CRUSHER_BL.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<MolecularReformerBE>> MOLECULAR_REFORMER_BE = BLOCK_ENTITIES.register(
+            "molecular_reformer_be", () -> BlockEntityType.Builder.of(MolecularReformerBE::new,
+                    MillenniumBlocks.MOLECULAR_REFORMER_BL.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<ResonanceChamberBE>> RESONANCE_CHAMBER_BE = BLOCK_ENTITIES.register(
+            "resonance_chamber_be", () -> BlockEntityType.Builder.of(ResonanceChamberBE::new,
+                    MillenniumBlocks.RESONANCE_CHAMBER_BL.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<CrystallizerBE>> CRYSTALLIZER_BE = BLOCK_ENTITIES.register(
+            "crystallizer_be", () -> BlockEntityType.Builder.of(CrystallizerBE::new,
+                    MillenniumBlocks.CRYSTALLIZER_BL.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<MeltingFurnaceBE>> MELTING_FURNACE_BE = BLOCK_ENTITIES.register(
             "melting_furnace_be", () -> BlockEntityType.Builder.of(MeltingFurnaceBE::new,

@@ -14,13 +14,14 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
 
+import static kivo.millennium.millind.block.device.MillenniumBlockProperty.WORKING;
+
 public class InductionFurnaceBE extends AbstractMachineBE implements IWorkingMachine {
     public static final int SLOT_COUNT = 3;
     public static int BATTERY_SLOT = 0;
     public static int INPUT_SLOT = 1;
     public static int OUTPUT_SLOT = 2;
     private final int energyUsagePerTick = 200;
-    private int progress = 0;
     private int smeltingTotalTime = 100;
     private boolean isWorking;
 
@@ -28,6 +29,7 @@ public class InductionFurnaceBE extends AbstractMachineBE implements IWorkingMac
         super(MillenniumBlockEntities.INDUCTION_FURNACE_BE.get(), pPos, pBlockState, new CapabilityCache.Builder()
                 .withItems(3)
                 .withEnergy(100000, 2000)
+                .withProgress()
         );
     }
 
@@ -48,49 +50,58 @@ public class InductionFurnaceBE extends AbstractMachineBE implements IWorkingMac
 
                 if (canStartSmelting) {
                     if(!isWorking){
-                        isWorking = true;
-                        level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.WORKING, true), 3);
+                        startWorking();
                     }
-                    progress++;
-                    getEnergyStorage().costEnergy(energyUsagePerTick);
-                    setChanged(level, getBlockPos(), getBlockState());
 
-                    if (progress >= smeltingTotalTime) {
+                    addProgress();
+                    getEnergyStorage().costEnergy(energyUsagePerTick);
+
+                    if (getProgress() >= smeltingTotalTime) {
                         smeltItem(recipeOutput);
                         resetProgress();
-                        setChanged(level, getBlockPos(), getBlockState());
                     }
+                    setChanged();
                 } else {
-                    isWorking = false;
-                    level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.WORKING, false), 3);
+                    resetProgress();
+                    stopWorking();
                 }
             }
         } else {
-            isWorking = false;
             resetProgress();
-            level.setBlock(getBlockPos(),getBlockState().setValue(InductionFurnaceBL.WORKING, false), 3);
+            stopWorking();
         }
 
     }
 
-    /*
-    @Override
-    protected void onContentChange(int slot) {
-        if (slot == INPUT_SLOT) {
-            ItemStack inputStack = getItemHandler().getStackInSlot(INPUT_SLOT);
-            if (inputStack.isEmpty()) {
-                resetProgress();
-            }
-        }
-    }*/
+    private void addProgress(){
+        cache.addProgress(1);
+    }
+
+    private int getProgress(){
+        return cache.getProgress();
+    }
+    private void resetProgress() {
+        cache.setProgress(0);
+    }
+
+    private void startWorking(){
+        isWorking = true;
+        level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, true), 3);
+    }
+
+    private void stopWorking(){
+        isWorking = false;
+        level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, false), 3);
+
+    }
 
     public boolean isWorking(){
-        return getBlockState().getValue(InductionFurnaceBL.WORKING);
+        return isWorking;
     }
 
 
     public int getProgressPercent(){
-        return (int) (((float) progress / smeltingTotalTime) * 100);
+        return (int) (((float) getProgress() / smeltingTotalTime) * 100);
     }
 
     private boolean canSmelt(ItemStack outputStack, ItemStack recipeOutput) {
@@ -119,10 +130,6 @@ public class InductionFurnaceBE extends AbstractMachineBE implements IWorkingMac
         }
 
         getItemHandler().extractItem(INPUT_SLOT, 1, false);
-    }
-
-    private void resetProgress() {
-        progress = 0;
     }
 
 }

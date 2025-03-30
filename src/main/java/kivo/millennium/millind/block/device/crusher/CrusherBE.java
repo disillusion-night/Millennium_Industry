@@ -12,16 +12,15 @@ import net.minecraft.world.level.block.state.BlockState;
 
 import java.util.Optional;
 
+import static kivo.millennium.millind.block.device.MillenniumBlockProperty.WORKING;
+
 public class CrusherBE extends AbstractMachineBE {
     public static int SLOT_COUNT = 3;
     public static int BATTERY_SLOT = 0;
     public static int INPUT_SLOT = 1;
     public static int OUTPUT_SLOT = 2;
     private final int energyUsagePerTick = 200;
-    private final int maxLitTime = 10;
-    private int progress = 0;
     private int totalTime = 100;
-    private int litTime = 0;
     private boolean isWorking;
 
 
@@ -29,6 +28,7 @@ public class CrusherBE extends AbstractMachineBE {
         super(MillenniumBlockEntities.Crusher_BE.get(), pPos, pBlockState, new CapabilityCache.Builder()
                 .withEnergy(100000, 2000)
                 .withItems(3)
+                .withProgress()
         );
     }
 
@@ -49,49 +49,56 @@ public class CrusherBE extends AbstractMachineBE {
 
                 if (canStartCrushing) {
                     if (!isWorking) {
-                        isWorking = true;
-                        level.setBlock(getBlockPos(), getBlockState().setValue(CrusherBL.WORKING, true), 3);
+                        startWorking();
                     }
-                    progress++;
+                    addProgress();
                     getEnergyStorage().costEnergy(energyUsagePerTick);
-                    setChanged(level, getBlockPos(), getBlockState());
 
-                    if (progress >= totalTime) {
+                    if (getProgress() >= totalTime) {
                         crushItem(recipeOutput);
                         resetProgress();
-                        setChanged(level, getBlockPos(), getBlockState());
                     }
+                    setChanged();
                 } else {
-                    isWorking = false;
-                    level.setBlock(getBlockPos(), getBlockState().setValue(CrusherBL.WORKING, false), 3);
+                    stopWorking();
                 }
             }
         } else {
-            isWorking = false;
             resetProgress();
-            level.setBlock(getBlockPos(), getBlockState().setValue(CrusherBL.WORKING, false), 3);
+            stopWorking();
         }
 
     }
 
-    /*
-    @Override
-    protected void onContentChange(int slot) {
-        if (slot == INPUT_SLOT) {
-            ItemStack inputStack = getItemHandler().getStackInSlot(INPUT_SLOT);
-            if (inputStack.isEmpty()) {
-                resetProgress();
-            }
-        }
-    }*/
 
+    private void addProgress(){
+        cache.addProgress(1);
+    }
+
+    private int getProgress(){
+        return cache.getProgress();
+    }
+    private void resetProgress() {
+        cache.setProgress(0);
+    }
+
+    private void startWorking(){
+        isWorking = true;
+        level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, true), 3);
+    }
+
+    private void stopWorking(){
+        isWorking = false;
+        level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, false), 3);
+
+    }
 
     public boolean isWorking() {
         return isWorking;
     }
 
     public int getProgressPercent() {
-        return (int) (((float) progress / totalTime) * 100);
+        return (int) (((float) getProgress() / totalTime) * 100);
     }
 
 
@@ -123,19 +130,4 @@ public class CrusherBE extends AbstractMachineBE {
         getItemHandler().extractItem(INPUT_SLOT, 1, false);
     }
 
-    private void resetProgress() {
-        progress = 0;
-    }
-    // NBT 数据读写
-    @Override
-    protected void saveAdditional(CompoundTag pTag) {
-        super.saveAdditional(pTag);
-        pTag.putInt("progress", progress);
-    }
-
-    @Override
-    public void load(CompoundTag pTag) {
-        super.load(pTag);
-        progress = pTag.getInt("progress");
-    }
 }

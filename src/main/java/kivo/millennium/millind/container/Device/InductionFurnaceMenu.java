@@ -14,7 +14,7 @@ import net.minecraft.world.inventory.DataSlot;
 import net.minecraft.world.level.block.Block;
 import org.joml.Vector2i;
 
-public class InductionFurnaceMenu extends AbstractDeviceMenu {
+public class InductionFurnaceMenu extends AbstractDeviceMenu<InductionFurnaceBE> {
     private static final Vector2i inputpos = new Vector2i(53, 35);
     private static final Vector2i outputpos = new Vector2i(107, 35);
     private int progressAndLit;
@@ -23,7 +23,7 @@ public class InductionFurnaceMenu extends AbstractDeviceMenu {
     }
 
     @Override
-    protected void setupSlot(Container container, AbstractMachineBE deviceBE) {
+    protected void setupSlot(Container container, InductionFurnaceBE deviceBE) {
         super.setupSlot(container, deviceBE);
         addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), InductionFurnaceBE.INPUT_SLOT, inputpos));
         addSlot(new DeviceOutputSlot(container, deviceBE.getItemHandler(), InductionFurnaceBE.OUTPUT_SLOT, outputpos));
@@ -31,13 +31,12 @@ public class InductionFurnaceMenu extends AbstractDeviceMenu {
 
 
     @Override
-    protected void setupDataSlot(Container container, AbstractMachineBE deviceBE) {
+    protected void setupDataSlot(Container container, InductionFurnaceBE deviceBE) {
         super.setupDataSlot(container, deviceBE);
-        InductionFurnaceBE be = (InductionFurnaceBE) deviceBE;
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return be.getProgressAndLit() & 0xffff;
+                return deviceBE.getProgressAndLit() & 0xffff;
             }
 
             @Override

@@ -1,7 +1,7 @@
 package kivo.millennium.millind.container.Device;
 
 import kivo.millennium.millind.block.device.AbstractMachineBE;
-import kivo.millennium.millind.block.device.FusionFurnace.FusionChamberBE;
+import kivo.millennium.millind.block.device.FusionChamber.FusionChamberBE;
 import kivo.millennium.millind.capability.ExtendedSlot;
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumMenuTypes;
@@ -15,7 +15,7 @@ import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fluids.FluidStack;
 import org.joml.Vector2i;
 
-public class FusionChamberContainer extends AbstractDeviceMenu {
+public class FusionChamberContainer extends AbstractDeviceMenu<FusionChamberBE> {
     private static final Vector2i inputpos = new Vector2i(56, 37);
     private static final Vector2i outputpos = new Vector2i(107, 35);
     private int fluidCapacityIn;
@@ -30,9 +30,9 @@ public class FusionChamberContainer extends AbstractDeviceMenu {
     }
 
     @Override
-    protected void setupSlot(Container container, AbstractMachineBE deviceBE) {
+    protected void setupSlot(Container container, FusionChamberBE deviceBE) {
         super.setupSlot(container, deviceBE);
-        addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), FusionChamberBE.INPUT_SLOT, inputpos));
+        addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(),1, inputpos));
     }
 
     public Vector2i getBatterySlotPos(){
@@ -44,13 +44,12 @@ public class FusionChamberContainer extends AbstractDeviceMenu {
     }
 
     @Override
-    protected void setupDataSlot(Container container, AbstractMachineBE deviceBE) {
+    protected void setupDataSlot(Container container, FusionChamberBE deviceBE) {
         super.setupDataSlot(container, deviceBE);
-        FusionChamberBE be = (FusionChamberBE) deviceBE;
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return be.getProgressAndLit() & 0xffff;
+                return deviceBE.getProgressAndLit() & 0xffff;
             }
 
             @Override
@@ -61,7 +60,7 @@ public class FusionChamberContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return be.getFluidTank().getFluidAmount(FusionChamberBE.INPUT_FLUID) & 0xffff;
+                return deviceBE.getFluidTank().getFluidAmount(FusionChamberBE.INPUT_FLUID) & 0xffff;
             }
 
             @Override
@@ -72,7 +71,7 @@ public class FusionChamberContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return (be.getFluidTank().getFluidAmount(FusionChamberBE.INPUT_FLUID) >> 16) & 0xffff;
+                return (deviceBE.getFluidTank().getFluidAmount(FusionChamberBE.INPUT_FLUID) >> 16) & 0xffff;
             }
 
             @Override
@@ -83,7 +82,7 @@ public class FusionChamberContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return be.getFluidTank().getTankCapacity(FusionChamberBE.OUTPUT_FLUID) & 0xffff;
+                return deviceBE.getFluidTank().getTankCapacity(FusionChamberBE.OUTPUT_FLUID) & 0xffff;
             }
 
             @Override
@@ -94,7 +93,7 @@ public class FusionChamberContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return (be.getFluidTank().getTankCapacity(FusionChamberBE.OUTPUT_FLUID) >> 16) & 0xffff;
+                return (deviceBE.getFluidTank().getTankCapacity(FusionChamberBE.OUTPUT_FLUID) >> 16) & 0xffff;
             }
 
             @Override
@@ -105,7 +104,7 @@ public class FusionChamberContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return be.getFluidTank().getFluidAmount(FusionChamberBE.OUTPUT_FLUID) & 0xffff;
+                return deviceBE.getFluidTank().getFluidAmount(FusionChamberBE.OUTPUT_FLUID) & 0xffff;
             }
 
             @Override
@@ -116,7 +115,7 @@ public class FusionChamberContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return (be.getFluidTank().getFluidAmount(FusionChamberBE.OUTPUT_FLUID) >> 16) & 0xffff;
+                return (deviceBE.getFluidTank().getFluidAmount(FusionChamberBE.OUTPUT_FLUID) >> 16) & 0xffff;
             }
 
             @Override
@@ -127,7 +126,7 @@ public class FusionChamberContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return be.getFluidTank().getTankCapacity(FusionChamberBE.OUTPUT_FLUID) & 0xffff;
+                return deviceBE.getFluidTank().getTankCapacity(FusionChamberBE.OUTPUT_FLUID) & 0xffff;
             }
 
             @Override
@@ -138,7 +137,7 @@ public class FusionChamberContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return (be.getFluidTank().getTankCapacity(FusionChamberBE.OUTPUT_FLUID) >> 16) & 0xffff;
+                return (deviceBE.getFluidTank().getTankCapacity(FusionChamberBE.OUTPUT_FLUID) >> 16) & 0xffff;
             }
 
             @Override
@@ -149,7 +148,7 @@ public class FusionChamberContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return BuiltInRegistries.FLUID.getId(be.getFluidTank().getFluidInTank(FusionChamberBE.INPUT_FLUID).getFluid());
+                return BuiltInRegistries.FLUID.getId(deviceBE.getFluidTank().getFluidInTank(FusionChamberBE.INPUT_FLUID).getFluid());
             }
 
             @Override
@@ -160,7 +159,7 @@ public class FusionChamberContainer extends AbstractDeviceMenu {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return BuiltInRegistries.FLUID.getId(be.getFluidTank().getFluidInTank(FusionChamberBE.OUTPUT_FLUID).getFluid());
+                return BuiltInRegistries.FLUID.getId(deviceBE.getFluidTank().getFluidInTank(FusionChamberBE.OUTPUT_FLUID).getFluid());
             }
 
             @Override

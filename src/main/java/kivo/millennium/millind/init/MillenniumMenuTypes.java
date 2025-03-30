@@ -28,6 +28,12 @@ public class MillenniumMenuTypes {
             "melting_furnace_menu",
             () -> IForgeMenuType.create((windowId, inv, data) -> new MeltingFurnaceContainer(windowId, inv.player, data.readBlockPos()))
     );
+
+    public static final RegistryObject<MenuType<ResonanceChamberContainer>> RESONANCE_CHAMBER_MENU = MENU_TYPES.register(
+            "resonance_chamber_menu",
+            () -> IForgeMenuType.create((windowId, inv, data) -> new ResonanceChamberContainer(windowId, inv.player, data.readBlockPos()))
+    );
+
     public static final RegistryObject<MenuType<FusionChamberContainer>> FUSION_FURNACE_MENU = MENU_TYPES.register(
             "fusion_furnace_menu",
             () -> IForgeMenuType.create((windowId, inv, data) -> new FusionChamberContainer(windowId, inv.player, data.readBlockPos()))

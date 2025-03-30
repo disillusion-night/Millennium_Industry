@@ -43,6 +43,8 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         cubeAllBlockWithItem(MillenniumBlocks.DEEPSLATE_ALUMINUM_ORE, "material");
         cubeAllBlockWithItem(MillenniumBlocks.RAW_ALUMINUM_BLOCK, "material");
 
+        horizontalOrientable(MillenniumBlocks.RESONANCE_CHAMBER_BL, "resonance_chamber");
+
         sixFacing(MillenniumBlocks.NETHER_STAR_LASER_BL, "nether_star_laser");
         simpleOrientableWithTop(MillenniumBlocks.MELTING_FURNACE_BL.get(), "melting_furnace");
         simpleOrientable(MillenniumBlocks.GENERATOR_BL.get(), "generator");
@@ -107,7 +109,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
             return ConfiguredModel.builder()
                     .modelFile(new ConfiguredModel(models().getExistingFile(getRL(modelPath + (IsPowered ? "_on" : "")))).model)
-                    .rotationY(ShapeUtils.getYRotation(blockState.getValue(BlockStateProperties.FACING)))
+                    .rotationY(ShapeUtils.getYRotation(blockState.getValue(HorizontalDirectionalBlock.FACING)))
                     .build();
         });
 

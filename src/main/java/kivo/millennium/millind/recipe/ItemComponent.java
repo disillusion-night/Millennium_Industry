@@ -27,6 +27,15 @@ public class ItemComponent implements RecipeComponent {
     }
 
     @Override
+    public <R extends RecipeComponent> boolean matches(R component) {
+        if(component instanceof ItemComponent itemComponent){
+            ItemStack stack = itemComponent.getItemStack();
+           return stack.is(this.itemStack.getItem()) && stack.getCount() >= itemStack.getCount();
+        }
+        return false;
+    }
+
+    @Override
     public JsonObject toJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("item", BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toString());

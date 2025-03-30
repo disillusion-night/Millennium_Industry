@@ -1,6 +1,7 @@
 {
   "type": "millind:melting",
   "category": "misc",
+  "energy": 1000,
   "experience": 0.0,
   "ingredient": {
     "item": "minecraft:cobblestone"

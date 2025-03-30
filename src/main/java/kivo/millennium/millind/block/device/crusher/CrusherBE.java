@@ -1,133 +1,74 @@
 package kivo.millennium.millind.block.device.crusher;
 
 import kivo.millennium.millind.block.device.AbstractMachineBE;
+import kivo.millennium.millind.block.device.AbstractRecipeMachineBE;
 import kivo.millennium.millind.capability.CapabilityCache;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.recipe.CrushingRecipe;
 import kivo.millennium.millind.recipe.ExtendedContainer;
+import kivo.millennium.millind.recipe.RecipeComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
+import org.openjdk.nashorn.api.tree.BreakTree;
 
+import java.util.List;
 import java.util.Optional;
 
 import static kivo.millennium.millind.block.device.MillenniumBlockProperty.WORKING;
 
-public class CrusherBE extends AbstractMachineBE {
+public class CrusherBE extends AbstractRecipeMachineBE<CrushingRecipe> {
     public static int SLOT_COUNT = 3;
-    public static int BATTERY_SLOT = 0;
     public static int INPUT_SLOT = 1;
     public static int OUTPUT_SLOT = 2;
-    private final int energyUsagePerTick = 200;
-    private int totalTime = 100;
-    private boolean isWorking;
 
 
     public CrusherBE(BlockPos pPos, BlockState pBlockState) {
-        super(MillenniumBlockEntities.Crusher_BE.get(), pPos, pBlockState, new CapabilityCache.Builder()
+        super(MillenniumBlockEntities.Crusher_BE.get(),CrushingRecipe.Type.INSTANCE, pPos, pBlockState, new CapabilityCache.Builder()
                 .withEnergy(100000, 2000)
-                .withItems(3)
-                .withProgress()
+                .withItems(SLOT_COUNT)
         );
     }
 
     @Override
-    protected void tickServer() {
-        ItemStack inputStack = getItemHandler().getStackInSlot(INPUT_SLOT);
-        ItemStack outputStack = getItemHandler().getStackInSlot(OUTPUT_SLOT);
-        boolean canStartCrushing = false;
-
-        if (!inputStack.isEmpty()) {
-            Optional<CrushingRecipe> recipe = level.getRecipeManager().getRecipeFor(CrushingRecipe.Type.INSTANCE, new ExtendedContainer(inputStack), level);
-
-            if (recipe.isPresent()) {
-                ItemStack recipeOutput = recipe.get().assemble(new ExtendedContainer(inputStack), level.registryAccess());
-                if (canCrush(outputStack, recipeOutput) && getEnergyStorage().getEnergyStored() >= energyUsagePerTick) {
-                    canStartCrushing = true;
-                }
-
-                if (canStartCrushing) {
-                    if (!isWorking) {
-                        startWorking();
-                    }
-                    addProgress();
-                    getEnergyStorage().costEnergy(energyUsagePerTick);
-
-                    if (getProgress() >= totalTime) {
-                        crushItem(recipeOutput);
-                        resetProgress();
-                    }
-                    setChanged();
-                } else {
-                    stopWorking();
-                }
-            }
-        } else {
-            resetProgress();
-            stopWorking();
-        }
-
+    protected ExtendedContainer getInputs() {
+        return new ExtendedContainer(getItemHandler().getStackInSlot(INPUT_SLOT));
     }
 
 
-    private void addProgress(){
-        cache.addProgress(1);
+    @Override
+    protected boolean isInputValid() {
+        return !getItemHandler().getStackInSlot(INPUT_SLOT).isEmpty();
     }
 
-    private int getProgress(){
-        return cache.getProgress();
-    }
-    private void resetProgress() {
-        cache.setProgress(0);
-    }
-
-    private void startWorking(){
-        isWorking = true;
-        level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, true), 3);
-    }
-
-    private void stopWorking(){
-        isWorking = false;
-        level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, false), 3);
-
-    }
-
-    public boolean isWorking() {
-        return isWorking;
-    }
-
-    public int getProgressPercent() {
-        return (int) (((float) getProgress() / totalTime) * 100);
-    }
-
-
-    private boolean canCrush(ItemStack outputStack, ItemStack recipeOutput) {
-        if (recipeOutput.isEmpty()) {
+    @Override
+    protected boolean canProcess(List<? extends RecipeComponent> recipeOutputs) {
+        if (recipeOutputs.isEmpty()) {
             return false;
         }
 
-        if (outputStack.isEmpty()) {
+        if (getItemHandler().getStackInSlot(OUTPUT_SLOT).isEmpty()) {
             return true;
         }
 
-        if (!outputStack.is(recipeOutput.getItem())) {
+        if (!getItemHandler().getStackInSlot(OUTPUT_SLOT).is(recipeOutputs.get(0).asItemComponent().getItemStack().getItem())) {
             return false;
         }
 
-        return outputStack.getCount() + recipeOutput.getCount() <= outputStack.getMaxStackSize();
+        return getItemHandler().getStackInSlot(OUTPUT_SLOT).getCount() + recipeOutputs.get(0).asItemComponent().getItemStack().getCount() <= getItemHandler().getSlotLimit(OUTPUT_SLOT);
     }
 
-    private void crushItem(ItemStack recipeOutput) {
+    @Override
+    protected void processItem(ExtendedContainer container, CrushingRecipe recipe, int energycost) {
         ItemStack outputStack = getItemHandler().getStackInSlot(OUTPUT_SLOT);
-
+        ItemStack result = recipe.getResultItem(null);
         if (outputStack.isEmpty()) {
-            getItemHandler().setStackInSlot(OUTPUT_SLOT, recipeOutput.copy());
-        } else if (outputStack.is(recipeOutput.getItem())) {
-            outputStack.grow(recipeOutput.getCount());
+            getItemHandler().setStackInSlot(OUTPUT_SLOT, result);
+        } else if (outputStack.is(result.getItem())) {
+            outputStack.grow(result.getCount());
         }
 
         getItemHandler().extractItem(INPUT_SLOT, 1, false);
     }
-
 }

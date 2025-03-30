@@ -107,6 +107,7 @@ public class ExtendedContainer implements Container, StackedContentsCompatible {
 
         return $$2;
     }
+
     public FluidStack addFluid(FluidStack pStack) {
         if (pStack.isEmpty()) {
             return FluidStack.EMPTY;
@@ -171,10 +172,10 @@ public class ExtendedContainer implements Container, StackedContentsCompatible {
         this.setChanged();
     }
     public void setItem(int pIndex, ItemStack pStack) {
-        this.items.set(pIndex, pStack);
+        this.items.set(pIndex, pStack);/*
         if (!pStack.isEmpty() && pStack.getCount() > this.getMaxStackSize()) {
             pStack.setCount(this.getMaxStackSize());
-        }
+        }*/
 
         this.setChanged();
     }
@@ -184,18 +185,33 @@ public class ExtendedContainer implements Container, StackedContentsCompatible {
     }
 
     public boolean isEmpty() {
-        Iterator var1 = this.items.iterator();
-
-        ItemStack $$0;
+        Iterator iterator = this.items.iterator();
+        boolean out1 = false;
+        boolean out2 = false;
+        ItemStack itemStack;
         do {
-            if (!var1.hasNext()) {
-                return true;
+            if (!iterator.hasNext()) {
+                out1 = true;
             }
 
-            $$0 = (ItemStack)var1.next();
-        } while($$0.isEmpty());
+            itemStack = (ItemStack)iterator.next();
+        } while(itemStack.isEmpty());
 
-        return false;
+        if(!this.fluids.get(0).isEmpty()){
+            Iterator var2 = this.fluids.iterator();
+
+            FluidStack fluidStack;
+            do {
+                if (!var2.hasNext()) {
+                    out2 = true;
+                }
+
+                fluidStack = (FluidStack)var2.next();
+            } while(fluidStack.isEmpty());
+        }else {
+            out2 = true;
+        }
+        return out1 && out2;
     }
 
     public void setChanged() {

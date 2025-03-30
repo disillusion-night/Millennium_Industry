@@ -1,13 +1,13 @@
 {
   "type": "millind:crushing",
   "category": "misc",
+  "energy": 100,
   "experience": 0.0,
   "ingredient": {
     "item": "minecraft:redstone_block"
   },
   "result": {
-    "count": 9,
     "item": "minecraft:redstone"
   },
-  "time": 100
+  "time": 9
 }

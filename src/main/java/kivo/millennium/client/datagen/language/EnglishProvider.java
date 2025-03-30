@@ -29,6 +29,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.FUSION_CHAMBER_BL.get(), "Fusion Chamber");
         add(MillenniumBlocks.MELTING_FURNACE_BL.get(), "Melting Furnace");
         add(MillenniumBlocks.RESONANCE_CHAMBER_BL.get(), "Resonance Chamber");
+        add(MillenniumBlocks.CRYSTALLIZER_BL.get(), "Crystallizer");
         add(MillenniumBlocks.SOLAR_GENERATOR.get(), "Solar Generator");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "High-Purity Wolfsegg Steel");
@@ -36,6 +37,9 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.WolfseggIron.get(), "Wolfsegg Iron");
         add(MillenniumItems.WolfseggIronOre.get(), "Wolfsegg Iron Ore");
         add(MillenniumItems.VRLA.get(), "Valve Regulated Lead Acid Battery");
+
+        add(MillenniumItems.CARBON_DUST.get(), "Carbon Dust");
+
         add(MillenniumItems.COPPER_DUST.get(), "Copper Dust");
 
         add(MillenniumBlocks.ALUMINUM_BLOCK.get(), "Aluminum Block");

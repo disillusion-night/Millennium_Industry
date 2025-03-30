@@ -57,7 +57,7 @@ public class FusionChamberScreen extends AbstractDeviceSC<FusionChamberContainer
                 && mouseY >= topPos + fluidSlot1Pos.y
                 && mouseY < topPos + fluidSlot1Pos.y + fluidSlotSize.y
         ) {
-            renderfluidTip(pGuiGraphics,fluidStack,capacity, mouseX, mouseY);;
+            RenderUtils.renderfluidTip(pGuiGraphics,font,fluidStack, capacity, mouseX, mouseY);
         }
     }
     protected void checkfluid2Tip(GuiGraphics pGuiGraphics,FluidStack fluidStack,int capacity,  int mouseX, int mouseY){
@@ -66,14 +66,8 @@ public class FusionChamberScreen extends AbstractDeviceSC<FusionChamberContainer
                 && mouseY >= topPos + fluidSlot2Pos.y
                 && mouseY < topPos + fluidSlot2Pos.y + fluidSlotSize.y
         ) {
-            renderfluidTip(pGuiGraphics,fluidStack, capacity, mouseX, mouseY);;
+           RenderUtils.renderfluidTip(pGuiGraphics,font,fluidStack, capacity, mouseX, mouseY);
         }
-    }
-    protected void renderfluidTip(GuiGraphics pGuiGraphics,FluidStack fluidStack,int capacity, int mouseX, int mouseY){
-        pGuiGraphics.renderTooltip(this.font, Component
-                .literal(fluidStack.getDisplayName().getString())
-                .append(NumberUtils.int2String(fluidStack.getAmount()) + "/" + NumberUtils.int2String(capacity) + " mB")
-                , mouseX, mouseY);
     }
 
 }

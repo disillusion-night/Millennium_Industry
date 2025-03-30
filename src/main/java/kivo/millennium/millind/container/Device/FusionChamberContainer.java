@@ -32,7 +32,7 @@ public class FusionChamberContainer extends AbstractDeviceMenu<FusionChamberBE> 
     @Override
     protected void setupSlot(Container container, FusionChamberBE deviceBE) {
         super.setupSlot(container, deviceBE);
-        addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(),1, inputpos));
+        addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(),FusionChamberBE.INPUT_SLOT, inputpos));
     }
 
     public Vector2i getBatterySlotPos(){

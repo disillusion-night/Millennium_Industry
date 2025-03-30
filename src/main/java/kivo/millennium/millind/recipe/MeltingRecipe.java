@@ -17,8 +17,8 @@ import java.util.List;
 import static kivo.millennium.millind.Main.getRL;
 
 public class MeltingRecipe extends GenericRecipe {
-    public MeltingRecipe(ResourceLocation id, ItemComponent input, FluidComponent output, int time) {
-        super(id, Arrays.asList(input), Arrays.asList(output), time);
+    public MeltingRecipe(ResourceLocation id, ItemComponent input, FluidComponent output, int time, int energy) {
+        super(id, Arrays.asList(input), Arrays.asList(output), time, energy);
         if (!(input instanceof ItemComponent) || !(output instanceof FluidComponent)) {
             throw new IllegalArgumentException("MeltingRecipe input must be an ItemComponent and output must be a FluidComponent.");
         }
@@ -74,14 +74,14 @@ public class MeltingRecipe extends GenericRecipe {
 
     public static class MeltingRecipeFactory implements GenericRecipe.Serializer.RecipeFactory<MeltingRecipe> {
         @Override
-        public MeltingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time) {
+        public MeltingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time, int energy) {
             if (inputs.size() != 1 || !(inputs.get(0) instanceof ItemComponent)) {
                 throw new IllegalArgumentException("MeltingRecipe must have exactly one ItemComponent as input.");
             }
             if (outputs.size() != 1 || !(outputs.get(0) instanceof FluidComponent)) {
                 throw new IllegalArgumentException("MeltingRecipe must have exactly one FluidComponent as output.");
             }
-            return new MeltingRecipe(id, (ItemComponent) inputs.get(0), (FluidComponent) outputs.get(0), time);
+            return new MeltingRecipe(id, (ItemComponent) inputs.get(0), (FluidComponent) outputs.get(0), time, energy);
         }
     }
 }

@@ -49,6 +49,15 @@ public class SimpleSingleRecipeBuilder implements RecipeBuilder {
         this.serializer = pSerializer;
     }
 
+    public static SimpleSingleRecipeBuilder pressing(Item model, ItemStack pIngredient2, RecipeCategory pCategory, ItemStack pResult, float pExperience, int pCookingTime, int pEnergyCost) {
+        NonNullList<RecipeComponent> recipeComponents = NonNullList.create();
+        ItemComponent a = ItemComponent.of(new ItemStack(model, 1));
+        a.setNoCost();
+        recipeComponents.add(a);
+        recipeComponents.add(ItemComponent.of(pIngredient2));
+        return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, ItemComponent.of(pResult)),recipeComponents, pExperience, pCookingTime,pEnergyCost,  MillenniumRecipes.PRESSING_RECIPE.get());
+    }
+
     public static SimpleSingleRecipeBuilder resonance(ItemStack pIngredient, RecipeCategory pCategory, ItemStack pResult, float pExperience, int pCookingTime, int pEnergyCost) {
         return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, ItemComponent.of(pResult)),NonNullList.withSize(1, ItemComponent.of(pIngredient)), pExperience, pCookingTime,pEnergyCost,  MillenniumRecipes.RESONANCE_RECIPE.get());
     }
@@ -57,7 +66,6 @@ public class SimpleSingleRecipeBuilder implements RecipeBuilder {
         NonNullList<RecipeComponent> recipeComponents = NonNullList.create();
         recipeComponents.add(ItemComponent.of(pIngredientItem));
         recipeComponents.add(FluidComponent.of(pIngredientFluid));
-        Main.log(recipeComponents.toString());
         return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, FluidComponent.of(pResult)), recipeComponents, pExperience, pCookingTime,pEnergyCost, MillenniumRecipes.FUSION_RECIPE.get());
     }
 
@@ -159,6 +167,7 @@ public class SimpleSingleRecipeBuilder implements RecipeBuilder {
 
             pJson.addProperty("experience", this.experience);
             pJson.addProperty("time", this.time);
+            pJson.addProperty("energy", this.energy);
         }
 
         public RecipeSerializer<?> getType() {

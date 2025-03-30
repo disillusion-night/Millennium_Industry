@@ -5,6 +5,7 @@ import kivo.millennium.millind.recipe.CrushingRecipe;
 import kivo.millennium.millind.util.RecipeUtils;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.AbstractCookingRecipe;
@@ -111,15 +112,28 @@ public class MillenniumRecipeProvider extends RecipeProvider {
         melting(pWriter, MillenniumItems.CRYOLITE_DUST.get(), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_CRYOLITE.get(), 100), 100, 1000);
 
         fusion(pWriter, MillenniumItems.RAW_ALUMINUM_DUST.get(), new FluidStack(MillenniumFluids.MOLTEN_CRYOLITE.get(), 100), RecipeCategory.MISC, new FluidStack(MillenniumFluids.RAW_MOLTEN_ALUMINUM.get(), 100), 200, 1000);
+
+        fusion(pWriter, MillenniumItems.CARBON_DUST.get(), new FluidStack(MillenniumFluids.MOLTEN_IRON.get(), 100), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_STEEL.get(), 100), 200, 1000);
+
+        pressing(pWriter, MillenniumItems.ALUMINUM_INGOT.get(), new ItemStack(MillenniumItems.ALUMINUM_ALLOY_INGOT.get(), 1), RecipeCategory.MISC, MillenniumItems.ALUMINUM_ALLOY_PANEL.get(), 200, 4000);
         //SimpleSingleRecipeBuilder.crushing()
         //oneToOneConversionRecipe(pWriter, Blocks.REDSTONE_BLOCK.asItem(), new ItemStack(Items.REDSTONE, 9), "a");
     }
+
+    protected static void pressing(Consumer<FinishedRecipe> pFinishedRecipeConsumer, Item model, ItemStack itemStack, RecipeCategory pCategory, ItemLike pResult, int pCookingTime, int energy) {
+        SimpleSingleRecipeBuilder
+                .pressing(model, itemStack, pCategory, new ItemStack(pResult, 1), 0, pCookingTime,energy)
+                .unlockedBy("has_" + getRL(model).getPath(), has(model))
+                .save(pFinishedRecipeConsumer,  getRL(getRL(pResult).getPath() + "_from_pressing_" + getRL(itemStack.getItem()).getPath()));
+    }
+
     protected static void fusion(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredientItem, FluidStack pIngredientFluid, RecipeCategory pCategory, FluidStack pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
                 .fusion(new ItemStack(pIngredientItem),pIngredientFluid, pCategory, pResult, 0, pCookingTime, energy)
                 .unlockedBy("has_" + getRL(pIngredientItem).getPath(), has(pIngredientItem))
                 .save(pFinishedRecipeConsumer,  getRL(getRL(pResult.getFluid()).getPath() + "_from_fusion_" + getRL(pIngredientItem).getPath()+ "_and_" + getRL(pIngredientFluid.getFluid()).getPath()));
     }
+
     protected static void melting(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredient, RecipeCategory pCategory, FluidStack pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
                 .melting(new ItemStack(pIngredient), pCategory, pResult, 0, pCookingTime, energy)

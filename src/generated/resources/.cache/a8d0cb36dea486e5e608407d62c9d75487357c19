@@ -1,4 +1,4 @@
-// 1.20.1	2025-03-26T14:23:16.8951125	Item Models: millind
+// 1.20.1	2025-03-30T19:50:20.4312406	Item Models: millind
 b260dc2e5cd49cc4a4d01f27394df1af74fe556c assets/millind/models/item/aluminum_alloy_dust.json
 3c4d740a9aa6c4d95d3f2432f5e395d011548d02 assets/millind/models/item/aluminum_alloy_ingot.json
 e60d6efdec93a197e4506e3531aa672816a64c70 assets/millind/models/item/aluminum_alloy_nugget.json
@@ -8,6 +8,7 @@ e6247449d2f2633338429af3cdfc9c4c43027a13 assets/millind/models/item/aluminum_all
 035af8a425d726ce7d31a1502b4861f67fb99b0e assets/millind/models/item/aluminum_dust.json
 a54773138427f59d76788590db151f43e57facdf assets/millind/models/item/aluminum_ingot.json
 28124302090ef6e47c8922af02676dab8ac76488 assets/millind/models/item/aluminum_nugget.json
+915d62a1e8caf1419a7d78a94d7dce048ab46fa3 assets/millind/models/item/carbon_dust.json
 8fbf91e4978704f19eb9c8eef73bc5cf6a8fa364 assets/millind/models/item/copper_dust.json
 5dc4453ef1e4915bf5122524bf11ce9dd6367a12 assets/millind/models/item/cryolite.json
 b06f4ba5fdd88a50ad73ca6e1b9a1b0b4c82dcdb assets/millind/models/item/cryolite_dust.json

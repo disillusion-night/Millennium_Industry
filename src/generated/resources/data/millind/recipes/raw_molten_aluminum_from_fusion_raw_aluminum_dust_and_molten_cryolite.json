@@ -1,6 +1,7 @@
 {
   "type": "millind:fusion",
   "category": "misc",
+  "energy": 1000,
   "experience": 0.0,
   "ingredients": [
     {

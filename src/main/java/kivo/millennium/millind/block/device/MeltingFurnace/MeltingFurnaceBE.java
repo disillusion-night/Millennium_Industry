@@ -8,7 +8,6 @@ import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.recipe.ExtendedContainer;
 import kivo.millennium.millind.recipe.MeltingRecipe;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
@@ -108,7 +107,7 @@ public class MeltingFurnaceBE extends AbstractMachineBE{
     }
 
     private void meltItem(FluidStack recipeOutput) {
-        getItemHandler().extractItem(0, 1, false); // 移除一个输入物品
+        getItemHandler().extractItem(INPUT_SLOT, 1, false); // 移除一个输入物品
         this.cache.getFluidCapability().fill(new FluidStack(recipeOutput.getFluid(), recipeOutput.getAmount()), IFluidHandler.FluidAction.EXECUTE);
         this.currentRecipeOutput = FluidStack.EMPTY; // 重置当前配方输出
         this.setChanged();

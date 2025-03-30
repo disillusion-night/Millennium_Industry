@@ -26,7 +26,7 @@ public class MeltingFurnaceScreen extends AbstractDeviceSC<MeltingFurnaceContain
     private static final Vector2i ProgressPos = new Vector2i(78, 38);
     private static final Vector2i fluidSlotPos = new Vector2i(107, 16);
     private static final Vector2i fluidSlotSize = new Vector2i(16,57);
-    private static final Vector2i FlamePos = new Vector2i(82, 53);
+    private static final Vector2i FlamePos = new Vector2i(81, 53);
 
     @Override
     public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTick) {
@@ -58,14 +58,8 @@ public class MeltingFurnaceScreen extends AbstractDeviceSC<MeltingFurnaceContain
                 && mouseY >= topPos + fluidSlotPos.y
                 && mouseY < topPos + fluidSlotPos.y + fluidSlotSize.y
         ) {
-            renderfluidTip(pGuiGraphics, mouseX, mouseY);;
+           RenderUtils.renderfluidTip(pGuiGraphics,font,this.menu.getFluid(),this.menu.getFluidCapacity(), mouseX, mouseY);;
         }
-    }
-    protected void renderfluidTip(GuiGraphics pGuiGraphics, int mouseX, int mouseY){
-        pGuiGraphics.renderTooltip(this.font, Component
-                .literal(menu.getFluid().getDisplayName().getString())
-                .append(NumberUtils.int2String(menu.getFluidAmount()) + "/" + NumberUtils.int2String(menu.getFluidCapacity()) + " mB")
-                , mouseX, mouseY);
     }
 
 }

@@ -1,6 +1,7 @@
 {
   "type": "millind:crushing",
   "category": "misc",
+  "energy": 1000,
   "experience": 0.0,
   "ingredient": {
     "item": "minecraft:iron_ingot"

@@ -218,6 +218,11 @@ public class MillenniumFluidStorage implements IFluidHandler {
         return addFluidToTank(size - 1, resource, action);
     }
 
+    public int fill(int tank, FluidStack resource, FluidAction action)
+    {
+        return addFluidToTank(tank, resource, action);
+    }
+
     public int drainFluidFromTank(int tank, int amount){
         int curr = getFluidAmount(tank);
         if(curr > amount){

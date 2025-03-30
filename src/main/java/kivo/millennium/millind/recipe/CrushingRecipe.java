@@ -13,8 +13,8 @@ import java.util.List;
 import static kivo.millennium.millind.Main.getRL;
 
 public class CrushingRecipe extends GenericRecipe {
-    public CrushingRecipe(ResourceLocation id, ItemComponent input, ItemComponent output, int time) {
-        super(id, Arrays.asList(input), Arrays.asList(output), time);
+    public CrushingRecipe(ResourceLocation id, ItemComponent input, ItemComponent output, int time, int energy) {
+        super(id, Arrays.asList(input), Arrays.asList(output), time, energy);
     }
 
     @Override
@@ -60,14 +60,14 @@ public class CrushingRecipe extends GenericRecipe {
 
     public static class CrushingRecipeFactory implements GenericRecipe.Serializer.RecipeFactory<CrushingRecipe> {
         @Override
-        public CrushingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time) {
+        public CrushingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time, int energy) {
             if (inputs.size() != 1 || !(inputs.get(0) instanceof ItemComponent)) {
                 throw new IllegalArgumentException("CrushingRecipe must have exactly one ItemComponent as input.");
             }
             if (outputs.size() != 1 || !(outputs.get(0) instanceof ItemComponent)) {
                 throw new IllegalArgumentException("CrushingRecipe must have exactly one ItemComponent as output.");
             }
-            return new CrushingRecipe(id, (ItemComponent) inputs.get(0), (ItemComponent) outputs.get(0), time);
+            return new CrushingRecipe(id, (ItemComponent) inputs.get(0), (ItemComponent) outputs.get(0), time, energy);
         }
     }
 }

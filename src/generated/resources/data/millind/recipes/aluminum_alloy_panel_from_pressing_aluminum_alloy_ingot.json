@@ -1,0 +1,19 @@
+{
+  "type": "millind:pressing",
+  "category": "misc",
+  "energy": 4000,
+  "experience": 0.0,
+  "ingredients": [
+    {
+      "cost_chance": 0.0,
+      "item": "millind:aluminum_ingot"
+    },
+    {
+      "item": "millind:aluminum_alloy_ingot"
+    }
+  ],
+  "result": {
+    "item": "millind:aluminum_alloy_panel"
+  },
+  "time": 200
+}

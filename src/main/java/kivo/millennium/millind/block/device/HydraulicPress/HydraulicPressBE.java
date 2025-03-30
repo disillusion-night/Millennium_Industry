@@ -1,161 +1,77 @@
 package kivo.millennium.millind.block.device.HydraulicPress;
 
 import kivo.millennium.millind.block.device.AbstractMachineBE;
+import kivo.millennium.millind.block.device.AbstractRecipeMachineBE;
 import kivo.millennium.millind.capability.CapabilityCache;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.recipe.CrushingRecipe;
 import kivo.millennium.millind.recipe.ExtendedContainer;
+import kivo.millennium.millind.recipe.PressingRecipe;
+import kivo.millennium.millind.recipe.RecipeComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.state.BlockState;
 
+import java.util.List;
 import java.util.Optional;
 
 import static kivo.millennium.millind.block.device.MillenniumBlockProperty.WORKING;
 
-public class HydraulicPressBE extends AbstractMachineBE {
+public class HydraulicPressBE extends AbstractRecipeMachineBE<PressingRecipe> {
     public static final int SLOT_COUNT = 4;
-    public static int BATTERY_SLOT = 0;
     public static int INPUT1_SLOT = 1;
     public static int INPUT2_SLOT = 2;
     public static int OUTPUT_SLOT = 3;
-    private final int energyUsagePerTick = 200;
-    private int totalTime = 100;
-    private boolean isWorking;
 
     public HydraulicPressBE(BlockPos pPos, BlockState pBlockState) {
-        super(MillenniumBlockEntities.HYDRAULIC_PRESS_BE.get(), pPos, pBlockState, new CapabilityCache.Builder()
+        super(MillenniumBlockEntities.HYDRAULIC_PRESS_BE.get(),PressingRecipe.Type.INSTANCE, pPos, pBlockState, new CapabilityCache.Builder()
                 .withEnergy(100000, 2000)
                 .withItems(4));
     }
 
     @Override
-    protected void tickServer(){
-        ItemStack inputStack1 = getItemHandler().getStackInSlot(INPUT1_SLOT);
-        ItemStack inputStack2 = getItemHandler().getStackInSlot(INPUT2_SLOT);
-        ItemStack outputStack = getItemHandler().getStackInSlot(OUTPUT_SLOT);
-        boolean canStartCrushing = false;
+    protected ExtendedContainer getInputs() {
+        ExtendedContainer container = new ExtendedContainer(2);
+        container.setItem(0, getItemHandler().getStackInSlot(INPUT1_SLOT));
+        container.setItem(1, getItemHandler().getStackInSlot(INPUT2_SLOT));
 
-        if (!inputStack1.isEmpty()) {
-            Optional<CrushingRecipe> recipe = level.getRecipeManager().getRecipeFor(CrushingRecipe.Type.INSTANCE, new ExtendedContainer(inputStack2), level);
-
-            if (recipe.isPresent()) {
-                ItemStack recipeOutput = recipe.get().assemble(new ExtendedContainer(inputStack2), level.registryAccess());
-                if (canCrush(outputStack, recipeOutput) && getEnergyStorage().getEnergyStored() >= energyUsagePerTick) {
-                    canStartCrushing = true;
-                }
-
-                if (canStartCrushing) {
-                    if(!isWorking){
-                        startWorking();
-                    }
-                    addProgress();
-                    getEnergyStorage().costEnergy(energyUsagePerTick);
-
-                    if (getProgress() >= totalTime) {
-                        crushItem(recipeOutput);
-                        resetProgress();
-                    }
-                    setChanged();
-                } else {
-                    resetProgress();
-                    stopWorking();
-                }
-            }
-        } else {
-            resetProgress();
-            stopWorking();
-        }
-
+        return container;
     }
 
-
-    private void addProgress(){
-        cache.addProgress(1);
-    }
-
-    private int getProgress(){
-        return cache.getProgress();
-    }
-    private void resetProgress() {
-        cache.setProgress(0);
-    }
-
-    public int getProgressPercent() {
-        return (int) (((float) getProgress() / totalTime) * 100);
-    }
-
-
-    private void startWorking(){
-        isWorking = true;
-        level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, true), 3);
-    }
-
-    private void stopWorking(){
-        isWorking = false;
-        level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, false), 3);
-
-    }
-    /*
-
-    protected SimpleContainer getInputs(){
-        return new SimpleContainer();
-    }
-
-    /*
     @Override
-    protected void onContentChange(int slot) {
-        if (slot == INPUT1_SLOT || slot == INPUT2_SLOT) {
-            ItemStack inputStack1 = getItemHandler().getStackInSlot(INPUT1_SLOT);
-            ItemStack inputStack2 = itemHandler.getStackInSlot(INPUT2_SLOT);
-            if (inputStack1.isEmpty() || inputStack2.isEmpty()) {
-                resetProgress();
-            }
-        }
-    }*/
-
-
-    public boolean isWorking() {
-        return getBlockState().getValue(HydraulicPressBL.WORKING);
+    protected boolean isInputValid() {
+        return !(getItemHandler().getStackInSlot(INPUT1_SLOT).isEmpty() || getItemHandler().getStackInSlot(INPUT2_SLOT).isEmpty());
     }
 
-
-    public int getProgressAndLit() {
-        if (isWorking()) {
-            return getProgressPercent() << 1 | 1;
-        } else {
-            return getProgressPercent() << 1;
-        }
-    }
-
-    private boolean canCrush(ItemStack outputStack, ItemStack recipeOutput) {
-        if (recipeOutput.isEmpty()) {
+    @Override
+    protected boolean canProcess(List<? extends RecipeComponent> recipeOutputs) {
+        if (recipeOutputs.isEmpty()) {
             return false;
         }
 
-        if (outputStack.isEmpty()) {
+        if (getItemHandler().getStackInSlot(OUTPUT_SLOT).isEmpty()) {
             return true;
         }
 
-        if (!outputStack.is(recipeOutput.getItem())) {
+        if (!getItemHandler().getStackInSlot(OUTPUT_SLOT).is(recipeOutputs.get(0).asItemComponent().getItemStack().getItem())) {
             return false;
         }
 
-        return outputStack.getCount() + recipeOutput.getCount() <= outputStack.getMaxStackSize();
+        return getItemHandler().getStackInSlot(OUTPUT_SLOT).getCount() + recipeOutputs.get(0).asItemComponent().getItemStack().getCount() <= getItemHandler().getSlotLimit(OUTPUT_SLOT);
+
     }
 
-    private void crushItem(ItemStack recipeOutput) {
+    @Override
+    protected void processItem(ExtendedContainer container, PressingRecipe recipe, int energycost) {
         ItemStack outputStack = getItemHandler().getStackInSlot(OUTPUT_SLOT);
-
+        ItemStack result = recipe.getResultItem(null);
         if (outputStack.isEmpty()) {
-            getItemHandler().setStackInSlot(OUTPUT_SLOT, recipeOutput.copy());
-        } else if (outputStack.is(recipeOutput.getItem())) {
-            outputStack.grow(recipeOutput.getCount());
+            getItemHandler().setStackInSlot(OUTPUT_SLOT, result);
+        } else if (outputStack.is(result.getItem())) {
+            outputStack.grow(result.getCount());
         }
-
-        getItemHandler().extractItem(INPUT1_SLOT, 1, false);
-        getItemHandler().extractItem(INPUT2_SLOT, 1, false);
+        recipe.costItem(getItemHandler().getStackInSlot(1), getItemHandler().getStackInSlot(2));
     }
 }

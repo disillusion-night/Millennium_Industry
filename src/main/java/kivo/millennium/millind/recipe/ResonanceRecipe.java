@@ -16,8 +16,8 @@ import java.util.List;
 import static kivo.millennium.millind.Main.getRL;
 
 public class ResonanceRecipe extends GenericRecipe {
-    public ResonanceRecipe(ResourceLocation id, ItemComponent inputItem, ItemComponent output, int time) {
-        super(id, Arrays.asList(inputItem), Arrays.asList(output), time);
+    public ResonanceRecipe(ResourceLocation id, ItemComponent inputItem, ItemComponent output, int time, int energy) {
+        super(id, Arrays.asList(inputItem), Arrays.asList(output), time, energy);
         if (!(inputItem instanceof ItemComponent) || !(output instanceof ItemComponent)) {
             throw new IllegalArgumentException("MeltingRecipe input item must be an ItemComponent,input fluid must be an FluidComponent and output must be a FluidComponent.");
         }
@@ -66,14 +66,14 @@ public class ResonanceRecipe extends GenericRecipe {
 
     public static class FusionRecipeFactory implements GenericRecipe.Serializer.RecipeFactory<ResonanceRecipe> {
         @Override
-        public ResonanceRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time) {
+        public ResonanceRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time, int energy) {
             if (inputs.size() != 2 || !(inputs.get(0) instanceof ItemComponent)) {
                 throw new IllegalArgumentException("MeltingRecipe must have exactly one ItemComponent as input.");
             }
             if (outputs.size() != 1 || !(outputs.get(0) instanceof FluidComponent)) {
                 throw new IllegalArgumentException("MeltingRecipe must have exactly one FluidComponent as output.");
             }
-            return new ResonanceRecipe(id, (ItemComponent) inputs.get(0), (ItemComponent) outputs.get(0), time);
+            return new ResonanceRecipe(id, (ItemComponent) inputs.get(0), (ItemComponent) outputs.get(0), time, energy);
         }
     }
 }

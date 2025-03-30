@@ -38,8 +38,11 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
         SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_DUST);
         SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_NUGGET);
 
+        SimpleMaterialItem(MillenniumItems.CARBON_DUST);
+
         SimpleMaterialItem(MillenniumItems.CRYOLITE);
         SimpleMaterialItem(MillenniumItems.CRYOLITE_DUST);
+
 
         SimpleMaterialItem(MillenniumItems.COPPER_DUST);
 

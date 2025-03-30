@@ -1,64 +1,45 @@
 package kivo.millennium.millind.recipe;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
-import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
-import net.minecraft.world.SimpleContainer;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.crafting.*;
-import net.minecraft.world.level.Level;
-import org.jetbrains.annotations.Nullable;
+import net.minecraft.world.item.crafting.CookingBookCategory;
+import net.minecraft.world.item.crafting.RecipeSerializer;
+import net.minecraft.world.item.crafting.RecipeType;
+import net.minecraftforge.fluids.FluidStack;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static kivo.millennium.millind.Main.getRL;
 
-public class PressingRecipe implements Recipe<SimpleContainer> {
-    private final ResourceLocation id;
-    private final ItemStack output;
-    private final Ingredient recipeItem;
-
-    public PressingRecipe(ResourceLocation id, ItemStack output, Ingredient recipeItem) {
-        this.id = id;
-        this.output = output;
-        this.recipeItem = recipeItem;
-    }
-
-    @Override
-    public boolean matches(SimpleContainer pContainer, Level pLevel) {
-        if(pLevel.isClientSide()) {
-            return false;
+public class PressingRecipe extends GenericRecipe {
+    public PressingRecipe(ResourceLocation id, ItemComponent input1, ItemComponent input2, ItemComponent output, int time, int energy) {
+        super(id, Arrays.asList(input1, input2), Arrays.asList(output), time, energy);
+        if (!(input1 instanceof ItemComponent) || !(input2 instanceof ItemComponent) || !(output instanceof ItemComponent)) {
+            throw new IllegalArgumentException("MeltingRecipe input item must be an ItemComponent,input fluid must be an FluidComponent and output must be a FluidComponent.");
         }
-        return recipeItem.test(pContainer.getItem(0));
     }
 
     @Override
-    public ItemStack assemble(SimpleContainer pContainer, RegistryAccess pRegistryAccess) {
-        return output;
+    public ComponentCollection getCollection(ExtendedContainer container) {
+        return new ComponentCollection()
+                .addItemStack(container.getItem(0))
+                .addItemStack(container.getItem(1));
     }
 
-    @Override
-    public NonNullList<Ingredient> getIngredients() {
-        return NonNullList.withSize(1, recipeItem);
-    }
-
-    @Override
-    public boolean canCraftInDimensions(int pWidth, int pHeight) {
-        return true;
+    public void costItem(ItemStack itemStack1, ItemStack itemStack2){
+        if (this.inputs.get(0).asItemComponent().getCostChance() > 0.0f) {
+            itemStack1.grow(-1);
+        }
+        if (this.inputs.get(1).asItemComponent().getCostChance() > 0.0f) {
+            itemStack2.grow(-1);
+        }
     }
 
     @Override
     public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
-        return output.copy();
-    }
-
-    @Override
-    public ResourceLocation getId() {
-        return id;
+        return outputs.get(0).asItemComponent().getItemStack().copy();
     }
 
     @Override
@@ -73,59 +54,29 @@ public class PressingRecipe implements Recipe<SimpleContainer> {
 
     public static class Type implements RecipeType<PressingRecipe> {
         private Type() { }
-        public static final Type INSTANCE = new Type();
-        public static final String ID = "crushing";
+        public static final PressingRecipe.Type INSTANCE = new PressingRecipe.Type();
+        public static final String ID = "pressing";
     }
 
+    public static class Serializer extends GenericRecipe.Serializer<PressingRecipe> {
+        public static final Serializer INSTANCE = new Serializer(new FusionRecipeFactory());
+        public static final ResourceLocation ID = getRL("pressing");
 
-    public static class Serializer implements RecipeSerializer<PressingRecipe> {
-        public static final Serializer INSTANCE = new Serializer();
-        public static final ResourceLocation ID =
-                getRL("crushing");
-
-        @Override
-        public PressingRecipe fromJson(ResourceLocation pRecipeId, JsonObject pSerializedRecipe) { ItemStack output;
-            if (pSerializedRecipe.has("result")) {
-                JsonElement resultElement = pSerializedRecipe.get("result");
-                if (resultElement.isJsonObject()) {
-                    output = ShapedRecipe.itemStackFromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "result"));
-                } else if (resultElement.isJsonPrimitive() && resultElement.getAsJsonPrimitive().isString()) {
-                    String itemId = GsonHelper.getAsString(pSerializedRecipe, "result");
-                    ResourceLocation itemLocation = new ResourceLocation(itemId);
-                    output = new ItemStack(BuiltInRegistries.ITEM.getOptional(itemLocation).orElseThrow(() ->
-                            new IllegalStateException("Item: " + itemId + " does not exist")), 1);
-                } else {
-                    throw new JsonSyntaxException("Expected 'result' to be a string or an object");
-                }
-            } else {
-                throw new JsonSyntaxException("Missing 'result', expected to find a string or object");
-            }
-
-            Ingredient ingredient = Ingredient.fromJson(GsonHelper.getAsJsonObject(pSerializedRecipe, "ingredient"));
-
-            return new PressingRecipe(pRecipeId, output, ingredient);
+        public Serializer(RecipeFactory<PressingRecipe> factory) {
+            super(factory);
         }
+    }
 
+    public static class FusionRecipeFactory implements GenericRecipe.Serializer.RecipeFactory<PressingRecipe> {
         @Override
-        public @Nullable PressingRecipe fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
-            NonNullList<Ingredient> inputs = NonNullList.withSize(buf.readInt(), Ingredient.EMPTY);
-
-            for (int i = 0; i < inputs.size(); i++) {
-                inputs.set(i, Ingredient.fromNetwork(buf));
+        public PressingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time, int energy) {
+            if (inputs.size() != 2 || !(inputs.get(0) instanceof ItemComponent)) {
+                throw new IllegalArgumentException("MeltingRecipe must have exactly one ItemComponent as input.");
             }
-
-            ItemStack output = buf.readItem();
-            return new PressingRecipe(id, output, inputs.get(0));
-        }
-
-        @Override
-        public void toNetwork(FriendlyByteBuf buf, PressingRecipe recipe) {
-            buf.writeInt(recipe.getIngredients().size());
-
-            for (Ingredient ing : recipe.getIngredients()) {
-                ing.toNetwork(buf);
+            if (outputs.size() != 1 || !(outputs.get(0) instanceof ItemComponent)) {
+                throw new IllegalArgumentException("MeltingRecipe must have exactly one FluidComponent as output.");
             }
-            buf.writeItemStack(recipe.getResultItem(null), false);
+            return new PressingRecipe(id, inputs.get(0).asItemComponent(),inputs.get(1).asItemComponent(), outputs.get(0).asItemComponent(), time, energy);
         }
     }
 }

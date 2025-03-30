@@ -9,17 +9,29 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
+import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemComponent implements RecipeComponent {
 
     private ItemStack itemStack;
+    private float costChance;
 
     public ItemComponent(ItemStack itemStack) {
         this.itemStack = itemStack.copy();
+        this.costChance = 1;
+    }
+
+    public ItemComponent(ItemStack itemStack, int costChance) {
+        this.itemStack = itemStack.copy();
+        this.costChance = costChance;
     }
 
     public static ItemComponent of(ItemStack itemStack){
         return new ItemComponent(itemStack);
+    }
+
+    public static ItemComponent of(ItemStack itemStack, int costChance){
+        return new ItemComponent(itemStack, costChance);
     }
 
     public ItemStack getItemStack() {
@@ -39,6 +51,9 @@ public class ItemComponent implements RecipeComponent {
     public JsonObject toJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("item", BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toString());
+        if(costChance != 1) {
+            jsonObject.addProperty("cost_chance", costChance);
+        }
         if (itemStack.getCount() > 1) {
             jsonObject.addProperty("count", itemStack.getCount());
         }
@@ -50,34 +65,12 @@ public class ItemComponent implements RecipeComponent {
 
     @Override
     public void readFromJson(JsonObject jsonObject) {
-        ResourceLocation itemLocation;
-        int count = 1;
-
-        if (jsonObject.has("item")) {
-            JsonElement itemElement = jsonObject.get("item");
-            if (itemElement.isJsonPrimitive() && itemElement.getAsJsonPrimitive().isString()) {
-                itemLocation = new ResourceLocation(itemElement.getAsString());
-            } else if (itemElement.isJsonObject()) {
-                JsonObject itemObject = itemElement.getAsJsonObject();
-                itemLocation = new ResourceLocation(GsonHelper.getAsString(itemObject, "item"));
-                count = GsonHelper.getAsInt(itemObject, "count", 1);
-            } else {
-                throw new JsonSyntaxException("Expected 'item' to be a string or an object containing 'item'");
-            }
-        } else if (jsonObject.isJsonPrimitive() && jsonObject.getAsJsonPrimitive().isString()) {
-            itemLocation = new ResourceLocation(jsonObject.getAsString());
-        } else {
-            throw new JsonSyntaxException("Expected item data to be a string or an object containing 'item'");
-        }
-
-        this.itemStack = new ItemStack(BuiltInRegistries.ITEM.get(itemLocation), count);
-
-        if (jsonObject.has("nbt")) {/*
-            try {
-                this.itemStack.setTag(net.minecraft.nbt.CompoundTag.tryParse(GsonHelper.getAsString(jsonObject, "nbt")));
-            } catch (net.minecraft.nbt.TagFormatException e) {
-                e.printStackTrace();
-            }*/
+        ResourceLocation item = new ResourceLocation(GsonHelper.getAsString(jsonObject, "item"));
+        int count = GsonHelper.getAsInt(jsonObject, "count", 1);
+        this.costChance = GsonHelper.getAsFloat(jsonObject, "cost_chance", 1.0F);
+        this.itemStack = new ItemStack(ForgeRegistries.ITEMS.getValue(item), count);
+        if (this.itemStack.isEmpty()) {
+            throw new JsonSyntaxException("Unknown item: " + item);
         }
     }
 
@@ -94,5 +87,13 @@ public class ItemComponent implements RecipeComponent {
     @Override
     public String getType() {
         return "item";
+    }
+
+    public float getCostChance() {
+        return costChance;
+    }
+
+    public void setNoCost(){
+        this.costChance = 0;
     }
 }

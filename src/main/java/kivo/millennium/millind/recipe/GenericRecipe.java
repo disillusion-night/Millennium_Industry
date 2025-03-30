@@ -22,13 +22,15 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
     protected final ResourceLocation id;
     protected final ComponentCollection inputs;
     protected final NonNullList<? extends RecipeComponent> outputs;
+    protected int energyCost;
     protected int time;
 
-    public GenericRecipe(ResourceLocation id, List<RecipeComponent> inputs, List<? extends RecipeComponent> outputs, int time) {
+    public GenericRecipe(ResourceLocation id, List<RecipeComponent> inputs, List<? extends RecipeComponent> outputs, int time, int energyCost) {
         this.id = id;
         this.inputs = new ComponentCollection(inputs);
         this.outputs = NonNullList.of(null, outputs.toArray(new RecipeComponent[0]));
         this.time = time;
+        this.energyCost = energyCost;
     }
 
     @Override
@@ -43,6 +45,10 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
 
     protected boolean serverMatches(ComponentCollection target){
         return inputs.matches(target);
+    }
+
+    public int getEnergyCost(){
+        return this.energyCost;
     }
 
     @Override
@@ -123,6 +129,7 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
             List<RecipeComponent> inputs = new ArrayList<>();
             List<RecipeComponent> outputs = new ArrayList<>();
             int time = 200;
+            int energyCost = 0;
 
             // 解析输入成分 (支持单个 "ingredient" 或 "ingredients" 数组)
             if (json.has("ingredient")) {
@@ -169,12 +176,17 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
             } else {
                 throw new JsonSyntaxException("Missing 'result' or 'results', expected to find one for output");
             }
+
             if (json.has("time")){
                 time = json.get("time").getAsInt();
+            }else {
+                throw new JsonSyntaxException("Missing 'time', expected to find a int");
             }
 
+            energyCost = GsonHelper.getAsInt(json, "energy", 0);
 
-            return factory.create(recipeId, GsonHelper.getAsString(json, "group", ""), CookingBookCategory.MISC, inputs, outputs, time);
+
+            return factory.create(recipeId, GsonHelper.getAsString(json, "group", ""), CookingBookCategory.MISC, inputs, outputs, time, energyCost);
         }
 
         @Override
@@ -203,7 +215,7 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
                 outputs.add(component);
             }
 
-            return factory.create(id, buf.readUtf(), buf.readEnum(CookingBookCategory.class), inputs, outputs, buf.readInt());
+            return factory.create(id, buf.readUtf(), buf.readEnum(CookingBookCategory.class), inputs, outputs, buf.readInt(), buf.readInt());
         }
 
         @Override
@@ -224,6 +236,7 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
                 output.writeToNetwork(buf);
             }
             buf.writeInt(recipe.time);
+            buf.writeInt(recipe.energyCost);
         }
 
         // 修改后的 createComponentFromJson
@@ -235,8 +248,7 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
                     component.readFromJson(jsonObject);
                     return component;
                 } else if (jsonObject.has("fluid")) {
-                    // 假设 FluidComponent 存在并且有 readFromJson 方法
-                    FluidComponent component = new FluidComponent(FluidStack.EMPTY); // 你可能需要根据你的 FluidComponent 的构造函数进行调整
+                    FluidComponent component = new FluidComponent(FluidStack.EMPTY);
                     component.readFromJson(jsonObject);
                     return component;
                 }
@@ -261,7 +273,7 @@ public abstract class GenericRecipe implements Recipe<ExtendedContainer> {
         }
 
         public interface RecipeFactory<T extends GenericRecipe> {
-            T create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time);
+            T create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time, int energyCost);
         }
     }
 }

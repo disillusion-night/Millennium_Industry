@@ -41,6 +41,24 @@ public interface RecipeComponent {
      */
     void readFromNetwork(FriendlyByteBuf buffer);
 
+    default ItemComponent asItemComponent(){
+        if (this instanceof ItemComponent){
+            return (ItemComponent) this;
+        }else {
+            return null;
+        }
+    }
+
+
+    default FluidComponent asFluidComponent(){
+        if (this instanceof FluidComponent){
+            return (FluidComponent) this;
+        }else {
+            return null;
+        }
+    }
+
+
     /**
      * 返回此成分的类型标识符，用于在 JSON 和网络数据中区分不同的成分类型。
      *

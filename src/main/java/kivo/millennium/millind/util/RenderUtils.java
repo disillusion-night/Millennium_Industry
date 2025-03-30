@@ -2,17 +2,23 @@ package kivo.millennium.millind.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import org.joml.Matrix4f;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static kivo.millennium.millind.Main.getRL;
 
@@ -21,6 +27,8 @@ public class RenderUtils {
     private static final ResourceLocation PROGRESS_TEXTURE = getRL("textures/gui/container/progress_arrow.png");
 
     private static final ResourceLocation FLAME_TEXTURE = getRL("textures/gui/container/furnace_flame.png");
+
+    private static final ResourceLocation SNOW_TEXTURE = getRL("textures/gui/container/snow.png");
 
     public static void renderFluid(GuiGraphics guiGraphics, FluidStack fluidStack, int x, int y, int width, int height, int blitOffset, int capacity) {
         if (fluidStack.isEmpty()) return;
@@ -83,5 +91,16 @@ public class RenderUtils {
 
     public static void renderFlame(GuiGraphics pGuiGraphics, int x, int y) {
             pGuiGraphics.blit(FLAME_TEXTURE, x, y, 0, 0, 14, 14, 14, 14);
+    }
+    public static void renderSnow(GuiGraphics pGuiGraphics, int x, int y) {
+        pGuiGraphics.blit(SNOW_TEXTURE, x, y, 0, 0, 14, 14, 14, 14);
+    }
+
+    public static void renderfluidTip(GuiGraphics pGuiGraphics, Font font,FluidStack fluidStack, int capability, int mouseX, int mouseY){
+        pGuiGraphics.renderTooltip(font, List.of(Component
+                        .literal(fluidStack.getDisplayName().getString()).getVisualOrderText(), Component
+                        .literal(NumberUtils.int2String(fluidStack.getAmount()) + "/" + NumberUtils.int2String(capability) + " mB")
+                        .withStyle(ChatFormatting.GRAY).getVisualOrderText())
+                , mouseX, mouseY);
     }
 }

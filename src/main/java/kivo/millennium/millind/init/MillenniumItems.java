@@ -29,6 +29,8 @@ public class MillenniumItems {
 
     public static final RegistryObject<Item> STONE_DUST = createMaterial("stone_dust");
 
+    public static final RegistryObject<Item> CARBON_DUST = createMaterial("carbon_dust");
+
     public static final RegistryObject<Item> COPPER_DUST = createMaterial("copper_dust");
 
     public static final RegistryObject<Item> IRON_DUST = createMaterial("iron_dust");

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "millind:item/tool/wolfram_steel_shovel"
+  }
+}

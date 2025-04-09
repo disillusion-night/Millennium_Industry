@@ -1,18 +1,13 @@
 package kivo.millennium.millind.block.device;
 
-import kivo.millennium.millind.Main;
 import kivo.millennium.millind.capability.CapabilityCache;
-import kivo.millennium.millind.recipe.ExtendedContainer;
-import kivo.millennium.millind.recipe.GenericRecipe;
-import kivo.millennium.millind.recipe.RecipeComponent;
+import kivo.millennium.millind.recipe.*;
 import net.minecraft.core.BlockPos;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
-import java.util.List;
 import java.util.Optional;
 
 import static kivo.millennium.millind.block.device.MillenniumBlockProperty.WORKING;
@@ -34,12 +29,14 @@ public abstract class AbstractRecipeMachineBE<R extends GenericRecipe> extends A
     protected void tickServer() {
         handleEnergyAcceptFromBattery();
         if (isInputValid()) {
-            Optional<R> recipeO = level.getRecipeManager().getRecipeFor(RecipeType, getInputs(), level);
+            NeoContainer inputs = getInputs();
+
+            Optional<R> recipeO = level.getRecipeManager().getRecipeFor(RecipeType, inputs, level);
 
             if (recipeO.isPresent()) {
                 R recipe = recipeO.get();
                 boolean canStart = false;
-                List<? extends RecipeComponent> recipeOutput = recipe.getRecipeOutputs();
+                NeoContainer recipeOutput = recipe.getOutputs();
                 if (canProcess(recipeOutput) && getEnergyStorage().getEnergyStored() >= getEnergyCost()) {
                     canStart = true;
                 }
@@ -52,7 +49,7 @@ public abstract class AbstractRecipeMachineBE<R extends GenericRecipe> extends A
 
                     if (getProgress() >= totalTime) {
                         getEnergyStorage().costEnergy(recipe.getEnergyCost());
-                        processItem(getInputs(), recipe, recipe.getEnergyCost());
+                        process(recipe, recipe.getEnergyCost());
                         resetProgress();
                     }
                     setChanged();
@@ -68,25 +65,33 @@ public abstract class AbstractRecipeMachineBE<R extends GenericRecipe> extends A
 
     }
 
-    private void addProgress(){
+    protected void addProgress(){
         cache.addProgress(1);
     }
 
-    private int getProgress(){
+    protected int getProgress(){
         return cache.getProgress();
     }
-    private void resetProgress() {
+    protected void resetProgress() {
         cache.setProgress(0);
     }
 
-    private void startWorking(){
+    protected void setTotalTime(int totalTime){
+        this.totalTime = totalTime;
+    }
+
+    protected int getTotalTime(){
+         return this.totalTime;
+    }
+
+    protected void startWorking(){
         if (!isWorking){
             level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, true), 3);
             isWorking = true;
         }
     }
 
-    private void stopWorking(){
+    protected void stopWorking(){
         if (isWorking){
             level.setBlock(getBlockPos(),getBlockState().setValue(WORKING, false), 3);
             isWorking = false;
@@ -102,7 +107,11 @@ public abstract class AbstractRecipeMachineBE<R extends GenericRecipe> extends A
         return (int) (((float) getProgress() / totalTime) * 100);
     }
 
-    protected abstract ExtendedContainer getInputs();
+    protected abstract NeoContainer getInputs();
+
+    protected abstract NeoContainer getOutputs();
+
+    protected abstract void acceptOutputs(NeoContainer container);
 
     protected abstract boolean isInputValid();
 
@@ -110,9 +119,13 @@ public abstract class AbstractRecipeMachineBE<R extends GenericRecipe> extends A
         return 0;
     }
 
-    protected abstract boolean canProcess(List<? extends RecipeComponent> recipeOutputs);
+    protected abstract boolean canProcess(NeoContainer neoContainer);
 
-    protected abstract void processItem(ExtendedContainer container, R recipe, int energycost);
+    protected void process(R recipe,int energycost) {
+        NeoContainer container = getOutputs();
+        recipe.process(getInputs(), container, energycost);
+        acceptOutputs(container);
+    }
 
     protected void handleEnergyAcceptFromBattery(){
         getItemHandler().getStackInSlot(BATTERY_SLOT).getCapability(ForgeCapabilities.ENERGY).ifPresent(energy -> {

@@ -30,6 +30,9 @@ public class MillenniumRecipes {
     public static final RegistryObject<RecipeSerializer<PressingRecipe>> PRESSING_RECIPE =
             SERIALIZERS.register("pressing", () -> PressingRecipe.Serializer.INSTANCE);
 
+    public static final RegistryObject<RecipeSerializer<CrystallizingRecipe>> CRYSTALLIZING_RECIPE =
+            SERIALIZERS.register("crystallizing", () -> CrystallizingRecipe.Serializer.INSTANCE);
+
     public static void register(IEventBus eventBus) {
         SERIALIZERS.register(eventBus);
     }

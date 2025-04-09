@@ -51,9 +51,9 @@ public class ItemComponent implements RecipeComponent {
     public JsonObject toJson() {
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty("item", BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toString());
-        if(costChance != 1) {
-            jsonObject.addProperty("cost_chance", costChance);
-        }
+        //if(costChance ) {
+            //jsonObject.addProperty("damage", costChance);
+        //}
         if (itemStack.getCount() > 1) {
             jsonObject.addProperty("count", itemStack.getCount());
         }

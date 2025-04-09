@@ -41,7 +41,7 @@ public class HDECBERenderer implements BlockEntityRenderer<HDECBE> {
 
         VertexConsumer builder = bufferSource.getBuffer(RenderType.lines());
 
-        // 4D 超立方体顶点数据
+        // 超立方体顶点数据
         float[][] vertices4D = {
                 {-1, -1, -1, -1}, {-1, -1, -1, 1}, {-1, -1, 1, -1}, {-1, -1, 1, 1},
                 {-1, 1, -1, -1}, {-1, 1, -1, 1}, {-1, 1, 1, -1}, {-1, 1, 1, 1},

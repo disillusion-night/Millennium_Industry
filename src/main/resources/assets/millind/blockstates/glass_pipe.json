@@ -1,0 +1,99 @@
+{
+  "multipart": [
+    {
+      "apply": {
+        "model": "millind:block/glasspipe_center_ns"
+      },
+      "when": {
+        "north": "CABLE",
+        "south": "CABLE",
+        "east": "NONE",
+        "west": "NONE",
+        "up": "NONE",
+        "down": "NONE"
+      }
+    },
+    {
+      "apply": {
+        "model": "millind:block/glasspipe_center_ew"
+      },
+      "when": {
+        "east": "CABLE",
+        "west": "CABLE",
+        "north": "NONE",
+        "south": "NONE",
+        "up": "NONE",
+        "down": "NONE"
+      }
+    },
+    {
+      "apply": {
+        "model": "millind:block/glasspipe_center_ud"
+      },
+      "when": {
+        "up": "CABLE",
+        "down": "CABLE",
+        "north": "NONE",
+        "south": "NONE",
+        "east": "NONE",
+        "west": "NONE"
+      }
+    },
+    {
+      "apply": {
+        "model": "millind:block/glasspipe_side"
+      },
+      "when": {
+        "north": "CABLE"
+      }
+    },
+    {
+      "apply": {
+        "model": "yourmodid:block/glasspipe_side",
+        "y": 180
+      },
+      "when": {
+        "south": "CABLE"
+      }
+    },
+    {
+      "apply": {
+        "model": "yourmodid:block/glasspipe_side",
+        "y": 270
+      },
+      "when": {
+        "west": "CABLE"
+      }
+    },
+    {
+      "apply": {
+        "model": "yourmodid:block/glasspipe_side",
+        "y": 90
+      },
+      "when": {
+        "east": "CABLE"
+      }
+    },
+    {
+      "apply": {
+        "model": "yourmodid:block/glasspipe_up"
+      },
+      "when": {
+        "up": "CABLE"
+      }
+    },
+    {
+      "apply": {
+        "model": "yourmodid:block/glasspipe_down"
+      },
+      "when": {
+        "down": "CABLE"
+      }
+    },
+    {
+      "apply": {
+        "model": "yourmodid:block/glasspipe_center"
+      }
+    }
+  ]
+}

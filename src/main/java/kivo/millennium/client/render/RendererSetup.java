@@ -16,6 +16,7 @@ import kivo.millennium.millind.machine.ResonanceChamber.ResonanceChamberScreen;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.init.MillenniumEntities;
 import kivo.millennium.millind.init.MillenniumMenuTypes;
+import kivo.millennium.millind.pipe.client.PipeModelLoader;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;

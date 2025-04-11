@@ -12,8 +12,6 @@ import kivo.millennium.millind.block.hypercube.HDECBE;
 import kivo.millennium.millind.machine.InductionFurnace.InductionFurnaceBE;
 import kivo.millennium.millind.block.laser.NetherStarLaserBE;
 import kivo.millennium.millind.block.laser.SolarGeneratorBE;
-import kivo.millennium.millind.cables.blocks.AbstractPipeBE;
-import kivo.millennium.millind.cables.blocks.FacadeBlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -27,14 +25,6 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<MetalFluidTankBE>> METAL_FLUID_TANK_BE = BLOCK_ENTITIES.register(
             "metal_tank_be", () -> BlockEntityType.Builder.of(MetalFluidTankBE::new,
                             MillenniumBlocks.METAL_TANK_BL.get()).build(null));
-
-    public static final RegistryObject<BlockEntityType<AbstractPipeBE>> CABLE_BE = BLOCK_ENTITIES.register(
-            "cable_be", () -> BlockEntityType.Builder.of(AbstractPipeBE::new,
-                    MillenniumBlocks.CABLE_BLOCK.get()).build(null));
-
-    public static final RegistryObject<BlockEntityType<FacadeBlockEntity>> FACADE_BE = BLOCK_ENTITIES.register(
-            "facade_be", () -> BlockEntityType.Builder.of(FacadeBlockEntity::new,
-                    MillenniumBlocks.FACADE_BLOCK.get()).build(null));
 
 
     public static final RegistryObject<BlockEntityType<HDECBE>> HDEC_BE = BLOCK_ENTITIES.register(

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
-public class MillenniumFluidStorage implements IFluidHandler {
+public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage {
 
     protected Predicate<FluidStack> validator;
     protected int size;

@@ -1,5 +1,6 @@
 package kivo.millennium.millind.init;
 
+import com.lowdragmc.lowdraglib.test.TestJava;
 import kivo.millennium.millind.cables.blocks.*;
 import kivo.millennium.millind.machine.FusionChamber.FusionChamberBL;
 import kivo.millennium.millind.machine.HydraulicPress.HydraulicPressBL;
@@ -14,6 +15,7 @@ import kivo.millennium.millind.block.hypercube.HDECBL;
 import kivo.millennium.millind.machine.InductionFurnace.InductionFurnaceBL;
 import kivo.millennium.millind.block.laser.NetherStarLaserBL;
 import kivo.millennium.millind.block.laser.SolarGeneratorBL;
+import kivo.millennium.millind.pipe.client.IronPipeBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -73,8 +75,7 @@ public class MillenniumBlocks {
 
     public static final RegistryObject<Block> CABLE_BLOCK = registerWithItem("cable_block", () -> new BasicEnergyPipe());
 
-    public static final RegistryObject<Block> GLASS_PIPE = registerWithItem("glass_pipe", GlassPipe::new);
-    public static final RegistryObject<Block> GLASS_LINE = registerWithItem("glass_line", GlassLine::new);
+    public static final RegistryObject<Block> IRON_FLUID_PIPE = registerWithItem("iron_fluid_pipe", IronPipeBlock::new);
 
     public static final RegistryObject<Block> LEAD_ORE = registerWithItem("lead_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
     public static final RegistryObject<Block> DEEPSLATE_LEAD_ORE = registerWithItem("deepslate_lead_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.copy(LEAD_ORE.get()).mapColor(MapColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE)));

@@ -7,7 +7,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.items.ItemStackHandler;
 
-public class MillenniumItemStorage extends ItemStackHandler {
+public class MillenniumItemStorage extends ItemStackHandler implements IMillenniumStorage {
 
     public MillenniumItemStorage()
     {

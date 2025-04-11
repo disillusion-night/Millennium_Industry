@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/block",
+  "loader": "millind:pipe_loader",
+  "textures": {
+    "normal": "millind:block/pipe/cu_pipe_normal",
+    "none": "millind:block/pipe/cu_pipe_none",
+    "cross": "millind:block/pipe/cu_pipe_cross",
+    "three": "millind:block/pipe/cu_pipe_three",
+    "corner": "millind:block/pipe/cu_pipe_corner",
+    "particle": "#pipe"
+  }
+}

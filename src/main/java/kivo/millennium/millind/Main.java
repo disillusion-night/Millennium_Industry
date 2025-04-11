@@ -5,6 +5,7 @@ import kivo.millennium.millind.cables.client.CableModelLoader;
 import kivo.millennium.millind.cables.client.FacadeBlockColor;
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumRecipes;
+import kivo.millennium.millind.pipe.client.PipeModelLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
@@ -118,6 +119,7 @@ public class Main {
         @SubscribeEvent
         public static void modelInit(ModelEvent.RegisterGeometryLoaders event) {
             CableModelLoader.register(event);
+            PipeModelLoader.register(event);
         }
 
         @SubscribeEvent

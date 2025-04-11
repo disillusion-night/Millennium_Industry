@@ -4,7 +4,7 @@ import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.energy.EnergyStorage;
 
-public class MillenniumEnergyStorage extends EnergyStorage {
+public class MillenniumEnergyStorage extends EnergyStorage implements IMillenniumStorage {
     private boolean canExact;
     private boolean canReceive;
 

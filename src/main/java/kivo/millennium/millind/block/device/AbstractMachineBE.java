@@ -39,9 +39,7 @@ public abstract class AbstractMachineBE extends BlockEntity implements IWorkingM
         pBlockEntity.tickServer(); // 调用服务端的 tick 逻辑
     }
 
-    // 服务端每 tick 执行的逻辑，子类可以覆写以实现自己的tick逻辑
     protected void tickServer() {
-        // 默认的 tick 逻辑，子类可以覆写
     }
 
 
@@ -60,8 +58,6 @@ public abstract class AbstractMachineBE extends BlockEntity implements IWorkingM
         this.cache.writeToNBT(pTag);
     }
 
-
-
     @Override
     public void load(CompoundTag pTag) {
         super.load(pTag);
@@ -74,7 +70,7 @@ public abstract class AbstractMachineBE extends BlockEntity implements IWorkingM
         setChanged();
     }
 
-    // 数据包同步（用于GUI更新 等）
+    // 数据包同步
     @Nullable
     @Override
     public ClientboundBlockEntityDataPacket getUpdatePacket() {

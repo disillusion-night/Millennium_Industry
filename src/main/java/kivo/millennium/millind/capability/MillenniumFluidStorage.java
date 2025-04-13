@@ -11,7 +11,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.function.Predicate;
 
-public class MillenniumFluidStorage implements IFluidHandler {
+public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage {
 
     protected Predicate<FluidStack> validator;
     protected int size;
@@ -49,6 +49,7 @@ public class MillenniumFluidStorage implements IFluidHandler {
         this.fluids = fluids;
         this.capacities = capa;
     }
+
     public MillenniumFluidStorage(int size, int... capacity){
         if (capacity.length != size)
             throw new RuntimeException("");
@@ -130,6 +131,10 @@ public class MillenniumFluidStorage implements IFluidHandler {
     public FluidStack addFluid(FluidStack fluidStack){
         this.fluids.add(fluidStack);
         return fluidStack;
+    }
+
+    public boolean isEmpty(int tank){
+        return fluids.get(tank).isEmpty();
     }
 
     public int addFluidToTank(int tank, FluidStack resource, FluidAction action){

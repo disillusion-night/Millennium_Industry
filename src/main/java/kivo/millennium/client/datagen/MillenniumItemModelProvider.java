@@ -4,6 +4,7 @@ import kivo.millennium.millind.init.MillenniumItems;
 import kivo.millennium.millind.item.Oopart.Oopart;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.client.model.generators.ItemModelProvider;
@@ -11,8 +12,7 @@ import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 
-import static kivo.millennium.millind.Main.MODID;
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.*;
 
 public class MillenniumItemModelProvider extends ItemModelProvider {
 
@@ -22,53 +22,37 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
+        log("Collecting Item Models");
+
         for (RegistryObject<Oopart> oopart : MillenniumItems.OOPARTS){
             registerOopartModel(oopart);
         }
-        SimpleMaterialItem(MillenniumItems.ALUMINIUM_DUST);
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_INGOT);
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_NUGGET);
-        SimpleMaterialItem(MillenniumItems.RAW_ALUMINUM);
-        SimpleMaterialItem(MillenniumItems.RAW_ALUMINUM_DUST);
 
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_INGOT);
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_PANEL);
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_PIPE);
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_ROD);
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_DUST);
-        SimpleMaterialItem(MillenniumItems.ALUMINUM_ALLOY_NUGGET);
-
-        SimpleMaterialItem(MillenniumItems.CARBON_DUST);
-
-        SimpleMaterialItem(MillenniumItems.CRYOLITE);
-        SimpleMaterialItem(MillenniumItems.CRYOLITE_DUST);
+        for (RegistryObject<Item> material : MillenniumItems.MATERIALS){
+            if(material.get() instanceof BlockItem) break;
+            simpleMaterialItem(material);
+        }
 
 
-        SimpleMaterialItem(MillenniumItems.COPPER_DUST);
+        simpleToolItem(MillenniumItems.STEEL_AXE);
+        simpleToolItem(MillenniumItems.STEEL_HOE);
+        simpleToolItem(MillenniumItems.STEEL_PICKAXE);
+        simpleToolItem(MillenniumItems.STEEL_SHOVEL);
+        simpleToolItem(MillenniumItems.STEEL_SWORD);
 
-        SimpleMaterialItem(MillenniumItems.IRON_DUST);
-        SimpleMaterialItem(MillenniumItems.IRON_PIPE);
-        SimpleMaterialItem(MillenniumItems.IRON_ROD);
-        SimpleMaterialItem(MillenniumItems.IRON_PANEL);
-        SimpleMaterialItem(MillenniumItems.GOLD_DUST);
-        SimpleMaterialItem(MillenniumItems.GOLD_PANEL);
+        simpleToolItem(MillenniumItems.WRENCH);
 
-        SimpleMaterialItem(MillenniumItems.STONE_DUST);
+        simpleToolItem(MillenniumItems.WOLFRAM_STEEL_AXE);
+        simpleToolItem(MillenniumItems.WOLFRAM_STEEL_HOE);
+        simpleToolItem(MillenniumItems.WOLFRAM_STEEL_PICKAXE);
+        simpleToolItem(MillenniumItems.WOLFRAM_STEEL_SHOVEL);
+        simpleToolItem(MillenniumItems.WOLFRAM_STEEL_SWORD);
 
-        SimpleMaterialItem(MillenniumItems.STEEL_DUST);
-        SimpleMaterialItem(MillenniumItems.STEEL_INGOT);
-        SimpleMaterialItem(MillenniumItems.STEEL_NUGGET);
-        SimpleMaterialItem(MillenniumItems.STEEL_PANEL);
-        SimpleMaterialItem(MillenniumItems.STEEL_PIPE);
-        SimpleMaterialItem(MillenniumItems.STEEL_ROD);
-
-        SimpleMaterialItem(MillenniumItems.LEAD_DUST);
-        SimpleMaterialItem(MillenniumItems.LEAD_INGOT);
-        SimpleMaterialItem(MillenniumItems.LEAD_NUGGET);
-        SimpleMaterialItem(MillenniumItems.LEAD_PANEL);
-        //SimpleMaterialItem(MillenniumItems.LEAD_PIPE);
-        SimpleMaterialItem(MillenniumItems.LEAD_ROD);
-        SimpleMaterialItem(MillenniumItems.RAW_LEAD);
+        simpleToolItem(MillenniumItems.TITANIUM_ALLOY_AXE);
+        simpleToolItem(MillenniumItems.TITANIUM_ALLOY_HOE);
+        simpleToolItem(MillenniumItems.TITANIUM_ALLOY_PICKAXE);
+        simpleToolItem(MillenniumItems.TITANIUM_ALLOY_SHOVEL);
+        simpleToolItem(MillenniumItems.TITANIUM_ALLOY_SWORD);
 
 
         SimpleItem(MillenniumItems.VRLA);
@@ -100,6 +84,8 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
                 .texture("layer0", "item/oopart/" + oopart.getId().getPath());
     }
 
+
+
     private <I extends Item> void SimpleItem(RegistryObject<I> item){
         getBuilder(MODID + ":" + item.getId().getPath())
                 .parent(new ModelFile.UncheckedModelFile("item/generated"))
@@ -112,11 +98,18 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
                 .texture("layer0", "item/" + prefix + "/" + item.getId().getPath());
     }
 
-    private <I extends Item> void SimpleMaterialItem(RegistryObject<I> item){
+    private <I extends Item> void simpleMaterialItem(RegistryObject<I> item){
         getBuilder(MODID + ":" + item.getId().getPath())
                 .parent(new ModelFile.UncheckedModelFile("item/generated"))
                 .texture("layer0", "item/material/" + item.getId().getPath());
     }
+
+    private <I extends Item> void simpleToolItem(RegistryObject<I> item){
+        getBuilder(MODID + ":" + item.getId().getPath())
+                .parent(new ModelFile.UncheckedModelFile("item/handheld"))
+                .texture("layer0", "item/tool/" + item.getId().getPath());
+    }
+
 
     private void registerBlockItemModel(RegistryObject<Oopart> oopart){
         getBuilder(oopart.getId().toString())

@@ -1,19 +1,19 @@
 package kivo.millennium.millind.init;
 
-import kivo.millennium.millind.block.device.FusionChamber.FusionChamberBL;
-import kivo.millennium.millind.block.device.HydraulicPress.HydraulicPressBL;
-import kivo.millennium.millind.block.device.MeltingFurnace.MeltingFurnaceBL;
-import kivo.millennium.millind.block.device.MolecularReformer.MolecularReformerBL;
-import kivo.millennium.millind.block.device.ResonanceChamber.ResonanceChamberBL;
-import kivo.millennium.millind.block.device.crusher.CrusherBL;
-import kivo.millennium.millind.block.device.crylizer.CrystallizerBL;
+import kivo.millennium.millind.machine.FusionChamber.FusionChamberBL;
+import kivo.millennium.millind.machine.HydraulicPress.HydraulicPressBL;
+import kivo.millennium.millind.machine.MeltingFurnace.MeltingFurnaceBL;
+import kivo.millennium.millind.machine.MolecularReformer.MolecularReformerBL;
+import kivo.millennium.millind.machine.ResonanceChamber.ResonanceChamberBL;
+import kivo.millennium.millind.machine.Crusher.CrusherBL;
+import kivo.millennium.millind.machine.Crystallizer.CrystallizerBL;
 import kivo.millennium.millind.block.fluid.*;
 import kivo.millennium.millind.block.fluidContainer.MetalTankBL;
-import kivo.millennium.millind.block.generator.GeneratorBL;
 import kivo.millennium.millind.block.hypercube.HDECBL;
-import kivo.millennium.millind.block.device.inductionFurnace.InductionFurnaceBL;
+import kivo.millennium.millind.machine.InductionFurnace.InductionFurnaceBL;
 import kivo.millennium.millind.block.laser.NetherStarLaserBL;
 import kivo.millennium.millind.block.laser.SolarGeneratorBL;
+import kivo.millennium.millind.pipe.client.IronPipeBlock;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -49,7 +49,6 @@ public class MillenniumBlocks {
     public static final RegistryObject<HDECBL> HDEC_BL = registerWithItem("hdec", HDECBL::new,  MillenniumItems.ENGINEERING_PARTS);
 
     public static final RegistryObject<NetherStarLaserBL> NETHER_STAR_LASER_BL = registerWithItem("nether_star_laser", NetherStarLaserBL::new,  MillenniumItems.ENGINEERING_PARTS);
-    public static final RegistryObject<GeneratorBL> GENERATOR_BL = registerWithItem("generator", GeneratorBL::new,  MillenniumItems.ENGINEERING_PARTS);
     public static final RegistryObject<InductionFurnaceBL> INDUCTION_FURNACE_BL = registerWithItem("induction_furnace", InductionFurnaceBL::new,  MillenniumItems.ENGINEERING_PARTS);
     public static final RegistryObject<MeltingFurnaceBL> MELTING_FURNACE_BL = registerWithItem("melting_furnace", MeltingFurnaceBL::new,  MillenniumItems.ENGINEERING_PARTS);
     public static final RegistryObject<FusionChamberBL> FUSION_CHAMBER_BL = registerWithItem("fusion_chamber", FusionChamberBL::new,  MillenniumItems.ENGINEERING_PARTS);
@@ -66,9 +65,12 @@ public class MillenniumBlocks {
     public static final RegistryObject<SolarGeneratorBL> SOLAR_GENERATOR = registerWithItem("solar_generator", SolarGeneratorBL::new, MillenniumItems.ENGINEERING_PARTS);
 
     public static final RegistryObject<Block> STEEL_BLOCK = registerWithItem("steel_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).instrument(NoteBlockInstrument.IRON_XYLOPHONE).requiresCorrectToolForDrops().strength(6.0F, 8.0F).sound(SoundType.METAL)));
-
     public static final RegistryObject<Block> ALUMINUM_ALLOY_BLOCK = registerWithItem("aluminum_alloy_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).instrument(NoteBlockInstrument.IRON_XYLOPHONE).requiresCorrectToolForDrops().strength(7.0F, 10.0F).sound(SoundType.METAL)));
+    public static final RegistryObject<Block> TITANIUM_ALLOY_BLOCK = registerWithItem("titanium_alloy_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).instrument(NoteBlockInstrument.IRON_XYLOPHONE).requiresCorrectToolForDrops().strength(7.0F, 10.0F).sound(SoundType.METAL)));
+    public static final RegistryObject<Block> WOLFRAM_STEEL_BLOCK = registerWithItem("wolfram_steel_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).instrument(NoteBlockInstrument.IRON_XYLOPHONE).requiresCorrectToolForDrops().strength(7.0F, 10.0F).sound(SoundType.METAL)));
 
+
+    public static final RegistryObject<Block> IRON_FLUID_PIPE = registerWithItem("iron_fluid_pipe", IronPipeBlock::new);
 
     public static final RegistryObject<Block> LEAD_ORE = registerWithItem("lead_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
     public static final RegistryObject<Block> DEEPSLATE_LEAD_ORE = registerWithItem("deepslate_lead_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.copy(LEAD_ORE.get()).mapColor(MapColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE)));

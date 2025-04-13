@@ -1,7 +1,6 @@
 package kivo.millennium.millind.container.Device;
 
-import kivo.millennium.millind.block.device.AbstractMachineBE;
-import kivo.millennium.millind.block.device.HydraulicPress.HydraulicPressBE;
+import kivo.millennium.millind.machine.HydraulicPress.HydraulicPressBE;
 import kivo.millennium.millind.capability.DeviceOutputSlot;
 import kivo.millennium.millind.capability.ExtendedSlot;
 import kivo.millennium.millind.init.MillenniumBlocks;

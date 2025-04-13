@@ -25,7 +25,6 @@ public class DataGeneratorHandler {
         ExistingFileHelper efh = event.getExistingFileHelper();
         CompletableFuture<HolderLookup.Provider> lookup = event.getLookupProvider();
 
-        // 语言文件
         event.getGenerator().addProvider(
                 event.includeClient(),
                 (DataProvider.Factory<MillenniumLanguageProvider>) EnglishProvider::new
@@ -35,17 +34,15 @@ public class DataGeneratorHandler {
                 (DataProvider.Factory<MillenniumLanguageProvider>) SimplifiedChineseProvider::new
         );
 
-        // 物品模型
-        event.getGenerator().addProvider(
-                event.includeClient(),
-                (DataProvider.Factory<MillenniumItemModelProvider>) pOutput -> new MillenniumItemModelProvider(pOutput,efh)
-        );
         event.getGenerator().addProvider(
                 event.includeClient(),
                 (DataProvider.Factory<MillenniumBlockStateProvider>) pOutput -> new MillenniumBlockStateProvider(pOutput,efh)
         );
 
-        //Item Tag
+        event.getGenerator().addProvider(
+                event.includeClient(),
+                (DataProvider.Factory<MillenniumItemModelProvider>) pOutput -> new MillenniumItemModelProvider(pOutput,efh)
+        );
 
         event.getGenerator().addProvider(
                 event.includeServer(),

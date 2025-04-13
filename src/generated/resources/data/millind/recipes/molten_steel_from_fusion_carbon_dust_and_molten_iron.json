@@ -5,11 +5,11 @@
   "experience": 0.0,
   "ingredients": [
     {
-      "item": "millind:carbon_dust"
-    },
-    {
       "amount": 100,
       "fluid": "millind:molten_iron"
+    },
+    {
+      "item": "millind:carbon_dust"
     }
   ],
   "result": {

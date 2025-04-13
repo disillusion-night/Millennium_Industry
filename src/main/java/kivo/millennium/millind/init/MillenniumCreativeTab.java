@@ -38,12 +38,22 @@ public class MillenniumCreativeTab {
 
 
 
-    public static final RegistryObject<CreativeModeTab> MATERIALS = CREATIVE_MODE_TABS.register("materials",
+    public static final RegistryObject<CreativeModeTab> MATERIALS = CREATIVE_MODE_TABS.register("material",
             () -> CreativeModeTab.builder()
-                    .title(Component.translatable(getCreativeTabTranslationKey("materials")))
+                    .title(Component.translatable(getCreativeTabTranslationKey("material")))
                     .icon(() -> MillenniumItems.LEAD_INGOT.get().getDefaultInstance())
                     .displayItems((parameters, output) -> {
                         for (RegistryObject<Item> item : MillenniumItems.MATERIALS){
+                            output.accept(item.get());
+                        }
+                    }).build());
+
+    public static final RegistryObject<CreativeModeTab> TOOLS = CREATIVE_MODE_TABS.register("tool",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable(getCreativeTabTranslationKey("tool")))
+                    .icon(() -> MillenniumItems.WOLFRAM_STEEL_PICKAXE.get().getDefaultInstance())
+                    .displayItems((parameters, output) -> {
+                        for (RegistryObject<Item> item : MillenniumItems.TOOLS){
                             output.accept(item.get());
                         }
                     }).build());

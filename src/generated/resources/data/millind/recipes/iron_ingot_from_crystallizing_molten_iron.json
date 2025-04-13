@@ -1,0 +1,20 @@
+{
+  "type": "millind:crystallizing",
+  "category": "misc",
+  "energy": 1000,
+  "experience": 0.0,
+  "ingredients": [
+    {
+      "amount": 100,
+      "fluid": "millind:molten_iron"
+    },
+    {
+      "damage": 1,
+      "item": "minecraft:ice"
+    }
+  ],
+  "result": {
+    "item": "minecraft:iron_ingot"
+  },
+  "time": 100
+}

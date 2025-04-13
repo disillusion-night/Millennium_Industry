@@ -1,16 +1,15 @@
 package kivo.millennium.millind.init;
 
-import kivo.millennium.millind.block.device.FusionChamber.FusionChamberBE;
-import kivo.millennium.millind.block.device.HydraulicPress.HydraulicPressBE;
-import kivo.millennium.millind.block.device.MeltingFurnace.MeltingFurnaceBE;
-import kivo.millennium.millind.block.device.MolecularReformer.MolecularReformerBE;
-import kivo.millennium.millind.block.device.ResonanceChamber.ResonanceChamberBE;
-import kivo.millennium.millind.block.device.crusher.CrusherBE;
-import kivo.millennium.millind.block.device.crylizer.CrystallizerBE;
+import kivo.millennium.millind.machine.FusionChamber.FusionChamberBE;
+import kivo.millennium.millind.machine.HydraulicPress.HydraulicPressBE;
+import kivo.millennium.millind.machine.MeltingFurnace.MeltingFurnaceBE;
+import kivo.millennium.millind.machine.MolecularReformer.MolecularReformerBE;
+import kivo.millennium.millind.machine.ResonanceChamber.ResonanceChamberBE;
+import kivo.millennium.millind.machine.Crusher.CrusherBE;
+import kivo.millennium.millind.machine.Crystallizer.CrystallizerBE;
 import kivo.millennium.millind.block.fluidContainer.MetalFluidTankBE;
-import kivo.millennium.millind.block.generator.GeneratorBE;
 import kivo.millennium.millind.block.hypercube.HDECBE;
-import kivo.millennium.millind.block.device.inductionFurnace.InductionFurnaceBE;
+import kivo.millennium.millind.machine.InductionFurnace.InductionFurnaceBE;
 import kivo.millennium.millind.block.laser.NetherStarLaserBE;
 import kivo.millennium.millind.block.laser.SolarGeneratorBE;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -36,11 +35,6 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<NetherStarLaserBE>> NETHER_STAR_LASER_BE = BLOCK_ENTITIES.register(
             "nether_star_laser_be", () -> BlockEntityType.Builder.of(NetherStarLaserBE::new,
                     MillenniumBlocks.NETHER_STAR_LASER_BL.get()).build(null));
-
-    public static final RegistryObject<BlockEntityType<GeneratorBE>> GENERATOR_BE = BLOCK_ENTITIES.register(
-            "generator_be", () -> BlockEntityType.Builder.of(GeneratorBE::new,
-                    MillenniumBlocks.GENERATOR_BL.get()).build(null));
-
 
     public static final RegistryObject<BlockEntityType<InductionFurnaceBE>> INDUCTION_FURNACE_BE = BLOCK_ENTITIES.register(
             "induction_furnace_be", () -> BlockEntityType.Builder.of(InductionFurnaceBE::new,

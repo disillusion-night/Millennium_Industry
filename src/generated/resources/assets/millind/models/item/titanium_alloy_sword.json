@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "millind:item/tool/titanium_alloy_sword"
+  }
+}

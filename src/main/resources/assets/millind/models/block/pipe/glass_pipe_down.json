@@ -1,0 +1,19 @@
+{
+	"render_type": "cutout",
+	"textures": {
+		"2": "millind:block/pipe/glass_pipe_no_side_ud",
+		"particle": "millind:block/pipe/glass_pipe"
+	},
+	"elements": [
+		{
+			"from": [4, 0, 4],
+			"to": [12, 4, 12],
+			"faces": {
+				"north": {"uv": [0, 0, 16, 8], "texture": "#2"},
+				"east": {"uv": [0, 0, 16, 8], "texture": "#2"},
+				"south": {"uv": [0, 0, 16, 8], "texture": "#2"},
+				"west": {"uv": [0, 0, 16, 8], "texture": "#2"}
+			}
+		}
+	]
+}

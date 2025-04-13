@@ -116,14 +116,32 @@ public class MillenniumRecipeProvider extends RecipeProvider {
         fusion(pWriter, MillenniumItems.CARBON_DUST.get(), new FluidStack(MillenniumFluids.MOLTEN_IRON.get(), 100), RecipeCategory.MISC, new FluidStack(MillenniumFluids.MOLTEN_STEEL.get(), 100), 200, 1000);
 
         pressing(pWriter, MillenniumItems.ALUMINUM_INGOT.get(), new ItemStack(MillenniumItems.ALUMINUM_ALLOY_INGOT.get(), 1), RecipeCategory.MISC, MillenniumItems.ALUMINUM_ALLOY_PANEL.get(), 200, 4000);
+
+        crystallizing(pWriter, new FluidStack(MillenniumFluids.MOLTEN_IRON.get(), 100), Items.ICE, RecipeCategory.MISC, Items.IRON_INGOT, 100, 1000);
+
+        crystallizing(pWriter, new FluidStack(MillenniumFluids.MOLTEN_STEEL.get(), 100), Items.ICE, RecipeCategory.MISC, MillenniumItems.STEEL_INGOT.get(), 100, 1000);
+
+        crystallizing(pWriter, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM_ALLOY.get(), 100), Items.ICE, RecipeCategory.MISC, MillenniumItems.ALUMINUM_ALLOY_INGOT.get(), 100, 1000);
+
+        crystallizing(pWriter, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM.get(), 100), Items.ICE, RecipeCategory.MISC, MillenniumItems.ALUMINUM_INGOT.get(), 100, 1000);
+
         //SimpleSingleRecipeBuilder.crushing()
         //oneToOneConversionRecipe(pWriter, Blocks.REDSTONE_BLOCK.asItem(), new ItemStack(Items.REDSTONE, 9), "a");
     }
 
+
+    protected static void crystallizing(Consumer<FinishedRecipe> pFinishedRecipeConsumer,FluidStack fluidStack, Item model, RecipeCategory pCategory, ItemLike pResult, int pCookingTime, int energy) {
+        SimpleSingleRecipeBuilder
+                .crystallizing(fluidStack, model, pCategory, new ItemStack(pResult, 1), 0, pCookingTime,energy)
+                .unlockedBy("has_" + getRL(pResult.asItem()).getPath(), has(pResult.asItem()))
+                .save(pFinishedRecipeConsumer,  getRL(getRL(pResult).getPath() + "_from_crystallizing_" + getRL(fluidStack.getFluid()).getPath()));
+    }
+
+
     protected static void pressing(Consumer<FinishedRecipe> pFinishedRecipeConsumer, Item model, ItemStack itemStack, RecipeCategory pCategory, ItemLike pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
                 .pressing(model, itemStack, pCategory, new ItemStack(pResult, 1), 0, pCookingTime,energy)
-                .unlockedBy("has_" + getRL(model).getPath(), has(model))
+                .unlockedBy("has_" + getRL(itemStack.getItem()).getPath(), has(itemStack.getItem()))
                 .save(pFinishedRecipeConsumer,  getRL(getRL(pResult).getPath() + "_from_pressing_" + getRL(itemStack.getItem()).getPath()));
     }
 

@@ -1,0 +1,20 @@
+{
+  "type": "millind:crystallizing",
+  "category": "misc",
+  "energy": 1000,
+  "experience": 0.0,
+  "ingredients": [
+    {
+      "amount": 100,
+      "fluid": "millind:molten_aluminum_alloy"
+    },
+    {
+      "damage": 1,
+      "item": "minecraft:ice"
+    }
+  ],
+  "result": {
+    "item": "millind:aluminum_alloy_ingot"
+  },
+  "time": 100
+}

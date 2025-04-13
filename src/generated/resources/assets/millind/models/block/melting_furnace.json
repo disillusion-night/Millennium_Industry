@@ -3,6 +3,6 @@
   "textures": {
     "front": "millind:block/melting_furnace_front_off",
     "side": "millind:block/melting_furnace_side",
-    "top": "millind:block/melting_furnace_top"
+    "top": "millind:block/melting_furnace_top_off"
   }
 }

@@ -2,14 +2,14 @@ package kivo.millennium.millind.datagen;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
+
+import java.lang.reflect.Proxy;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
 import kivo.millennium.millind.Main;
 import kivo.millennium.millind.init.MillenniumRecipes;
-import kivo.millennium.millind.recipe.FluidComponent;
-import kivo.millennium.millind.recipe.ItemComponent;
-import kivo.millennium.millind.recipe.RecipeComponent;
+import kivo.millennium.millind.recipe.*;
 import net.minecraft.advancements.Advancement;
 import net.minecraft.advancements.AdvancementRewards;
 import net.minecraft.advancements.CriterionTriggerInstance;
@@ -22,14 +22,17 @@ import net.minecraft.data.recipes.RecipeCategory;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.crafting.*;
 import net.minecraftforge.fluids.FluidStack;
 
-public class SimpleSingleRecipeBuilder implements RecipeBuilder {
+import static net.minecraft.data.recipes.RecipeBuilder.ROOT_RECIPE_ADVANCEMENT;
+
+public class SimpleSingleRecipeBuilder {
     private final RecipeCategory category;
     private final CookingBookCategory bookCategory;
-    private final NonNullList<RecipeComponent> results; // Can be ItemStack or FluidStack
-    private final NonNullList<RecipeComponent> ingredients;
+    private final NonNullList<ISlotProxy> results; // Can be ItemStack or FluidStack
+    private final NonNullList<ISlotProxy> ingredients;
     private final float experience;
     private final int time;
     private final int energy;
@@ -38,7 +41,7 @@ public class SimpleSingleRecipeBuilder implements RecipeBuilder {
     private String group;
     private final RecipeSerializer<? extends Recipe> serializer;
 
-    private SimpleSingleRecipeBuilder(RecipeCategory pCategory, CookingBookCategory pBookCategory, NonNullList<RecipeComponent> pResult, NonNullList<RecipeComponent> pIngredient, float pExperience, int pTime,int pEnergy, RecipeSerializer<? extends Recipe> pSerializer) {
+    private SimpleSingleRecipeBuilder(RecipeCategory pCategory, CookingBookCategory pBookCategory, NonNullList<ISlotProxy> pResult, NonNullList<ISlotProxy> pIngredient, float pExperience, int pTime,int pEnergy, RecipeSerializer<? extends Recipe> pSerializer) {
         this.category = pCategory;
         this.bookCategory = pBookCategory;
         this.results = pResult;
@@ -48,33 +51,41 @@ public class SimpleSingleRecipeBuilder implements RecipeBuilder {
         this.energy = pEnergy;
         this.serializer = pSerializer;
     }
+    public static SimpleSingleRecipeBuilder crystallizing(FluidStack fluidStack,  Item model, RecipeCategory pCategory, ItemStack pResult, float pExperience, int pCookingTime, int pEnergyCost) {
+        NonNullList<ISlotProxy> recipeComponents = NonNullList.create();
+        recipeComponents.add(new FluidProxy(fluidStack));
+        ItemProxy a = new ItemProxy(new ItemStack(model, 1));
+        a.setDamage(1);
+        recipeComponents.add(a);
+        return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, new ItemProxy(pResult)),recipeComponents, pExperience, pCookingTime,pEnergyCost,  MillenniumRecipes.CRYSTALLIZING_RECIPE.get());
+    }
 
     public static SimpleSingleRecipeBuilder pressing(Item model, ItemStack pIngredient2, RecipeCategory pCategory, ItemStack pResult, float pExperience, int pCookingTime, int pEnergyCost) {
-        NonNullList<RecipeComponent> recipeComponents = NonNullList.create();
-        ItemComponent a = ItemComponent.of(new ItemStack(model, 1));
-        a.setNoCost();
+        NonNullList<ISlotProxy> recipeComponents = NonNullList.create();
+        ItemProxy a = new ItemProxy(new ItemStack(model, 1));
+        a.setDamage(1);
         recipeComponents.add(a);
-        recipeComponents.add(ItemComponent.of(pIngredient2));
-        return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, ItemComponent.of(pResult)),recipeComponents, pExperience, pCookingTime,pEnergyCost,  MillenniumRecipes.PRESSING_RECIPE.get());
+        recipeComponents.add(new ItemProxy(pIngredient2));
+        return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, new ItemProxy(pResult)),recipeComponents, pExperience, pCookingTime,pEnergyCost,  MillenniumRecipes.PRESSING_RECIPE.get());
     }
 
     public static SimpleSingleRecipeBuilder resonance(ItemStack pIngredient, RecipeCategory pCategory, ItemStack pResult, float pExperience, int pCookingTime, int pEnergyCost) {
-        return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, ItemComponent.of(pResult)),NonNullList.withSize(1, ItemComponent.of(pIngredient)), pExperience, pCookingTime,pEnergyCost,  MillenniumRecipes.RESONANCE_RECIPE.get());
+        return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, new ItemProxy(pResult)),NonNullList.withSize(1, new ItemProxy(pIngredient)), pExperience, pCookingTime,pEnergyCost,  MillenniumRecipes.RESONANCE_RECIPE.get());
     }
 
     public static SimpleSingleRecipeBuilder fusion(ItemStack pIngredientItem, FluidStack pIngredientFluid, RecipeCategory pCategory, FluidStack pResult, float pExperience, int pCookingTime, int pEnergyCost) {
-        NonNullList<RecipeComponent> recipeComponents = NonNullList.create();
-        recipeComponents.add(ItemComponent.of(pIngredientItem));
-        recipeComponents.add(FluidComponent.of(pIngredientFluid));
-        return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, FluidComponent.of(pResult)), recipeComponents, pExperience, pCookingTime,pEnergyCost, MillenniumRecipes.FUSION_RECIPE.get());
+        NonNullList<ISlotProxy> recipeComponents = NonNullList.create();
+        recipeComponents.add(new FluidProxy(pIngredientFluid));
+        recipeComponents.add(new ItemProxy(pIngredientItem));
+        return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, new FluidProxy(pResult)), recipeComponents, pExperience, pCookingTime,pEnergyCost, MillenniumRecipes.FUSION_RECIPE.get());
     }
 
     public static SimpleSingleRecipeBuilder crushing(ItemStack pIngredient, RecipeCategory pCategory, ItemStack pResult, float pExperience, int pCookingTime, int pEnergyCost) {
-        return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, ItemComponent.of(pResult)),NonNullList.withSize(1, ItemComponent.of(pIngredient)), pExperience, pCookingTime,pEnergyCost, MillenniumRecipes.CRUSHING_RECIPE.get());
+        return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, new ItemProxy(pResult)),NonNullList.withSize(1, new ItemProxy(pIngredient)), pExperience, pCookingTime,pEnergyCost, MillenniumRecipes.CRUSHING_RECIPE.get());
     }
 
     public static SimpleSingleRecipeBuilder melting(ItemStack pIngredient, RecipeCategory pCategory, FluidStack pResult, float pExperience, int pCookingTime, int pEnergyCost) {
-        return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, FluidComponent.of(pResult)),NonNullList.withSize(1, ItemComponent.of(pIngredient)), pExperience, pCookingTime,pEnergyCost, MillenniumRecipes.MELTING_RECIPE.get());
+        return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, new FluidProxy(pResult)),NonNullList.withSize(1, new ItemProxy(pIngredient)), pExperience, pCookingTime,pEnergyCost, MillenniumRecipes.MELTING_RECIPE.get());
     }
 
     public SimpleSingleRecipeBuilder unlockedBy(String pCriterionName, CriterionTriggerInstance pCriterionTrigger) {
@@ -87,14 +98,14 @@ public class SimpleSingleRecipeBuilder implements RecipeBuilder {
         return this;
     }
 
-    @Override
+    //@Override
     public Item getResult() {
         return getResultItem();
     }
 
     public Item getResultItem() {
-        if (this.results.get(0) instanceof ItemComponent itemComponent) {
-            return itemComponent.getItemStack().getItem();
+        if (this.results.get(0) instanceof ItemProxy proxy) {
+            return proxy.get().getItem();
         }
         return null; // Or handle FluidStack differently if needed
     }
@@ -115,8 +126,8 @@ public class SimpleSingleRecipeBuilder implements RecipeBuilder {
         private final ResourceLocation id;
         private final String group;
         private final CookingBookCategory category;
-        private final NonNullList<RecipeComponent> ingredients;
-        private final NonNullList<RecipeComponent> results;
+        private final NonNullList<ISlotProxy> ingredients;
+        private final NonNullList<ISlotProxy> results;
         private final float experience;
         private final int time;
         private final int energy;
@@ -124,7 +135,7 @@ public class SimpleSingleRecipeBuilder implements RecipeBuilder {
         private final ResourceLocation advancementId;
         private final RecipeSerializer<? extends Recipe> serializer;
 
-        public Result(ResourceLocation pId, String pGroup, CookingBookCategory pCategory, NonNullList<RecipeComponent> pIngredient, NonNullList<RecipeComponent> pResult, float pExperience, int pTime,int pEnergy, Advancement.Builder pAdvancement, ResourceLocation pAdvancementId, RecipeSerializer<? extends Recipe> pSerializer) {
+        public Result(ResourceLocation pId, String pGroup, CookingBookCategory pCategory, NonNullList<ISlotProxy> pIngredient, NonNullList<ISlotProxy> pResult, float pExperience, int pTime,int pEnergy, Advancement.Builder pAdvancement, ResourceLocation pAdvancementId, RecipeSerializer<? extends Recipe> pSerializer) {
             this.id = pId;
             this.group = pGroup;
             this.category = pCategory;

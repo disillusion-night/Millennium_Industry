@@ -9,7 +9,7 @@
       "fluid": "millind:molten_steel"
     },
     {
-      "cost_chance": 0.0,
+      "damage": 1,
       "item": "minecraft:ice"
     }
   ],

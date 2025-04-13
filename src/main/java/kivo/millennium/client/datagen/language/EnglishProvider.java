@@ -138,6 +138,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.WOLFRAM_STEEL_SHOVEL.get(), "Wolfram Steel Shovel");
         add(MillenniumItems.WOLFRAM_STEEL_SWORD.get(), "Wolfram Steel Sword");
 
+        add(MillenniumItems.WRENCH.get(), "Wrench");
 
         add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.OOPARTS.get())), "Millennium Industry:Oopart");
         add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.ENGINEERING_PARTS.get())), "Millennium Industry:Engineering Parts");

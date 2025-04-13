@@ -5,7 +5,7 @@
   "experience": 0.0,
   "ingredients": [
     {
-      "cost_chance": 0.0,
+      "damage": 1,
       "item": "millind:aluminum_ingot"
     },
     {

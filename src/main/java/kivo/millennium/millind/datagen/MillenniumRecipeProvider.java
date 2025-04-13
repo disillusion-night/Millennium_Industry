@@ -133,7 +133,7 @@ public class MillenniumRecipeProvider extends RecipeProvider {
     protected static void crystallizing(Consumer<FinishedRecipe> pFinishedRecipeConsumer,FluidStack fluidStack, Item model, RecipeCategory pCategory, ItemLike pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
                 .crystallizing(fluidStack, model, pCategory, new ItemStack(pResult, 1), 0, pCookingTime,energy)
-                .unlockedBy("has_" + getRL(model).getPath(), has(model))
+                .unlockedBy("has_" + getRL(pResult.asItem()).getPath(), has(pResult.asItem()))
                 .save(pFinishedRecipeConsumer,  getRL(getRL(pResult).getPath() + "_from_crystallizing_" + getRL(fluidStack.getFluid()).getPath()));
     }
 
@@ -141,21 +141,21 @@ public class MillenniumRecipeProvider extends RecipeProvider {
     protected static void pressing(Consumer<FinishedRecipe> pFinishedRecipeConsumer, Item model, ItemStack itemStack, RecipeCategory pCategory, ItemLike pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
                 .pressing(model, itemStack, pCategory, new ItemStack(pResult, 1), 0, pCookingTime,energy)
-                .unlockedBy("has_" + getRL(model).getPath(), has(model))
+                .unlockedBy("has_" + getRL(itemStack.getItem()).getPath(), has(itemStack.getItem()))
                 .save(pFinishedRecipeConsumer,  getRL(getRL(pResult).getPath() + "_from_pressing_" + getRL(itemStack.getItem()).getPath()));
     }
 
     protected static void fusion(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredientItem, FluidStack pIngredientFluid, RecipeCategory pCategory, FluidStack pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
                 .fusion(new ItemStack(pIngredientItem),pIngredientFluid, pCategory, pResult, 0, pCookingTime, energy)
-                //.unlockedBy("has_" + getRL(pIngredientItem).getPath(), has(pIngredientItem))
+                .unlockedBy("has_" + getRL(pIngredientItem).getPath(), has(pIngredientItem))
                 .save(pFinishedRecipeConsumer,  getRL(getRL(pResult.getFluid()).getPath() + "_from_fusion_" + getRL(pIngredientItem).getPath()+ "_and_" + getRL(pIngredientFluid.getFluid()).getPath()));
     }
 
     protected static void melting(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredient, RecipeCategory pCategory, FluidStack pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
                 .melting(new ItemStack(pIngredient), pCategory, pResult, 0, pCookingTime, energy)
-                //.unlockedBy("has_" + getRL(pIngredient).getPath(), has(pIngredient))
+                .unlockedBy("has_" + getRL(pIngredient).getPath(), has(pIngredient))
                 .save(pFinishedRecipeConsumer,  getRL(getRL(pResult.getFluid()).getPath() + "_from_melting_" + getRL(pIngredient).getPath()));
     }
 

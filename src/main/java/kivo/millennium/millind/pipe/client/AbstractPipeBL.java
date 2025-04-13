@@ -1,7 +1,11 @@
 package kivo.millennium.millind.pipe.client;
 
+import kivo.millennium.millind.Main;
+import kivo.millennium.millind.init.MillenniumItems;
+import kivo.millennium.millind.item.Wrench;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.network.chat.Component;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -20,14 +24,17 @@ import net.minecraft.world.level.block.state.properties.EnumProperty;
 import net.minecraft.world.level.material.FluidState;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.ticks.ScheduledTick;
+import org.checkerframework.checker.units.qual.C;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static kivo.millennium.millind.pipe.client.EPipeState.*;
 import static net.minecraft.world.level.block.state.properties.BlockStateProperties.WATERLOGGED;
 
 public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedBlock {
@@ -55,61 +62,53 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
                 .setValue(WATERLOGGED, false));
     }
 
-    protected abstract double getDefaultWidth();
+    public abstract double getDefaultWidth();
 
-    private boolean canConnectTo(BlockState state, Direction facing) {
-        if(state.isAir()) return false;
-        if(state.hasProperty(getPropertyForDirection(facing)) && state.getValue(getPropertyForDirection(facing)).equals(EPipeState.DISCONNECTED)) return false;
-
-        return connectionTest(state, facing);
-    }
-
-    protected abstract boolean connectionTest(BlockState state, Direction facing);
-
-
-    protected EPipeState getEPipeStateForNeighbor(BlockGetter level, BlockPos pos, Direction facing) {
-
-        BlockState currentState = level.getBlockState(pos);
-
-        BlockPos neighborPos = pos.relative(facing);
-        BlockState neighborState = level.getBlockState(neighborPos);
-
-        if (canConnectTo(neighborState, facing)) {
-            return EPipeState.CONNECT;
+    public boolean canConnectTo(BlockGetter level, BlockPos neighborPos, BlockState neighborState, Direction facing) {
+        if(neighborState.isAir()) return false;
+        if (neighborState.getBlock() instanceof AbstractPipeBL){
+            if(neighborState.hasProperty(getPropertyForDirection(facing.getOpposite())) && neighborState.getValue(getPropertyForDirection(facing.getOpposite())).equals(EPipeState.DISCONNECTED)) return false;
+            else return true;
+        } else {
+            return connectionTest(level, neighborPos, neighborState, facing);
         }
-
-        return EPipeState.NONE;
     }
 
-    protected EPipeState getPipeStateForNeighborWhenUpdate(BlockGetter level, BlockPos pos, Direction facing) {
+    protected abstract boolean connectionTest(BlockGetter level, BlockPos pos, BlockState state, Direction facing);
+
+    protected boolean isPipe(BlockState state, Block block) {
+        if (block instanceof AbstractPipeBL){
+            return true;
+        }
+        return false;
+    }
+
+    protected EPipeState getPipeStateForNeighbor(BlockGetter level, BlockPos pos, Direction facing) {
 
         BlockState currentState = level.getBlockState(pos);
 
-        if (currentState.getValue(getPropertyForDirection(facing)) == EPipeState.DISCONNECTED) {
+        if (currentState.hasProperty(getPropertyForDirection(facing)) && currentState.getValue(getPropertyForDirection(facing)) == DISCONNECTED) {
             return EPipeState.DISCONNECTED;
         }
 
+
         BlockPos neighborPos = pos.relative(facing);
         BlockState neighborState = level.getBlockState(neighborPos);
 
 
+        if (canConnectTo(level, neighborPos, neighborState, facing)) {
 
-        if (canConnectTo(neighborState, facing)) {
+            if (currentState.hasProperty(getPropertyForDirection(facing))) {
+                switch (currentState.getValue(getPropertyForDirection(facing))) {
+                    case INSERT, OUTPUT: {
+                        return isPipe(neighborState, neighborState.getBlock())?CONNECT:currentState.getValue(getPropertyForDirection(facing));
+                    }
+                }
+            }
             return EPipeState.CONNECT;
         }
         // TODO: 添加判断 INSERT 和 OUTPUT 状态的逻辑
         return EPipeState.NONE;
-    }
-
-    protected EnumProperty<EPipeState> getPropertyForDirection(Direction direction) {
-        return switch (direction) {
-            case NORTH -> NORTH;
-            case EAST -> EAST;
-            case SOUTH -> SOUTH;
-            case WEST -> WEST;
-            case UP -> UP;
-            case DOWN -> DOWN;
-        };
     }
 
     @Override
@@ -128,22 +127,6 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
         builder.add(NORTH, EAST, SOUTH, WEST, UP, DOWN, WATERLOGGED);
     }
-    /*
-    @Nullable
-    @Override
-    public BlockState getStateForPlacement(BlockPlaceContext context) {
-        Level level = context.getLevel();
-        BlockPos pos = context.getClickedPos();
-        FluidState fluidstate = context.getLevel().getFluidState(context.getClickedPos());
-        return this.defaultBlockState()
-                .setValue(NORTH, getEPipeStateForNeighbor(level, pos, Direction.NORTH))
-                .setValue(EAST, getEPipeStateForNeighbor(level, pos, Direction.EAST))
-                .setValue(SOUTH, getEPipeStateForNeighbor(level, pos, Direction.SOUTH))
-                .setValue(WEST, getEPipeStateForNeighbor(level, pos, Direction.WEST))
-                .setValue(UP, getEPipeStateForNeighbor(level, pos, Direction.UP))
-                .setValue(DOWN, getEPipeStateForNeighbor(level, pos, Direction.DOWN))
-                .setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
-    }*/
 
     @Nonnull
     @Override
@@ -151,20 +134,30 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
         if (state.getValue(WATERLOGGED)) {
             world.getFluidTicks().schedule(new ScheduledTick<>(Fluids.WATER, current, Fluids.WATER.getTickDelay(world), 0L));
         }
-        return calculateState(world, current, state);
+        return calculateStateWhenUpdate(world, current, state);
     }
 
     @Nullable
-    public BlockState calculateState(LevelAccessor level, BlockPos pos, BlockState state) {
-        //FluidState fluidstate = getFluidState(state);
+    public BlockState calculateStateWhenUpdate(LevelAccessor level, BlockPos pos, BlockState state) {
         return state
-                .setValue(NORTH, getEPipeStateForNeighbor(level, pos, Direction.NORTH))
-                .setValue(EAST, getEPipeStateForNeighbor(level, pos, Direction.EAST))
-                .setValue(SOUTH, getEPipeStateForNeighbor(level, pos, Direction.SOUTH))
-                .setValue(WEST, getEPipeStateForNeighbor(level, pos, Direction.WEST))
-                .setValue(UP, getEPipeStateForNeighbor(level, pos, Direction.UP))
-                .setValue(DOWN, getEPipeStateForNeighbor(level, pos, Direction.DOWN));
-                //.setValue(WATERLOGGED, fluidstate.getType() == Fluids.WATER);
+                .setValue(NORTH, getPipeStateForNeighbor(level, pos, Direction.NORTH))
+                .setValue(EAST, getPipeStateForNeighbor(level, pos, Direction.EAST))
+                .setValue(SOUTH, getPipeStateForNeighbor(level, pos, Direction.SOUTH))
+                .setValue(WEST, getPipeStateForNeighbor(level, pos, Direction.WEST))
+                .setValue(UP, getPipeStateForNeighbor(level, pos, Direction.UP))
+                .setValue(DOWN, getPipeStateForNeighbor(level, pos, Direction.DOWN));
+    }
+
+
+    @Nullable
+    public BlockState calculateState(LevelAccessor level, BlockPos pos, BlockState state) {
+        return state
+                .setValue(NORTH, getPipeStateForNeighbor(level, pos, Direction.NORTH))
+                .setValue(EAST, getPipeStateForNeighbor(level, pos, Direction.EAST))
+                .setValue(SOUTH, getPipeStateForNeighbor(level, pos, Direction.SOUTH))
+                .setValue(WEST, getPipeStateForNeighbor(level, pos, Direction.WEST))
+                .setValue(UP, getPipeStateForNeighbor(level, pos, Direction.UP))
+                .setValue(DOWN, getPipeStateForNeighbor(level, pos, Direction.DOWN));
     }
 
     @Override
@@ -175,11 +168,13 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
     @Override
     public void neighborChanged(BlockState state, Level level, BlockPos pos, Block block, BlockPos fromPos, boolean isMoving) {
         if (!level.isClientSide) {
-            Direction facing = Direction.getNearest(fromPos.getX() - pos.getX(), fromPos.getY() - pos.getY(), fromPos.getZ() - pos.getZ());
+            Direction facing = Direction.getNearest(fromPos.getX() - pos.getX(), fromPos.getY() - pos.getY(), fromPos.getZ() - pos.getZ()).getOpposite();
+            Main.log(pos.toString());
+            Main.log(facing.toString());
             if (facing != null) {
-                EnumProperty<EPipeState> property = getPropertyForDirection(facing.getOpposite());
+                EnumProperty<EPipeState> property = getPropertyForDirection(facing);
                 if (state.getValue(property) != EPipeState.DISCONNECTED) {
-                    BlockState newState = state.setValue(property, getPipeStateForNeighborWhenUpdate(level, pos, facing.getOpposite()));
+                    BlockState newState = state.setValue(property, getPipeStateForNeighbor(level, pos, facing));
                     if (newState.getValue(WATERLOGGED)) {
                         level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
                     }
@@ -189,12 +184,12 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
                 }
             } else {
                 BlockState newState = state
-                        .setValue(NORTH, getPipeStateForNeighborWhenUpdate(level, pos, Direction.NORTH))
-                        .setValue(EAST, getPipeStateForNeighborWhenUpdate(level, pos, Direction.EAST))
-                        .setValue(SOUTH, getPipeStateForNeighborWhenUpdate(level, pos, Direction.SOUTH))
-                        .setValue(WEST, getPipeStateForNeighborWhenUpdate(level, pos, Direction.WEST))
-                        .setValue(UP, getPipeStateForNeighborWhenUpdate(level, pos, Direction.UP))
-                        .setValue(DOWN, getPipeStateForNeighborWhenUpdate(level, pos, Direction.DOWN));
+                        .setValue(NORTH, getPipeStateForNeighbor(level, pos, Direction.NORTH))
+                        .setValue(EAST, getPipeStateForNeighbor(level, pos, Direction.EAST))
+                        .setValue(SOUTH, getPipeStateForNeighbor(level, pos, Direction.SOUTH))
+                        .setValue(WEST, getPipeStateForNeighbor(level, pos, Direction.WEST))
+                        .setValue(UP, getPipeStateForNeighbor(level, pos, Direction.UP))
+                        .setValue(DOWN, getPipeStateForNeighbor(level, pos, Direction.DOWN));
                 if (newState.getValue(WATERLOGGED)) {
                     level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
                 }
@@ -206,11 +201,8 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
         super.neighborChanged(state, level, pos, block, fromPos, isMoving);
     }
 
-    @Override
-    public InteractionResult use(BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        return InteractionResult.PASS; // 暂时禁用手动设置
-    }
 
+    public abstract boolean isSamePipe(Block target);
     // TODO: 添加设置和获取特定面连接状态的方法 (如果需要)
 
 

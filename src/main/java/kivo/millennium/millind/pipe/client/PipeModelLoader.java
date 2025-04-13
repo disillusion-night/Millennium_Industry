@@ -3,8 +3,6 @@ package kivo.millennium.millind.pipe.client;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
-import kivo.millennium.millind.cables.client.CableBakedModel;
-import kivo.millennium.millind.cables.client.CableModelLoader;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;

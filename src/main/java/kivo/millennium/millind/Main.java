@@ -1,8 +1,6 @@
 package kivo.millennium.millind;
 
 import com.mojang.logging.LogUtils;
-import kivo.millennium.millind.cables.client.CableModelLoader;
-import kivo.millennium.millind.cables.client.FacadeBlockColor;
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumRecipes;
 import kivo.millennium.millind.pipe.client.PipeModelLoader;
@@ -118,13 +116,11 @@ public class Main {
 
         @SubscribeEvent
         public static void modelInit(ModelEvent.RegisterGeometryLoaders event) {
-            CableModelLoader.register(event);
             PipeModelLoader.register(event);
         }
 
         @SubscribeEvent
         public static void registerBlockColor(RegisterColorHandlersEvent.Block event) {
-            event.register(new FacadeBlockColor(), MillenniumBlocks.FACADE_BLOCK.get());
         }
     }
 

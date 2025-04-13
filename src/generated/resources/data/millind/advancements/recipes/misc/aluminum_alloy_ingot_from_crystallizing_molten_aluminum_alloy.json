@@ -1,12 +1,12 @@
 {
   "parent": "minecraft:recipes/root",
   "criteria": {
-    "has_ice": {
+    "has_aluminum_alloy_ingot": {
       "conditions": {
         "items": [
           {
             "items": [
-              "minecraft:ice"
+              "millind:aluminum_alloy_ingot"
             ]
           }
         ]
@@ -22,7 +22,7 @@
   },
   "requirements": [
     [
-      "has_ice",
+      "has_aluminum_alloy_ingot",
       "has_the_recipe"
     ]
   ],

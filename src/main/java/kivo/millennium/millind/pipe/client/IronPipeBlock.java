@@ -1,8 +1,16 @@
 package kivo.millennium.millind.pipe.client;
 
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.FluidState;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+
+import static kivo.millennium.millind.pipe.client.EPipeState.getPropertyForDirection;
 
 public class IronPipeBlock extends AbstractPipeBL {
 
@@ -13,18 +21,25 @@ public class IronPipeBlock extends AbstractPipeBL {
     }
 
     @Override
-    protected double getDefaultWidth() {
+    public double getDefaultWidth() {
         return PIPE_WIDTH;
     }
 
     @Override
-    protected boolean connectionTest(BlockState state, Direction facing) {
-        // 检查相邻方块是否是我们的管道
-        if (state.getBlock() instanceof AbstractPipeBL) {
+    protected boolean connectionTest(BlockGetter level, BlockPos neighborPos, BlockState neighborState, Direction facing) {
+        if (neighborState.getBlock() instanceof IronPipeBlock && neighborState.getValue(getPropertyForDirection(facing.getOpposite())) != EPipeState.DISCONNECTED) {
             return true;
         }
-        // 检查相邻方块是否具有非空的流体状态 (简化的液体储存能力判断)
-        FluidState fluidState = state.getFluidState();
-        return !fluidState.isEmpty() && fluidState.getType() != net.minecraft.world.level.material.Fluids.EMPTY;
+        BlockEntity be = level.getBlockEntity(neighborPos);
+        if(be != null) {
+            return be.getCapability(ForgeCapabilities.FLUID_HANDLER, facing.getOpposite()).isPresent();
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public boolean isSamePipe(Block target) {
+        return target instanceof IronPipeBlock;
     }
 }

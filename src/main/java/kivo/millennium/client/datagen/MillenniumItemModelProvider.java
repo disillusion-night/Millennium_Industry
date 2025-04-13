@@ -40,6 +40,8 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
         simpleToolItem(MillenniumItems.STEEL_SHOVEL);
         simpleToolItem(MillenniumItems.STEEL_SWORD);
 
+        simpleToolItem(MillenniumItems.WRENCH);
+
         simpleToolItem(MillenniumItems.WOLFRAM_STEEL_AXE);
         simpleToolItem(MillenniumItems.WOLFRAM_STEEL_HOE);
         simpleToolItem(MillenniumItems.WOLFRAM_STEEL_PICKAXE);
@@ -54,8 +56,6 @@ public class MillenniumItemModelProvider extends ItemModelProvider {
 
 
         SimpleItem(MillenniumItems.VRLA);
-        withExistingParent(MillenniumItems.CABLE_BLOCK_ITEM.getId().getPath(), modLoc("block/cable"));
-        withExistingParent(MillenniumItems.FACADE_BLOCK_ITEM.getId().getPath(), modLoc("block/facade"));
     }
 
     private void createMetalOreItem(Item ingot){

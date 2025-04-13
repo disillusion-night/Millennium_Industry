@@ -1,6 +1,5 @@
 package kivo.millennium.millind.pipe.client;
 
-import kivo.millennium.millind.cables.client.PipePatterns;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.BakedQuad;
@@ -21,18 +20,14 @@ import org.jetbrains.annotations.NotNull;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.function.Function;
 
-import static kivo.millennium.millind.cables.BakedModelHelper.quad;
-import static kivo.millennium.millind.cables.BakedModelHelper.v;
-import static kivo.millennium.millind.cables.ConnectorType.BLOCK;
-import static kivo.millennium.millind.cables.ConnectorType.CABLE;
-import static kivo.millennium.millind.cables.client.PipePatterns.SpriteIdx.*;
+import static kivo.millennium.millind.pipe.client.PipePatterns.SpriteIdx.*;
 import static kivo.millennium.millind.pipe.client.EPipeState.*;
 import static kivo.millennium.millind.pipe.client.AbstractPipeBL.*;
+import static kivo.millennium.millind.util.BakedModelHelper.quad;
+import static kivo.millennium.millind.util.BakedModelHelper.v;
 
 
 public class PipeBakedModel implements IDynamicBakedModel {

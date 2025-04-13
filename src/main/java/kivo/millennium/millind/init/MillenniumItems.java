@@ -1,8 +1,8 @@
 package kivo.millennium.millind.init;
 
-import kivo.millennium.millind.cables.blocks.FacadeBlockItem;
 import kivo.millennium.millind.item.Oopart.BAItemLevel;
 import kivo.millennium.millind.item.Oopart.Oopart;
+import kivo.millennium.millind.item.Wrench;
 import kivo.millennium.millind.item.battery.BaseBattery;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -14,8 +14,6 @@ import java.util.ArrayList;
 import java.util.function.Supplier;
 
 import static kivo.millennium.millind.Main.MODID;
-import static kivo.millennium.millind.init.MillenniumBlocks.CABLE_BLOCK;
-import static kivo.millennium.millind.init.MillenniumBlocks.FACADE_BLOCK;
 import static kivo.millennium.millind.item.Oopart.BAItemLevel.*;
 
 public class MillenniumItems {
@@ -34,6 +32,8 @@ public class MillenniumItems {
     public static final RegistryObject<BaseBattery> VRLA = createBattery("vrla", 10000, 1000);
 
     public static final RegistryObject<Item> STONE_DUST = createMaterial("stone_dust");
+
+    public static final RegistryObject<Item> WRENCH = createTool("wrench", Wrench::new);
 
     public static final RegistryObject<Item> CARBON_DUST = createMaterial("carbon_dust");
 
@@ -115,9 +115,9 @@ public class MillenniumItems {
     public static final RegistryObject<Item> WOLFRAM_STEEL_AXE = createTool("wolfram_steel_axe",() -> new AxeItem(Tiers.NETHERITE, 5.0F, -3.0F, (new Item.Properties()).fireResistant()));
     public static final RegistryObject<Item> WOLFRAM_STEEL_HOE = createTool("wolfram_steel_hoe",() -> new HoeItem(Tiers.NETHERITE, -4, 0.0F, (new Item.Properties()).fireResistant()));
 
-    public static final RegistryObject<Item> CABLE_BLOCK_ITEM = ITEMS.register("cable", () -> new BlockItem(CABLE_BLOCK.get(), new Item.Properties()));
+    //public static final RegistryObject<Item> CABLE_BLOCK_ITEM = ITEMS.register("cable", () -> new BlockItem(CABLE_BLOCK.get(), new Item.Properties()));
 
-    public static final RegistryObject<Item> FACADE_BLOCK_ITEM = ITEMS.register("facade", () -> new FacadeBlockItem(FACADE_BLOCK.get(), new Item.Properties()));
+   // public static final RegistryObject<Item> FACADE_BLOCK_ITEM = ITEMS.register("facade", () -> new FacadeBlockItem(FACADE_BLOCK.get(), new Item.Properties()));
 
     private static <T extends Item> RegistryObject<Item> createTool(String name, Supplier<T> supplier){
         RegistryObject<Item> tool = ITEMS.register(name, supplier);

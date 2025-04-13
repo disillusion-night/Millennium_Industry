@@ -133,9 +133,10 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumFluidTypes.MOLTEN_STEEL_FT.get().getDescriptionId(), "熔融钢");
         add(MillenniumFluidTypes.RAW_MOLTEN_ALUMINUM_FT.get().getDescriptionId(), "粗熔融铝");
         add(MillenniumFluidTypes.MOLTEN_ALUMINUM_ALLOY_FT.get().getDescriptionId(), "熔融铝合金");
-        
 
-        
+
+
+        add(MillenniumItems.WRENCH.get(), "扳手");
 
         add(InductionFurnaceBL.SCREEN_INDUCTION_FURNACE.getString(), "感应炉");
 

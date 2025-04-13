@@ -9,7 +9,7 @@
       "fluid": "millind:molten_aluminum_alloy"
     },
     {
-      "cost_chance": 0.0,
+      "damage": 1,
       "item": "minecraft:ice"
     }
   ],

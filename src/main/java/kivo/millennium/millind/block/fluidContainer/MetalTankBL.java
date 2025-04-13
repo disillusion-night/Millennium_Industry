@@ -26,18 +26,6 @@ public class MetalTankBL extends Block implements EntityBlock {
 
 
     @Override
-    public InteractionResult use(BlockState state, Level world, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hit) {
-        BlockEntity tileentity = world.getBlockEntity(pos);
-        if (tileentity instanceof MetalFluidTankBE) {
-            MetalFluidTankBE metalTank = (MetalFluidTankBE) tileentity;
-            InteractionResult result = metalTank.handleInteraction(player, hand);
-            if (result.consumesAction()) {
-                return result;
-            }
-        }
-        return super.use(state, world, pos, player, hand, hit);
-    }
-    @Override
     public VoxelShape getShape(BlockState pState, BlockGetter pLevel, BlockPos pPos, CollisionContext pContext) {
         return SHAPE;
     }

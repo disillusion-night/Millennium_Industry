@@ -1,7 +1,5 @@
 package kivo.millennium.millind.init;
 
-import com.lowdragmc.lowdraglib.test.TestJava;
-import kivo.millennium.millind.cables.blocks.*;
 import kivo.millennium.millind.machine.FusionChamber.FusionChamberBL;
 import kivo.millennium.millind.machine.HydraulicPress.HydraulicPressBL;
 import kivo.millennium.millind.machine.MeltingFurnace.MeltingFurnaceBL;
@@ -71,9 +69,6 @@ public class MillenniumBlocks {
     public static final RegistryObject<Block> TITANIUM_ALLOY_BLOCK = registerWithItem("titanium_alloy_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).instrument(NoteBlockInstrument.IRON_XYLOPHONE).requiresCorrectToolForDrops().strength(7.0F, 10.0F).sound(SoundType.METAL)));
     public static final RegistryObject<Block> WOLFRAM_STEEL_BLOCK = registerWithItem("wolfram_steel_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).instrument(NoteBlockInstrument.IRON_XYLOPHONE).requiresCorrectToolForDrops().strength(7.0F, 10.0F).sound(SoundType.METAL)));
 
-    public static final RegistryObject<FacadeBlock> FACADE_BLOCK = registerWithItem("facade_block", () -> new FacadeBlock());
-
-    public static final RegistryObject<Block> CABLE_BLOCK = registerWithItem("cable_block", () -> new BasicEnergyPipe());
 
     public static final RegistryObject<Block> IRON_FLUID_PIPE = registerWithItem("iron_fluid_pipe", IronPipeBlock::new);
 

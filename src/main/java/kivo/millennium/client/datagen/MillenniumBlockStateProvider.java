@@ -2,7 +2,6 @@ package kivo.millennium.client.datagen;
 
 import com.google.gson.JsonObject;
 import kivo.millennium.millind.block.device.MillenniumBlockProperty;
-import kivo.millennium.millind.cables.client.CableModelLoader;
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumMenuTypes;
 import kivo.millennium.millind.util.ShapeUtils;
@@ -53,27 +52,8 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         simpleOrientableExtra(MillenniumBlocks.CRYSTALLIZER_BL.get(), "crystallizer");
 
         solarGenerator(MillenniumBlocks.SOLAR_GENERATOR);
-        //simpleOrientableWithTop();
 
-        registerCable();
-        registerFacade();
 
-    }
-
-    private void registerCable() {
-        BlockModelBuilder model = models().getBuilder("cable")
-                .parent(models().getExistingFile(mcLoc("cube")))
-                .customLoader((builder, helper) -> new CableLoaderBuilder(CableModelLoader.GENERATOR_LOADER, builder, helper, false))
-                .end();
-        simpleBlock(MillenniumBlocks.CABLE_BLOCK.get(), model);
-    }
-
-    private void registerFacade() {
-        BlockModelBuilder model = models().getBuilder("facade")
-                .parent(models().getExistingFile(mcLoc("cube")))
-                .customLoader((builder, helper) -> new CableLoaderBuilder(CableModelLoader.GENERATOR_LOADER, builder, helper, true))
-                .end();
-        simpleBlock(MillenniumBlocks.FACADE_BLOCK.get(), model);
     }
 
     public static class CableLoaderBuilder extends CustomLoaderBuilder<BlockModelBuilder> {

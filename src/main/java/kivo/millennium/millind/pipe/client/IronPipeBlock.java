@@ -14,7 +14,7 @@ import static kivo.millennium.millind.pipe.client.EPipeState.getPropertyForDirec
 
 public class IronPipeBlock extends AbstractPipeBL {
 
-    private static final double PIPE_WIDTH = .5;
+    private static final double PIPE_WIDTH = .2;
 
     public IronPipeBlock() {
         super(Properties.of().strength(2.0f));

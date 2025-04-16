@@ -1,12 +1,13 @@
 package kivo.millennium.client.render.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.init.MillenniumCreativeTab;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.CreativeModeTab;
 import org.joml.Vector2i;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public class SchaleOverlay {
     public static void renderCustomOverlayer(GuiGraphics pGuiGraphics, int leftpos, int toppos, int width, int height, CreativeModeTab selectedTab){
@@ -22,7 +23,7 @@ public class SchaleOverlay {
         Vector2i resource = new Vector2i(1000, 1000);
         Vector2i overlay = new Vector2i(100, 100);
         RenderSystem.enableBlend();
-        graphics.blit(getRL("textures/gui/layer/schale_logo.png"),
+        graphics.blit(Main.getRL("textures/gui/layer/schale_logo.png"),
                 middle.x - 8 - (overlay.x / 2),
                 middle.y - (overlay.y / 2),
                 overlay.x,

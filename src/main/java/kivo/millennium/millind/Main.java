@@ -1,7 +1,6 @@
 package kivo.millennium.millind;
 
 import com.mojang.logging.LogUtils;
-import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumRecipes;
 import kivo.millennium.millind.pipe.client.PipeModelLoader;
 import net.minecraft.client.Minecraft;
@@ -9,7 +8,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
@@ -19,7 +17,6 @@ import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -127,10 +124,10 @@ public class Main {
     public static ResourceLocation getRL(String path){
         return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
-    public static ResourceLocation getRL(ItemLike itemLike){
+    public static ResourceLocation getKey(ItemLike itemLike){
         return ForgeRegistries.ITEMS.getKey(itemLike.asItem());
     }
-    public static ResourceLocation getRL(Fluid fluid){
+    public static ResourceLocation getKey(Fluid fluid){
         return ForgeRegistries.FLUIDS.getKey(fluid);
     }
     public static ResourceLocation getResourceKey(Item item){

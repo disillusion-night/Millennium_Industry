@@ -1,82 +1,81 @@
 package kivo.millennium.millind.recipe;
 
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.capability.CapabilityType;
-import net.minecraft.core.registries.BuiltInRegistries;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraft.util.GsonHelper;
+import kivo.millennium.millind.capability.MillenniumItemStorage;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.registries.ForgeRegistries;
 
 public class ItemProxy implements ISlotProxy<ItemStack> {
-    private ItemStack itemStack;
-    //private float costChance;
-    private int capability;
-    private int damage;
 
+    MillenniumItemStorage itemStorage;
+    int index;
 
-    public ItemProxy(){
-        this.itemStack = ItemStack.EMPTY;
-        this.capability = 64;
-        this.damage = 0;
+    public ItemProxy(MillenniumItemStorage itemStorage, int index){
+        this.itemStorage = itemStorage;
+        this.index = index;
     }
 
-    public ItemProxy(ItemStack itemStack){
-        this.itemStack = itemStack;
-        this.capability = 64;
-        this.damage = 0;
+    @Override
+    public boolean isEmpty() {
+        return itemStorage.getStackInSlot(index).isEmpty();
     }
 
-    public void  setDamage(int damage){
-        this.damage = damage;
+    @Override
+    public int getAmount() {
+        return itemStorage.getStackInSlot(index).getCount();
     }
 
-    public int getDamage(){
-        return this.damage;
+    @Override
+    public void setSlotLimit(int limit) {
+
     }
 
-    /*public void setCostChance(float costChance){
-        this.costChance = costChance;
+    @Override
+    public int getSlotLimit() {
+        return itemStorage.getSlotLimit(index);
     }
 
-    public float getCostChance(){
-        return this.costChance;
-    }*/
-
-    public void set(ItemStack itemStack) {
-        this.itemStack = itemStack;
+    @Override
+    public RecipeComponent convert2RecipeComponent() {
+        return null;
     }
 
+    @Override
     public ItemStack get() {
-        return itemStack;
+        return itemStorage.getStackInSlot(index);
+    }
+
+    @Override
+    public void set(ItemStack stack) {
+        itemStorage.setStackInSlot(index, stack);
     }
 
     @Override
     public ItemStack shrink(int amount) {
-        itemStack.shrink(amount);
-        return itemStack;
+        itemStorage.getStackInSlot(index).shrink(amount);
+        return itemStorage.getStackInSlot(index);
     }
 
     @Override
-    public ItemStack grow(int amount){
-        itemStack.grow(amount);
-        return itemStack;
+    public ItemStack grow(int amount) {
+        itemStorage.getStackInSlot(index).grow(amount);
+        return itemStorage.getStackInSlot(index);
     }
 
     @Override
-    public boolean hasPlaceFor(ISlotProxy slotProxy) {
-        if (slotProxy instanceof ItemProxy itemProxy){
-            if(itemStack.isEmpty()) return true;
-            return itemStack.getCount() + itemProxy.getAmount() <= capability;
+    public boolean hasPlaceFor(RecipeComponent<ItemStack> itemComponent) {
+        ItemStack itemStack = itemComponent.get();
+        if (isEmpty()) return getSlotLimit() >= itemStack.getCount();
+        if (itemStack.is(get().getItem()) && itemStack.getCount() + getAmount() <= getSlotLimit()){
+            return true;
         }
         return false;
     }
 
     @Override
     public void clear() {
-        this.itemStack = ItemStack.EMPTY;
+
     }
 
     @Override
@@ -85,114 +84,36 @@ public class ItemProxy implements ISlotProxy<ItemStack> {
     }
 
     @Override
-    public boolean contains(ISlotProxy proxy) {
-        if (proxy instanceof ItemProxy itemProxy){
-            return itemStack.is(itemProxy.get().getItem()) && getAmount() >= itemProxy.getAmount();
-        }else {
-            return false;
+    public boolean contains(RecipeComponent<ItemStack> itemComponent) {
+        if (isEmpty()) return false;
+        ItemStack itemStack = itemComponent.get();
+        if (get().is(itemStack.getItem()) && itemStack.getCount() <= getAmount()){
+            return true;
         }
+        return false;
     }
 
     @Override
-    public boolean remove(ISlotProxy proxy) {
-        if (proxy instanceof ItemProxy itemProxy){
-            if(this.itemStack.is(itemProxy.get().getItem()) && getAmount() >= itemProxy.getAmount()){
-                this.itemStack.shrink(itemProxy.getAmount());
-                return true;
-            }else {
-                return false;
-            }
-        }else {
-            return false;
+    public boolean remove(RecipeComponent<ItemStack> itemComponent) {
+        ItemStack itemStack = itemComponent.get();
+        if (contains(itemComponent)){
+            shrink(itemComponent.get().getCount());
+            return true;
         }
+        return false;
     }
 
     @Override
-    public boolean add(ISlotProxy proxy) {
-        if (proxy instanceof ItemProxy itemProxy){
-            if(this.itemStack.isEmpty()){
-                this.itemStack = itemProxy.get();
-                return true;
-            }
-            if(this.itemStack.getCount() + itemProxy.getAmount() <= capability ){
-                this.itemStack.grow(itemProxy.getAmount());
-                return true;
-            }else {
-                return false;
-            }
-        } else {
-            return false;
+    public boolean add(RecipeComponent<ItemStack> itemComponent) {
+        ItemStack itemStack = itemComponent.get();
+        if (isEmpty()) {
+            set(itemStack);
+            return true;
         }
-    }
-
-    @Override
-    public boolean isEmpty() {
-        return itemStack.isEmpty();
-    }
-
-    @Override
-    public int getAmount() {
-        return itemStack.getCount();
-    }
-
-    @Override
-    public void setSlotLimit(int limit) {
-        this.capability = limit;
-    }
-
-
-    @Override
-    public int getSlotLimit() {
-        return this.capability;
-    }
-
-    @Override
-    public ItemComponent getAsRecipeComponent() {
-        return ItemComponent.of(itemStack);
-    }
-
-    @Override
-    public ItemProxy of(ItemStack stack) {
-        return new ItemProxy(stack);
-    }
-
-
-    @Override
-    public JsonObject toJson() {
-        JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("item", BuiltInRegistries.ITEM.getKey(itemStack.getItem()).toString());
-        if (itemStack.getCount() > 1) {
-            jsonObject.addProperty("count", itemStack.getCount());
+        if (contains(itemComponent)){
+            grow(itemComponent.get().getCount());
+            return true;
         }
-        if (itemStack.hasTag()) {
-            jsonObject.addProperty("nbt", itemStack.getTag().toString());
-        }
-        if (damage > 0) {
-            jsonObject.addProperty("damage", damage);
-        }
-        //if ()
-        return jsonObject;
-    }
-
-    @Override
-    public void readFromJson(JsonObject jsonObject) {
-        ResourceLocation item = new ResourceLocation(GsonHelper.getAsString(jsonObject, "item"));
-        int count = GsonHelper.getAsInt(jsonObject, "count", 1);
-        int damage = GsonHelper.getAsInt(jsonObject,"damage", 0);
-        this.itemStack = new ItemStack(ForgeRegistries.ITEMS.getValue(item), count);
-        this.damage = damage;
-        if (this.itemStack.isEmpty()) {
-            throw new JsonSyntaxException("Unknown item: " + item);
-        }
-    }
-
-    @Override
-    public void writeToNetwork(FriendlyByteBuf buffer) {
-        buffer.writeItem(itemStack);
-    }
-
-    @Override
-    public void readFromNetwork(FriendlyByteBuf buffer) {
-        this.itemStack = buffer.readItem();
+        return false;
     }
 }

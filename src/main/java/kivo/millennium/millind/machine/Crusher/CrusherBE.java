@@ -5,11 +5,19 @@ import kivo.millennium.millind.capability.CapabilityCache;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.recipe.CrushingRecipe;
 import kivo.millennium.millind.recipe.ItemProxy;
-import kivo.millennium.millind.recipe.NeoContainer;
+import kivo.millennium.millind.recipe.ProxyContainer;
+import kivo.millennium.millind.recipe.RecipeComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.List;
+
+import static kivo.millennium.millind.Main.getKey;
 
 public class CrusherBE extends AbstractRecipeMachineBE<CrushingRecipe> {
+    private static final Logger log = LoggerFactory.getLogger(CrusherBE.class);
     public static int SLOT_COUNT = 3;
     public static int INPUT_SLOT = 1;
     public static int OUTPUT_SLOT = 2;
@@ -23,40 +31,18 @@ public class CrusherBE extends AbstractRecipeMachineBE<CrushingRecipe> {
     }
 
     @Override
-    protected NeoContainer getInputs() {
-        return new NeoContainer(new ItemProxy(getItemHandler().getStackInSlot(INPUT_SLOT)));
+    protected ProxyContainer getInputs() {
+        return new ProxyContainer().addProxy(getItemHandler(), INPUT_SLOT);
     }
 
     @Override
-    protected void acceptOutputs(NeoContainer container) {
-        getItemHandler().setStackInSlot(OUTPUT_SLOT, container.getItem(0));
-    }
-
-    @Override
-    protected NeoContainer getOutputs() {
-        return new NeoContainer(new ItemProxy(getItemHandler().getStackInSlot(OUTPUT_SLOT)));
+    protected ProxyContainer getOutputs() {
+        return new ProxyContainer().addProxy(getItemHandler(), OUTPUT_SLOT);
     }
 
     @Override
     protected boolean isInputValid() {
         return !getItemHandler().getStackInSlot(INPUT_SLOT).isEmpty();
-    }
-
-    @Override
-    protected boolean canProcess(NeoContainer recipeOutputs) {
-        if (recipeOutputs.isEmpty()) {
-            return false;
-        }
-
-        if (getItemHandler().getStackInSlot(OUTPUT_SLOT).isEmpty()) {
-            return true;
-        }
-
-        if (!getItemHandler().getStackInSlot(OUTPUT_SLOT).is(recipeOutputs.getItem(0).getItem())) {
-            return false;
-        }
-
-        return getItemHandler().getStackInSlot(OUTPUT_SLOT).getCount() + recipeOutputs.getItem(0).getCount() <= getItemHandler().getSlotLimit(OUTPUT_SLOT);
     }
 
 }

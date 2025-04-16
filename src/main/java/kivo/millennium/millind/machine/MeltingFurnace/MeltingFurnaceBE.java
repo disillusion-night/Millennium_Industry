@@ -5,12 +5,10 @@ import kivo.millennium.millind.capability.CapabilityCache;
 import kivo.millennium.millind.capability.CapabilityType;
 import kivo.millennium.millind.capability.MillenniumFluidStorage;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
-import kivo.millennium.millind.recipe.ItemProxy;
 import kivo.millennium.millind.recipe.MeltingRecipe;
-import kivo.millennium.millind.recipe.NeoContainer;
+import kivo.millennium.millind.recipe.ProxyContainer;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 
 public class MeltingFurnaceBE extends AbstractRecipeMachineBE<MeltingRecipe> {
     public static final int SLOT_COUNT = 2;
@@ -41,42 +39,19 @@ public class MeltingFurnaceBE extends AbstractRecipeMachineBE<MeltingRecipe> {
     }
 
     @Override
-    protected NeoContainer getInputs() {
-        return new NeoContainer()
-                .addStack((getItemHandler().getStackInSlot(INPUT_SLOT)));
+    protected ProxyContainer getInputs() {
+        return new ProxyContainer()
+                .addProxy(getItemHandler(), INPUT_SLOT);
     }
 
     @Override
-    protected NeoContainer getOutputs() {
-        return new NeoContainer()
-                .addStack(getFluidTank().getFluidInTank(OUTPUT_SLOT));
-    }
-
-    @Override
-    protected void acceptOutputs(NeoContainer container) {
-        getFluidHandler().setFluidInTank(OUTPUT_SLOT, container.getFluid(0));
+    protected ProxyContainer getOutputs() {
+        return new ProxyContainer()
+                .addProxy(getFluidTank(), OUTPUT_SLOT);
     }
 
     @Override
     protected boolean isInputValid() {
         return! getItemHandler().getStackInSlot(INPUT_SLOT).isEmpty();
-    }
-
-    @Override
-    protected boolean canProcess(NeoContainer neoContainer) {
-        if (neoContainer.isEmpty()) {
-            return false;
-        }
-
-        if (getItemHandler().getStackInSlot(OUTPUT_SLOT).isEmpty()) {
-            return true;
-        }
-
-        if (!(getFluidTank().getFluidInTank(OUTPUT_SLOT).getFluid() == neoContainer.getFluid(0).getFluid())) {
-            return false;
-        }
-
-        return getItemHandler().getStackInSlot(OUTPUT_SLOT).getCount() + neoContainer.getAmount(0) <= getItemHandler().getSlotLimit(OUTPUT_SLOT);
-
     }
 }

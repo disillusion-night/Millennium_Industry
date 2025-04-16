@@ -1,19 +1,20 @@
 package kivo.millennium.millind.machine.ResonanceChamber;
 
 import kivo.millennium.client.screen.AbstractDeviceSC;
+import kivo.millennium.millind.Main;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 @OnlyIn(Dist.CLIENT)
 public class ResonanceChamberScreen extends AbstractDeviceSC<ResonanceChamberMenu> {
     public ResonanceChamberScreen(ResonanceChamberMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
-        this.GUI_TEXTURE = getRL( "textures/gui/container/resonance_chamber_gui.png");
+        this.GUI_TEXTURE = Main.getRL( "textures/gui/container/resonance_chamber_gui.png");
     }
 
     @Override

@@ -1,23 +1,24 @@
 package kivo.millennium.client.datagen;
 
 import com.google.gson.JsonObject;
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.block.device.MillenniumBlockProperty;
 import kivo.millennium.millind.init.MillenniumBlocks;
-import kivo.millennium.millind.init.MillenniumMenuTypes;
 import kivo.millennium.millind.util.ShapeUtils;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.generators.*;
 import net.minecraftforge.common.data.ExistingFileHelper;
-import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
+import org.jetbrains.annotations.NotNull;
+
+import javax.annotation.Nullable;
 
 import static kivo.millennium.millind.Main.MODID;
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public class MillenniumBlockStateProvider extends BlockStateProvider {
     ExistingFileHelper efh;
@@ -42,6 +43,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         cubeAllBlockWithItem(MillenniumBlocks.ALUMINUM_ORE, "material");
         cubeAllBlockWithItem(MillenniumBlocks.DEEPSLATE_ALUMINUM_ORE, "material");
         cubeAllBlockWithItem(MillenniumBlocks.RAW_ALUMINUM_BLOCK, "material");
+        cubeAllBlockWithItem(MillenniumBlocks.ALERT_BLOCK);
 
         horizontalOrientable(MillenniumBlocks.RESONANCE_CHAMBER_BL, "resonance_chamber");
 
@@ -75,16 +77,26 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
     }
 
     public void addWithHaveModel(Block block, String name){
-        var model_path = models().getExistingFile(getRL(name));
+        var model_path = models().getExistingFile(Main.getRL(name));
         var model = new ConfiguredModel(model_path);
         getVariantBuilder(block).partialState().setModels(model);
         simpleBlockItem(block,model_path);
     }
 
+    public <B extends Block> void cubeAllBlockWithItem(RegistryObject<B> block) {
+        ModelFile blockModel = models().getBuilder("block/" + block.getId().getPath())
+                .parent(new ConfiguredModel(models().getExistingFile(new ResourceLocation("minecraft:block/cube_all"))).model)
+                .texture("all", Main.getRL("block/" + block.getId().getPath()));
+
+        getVariantBuilder(block.get()).partialState().setModels(new ConfiguredModel(blockModel));
+        itemModels().getBuilder(block.getId().getPath()).parent(blockModel);
+    }
+
+
     public <B extends Block> void cubeAllBlockWithItem(RegistryObject<B> block, String prefix) {
         ModelFile blockModel = models().getBuilder("block/" + prefix + "/" + block.getId().getPath())
                 .parent(new ConfiguredModel(models().getExistingFile(new ResourceLocation("minecraft:block/cube_all"))).model)
-                .texture("all", getRL("block/"+ prefix + "/" + block.getId().getPath()));
+                .texture("all", Main.getRL("block/"+ prefix + "/" + block.getId().getPath()));
 
         getVariantBuilder(block.get()).partialState().setModels(new ConfiguredModel(blockModel));
         itemModels().getBuilder(block.getId().getPath()).parent(blockModel);
@@ -103,13 +115,13 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
             String poweredSuffix = blockState.getValue(MillenniumBlockProperty.WORKING)? "_on" : "";
 
             return ConfiguredModel.builder()
-                    .modelFile(new ConfiguredModel(models().getExistingFile(getRL(modelPath + poweredSuffix))).model)
+                    .modelFile(new ConfiguredModel(models().getExistingFile(Main.getRL(modelPath + poweredSuffix))).model)
                     .rotationX(ShapeUtils.getXRotation(blockState.getValue(BlockStateProperties.FACING)))
                     .rotationY(ShapeUtils.getYRotation(blockState.getValue(BlockStateProperties.FACING)))
                     .build();
         });
 
-        simpleBlockItem(block.get(), new ConfiguredModel(models().getExistingFile(getRL(modelPath))).model);
+        simpleBlockItem(block.get(), new ConfiguredModel(models().getExistingFile(Main.getRL(modelPath))).model);
     }
 
 
@@ -126,12 +138,12 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
             boolean IsPowered = blockState.getValue(MillenniumBlockProperty.WORKING);
 
             return ConfiguredModel.builder()
-                    .modelFile(new ConfiguredModel(models().getExistingFile(getRL(modelPath + (IsPowered ? "_on" : "")))).model)
+                    .modelFile(new ConfiguredModel(models().getExistingFile(Main.getRL(modelPath + (IsPowered ? "_on" : "")))).model)
                     .rotationY(ShapeUtils.getYRotation(blockState.getValue(HorizontalDirectionalBlock.FACING)))
                     .build();
         });
 
-        simpleBlockItem(block.get(), new ConfiguredModel(models().getExistingFile(getRL(modelPath))).model);
+        simpleBlockItem(block.get(), new ConfiguredModel(models().getExistingFile(Main.getRL(modelPath))).model);
     }
 
 
@@ -149,10 +161,10 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
             boolean IsPowered = blockState.getValue(MillenniumBlockProperty.WORKING);
 
             ModelFile blockModel = models().getBuilder(modelPath + (IsPowered ? "_on" : ""))
-                    .parent(itemModels().getExistingFile(getRL("block/orientable_with_top")))
-                    .texture("front", getRL("block/" + modelPath + "_front" + (IsPowered ? "_on" : "_off")))
-                    .texture("side", getRL("block/" + modelPath + "_side"))
-                    .texture("top", getRL("block/" + modelPath + "_top"));
+                    .parent(itemModels().getExistingFile(Main.getRL("block/orientable_with_top")))
+                    .texture("front", Main.getRL("block/" + modelPath + "_front" + (IsPowered ? "_on" : "_off")))
+                    .texture("side", Main.getRL("block/" + modelPath + "_side"))
+                    .texture("top", Main.getRL("block/" + modelPath + "_top"));
 
 
 
@@ -162,7 +174,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
                     .build();
         });
 
-        simpleBlockItem(block, new ConfiguredModel(models().getExistingFile(getRL(modelPath))).model);
+        simpleBlockItem(block, new ConfiguredModel(models().getExistingFile(Main.getRL(modelPath))).model);
     }
 
 
@@ -180,9 +192,9 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
             ModelFile blockModel = models().getBuilder(modelPath + (IsPowered ? "_on" : ""))
                     .parent(itemModels().getExistingFile(new ResourceLocation("minecraft", "block/orientable")))
-                    .texture("front", getRL("block/" + modelPath + "_front" + (IsPowered ? "_on" : "_off")))
-                    .texture("side", getRL("block/" + modelPath + "_side"))
-                    .texture("top", getRL("block/" + modelPath + "_top"));
+                    .texture("front", Main.getRL("block/" + modelPath + "_front" + (IsPowered ? "_on" : "_off")))
+                    .texture("side", Main.getRL("block/" + modelPath + "_side"))
+                    .texture("top", Main.getRL("block/" + modelPath + "_top"));
 
 
 
@@ -192,7 +204,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
                     .build();
         });
 
-        simpleBlockItem(block, new ConfiguredModel(models().getExistingFile(getRL(modelPath))).model);
+        simpleBlockItem(block, new ConfiguredModel(models().getExistingFile(Main.getRL(modelPath))).model);
     }
 
 
@@ -210,11 +222,11 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
             boolean IsPowered = blockState.getValue(MillenniumBlockProperty.WORKING);
 
             ModelFile blockModel = models().getBuilder(modelPath + (IsPowered ? "_on" : ""))
-                    .parent(itemModels().getExistingFile(getRL("block/orientable_with_bottom_extra")))
-                    .texture("front", getRL("block/" + modelPath + "_front" + (IsPowered ? "_on" : "_off")))
-                    .texture("side", getRL("block/" + modelPath + "_side"))
-                    .texture("bottom", getRL("block/" + modelPath + "_bottom"))
-                    .texture("top", getRL("block/" + modelPath + "_top"));
+                    .parent(itemModels().getExistingFile(Main.getRL("block/orientable_with_bottom_extra")))
+                    .texture("front", Main.getRL("block/" + modelPath + "_front" + (IsPowered ? "_on" : "_off")))
+                    .texture("side", Main.getRL("block/" + modelPath + "_side"))
+                    .texture("bottom", Main.getRL("block/" + modelPath + "_bottom"))
+                    .texture("top", Main.getRL("block/" + modelPath + "_top"));
 
 
 
@@ -224,7 +236,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
                     .build();
         });
 
-        simpleBlockItem(block, new ConfiguredModel(models().getExistingFile(getRL(modelPath))).model);
+        simpleBlockItem(block, new ConfiguredModel(models().getExistingFile(Main.getRL(modelPath))).model);
     }
 
     private  <T extends Block> void solarGenerator(RegistryObject<T> block) {
@@ -234,8 +246,8 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
             ModelFile blockModel = models().getBuilder(block.getId().getPath())
                     .parent(itemModels().getExistingFile(new ResourceLocation("minecraft", "block/template_daylight_detector")))
-                    .texture("side", getRL("block/" + block.getId().getPath() + "_side"))
-                    .texture("top", getRL("block/" + block.getId().getPath() + "_top"));
+                    .texture("side", Main.getRL("block/" + block.getId().getPath() + "_side"))
+                    .texture("top", Main.getRL("block/" + block.getId().getPath() + "_top"));
 
 
 
@@ -244,7 +256,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
                     .build();
         });
 
-        simpleBlockItem(block.get(), new ConfiguredModel(models().getExistingFile(getRL(block.getId().getPath()))).model);
+        simpleBlockItem(block.get(), new ConfiguredModel(models().getExistingFile(Main.getRL(block.getId().getPath()))).model);
     }
 
     private void Crystallizer(RegistryObject<Block> block) {
@@ -256,10 +268,10 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
 
             ModelFile blockModel = models().getBuilder(resource.getPath() + (IsPowered ? "_on" : ""))
-                    .parent(itemModels().getExistingFile(getRL("block/cube")))
-                    .texture("front", getRL("block/" + resource.getPath() + "_front" + (IsPowered ? "_on" : "_off")))
-                    .texture("side", getRL("block/" + resource.getPath() + "_side"))
-                    .texture("top", getRL("block/" + resource.getPath() + "_top")  + (IsPowered ? "_on" : "_off"));
+                    .parent(itemModels().getExistingFile(Main.getRL("block/cube")))
+                    .texture("front", Main.getRL("block/" + resource.getPath() + "_front" + (IsPowered ? "_on" : "_off")))
+                    .texture("side", Main.getRL("block/" + resource.getPath() + "_side"))
+                    .texture("top", Main.getRL("block/" + resource.getPath() + "_top")  + (IsPowered ? "_on" : "_off"));
 
 
 
@@ -281,10 +293,10 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
 
             ModelFile blockModel = models().getBuilder(resource.getPath() + (IsPowered ? "_on" : ""))
-                    .parent(itemModels().getExistingFile(getRL("block/orientable_with_top")))
-                    .texture("front", getRL("block/" + resource.getPath() + "_front" + (IsPowered ? "_on" : "_off")))
-                    .texture("side", getRL("block/" + resource.getPath() + "_side"))
-                    .texture("top", getRL("block/" + resource.getPath() + "_top"));
+                    .parent(itemModels().getExistingFile(Main.getRL("block/orientable_with_top")))
+                    .texture("front", Main.getRL("block/" + resource.getPath() + "_front" + (IsPowered ? "_on" : "_off")))
+                    .texture("side", Main.getRL("block/" + resource.getPath() + "_side"))
+                    .texture("top", Main.getRL("block/" + resource.getPath() + "_top"));
 
 
 
@@ -307,10 +319,10 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
 
             ModelFile blockModel = models().getBuilder(resource.getPath() + (IsPowered ? "_on" : ""))
-                    .parent(itemModels().getExistingFile(getRL("block/orientable_with_top")))
-                    .texture("front", getRL("block/" + resource.getPath() + "_front" + (IsPowered ? "_on" : "_off")))
-                    .texture("side", getRL("block/" + resource.getPath() + "_side"))
-                    .texture("top", getRL("block/" + resource.getPath() + "_top")  + (IsPowered ? "_on" : "_off"));
+                    .parent(itemModels().getExistingFile(Main.getRL("block/orientable_with_top")))
+                    .texture("front", Main.getRL("block/" + resource.getPath() + "_front" + (IsPowered ? "_on" : "_off")))
+                    .texture("side", Main.getRL("block/" + resource.getPath() + "_side"))
+                    .texture("top", Main.getRL("block/" + resource.getPath() + "_top")  + (IsPowered ? "_on" : "_off"));
 
 
 

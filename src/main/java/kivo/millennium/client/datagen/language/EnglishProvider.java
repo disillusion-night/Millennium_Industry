@@ -1,7 +1,7 @@
 package kivo.millennium.client.datagen.language;
 
 
-import kivo.millennium.millind.capability.MillenniumItemStorage;
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumCreativeTab;
 import kivo.millennium.millind.init.MillenniumFluidTypes;
@@ -11,7 +11,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 import static kivo.millennium.millind.Main.log;
 
 public class EnglishProvider extends MillenniumLanguageProvider {
@@ -33,6 +33,8 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.RESONANCE_CHAMBER_BL.get(), "Resonance Chamber");
         add(MillenniumBlocks.CRYSTALLIZER_BL.get(), "Crystallizer");
         add(MillenniumBlocks.SOLAR_GENERATOR.get(), "Solar Generator");
+
+        add(MillenniumBlocks.ALERT_BLOCK.get(), "Alert Block");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "High-Purity Wolfsegg Steel");
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "Low-Purity Wolfsegg Steel");
@@ -148,6 +150,6 @@ public class EnglishProvider extends MillenniumLanguageProvider {
 
 
     private void addEnglishFromId(Item item){
-        add(item, getRL(item).getPath());
+        add(item, Main.getKey(item).getPath());
     }
 }

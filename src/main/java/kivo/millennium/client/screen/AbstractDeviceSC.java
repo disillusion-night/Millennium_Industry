@@ -1,5 +1,6 @@
 package kivo.millennium.client.screen;
 
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.container.Device.AbstractDeviceMenu;
 import kivo.millennium.millind.util.NumberUtils;
 import net.minecraft.client.gui.GuiGraphics;
@@ -9,7 +10,7 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import org.joml.Vector2i;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends AbstractContainerScreen<C> {
 
@@ -31,9 +32,9 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends Abs
         this.menu = pMenu;
         this.imageWidth = getImageSize().x;
         this.imageHeight = getImageSize().y;
-        this.ENERGY_AREA_BASE_TEXTURE = getRL("textures/gui/container/energy/energy_area.png");
-        this.BATTERY_OVERLAY_TEXTURE = getRL("textures/gui/container/energy/battery_overlay.png");
-        this.POWER_OVERLAY_TEXTURE = getRL("textures/gui/container/energy/has_power_supply.png");
+        this.ENERGY_AREA_BASE_TEXTURE = Main.getRL("textures/gui/container/energy/energy_area.png");
+        this.BATTERY_OVERLAY_TEXTURE = Main.getRL("textures/gui/container/energy/battery_overlay.png");
+        this.POWER_OVERLAY_TEXTURE = Main.getRL("textures/gui/container/energy/has_power_supply.png");
         this.EnergyAreaSize = new Vector2i(29, 29);
         this.EnergyPercentOffset = new Vector2i(3, 18);
         this.renderPos = new Vector2i(leftPos, topPos);

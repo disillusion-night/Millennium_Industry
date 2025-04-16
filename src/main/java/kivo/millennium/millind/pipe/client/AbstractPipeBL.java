@@ -208,7 +208,7 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
 
     @Override
     public VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
-        float width = (float) getDefaultWidth();
+        float width =  (float) getDefaultWidth();
         float center = 0.5F;
         float radius = width / 2.0F;
 

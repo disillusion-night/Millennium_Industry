@@ -123,7 +123,7 @@ public class PipeBakedModel implements IDynamicBakedModel {
             return quads;
         }
         
-        double m = AbstractPipeBL.getDefaultWidth() / 2;
+        double m = (1 - AbstractPipeBL.getDefaultWidth()) / 2;
         double n = 1 - m;
 
         EPipeState north = state.getValue(NORTH);

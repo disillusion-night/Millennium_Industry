@@ -2,6 +2,7 @@ package kivo.millennium.millind.util;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import kivo.millennium.millind.Main;
 import net.minecraft.ChatFormatting;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Font;
@@ -17,18 +18,17 @@ import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import org.joml.Matrix4f;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 @OnlyIn(Dist.CLIENT)
 public class RenderUtils {
-    private static final ResourceLocation PROGRESS_TEXTURE = getRL("textures/gui/container/progress_arrow.png");
+    private static final ResourceLocation PROGRESS_TEXTURE = Main.getRL("textures/gui/container/progress_arrow.png");
 
-    private static final ResourceLocation FLAME_TEXTURE = getRL("textures/gui/container/furnace_flame.png");
+    private static final ResourceLocation FLAME_TEXTURE = Main.getRL("textures/gui/container/furnace_flame.png");
 
-    private static final ResourceLocation SNOW_TEXTURE = getRL("textures/gui/container/snow.png");
+    private static final ResourceLocation SNOW_TEXTURE = Main.getRL("textures/gui/container/snow.png");
 
     public static void renderFluid(GuiGraphics guiGraphics, FluidStack fluidStack, int x, int y, int width, int height, int blitOffset, int capacity) {
         if (fluidStack.isEmpty()) return;

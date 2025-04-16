@@ -1,27 +1,21 @@
 package kivo.millennium.millind.datagen;
 
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.init.*;
-import kivo.millennium.millind.recipe.CrushingRecipe;
 import kivo.millennium.millind.util.RecipeUtils;
 import net.minecraft.data.PackOutput;
 import net.minecraft.data.recipes.*;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.AbstractCookingRecipe;
-import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluids;
 import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
 import java.util.function.Consumer;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public class MillenniumRecipeProvider extends RecipeProvider {
     public MillenniumRecipeProvider(PackOutput pOutput) {
@@ -133,44 +127,44 @@ public class MillenniumRecipeProvider extends RecipeProvider {
     protected static void crystallizing(Consumer<FinishedRecipe> pFinishedRecipeConsumer,FluidStack fluidStack, Item model, RecipeCategory pCategory, ItemLike pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
                 .crystallizing(fluidStack, model, pCategory, new ItemStack(pResult, 1), 0, pCookingTime,energy)
-                .unlockedBy("has_" + getRL(pResult.asItem()).getPath(), has(pResult.asItem()))
-                .save(pFinishedRecipeConsumer,  getRL(getRL(pResult).getPath() + "_from_crystallizing_" + getRL(fluidStack.getFluid()).getPath()));
+                .unlockedBy("has_" + Main.getKey(pResult.asItem()).getPath(), has(pResult.asItem()))
+                .save(pFinishedRecipeConsumer,  Main.getRL(Main.getKey(pResult).getPath() + "_from_crystallizing_" + getKey(fluidStack.getFluid()).getPath()));
     }
 
 
     protected static void pressing(Consumer<FinishedRecipe> pFinishedRecipeConsumer, Item model, ItemStack itemStack, RecipeCategory pCategory, ItemLike pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
                 .pressing(model, itemStack, pCategory, new ItemStack(pResult, 1), 0, pCookingTime,energy)
-                .unlockedBy("has_" + getRL(itemStack.getItem()).getPath(), has(itemStack.getItem()))
-                .save(pFinishedRecipeConsumer,  getRL(getRL(pResult).getPath() + "_from_pressing_" + getRL(itemStack.getItem()).getPath()));
+                .unlockedBy("has_" + Main.getKey(itemStack.getItem()).getPath(), has(itemStack.getItem()))
+                .save(pFinishedRecipeConsumer,  Main.getRL(Main.getKey(pResult).getPath() + "_from_pressing_" + Main.getKey(itemStack.getItem()).getPath()));
     }
 
     protected static void fusion(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredientItem, FluidStack pIngredientFluid, RecipeCategory pCategory, FluidStack pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
                 .fusion(new ItemStack(pIngredientItem),pIngredientFluid, pCategory, pResult, 0, pCookingTime, energy)
-                .unlockedBy("has_" + getRL(pIngredientItem).getPath(), has(pIngredientItem))
-                .save(pFinishedRecipeConsumer,  getRL(getRL(pResult.getFluid()).getPath() + "_from_fusion_" + getRL(pIngredientItem).getPath()+ "_and_" + getRL(pIngredientFluid.getFluid()).getPath()));
+                .unlockedBy("has_" + Main.getKey(pIngredientItem).getPath(), has(pIngredientItem))
+                .save(pFinishedRecipeConsumer,  Main.getRL(getKey(pResult.getFluid()).getPath() + "_from_fusion_" + Main.getKey(pIngredientItem).getPath()+ "_and_" + getKey(pIngredientFluid.getFluid()).getPath()));
     }
 
     protected static void melting(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredient, RecipeCategory pCategory, FluidStack pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
                 .melting(new ItemStack(pIngredient), pCategory, pResult, 0, pCookingTime, energy)
-                .unlockedBy("has_" + getRL(pIngredient).getPath(), has(pIngredient))
-                .save(pFinishedRecipeConsumer,  getRL(getRL(pResult.getFluid()).getPath() + "_from_melting_" + getRL(pIngredient).getPath()));
+                .unlockedBy("has_" + Main.getKey(pIngredient).getPath(), has(pIngredient))
+                .save(pFinishedRecipeConsumer,  Main.getRL(getKey(pResult.getFluid()).getPath() + "_from_melting_" + Main.getKey(pIngredient).getPath()));
     }
 
 
     protected static void crushing(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredient, RecipeCategory pCategory, ItemLike pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
                 .crushing(new ItemStack(pIngredient), pCategory, new ItemStack(pResult, 1), 0, pCookingTime,energy)
-                .unlockedBy("has_" + getRL(pIngredient).getPath(), has(pIngredient))
-                .save(pFinishedRecipeConsumer,  getRL(getRL(pResult).getPath() + "_from_crushing_" + getRL(pIngredient).getPath()));
+                .unlockedBy("has_" + Main.getKey(pIngredient).getPath(), has(pIngredient))
+                .save(pFinishedRecipeConsumer,  Main.getRL(Main.getKey(pResult).getPath() + "_from_crushing_" + Main.getKey(pIngredient).getPath()));
     }
 
     protected static void crushing(Consumer<FinishedRecipe> pFinishedRecipeConsumer, ItemLike pIngredient, RecipeCategory pCategory, ItemLike pResult, int count, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
                 .crushing(new ItemStack(pIngredient), pCategory, new ItemStack(pResult, count), 0, pCookingTime, energy)
-                .unlockedBy("has_" + getRL(pIngredient).getPath(), has(pIngredient))
-                .save(pFinishedRecipeConsumer,  getRL(getRL(pResult).getPath() + "_from_crushing_" + getRL(pIngredient).getPath()));
+                .unlockedBy("has_" + Main.getKey(pIngredient).getPath(), has(pIngredient))
+                .save(pFinishedRecipeConsumer,  Main.getRL(Main.getKey(pResult).getPath() + "_from_crushing_" + Main.getKey(pIngredient).getPath()));
     }
 }

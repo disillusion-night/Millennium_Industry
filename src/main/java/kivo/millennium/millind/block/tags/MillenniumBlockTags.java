@@ -1,12 +1,12 @@
 package kivo.millennium.millind.block.tags;
 
-import net.minecraft.core.registries.Registries;
+import kivo.millennium.millind.Main;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.registries.ForgeRegistries;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public abstract class MillenniumBlockTags {
     public static final TagKey<Block> PIPE = create("pipe");
@@ -17,7 +17,7 @@ public abstract class MillenniumBlockTags {
     public static final TagKey<Block> ORE = create("ore");
 
     private static TagKey<Block> create(String pName) {
-        return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), getRL(pName));
+        return TagKey.create(ForgeRegistries.BLOCKS.getRegistryKey(), Main.getRL(pName));
     }
 
     public static TagKey<Block> create(ResourceLocation name) {

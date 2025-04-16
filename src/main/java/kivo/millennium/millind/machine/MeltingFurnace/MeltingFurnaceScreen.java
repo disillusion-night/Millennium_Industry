@@ -1,6 +1,7 @@
 package kivo.millennium.millind.machine.MeltingFurnace;
 
 import kivo.millennium.client.screen.AbstractDeviceSC;
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.container.Device.MeltingFurnaceMenu;
 import kivo.millennium.millind.util.RenderUtils;
 import net.minecraft.client.gui.GuiGraphics;
@@ -11,7 +12,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.fluids.FluidStack;
 import org.joml.Vector2i;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 @OnlyIn(Dist.CLIENT)
 public class MeltingFurnaceScreen extends AbstractDeviceSC<MeltingFurnaceMenu> {
@@ -30,7 +31,7 @@ public class MeltingFurnaceScreen extends AbstractDeviceSC<MeltingFurnaceMenu> {
 
     public MeltingFurnaceScreen(MeltingFurnaceMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
-        this.GUI_TEXTURE = getRL( "textures/gui/container/melting_furnace_gui.png");
+        this.GUI_TEXTURE = Main.getRL( "textures/gui/container/melting_furnace_gui.png");
     }
 
     @Override

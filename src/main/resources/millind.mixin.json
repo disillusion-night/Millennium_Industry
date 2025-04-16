@@ -5,6 +5,7 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "millind.refmap.json",
   "mixins": [
+    "ItemStackAccessor"
   ],
   "client": [
     "AbstractContainerScreenMixin",

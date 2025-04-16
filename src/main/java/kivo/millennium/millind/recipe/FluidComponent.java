@@ -3,16 +3,20 @@ package kivo.millennium.millind.recipe;
 
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
+import kivo.millennium.millind.capability.CapabilityType;
+import kivo.millennium.millind.mixin.ItemStackAccessor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
+import net.minecraft.world.item.ItemStack;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import javax.annotation.Nullable;
 
-public class FluidComponent implements RecipeComponent {
+public class FluidComponent implements RecipeComponent<FluidStack> {
     @Nullable
     private FluidStack fluidStack;
 
@@ -20,18 +24,24 @@ public class FluidComponent implements RecipeComponent {
         this.fluidStack = fluidStack;
     }
 
-    public static FluidComponent of(FluidStack fluidStack){
-        return new FluidComponent(fluidStack);
+    public FluidComponent(JsonObject jsonObject) {
+        ResourceLocation fluidName = new ResourceLocation(GsonHelper.getAsString(jsonObject, "fluid"));
+        int amount = GsonHelper.getAsInt(jsonObject, "amount");
+        this.fluidStack = new FluidStack(ForgeRegistries.FLUIDS.getValue(fluidName), amount);
+        if (this.fluidStack.isEmpty()) {
+            throw new JsonSyntaxException("Unknown fluid: " + fluidName);
+        }
     }
 
-    public FluidStack getFluidStack() {
+    @Override
+    public FluidStack get() {
         return fluidStack == null ? FluidStack.EMPTY : fluidStack;
     }
 
     @Override
     public <R extends RecipeComponent> boolean matches(R component) {
         if(component instanceof FluidComponent fluidComponent){
-            FluidStack stack = fluidComponent.getFluidStack();
+            FluidStack stack = fluidComponent.get();
             return stack.containsFluid(fluidStack);
         }
         return false;
@@ -75,7 +85,7 @@ public class FluidComponent implements RecipeComponent {
     }
 
     @Override
-    public String getType() {
-        return "fluid";
+    public CapabilityType getType() {
+        return CapabilityType.FLUID;
     }
 }

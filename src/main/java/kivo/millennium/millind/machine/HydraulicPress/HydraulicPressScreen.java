@@ -1,6 +1,7 @@
 package kivo.millennium.millind.machine.HydraulicPress;
 
 import kivo.millennium.client.screen.AbstractDeviceSC;
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.container.Device.HydraulicPressMenu;
 import kivo.millennium.millind.util.RenderUtils;
 import net.minecraft.client.gui.GuiGraphics;
@@ -9,7 +10,7 @@ import net.minecraft.world.entity.player.Inventory;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 @OnlyIn(Dist.CLIENT)
 public class HydraulicPressScreen extends AbstractDeviceSC<HydraulicPressMenu> {
@@ -17,7 +18,7 @@ public class HydraulicPressScreen extends AbstractDeviceSC<HydraulicPressMenu> {
     int progressY = 34;
     public HydraulicPressScreen(HydraulicPressMenu pMenu, Inventory pPlayerInventory, Component pTitle) {
         super(pMenu, pPlayerInventory, pTitle);
-        this.GUI_TEXTURE = getRL( "textures/gui/container/hydraulic_press_gui.png");
+        this.GUI_TEXTURE = Main.getRL( "textures/gui/container/hydraulic_press_gui.png");
     }
 
     @Override

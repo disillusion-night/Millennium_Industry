@@ -1,9 +1,10 @@
 package kivo.millennium.millind.item.Oopart;
 
+import kivo.millennium.millind.Main;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public class BAItem extends Item implements IBABackground {
     private final BAItemLevel level;
@@ -18,6 +19,6 @@ public class BAItem extends Item implements IBABackground {
 
     @Override
     public ResourceLocation getBackGround() {
-        return getRL("textures/gui/background/"+this.level.toString().toLowerCase()+".png");
+        return Main.getRL("textures/gui/background/"+this.level.toString().toLowerCase()+".png");
     }
 }

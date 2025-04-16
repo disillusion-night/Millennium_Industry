@@ -1,6 +1,8 @@
 package kivo.millennium.millind.recipe;
 
 import kivo.millennium.millind.Main;
+import kivo.millennium.millind.capability.MillenniumFluidStorage;
+import kivo.millennium.millind.capability.MillenniumItemStorage;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
@@ -10,15 +12,15 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-public class NeoContainer implements Container {
+public class ProxyContainer implements Container {
     private ArrayList<ISlotProxy> slotProxies;
 
-    public NeoContainer (ISlotProxy...slotProxies){
+    public ProxyContainer(ISlotProxy...slotProxies){
         this.slotProxies = new ArrayList();
         this.slotProxies.addAll(Arrays.asList(slotProxies));
     }
 
-    public NeoContainer (List<ISlotProxy> slotProxies){
+    public ProxyContainer(List<ISlotProxy> slotProxies){
         this.slotProxies = new ArrayList();
         this.slotProxies.addAll(slotProxies);
     }
@@ -108,6 +110,27 @@ public class NeoContainer implements Container {
 
     }
 
+    public ProxyContainer addProxy(ItemProxy itemProxy){
+        this.slotProxies.add(itemProxy);
+        return this;
+    }
+
+    public ProxyContainer addProxy(MillenniumItemStorage itemStorage, int index){
+        this.slotProxies.add(new ItemProxy(itemStorage, index));
+        return this;
+    }
+
+    public ProxyContainer addProxy(FluidProxy fluidProxy){
+        this.slotProxies.add(fluidProxy);
+        return this;
+    }
+
+    public ProxyContainer addProxy(MillenniumFluidStorage fluidStorage, int index){
+        this.slotProxies.add(new FluidProxy(fluidStorage, index));
+        return this;
+    }
+
+
     @Override
     public boolean stillValid(Player pPlayer) {
         return true;
@@ -118,44 +141,43 @@ public class NeoContainer implements Container {
 
     }
 
-    public NeoContainer addStack(FluidStack fluidStack){
-        slotProxies.add(new FluidProxy().of(fluidStack));
-        return this;
-    }
-
-    public NeoContainer addStack(ItemStack itemStack){
-        slotProxies.add(new ItemProxy().of(itemStack));
-        return this;
-    }
-
-    public boolean isContain(NeoContainer container){
-        if(container.getContainerSize() != this.getContainerSize()){
+    public boolean isContain(List<RecipeComponent> recipeComponentList){
+        if(recipeComponentList.size() != this.getContainerSize()){
             return false;
         }
         for (int i = 0; i < getContainerSize(); i++){
-            if(!this.getProxyInSlot(i).contains(container.getProxyInSlot(i))){
+            RecipeComponent component = recipeComponentList.get(i);
+            if (this.getProxyInSlot(i).getType() != component.getType()){
+                return false;
+            }
+            if(!this.getProxyInSlot(i).contains(component)){
                 return false;
             }
         }
         return true;
     }
 
-    public boolean hasPlaceFor(NeoContainer container){
-        if(container.getContainerSize() != this.getContainerSize()){
+    public boolean hasPlaceFor(List<RecipeComponent> recipeComponentList){
+        if(recipeComponentList.size() != this.getContainerSize()){
             return false;
         }
         for (int i = 0; i < getContainerSize(); i++){
-            if(!this.getProxyInSlot(i).hasPlaceFor(container.getProxyInSlot(i))){
+            RecipeComponent component = recipeComponentList.get(i);
+            if (this.getProxyInSlot(i).getType() != component.getType()){
+
+                return false;
+            }
+            if(!this.getProxyInSlot(i).hasPlaceFor(component)){
                 return false;
             }
         }
         return true;
     }
 
-    public boolean tryRemove(NeoContainer container){
-        if(this.isContain(container)){
+    public boolean tryRemove(List<RecipeComponent> recipeComponentList){
+        if(this.isContain(recipeComponentList)){
             for (int i = 0; i < getContainerSize(); i++){
-                this.slotProxies.get(i).remove(container.getProxyInSlot(i));
+                this.slotProxies.get(i).remove(recipeComponentList.get(i));
             }
             return true;
         }
@@ -163,10 +185,10 @@ public class NeoContainer implements Container {
 
     }
 
-    public boolean tryAdd(NeoContainer container){
-        if(this.hasPlaceFor(container)){
+    public boolean tryAdd(List<RecipeComponent> recipeComponentList){
+        if(this.hasPlaceFor(recipeComponentList)){
             for (int i = 0; i < getContainerSize(); i++){
-                this.slotProxies.get(i).add(container.getProxyInSlot(i));
+                this.slotProxies.get(i).add(recipeComponentList.get(i));
             }
             return true;
         }

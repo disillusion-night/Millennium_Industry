@@ -2,10 +2,13 @@ package kivo.millennium.millind.block.laser;
 
 import kivo.millennium.millind.block.device.AbstractDeviceBL;
 import kivo.millennium.millind.block.device.AbstractMachineBE;
+import kivo.millennium.millind.machine.Crusher.CrusherBE;
+import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.HorizontalDirectionalBlock;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
@@ -20,6 +23,9 @@ public abstract class HorizonalMachineBL<BE extends AbstractMachineBE> extends A
         this.registerDefaultState(this.stateDefinition.any().setValue(FACING, Direction.NORTH));
     }
 
+    @Nullable
+    @Override
+    public abstract BE newBlockEntity(BlockPos pPos, BlockState pState); // 强制子类实现创建 BlockEntity 的方法
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {

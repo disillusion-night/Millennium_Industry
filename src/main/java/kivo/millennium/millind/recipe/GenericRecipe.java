@@ -52,8 +52,12 @@ public abstract class GenericRecipe implements Recipe<ProxyContainer> {
         if(pInput.isContain(inputs) && pOutput.hasPlaceFor(outputs)){
             pOutput.tryAdd(outputs);
             pInput.tryRemove(inputs);
+            pOutput.clear();
+            pInput.clear();
             return true;
         }
+        pOutput.clear();
+        pInput.clear();
         return false;
     }
 

@@ -25,13 +25,13 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 public abstract class AbstractMachineBE extends BlockEntity implements IWorkingMachine {
     public CapabilityCache cache;
 
-    public<T extends AbstractMachineBE> AbstractMachineBE(BlockEntityType<?> pType, BlockPos pWorldPosition, BlockState pBlockState, CapabilityCache.Builder builder) {
+    public<T extends AbstractMachineBE> AbstractMachineBE(BlockEntityType<T> pType, BlockPos pWorldPosition, BlockState pBlockState, CapabilityCache.Builder builder) {
         super(pType, pWorldPosition, pBlockState);
         this.cache = builder.build(this::setCapabilityChanged);
     }
 
     // 每 tick 执行的逻辑，由 AbstractDeviceBL 的 Ticker 调用
-    public static <T extends BlockEntity> void tick(Level pLevel, BlockPos pPos, BlockState pState, AbstractMachineBE pBlockEntity) {
+    public static <T extends AbstractMachineBE> void tick(Level pLevel, BlockPos pPos, BlockState pState, T pBlockEntity) {
         if (pLevel.isClientSide()) {
             return; // 客户端不做逻辑处理
         }

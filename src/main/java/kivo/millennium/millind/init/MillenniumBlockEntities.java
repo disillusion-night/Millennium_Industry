@@ -3,6 +3,7 @@ package kivo.millennium.millind.init;
 import kivo.millennium.millind.machine.FusionChamber.FusionChamberBE;
 import kivo.millennium.millind.machine.HydraulicPress.HydraulicPressBE;
 import kivo.millennium.millind.machine.MeltingFurnace.MeltingFurnaceBE;
+import kivo.millennium.millind.machine.PipeBooster.PipeBoosterBE;
 import kivo.millennium.millind.machine.ResonanceChamber.ResonanceChamberBE;
 import kivo.millennium.millind.machine.Crusher.CrusherBE;
 import kivo.millennium.millind.machine.Crystallizer.CrystallizerBE;
@@ -45,6 +46,10 @@ public class MillenniumBlockEntities {
     /*public static final RegistryObject<BlockEntityType<MolecularReformerBE>> MOLECULAR_REFORMER_BE = BLOCK_ENTITIES.register(
             "molecular_reformer_be", () -> BlockEntityType.Builder.of(MolecularReformerBE::new,
                     MillenniumBlocks.MOLECULAR_REFORMER_BL.get()).build(null));*/
+
+    public static final RegistryObject<BlockEntityType<PipeBoosterBE>> PIPE_BOOSTER_BE = BLOCK_ENTITIES.register(
+            "pipe_booster_be", () -> BlockEntityType.Builder.of(PipeBoosterBE::new,
+                    MillenniumBlocks.RESONANCE_CHAMBER_BL.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<ResonanceChamberBE>> RESONANCE_CHAMBER_BE = BLOCK_ENTITIES.register(
             "resonance_chamber_be", () -> BlockEntityType.Builder.of(ResonanceChamberBE::new,

@@ -1,7 +1,6 @@
 package kivo.millennium.millind.eventHandler;
 
-import kivo.millennium.millind.pipe.client.network.AbstractNetwork;
-import kivo.millennium.millind.pipe.client.network.NetworkManagerData;
+import net.minecraft.server.MinecraftServer; // 导入 MinecraftServer
 import net.minecraft.server.level.ServerLevel;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -14,38 +13,28 @@ public class ServerTickEvents {
 
     @SubscribeEvent
     public static void onServerTick(TickEvent.ServerTickEvent event) {
+        // 只在服务器 Tick 结束时处理网络逻辑
         if (event.phase == TickEvent.Phase.END) {
-            // 获取所有 ServerLevel，对于全局网络，只需要在主世界 Tick
-            // 对于单维度网络，需要在每个维度 Tick
+            MinecraftServer server = event.getServer();
+            if (server != null) {
+                // 遍历所有已加载的 ServerLevel
+                for (ServerLevel serverLevel : server.getAllLevels()) {
+                    // 获取该维度的 LevelNetworkManagerData
+                    //LevelNetworkManagerData networkManager = LevelNetworkManagerData.get();
 
-            // 示例：在主世界 Tick 全局网络和主世界的单维度网络
-            ServerLevel overworld = event.getServer().getLevel(net.minecraft.world.level.Level.OVERWORLD);
-            if (overworld != null) {
-                NetworkManagerData networkManager = NetworkManagerData.get(overworld);
-                for (AbstractNetwork network : networkManager.getNetworks().values()) {
-                    if (network.isGlobal()) {
-                        // 全局网络只在主世界 Tick
-                        network.handleTick(overworld);
-                    } else {
-                        // 单维度网络在各自维度 Tick，这里只 Tick 主世界的单维度网络
-                        if (overworld.dimension() == overworld.dimension()) { // 恒等判断，仅为示例
-                            network.handleTick(overworld);
-                        }
-                    }
+                    // 遍历该维度的所有 LevelNetwork 实例并执行 Tick 逻辑
+                    // 使用 values() 获取网络的 Collection，避免在迭代时因网络合并/分裂修改 Map 导致并发问题
+                    // 或者在 Tick 循环前复制一份网络列表
+                    //List<AbstractLevelNetwork> networksToTick = networkManager.;
+
+                    //for (AbstractLevelNetwork network : networksToTick) {
+                        // 确保网络实例有效且仍应被 Tick (例如，可能在 Tick 过程中被标记为删除)
+                        // 你可能需要在 AbstractLevelNetwork 中添加一个 isRemoved() 或 similar 方法
+                        // if (!network.isRemoved()) { // 示例检查
+                        //network.handleTick(serverLevel); // 调用网络的 Tick 方法
+                        // }
+                    //}
                 }
-
-                // TODO: 遍历其他维度，并 Tick 它们的单维度网络
-                // 你可能需要一个 Map 来存储每个维度的 NetworkManagerData
-                // net.minecraft.server.MinecraftServer.getServer().getAllLevels().forEach(level -> {
-                //     if (level != overworld) {
-                //         NetworkManagerData dimensionNetworkManager = NetworkManagerData.get(level);
-                //         for (AbstractNetwork network : dimensionNetworkManager.getNetworks().values()) {
-                //             if (!network.isGlobal()) {
-                //                 network.handleTick(level);
-                //             }
-                //         }
-                //     }
-                // });
             }
         }
     }

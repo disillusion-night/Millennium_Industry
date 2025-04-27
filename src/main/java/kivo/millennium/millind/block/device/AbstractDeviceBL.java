@@ -23,9 +23,15 @@ import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.function.ToIntFunction;
+
 public abstract class AbstractDeviceBL extends Block implements EntityBlock {
     public static final BooleanProperty WORKING = MillenniumBlockProperty.WORKING;
 
+    protected static final ToIntFunction<BlockState> STATE_TO_LIGHT_LEVEL_FUNCTION = (state) -> {
+        if (state.getValue(WORKING)) return 15;
+        return 0;
+    };
     public AbstractDeviceBL(Properties properties) {
         super(properties.sound(SoundType.METAL));
         this.registerDefaultState(this.stateDefinition.any().setValue(WORKING, false));

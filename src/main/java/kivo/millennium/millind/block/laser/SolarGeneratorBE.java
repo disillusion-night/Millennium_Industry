@@ -24,7 +24,7 @@ public class SolarGeneratorBE extends AbstractMachineBE {
     }
 
     @Override
-    protected void tickServer() {
+    public void tickServer() {
         generateEnergy();
         distributeEnergy();
 
@@ -33,11 +33,6 @@ public class SolarGeneratorBE extends AbstractMachineBE {
     @Override
     public boolean isWorking() {
         return false;
-    }
-
-    @Override
-    public int getProgressPercent() {
-        return 0;
     }
 
     protected void distributeEnergy() {

@@ -1,5 +1,7 @@
 package kivo.millennium.millind.pipe.client;
 
+import kivo.millennium.millind.init.MillenniumLevelNetwork;
+import kivo.millennium.millind.pipe.client.network.FluidLevelNetwork;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
@@ -12,7 +14,7 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
 import static kivo.millennium.millind.pipe.client.EPipeState.getPropertyForDirection;
 
-public class IronPipeBlock extends AbstractPipeBL {
+public class IronPipeBlock extends AbstractPipeBL<FluidLevelNetwork> {
 
     private static final double PIPE_WIDTH = .5;
 
@@ -23,6 +25,11 @@ public class IronPipeBlock extends AbstractPipeBL {
     @Override
     public double getDefaultWidth() {
         return PIPE_WIDTH;
+    }
+
+    @Override
+    public MillenniumLevelNetwork.LevelNetworkType<FluidLevelNetwork> getAssociatedNetworkType() {
+        return MillenniumLevelNetwork.FLUID_LEVEL_NETWORK.get();
     }
 
     @Override

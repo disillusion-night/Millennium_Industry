@@ -1,6 +1,5 @@
+package kivo.millennium.millind.pipe.client.network;
 
-
-import kivo.millennium.millind.pipe.client.network.NetworkTarget;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
@@ -9,6 +8,8 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.energy.IEnergyStorage;
+import net.minecraftforge.fluids.FluidStack; // 导入 FluidStack
+import net.minecraftforge.fluids.capability.IFluidHandler; // 导入 IFluidHandler
 
 public class BlockNetworkTarget extends NetworkTarget {
 
@@ -32,8 +33,9 @@ public class BlockNetworkTarget extends NetworkTarget {
         }
         // 检查方块实体是否存在且仍然是具有 Capability 的类型
         BlockEntity be = level.getBlockEntity(pos);
-        // TODO: 检查具体的 Capability 类型，例如 ForgeCapabilities.ENERGY
-        return be != null && be.getCapability(ForgeCapabilities.ENERGY /*, capabilityDirection */).isPresent();
+        // TODO: 检查具体的 Capability 类型，例如 ForgeCapabilities.FLUID_HANDLER 或 ForgeCapabilities.ENERGY
+        return be != null && (be.getCapability(ForgeCapabilities.FLUID_HANDLER /*, capabilityDirection */).isPresent() ||
+                be.getCapability(ForgeCapabilities.ENERGY /*, capabilityDirection */).isPresent() /* 或其他 capability */);
     }
 
     @Override
@@ -65,6 +67,51 @@ public class BlockNetworkTarget extends NetworkTarget {
             }
         }
         return 0;
+    }
+
+    @Override
+    public int fillFluid(Level level, FluidStack fluid, IFluidHandler.FluidAction action) {
+        if (level == null || level.isClientSide || pos == null || fluid.isEmpty()) return 0;
+
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be != null) {
+            LazyOptional<IFluidHandler> capability = be.getCapability(ForgeCapabilities.FLUID_HANDLER /*, capabilityDirection */);
+            if (capability.isPresent()) {
+                IFluidHandler fluidHandler = capability.orElseThrow(RuntimeException::new);
+                return fluidHandler.fill(fluid, action);
+            }
+        }
+        return 0;
+    }
+
+    @Override
+    public FluidStack drainFluid(Level level, int amount, IFluidHandler.FluidAction action) {
+        if (level == null || level.isClientSide || pos == null || amount <= 0) return FluidStack.EMPTY;
+
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be != null) {
+            LazyOptional<IFluidHandler> capability = be.getCapability(ForgeCapabilities.FLUID_HANDLER /*, capabilityDirection */);
+            if (capability.isPresent()) {
+                IFluidHandler fluidHandler = capability.orElseThrow(RuntimeException::new);
+                return fluidHandler.drain(amount, action);
+            }
+        }
+        return FluidStack.EMPTY;
+    }
+
+    @Override
+    public FluidStack drainFluid(Level level, FluidStack fluid, IFluidHandler.FluidAction action) {
+        if (level == null || level.isClientSide || pos == null || fluid.isEmpty()) return FluidStack.EMPTY;
+
+        BlockEntity be = level.getBlockEntity(pos);
+        if (be != null) {
+            LazyOptional<IFluidHandler> capability = be.getCapability(ForgeCapabilities.FLUID_HANDLER /*, capabilityDirection */);
+            if (capability.isPresent()) {
+                IFluidHandler fluidHandler = capability.orElseThrow(RuntimeException::new);
+                return fluidHandler.drain(fluid, action);
+            }
+        }
+        return FluidStack.EMPTY;
     }
 
     @Override

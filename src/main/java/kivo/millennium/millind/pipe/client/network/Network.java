@@ -1,6 +1,5 @@
 package kivo.millennium.millind.pipe.client.network;
 
-import kivo.millennium.millind.capability.CapabilityType;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -12,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class AbstractNetwork {
+public abstract class Network {
 
     private final boolean isGlobal;
     private final List<NetworkTarget> inputNodes = new ArrayList<>();
@@ -23,7 +22,7 @@ public abstract class AbstractNetwork {
      *
      * @param isGlobal 如果网络可以在维度间传输（全局可见），则为 true；否则为 false（单维度传输）。
      */
-    public AbstractNetwork(boolean isGlobal) {
+    public Network(boolean isGlobal) {
         this.isGlobal = isGlobal;
     }
 

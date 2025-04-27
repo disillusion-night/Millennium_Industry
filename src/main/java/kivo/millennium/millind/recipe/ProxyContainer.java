@@ -196,6 +196,9 @@ public class ProxyContainer implements Container {
 
     }
 
+    public void clear (){
+        this.slotProxies.clear();
+    }
     //public void setSlotProxies(NonNullList<ISlotProxy> slotProxies) {
         //this.slotProxies = slotProxies;
     //}

@@ -140,8 +140,6 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
 
         add(MillenniumItems.WRENCH.get(), "扳手");
 
-        add(InductionFurnaceBL.SCREEN_INDUCTION_FURNACE.getString(), "感应炉");
-
         add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.OOPARTS.get())), "千年科工 神秘古物");
         add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.ENGINEERING_PARTS.get())), "千年科工 工程组件");
         add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.MATERIALS.get())), "千年科工 材料");

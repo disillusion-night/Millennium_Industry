@@ -62,6 +62,7 @@ public class SimpleSingleRecipeBuilder {
     public static SimpleSingleRecipeBuilder pressing(Item model, ItemStack pIngredient2, RecipeCategory pCategory, ItemStack pResult, float pExperience, int pCookingTime, int pEnergyCost) {
         NonNullList<RecipeComponent> recipeComponents = NonNullList.create();
         ItemComponent a = new ItemComponent(new ItemStack(model, 1));
+        a.setNoCost();
         recipeComponents.add(a);
         recipeComponents.add(new ItemComponent(pIngredient2));
         return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, new ItemComponent(pResult)),recipeComponents, pExperience, pCookingTime,pEnergyCost,  MillenniumRecipes.PRESSING_RECIPE.get());

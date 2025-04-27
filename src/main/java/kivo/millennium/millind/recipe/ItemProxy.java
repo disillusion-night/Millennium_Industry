@@ -97,7 +97,15 @@ public class ItemProxy implements ISlotProxy<ItemStack> {
     public boolean remove(RecipeComponent<ItemStack> itemComponent) {
         ItemStack itemStack = itemComponent.get();
         if (contains(itemComponent)){
-            shrink(itemComponent.get().getCount());
+            Float costChance = itemComponent.asItemComponent().getCostChance();
+            if (costChance.equals(1.0F)){
+                shrink(itemComponent.get().getCount());
+            } else if (costChance.equals(0.0F)){
+                //
+            } else {
+                if (Math.random() < costChance)
+                    shrink(itemComponent.get().getCount());
+            }
             return true;
         }
         return false;

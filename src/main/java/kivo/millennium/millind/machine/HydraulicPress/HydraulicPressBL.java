@@ -1,35 +1,29 @@
 package kivo.millennium.millind.machine.HydraulicPress;
 
-import kivo.millennium.millind.block.device.AbstractMachineBE;
-import kivo.millennium.millind.block.laser.HorizonalMachineBL;
+import kivo.millennium.millind.block.laser.HorizontalMachineBL;
 import kivo.millennium.millind.container.Device.HydraulicPressMenu;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
-public class HydraulicPressBL extends HorizonalMachineBL {
+public class HydraulicPressBL extends HorizontalMachineBL<HydraulicPressBE> {
 
     public HydraulicPressBL() {
-        super(Properties.of().lightLevel(state -> {
-            if(state.getValue(WORKING)) return 15;
-            return 0;
-        }));
+        super(Properties.of().lightLevel(STATE_TO_LIGHT_LEVEL_FUNCTION));
     }
 
-    @Nullable
     @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+    public HydraulicPressBE newBlockEntity(BlockPos pPos, BlockState pState) {
         return new HydraulicPressBE(pPos, pState);
     }
 
     @Override
-    protected BlockEntityType<? extends AbstractMachineBE> blockEntityType() {
+    protected BlockEntityType<HydraulicPressBE> blockEntityType() {
         return MillenniumBlockEntities.HYDRAULIC_PRESS_BE.get();
     }
 

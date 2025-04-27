@@ -21,14 +21,14 @@ public abstract class AbstractRecipeMachineBE<R extends GenericRecipe> extends A
     private int totalTime;
     private final RecipeType<R> RecipeType;
 
-    public <T extends AbstractRecipeMachineBE<R>> AbstractRecipeMachineBE(BlockEntityType<?> pType, RecipeType<R> pRecipeType, BlockPos pWorldPosition, BlockState pBlockState, CapabilityCache.Builder builder) {
+    public <T extends AbstractRecipeMachineBE<R>> AbstractRecipeMachineBE(BlockEntityType<T> pType, RecipeType<R> pRecipeType, BlockPos pWorldPosition, BlockState pBlockState, CapabilityCache.Builder builder) {
         super(pType, pWorldPosition, pBlockState, builder.withProgress());
         this.cache = builder.build(this::setCapabilityChanged);
         this.RecipeType = pRecipeType;
     }
 
     @Override
-    protected void tickServer() {
+    public void tickServer() {
         handleEnergyAcceptFromBattery();
         if (isInputValid()) {
             ProxyContainer inputs = getInputs();
@@ -133,4 +133,13 @@ public abstract class AbstractRecipeMachineBE<R extends GenericRecipe> extends A
             }
         });
     }
+
+    public int getProgressAndLit() {
+        if (isWorking()) {
+            return getProgressPercent() << 1 | 1;
+        } else {
+            return getProgressPercent() << 1;
+        }
+    }
+
 }

@@ -1,39 +1,29 @@
 package kivo.millennium.millind.machine.InductionFurnace;
 
-import kivo.millennium.millind.block.device.AbstractMachineBE;
-import kivo.millennium.millind.block.laser.HorizonalMachineBL;
+import kivo.millennium.millind.block.laser.HorizontalMachineBL;
 import kivo.millennium.millind.container.Device.InductionFurnaceMenu;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
-import net.minecraft.network.chat.Component;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.level.block.SoundType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 
-public class InductionFurnaceBL extends HorizonalMachineBL {
-    public static final Component SCREEN_INDUCTION_FURNACE = Component.translatable("screen.millind.generator");
+public class InductionFurnaceBL extends HorizontalMachineBL<InductionFurnaceBE> {
 
     public InductionFurnaceBL() {
-        super(Properties.of().destroyTime(40.0F).sound(SoundType.METAL).lightLevel(blockState -> {
-            if(blockState.getValue(WORKING)){
-                return 15;
-            }else {
-                return 0;
-            }
-        }));
+        super(Properties.of().destroyTime(40.0F).sound(SoundType.METAL).lightLevel(STATE_TO_LIGHT_LEVEL_FUNCTION));
     }
 
     @Override
-    public BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+    public InductionFurnaceBE newBlockEntity(BlockPos pPos, BlockState pState) {
         return new InductionFurnaceBE(pPos, pState);
     }
 
     @Override
-    protected BlockEntityType<? extends AbstractMachineBE> blockEntityType() {
+    protected BlockEntityType<InductionFurnaceBE> blockEntityType() {
         return MillenniumBlockEntities.INDUCTION_FURNACE_BE.get();
     }
 

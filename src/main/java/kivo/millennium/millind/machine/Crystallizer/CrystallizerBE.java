@@ -25,6 +25,7 @@ public class CrystallizerBE extends AbstractRecipeMachineBE<CrystallizingRecipe>
                 .withItems(3)
                 .withProgress()
         );
+        this.getFluidTank().setForInput(0);
     }
 
     @Override

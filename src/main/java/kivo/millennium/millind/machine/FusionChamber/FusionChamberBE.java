@@ -32,8 +32,7 @@ public class FusionChamberBE extends AbstractRecipeMachineBE<FusionRecipe> {
                 .withItems(2)
                 .withProgress()
         );
-
-        this.getFluidTank().addFluidToTank(0, new FluidStack(MillenniumFluids.MOLTEN_IRON.get(), 10000), IFluidHandler.FluidAction.EXECUTE);
+        this.getFluidTank().setForInput(0).setForOutput(1);
     }
 
 

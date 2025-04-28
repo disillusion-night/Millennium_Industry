@@ -1,20 +1,19 @@
 package kivo.millennium.millind.pipe.client;
 
-import kivo.millennium.millind.init.MillenniumLevelNetwork;
-import kivo.millennium.millind.pipe.client.network.FluidLevelNetwork;
+import kivo.millennium.millind.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.FluidState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import org.jetbrains.annotations.Nullable;
 
 import static kivo.millennium.millind.pipe.client.EPipeState.getPropertyForDirection;
 
-public class IronPipeBlock extends AbstractPipeBL<FluidLevelNetwork> {
+public class IronPipeBlock extends AbstractPipeBL{
 
     private static final double PIPE_WIDTH = .5;
 
@@ -25,11 +24,6 @@ public class IronPipeBlock extends AbstractPipeBL<FluidLevelNetwork> {
     @Override
     public double getDefaultWidth() {
         return PIPE_WIDTH;
-    }
-
-    @Override
-    public MillenniumLevelNetwork.LevelNetworkType<FluidLevelNetwork> getAssociatedNetworkType() {
-        return MillenniumLevelNetwork.FLUID_LEVEL_NETWORK.get();
     }
 
     @Override
@@ -48,5 +42,15 @@ public class IronPipeBlock extends AbstractPipeBL<FluidLevelNetwork> {
     @Override
     public boolean isSamePipe(Block target) {
         return target instanceof IronPipeBlock;
+    }
+
+    @Override
+    public @Nullable BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+        return new FluidPipeBE(pPos, pState);
+    }
+
+    @Override
+    protected BlockEntityType<FluidPipeBE> blockEntityType() {
+        return MillenniumBlockEntities.FLUID_PIPE_BE.get();
     }
 }

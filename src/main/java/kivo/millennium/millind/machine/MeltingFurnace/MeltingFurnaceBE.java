@@ -31,16 +31,9 @@ public class MeltingFurnaceBE extends AbstractRecipeMachineBE<MeltingRecipe> {
                 .withItems(2)
                 .withProgress()
         );
+        this.getFluidTank().setForOutput(0);
     }
 
-    @Override
-    public void tickServer(){
-        super.tickServer();
-
-        if(!this.getFluidTank().getFluidInTank(OUTPUT_SLOT).isEmpty()) {
-            //pushOutput();
-        }
-    }
     @Override
     public void setCapabilityChanged(CapabilityType type) {
         super.setCapabilityChanged(type);

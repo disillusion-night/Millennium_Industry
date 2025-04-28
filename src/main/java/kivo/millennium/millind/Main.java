@@ -34,7 +34,6 @@ import static kivo.millennium.millind.init.MillenniumFluidTypes.FLUID_TYPES;
 import static kivo.millennium.millind.init.MillenniumFluids.FLUIDS;
 import static kivo.millennium.millind.init.MillenniumItems.ITEMS;
 import static kivo.millennium.millind.init.MillenniumMenuTypes.MENU_TYPES;
-import static kivo.millennium.millind.init.MillenniumLevelNetwork.LEVEL_NETWORK_TYPES_RE;
 
 @Mod(Main.MODID)
 public class Main {
@@ -66,7 +65,6 @@ public class Main {
         FLUID_TYPES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
         MENU_TYPES.register(modEventBus);
-        LEVEL_NETWORK_TYPES_RE.register(modEventBus);
         MillenniumRecipes.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);

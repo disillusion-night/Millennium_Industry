@@ -1,12 +1,15 @@
 package kivo.millennium.millind.pipe.client;
 
+import kivo.millennium.millind.block.device.AbstractMachineBE;
 import kivo.millennium.millind.capability.CapabilityType;
 import kivo.millennium.millind.capability.IMillenniumStorage;
 import kivo.millennium.millind.capability.MetalTankFluidHandler;
 import kivo.millennium.millind.capability.MillenniumFluidStorage;
+import kivo.millennium.millind.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -35,9 +38,18 @@ public class FluidPipeBE extends BlockEntity {
 
     private LazyOptional<IFluidHandler> fluidHandlerLazy = LazyOptional.of(() -> this.fluidTank);
 
-    protected FluidPipeBE(BlockEntityType<?> type, BlockPos pos, BlockState state, int capacity) {
-        super(type, pos, state);
-        this.fluidTank = new FluidTank(capacity);
+    public FluidPipeBE(BlockPos pos, BlockState state) {
+        super(MillenniumBlockEntities.FLUID_PIPE_BE.get(), pos, state);
+        this.fluidTank = new FluidTank(10000);
+    }
+
+    // 每 tick 执行的逻辑，由 AbstractDeviceBL 的 Ticker 调用
+    public static void tick(Level pLevel, BlockPos pPos, BlockState pState, FluidPipeBE pBlockEntity) {
+        if (pLevel.isClientSide()) {
+            return; // 客户端不做逻辑处理
+        }
+
+        pBlockEntity.tickServer(); // 调用服务端的 tick 逻辑
     }
 
     public void tickServer() {

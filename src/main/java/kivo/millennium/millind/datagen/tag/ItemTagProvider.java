@@ -1,5 +1,6 @@
 package kivo.millennium.millind.datagen.tag;
 
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.init.MillenniumItems;
 import net.minecraft.core.HolderLookup;
 import net.minecraft.core.registries.Registries;
@@ -15,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.concurrent.CompletableFuture;
 
 import static kivo.millennium.millind.Main.MODID;
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public class ItemTagProvider extends TagsProvider<Item> {
 
@@ -26,7 +27,7 @@ public class ItemTagProvider extends TagsProvider<Item> {
 
     @Override
     protected void addTags(HolderLookup.Provider p_256380_) {
-        TagKey<Item> OopartTag = ItemTags.create(getRL("oopart"));
+        TagKey<Item> OopartTag = ItemTags.create(Main.getRL("oopart"));
 
         MillenniumItems.OOPARTS.forEach(oopartRegistryObject -> {
             this.tag(OopartTag).add(TagEntry.element(oopartRegistryObject.getId()));

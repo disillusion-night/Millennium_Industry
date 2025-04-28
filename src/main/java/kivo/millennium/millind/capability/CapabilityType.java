@@ -7,4 +7,6 @@ public enum CapabilityType{
     public String toString() {
         return this.name().toLowerCase();
     }
+
+
 }

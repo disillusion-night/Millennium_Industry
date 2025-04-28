@@ -2,9 +2,13 @@ package kivo.millennium.millind.recipe;
 
 
 import com.google.gson.JsonObject;
+import kivo.millennium.millind.capability.CapabilityType;
 import net.minecraft.network.FriendlyByteBuf;
 
-public interface RecipeComponent {
+public interface RecipeComponent<T> {
+
+
+    T get();
 
     /**
      *
@@ -58,11 +62,5 @@ public interface RecipeComponent {
         }
     }
 
-
-    /**
-     * 返回此成分的类型标识符，用于在 JSON 和网络数据中区分不同的成分类型。
-     *
-     * @return 成分类型标识符。
-     */
-    String getType();
+    CapabilityType getType();
 }

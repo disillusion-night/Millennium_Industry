@@ -5,6 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import kivo.millennium.millind.Main;
+import kivo.millennium.millind.capability.CapabilityType;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;
@@ -18,41 +19,50 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicReference;
 
-public abstract class GenericRecipe implements Recipe<NeoContainer> {
+public abstract class GenericRecipe implements Recipe<ProxyContainer> {
     protected final ResourceLocation id;
-    protected final NeoContainer inputs;
-    protected final NeoContainer outputs;
+    protected final List<RecipeComponent> inputs;
+    protected final List<RecipeComponent> outputs;
     protected int energyCost;
     protected int time;
 
-    public GenericRecipe(ResourceLocation id, List<ISlotProxy> inputs, List<ISlotProxy> outputs, int time, int energyCost) {
+    public GenericRecipe(ResourceLocation id, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time, int energyCost) {
         this.id = id;
-        this.inputs = new NeoContainer(inputs);
-        this.outputs = new NeoContainer(outputs);
+        this.inputs = inputs;
+        this.outputs = outputs;
         this.time = time;
         this.energyCost = energyCost;
     }
 
-    public NeoContainer getInputs(){
+    public List<RecipeComponent> getInputs(){
         return this.inputs;
     }
 
-    public NeoContainer getOutputs(){
+    public List<RecipeComponent> getOutputs(){
         return this.outputs;
     }
 
-    public boolean process(NeoContainer pInput, NeoContainer pOutput, int energyCost){
+    public boolean canProcess(ProxyContainer pOutput){
+        return pOutput.hasPlaceFor(outputs);
+    }
+
+    public boolean process(ProxyContainer pInput, ProxyContainer pOutput, int energyCost){
         if(pInput.isContain(inputs) && pOutput.hasPlaceFor(outputs)){
             pOutput.tryAdd(outputs);
             pInput.tryRemove(inputs);
+            pOutput.clear();
+            pInput.clear();
             return true;
         }
+        pOutput.clear();
+        pInput.clear();
         return false;
     }
 
     @Override
-    public boolean matches(NeoContainer pContainer, Level pLevel) {
+    public boolean matches(ProxyContainer pContainer, Level pLevel) {
         if (pLevel.isClientSide()) {
             return false;
         }
@@ -64,29 +74,25 @@ public abstract class GenericRecipe implements Recipe<NeoContainer> {
     }
 
     @Override
-    public @NotNull ItemStack assemble(NeoContainer pContainer, RegistryAccess pRegistryAccess) {
-        return outputs.getFirstItem();
+    public @NotNull ItemStack assemble(ProxyContainer pContainer, RegistryAccess pRegistryAccess) {
+        for (int i = 0; i < outputs.size(); i++){
+            if (outputs.get(i) instanceof  ItemComponent itemComponent) return itemComponent.get();
+        }
+        return ItemStack.EMPTY;
     }
 
     @Override
     public NonNullList<Ingredient> getIngredients() {
         NonNullList<Ingredient> ingredients = NonNullList.create();
-        inputs.getSlotProxies().forEach(input -> {
-            if (input instanceof ItemProxy itemProxy){
-                ingredients.add(Ingredient.of((itemProxy.get())));
-            }
-        });
+        for (int i = 0; i < outputs.size(); i++){
+            if (outputs.get(i) instanceof ItemComponent itemComponent) ingredients.add(Ingredient.of(itemComponent.get()));
+        }
         return ingredients;
     }
 
     @Override
     public boolean canCraftInDimensions(int pWidth, int pHeight) {
         return true;
-    }
-
-    @Override
-    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
-        return outputs.getItem(0);
     }
 
     @Override
@@ -119,15 +125,15 @@ public abstract class GenericRecipe implements Recipe<NeoContainer> {
 
         @Override
         public T fromJson(ResourceLocation recipeId, JsonObject json) {
-            List<ISlotProxy> inputs = new ArrayList<>();
-            List<ISlotProxy> outputs = new ArrayList<>();
+            List<RecipeComponent> inputs = new ArrayList<>();
+            List<RecipeComponent> outputs = new ArrayList<>();
             int time = 200;
             int energyCost = 0;
 
             // 解析输入成分 (支持单个 "ingredient" 或 "ingredients" 数组)
             if (json.has("ingredient")) {
                 JsonElement ingredientElement = json.get("ingredient");
-                ISlotProxy component = createSlotProxyFromJson(ingredientElement);
+                RecipeComponent component = createSlotProxyFromJson(ingredientElement);
                 if (component != null) {
                     inputs.add(component);
                 } else {
@@ -136,7 +142,7 @@ public abstract class GenericRecipe implements Recipe<NeoContainer> {
             } else if (json.has("ingredients")) {
                 JsonArray ingredientsJson = GsonHelper.getAsJsonArray(json, "ingredients");
                 for (JsonElement ingredientElement : ingredientsJson) {
-                    ISlotProxy component = createSlotProxyFromJson(ingredientElement);
+                    RecipeComponent component = createSlotProxyFromJson(ingredientElement);
                     if (component != null) {
                         inputs.add(component);
                     } else {
@@ -150,7 +156,7 @@ public abstract class GenericRecipe implements Recipe<NeoContainer> {
             // 解析输出成分 (支持单个 "result" 或 "results" 数组)
             if (json.has("result")) {
                 JsonElement resultElement = json.get("result");
-                ISlotProxy component = createSlotProxyFromJson(resultElement);
+                RecipeComponent component = createSlotProxyFromJson(resultElement);
                 if (component != null) {
                     outputs.add(component);
                 } else {
@@ -159,7 +165,7 @@ public abstract class GenericRecipe implements Recipe<NeoContainer> {
             } else if (json.has("results")) {
                 JsonArray resultsJson = GsonHelper.getAsJsonArray(json, "results");
                 for (JsonElement resultElement : resultsJson) {
-                    ISlotProxy component = createSlotProxyFromJson(resultElement);
+                    RecipeComponent component = createSlotProxyFromJson(resultElement);
                     if (component != null) {
                         outputs.add(component);
                     } else {
@@ -185,10 +191,10 @@ public abstract class GenericRecipe implements Recipe<NeoContainer> {
         @Override
         public @Nullable T fromNetwork(ResourceLocation id, FriendlyByteBuf buf) {
             int inputCount = buf.readVarInt();
-            List<ISlotProxy> inputs = new ArrayList<>();
+            List<RecipeComponent> inputs = new ArrayList<>();
             for (int i = 0; i < inputCount; i++) {
                 String type = buf.readUtf();
-                ISlotProxy component = createComponentFromNetwork(type);
+                RecipeComponent component = createComponentFromNetwork(type);
                 if (component == null) {
                     throw new IllegalStateException("Unknown component type from network: " + type);
                 }
@@ -197,10 +203,10 @@ public abstract class GenericRecipe implements Recipe<NeoContainer> {
             }
 
             int outputCount = buf.readVarInt();
-            List<ISlotProxy> outputs = new ArrayList<>();
+            List<RecipeComponent> outputs = new ArrayList<>();
             for (int i = 0; i < outputCount; i++) {
                 String type = buf.readUtf();
-                ISlotProxy component = createComponentFromNetwork(type);
+                RecipeComponent component = createComponentFromNetwork(type);
                 if (component == null) {
                     throw new IllegalStateException("Unknown component type from network: " + type);
                 }
@@ -216,15 +222,15 @@ public abstract class GenericRecipe implements Recipe<NeoContainer> {
             buf.writeUtf(recipe.getGroup());
             buf.writeEnum(recipe.category());
 
-            buf.writeVarInt(recipe.inputs.getContainerSize());
-            List<ISlotProxy> a = recipe.inputs.getSlotProxies();
+            buf.writeVarInt(recipe.inputs.size());
+            List<RecipeComponent> a = recipe.inputs;
             a.forEach(input -> {
                 buf.writeUtf(input.getType().toString()); // 写入类型以便网络传输
                 input.writeToNetwork(buf);
             });
 
-            buf.writeVarInt(recipe.outputs.getContainerSize());
-            for (ISlotProxy output : recipe.outputs.getSlotProxies()) {
+            buf.writeVarInt(recipe.outputs.size());
+            for (RecipeComponent output : recipe.outputs) {
                 buf.writeUtf(output.getType().toString()); // 仍然写入类型以便网络传输
                 output.writeToNetwork(buf);
             }
@@ -232,40 +238,36 @@ public abstract class GenericRecipe implements Recipe<NeoContainer> {
             buf.writeInt(recipe.energyCost);
         }
 
-        protected ISlotProxy createSlotProxyFromJson(JsonElement element) {
+        protected RecipeComponent createSlotProxyFromJson(JsonElement element) {
             if (element.isJsonObject()) {
                 JsonObject jsonObject = element.getAsJsonObject();
                 if (jsonObject.has("item")) {
-                    ItemProxy component = new ItemProxy();
-                    component.readFromJson(jsonObject);
+                    ItemComponent component = new ItemComponent(jsonObject);
                     return component;
                 } else if (jsonObject.has("fluid")) {
-                    FluidProxy component = new FluidProxy();
-                    component.readFromJson(jsonObject);
+                    FluidComponent component = new FluidComponent(jsonObject);
                     return component;
                 }
             } else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
                 // 如果是简单的字符串，默认作为物品处理
-                ItemProxy component = new ItemProxy();
                 JsonObject tempJson = new JsonObject();
                 tempJson.addProperty("item", element.getAsString());
-                component.readFromJson(tempJson);
-                return component;
+                return new ItemComponent(tempJson);
             }
             return null;
         }
 
-        protected ISlotProxy createComponentFromNetwork(String type) {
-            if ("item".equals(type)) {
-                return new ItemProxy();
-            } else if ("fluid".equals(type)) {
-                return new FluidProxy();
+        protected RecipeComponent createComponentFromNetwork(String type) {
+            if (CapabilityType.ITEM.toString().equals(type)) {
+                return new ItemComponent(ItemStack.EMPTY);
+            } else if (CapabilityType.FLUID.toString().equals(type)) {
+                return new FluidComponent(FluidStack.EMPTY);
             }
             return null;
         }
 
         public interface RecipeFactory<T extends GenericRecipe> {
-            T create(ResourceLocation id, String group, CookingBookCategory category, List<ISlotProxy> inputs, List<ISlotProxy> outputs, int time, int energyCost);
+            T create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time, int energyCost);
         }
     }
 }

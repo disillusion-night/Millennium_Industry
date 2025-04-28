@@ -2,14 +2,13 @@ package kivo.millennium.millind.init;
 
 import kivo.millennium.millind.recipe.*;
 import net.minecraft.world.item.crafting.RecipeSerializer;
-import net.minecraft.world.item.crafting.RecipeType;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import static kivo.millennium.millind.Main.MODID;
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public class MillenniumRecipes {
     public static final DeferredRegister<RecipeSerializer<?>> SERIALIZERS =

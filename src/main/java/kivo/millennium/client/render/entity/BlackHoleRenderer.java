@@ -3,6 +3,7 @@ package kivo.millennium.client.render.entity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.entity.special.BlackHole;
 import net.minecraft.client.renderer.LightTexture;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,12 +16,12 @@ import net.minecraft.util.RandomSource;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public class BlackHoleRenderer extends EntityRenderer<BlackHole> {
 
-    private static final ResourceLocation CENTER_TEXTURE = getRL("textures/entity/black_hole/black_hole.png");
-    private static final ResourceLocation BEAM_TEXTURE = getRL("textures/entity/black_hole/beam.png");
+    private static final ResourceLocation CENTER_TEXTURE = Main.getRL("textures/entity/black_hole/black_hole.png");
+    private static final ResourceLocation BEAM_TEXTURE = Main.getRL("textures/entity/black_hole/beam.png");
 
     public BlackHoleRenderer(EntityRendererProvider.Context pContext) {
         super(pContext);

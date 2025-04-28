@@ -1,5 +1,6 @@
 package kivo.millennium.millind.init;
 
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.entity.special.BlackHole;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.MobCategory;
@@ -8,7 +9,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
 import static kivo.millennium.millind.Main.MODID;
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public class MillenniumEntities {
     public static DeferredRegister<EntityType<?>> ENTITIES = DeferredRegister.create(ForgeRegistries.ENTITY_TYPES, MODID);
@@ -17,6 +18,6 @@ public class MillenniumEntities {
             ENTITIES.register("black_hole", () -> EntityType.Builder.<BlackHole>of(BlackHole::new, MobCategory.MISC)
                     .sized(11, 11)
                     .clientTrackingRange(64)
-                    .build(getRL("black_hole").toString()));
+                    .build(Main.getRL("black_hole").toString()));
 
 }

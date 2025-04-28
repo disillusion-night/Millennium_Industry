@@ -1,5 +1,6 @@
 package kivo.millennium.millind.util;
 
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.datagen.SimpleSingleRecipeBuilder;
 import net.minecraft.advancements.critereon.ContextAwarePredicate;
 import net.minecraft.advancements.critereon.InventoryChangeTrigger;
@@ -16,7 +17,7 @@ import net.minecraft.world.level.block.Block;
 
 import java.util.function.Consumer;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public class RecipeUtils {
 
@@ -268,21 +269,21 @@ public class RecipeUtils {
                         .pattern("###")
                         .define('#', ingot)
                         .unlockedBy("has_" + getItemName(ingot), has(ingot))
-                        .save(writer, getRL(mineralName + "_block_from_ingot"));
+                        .save(writer, Main.getRL(mineralName + "_block_from_ingot"));
             }
 
             if (createIngotFromBlockRecipe) {
                 ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, ingot, 9)
                         .requires(block)
                         .unlockedBy("has_" + getBlockName(block), has(block))
-                        .save(writer, getRL(mineralName + "_ingot_from_block"));
+                        .save(writer, Main.getRL(mineralName + "_ingot_from_block"));
             }
 
             if (createNuggetFromIngotRecipe) {
                 ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, nugget, 9)
                         .requires(ingot)
                         .unlockedBy("has_" + getItemName(ingot), has(ingot))
-                        .save(writer, getRL(mineralName + "_nugget_from_ingot"));
+                        .save(writer, Main.getRL(mineralName + "_nugget_from_ingot"));
             }
 
             if (createIngotFromNuggetRecipe) {
@@ -292,50 +293,50 @@ public class RecipeUtils {
                         .pattern("###")
                         .define('#', nugget)
                         .unlockedBy("has_" + getItemName(nugget), has(nugget))
-                        .save(writer, getRL(mineralName + "_ingot_from_nugget"));
+                        .save(writer, Main.getRL(mineralName + "_ingot_from_nugget"));
             }
 
             if (createIngotFromSmeltingRawOreRecipe) {
                 SimpleCookingRecipeBuilder.smelting(Ingredient.of(rawOre), RecipeCategory.MISC, ingot, 0.7F, 200)
                         .unlockedBy("has_" + getItemName(rawOre), has(rawOre))
                         .group(mineralName)
-                        .save(writer, getRL(mineralName + "_ingot_from_smelting_raw"));
+                        .save(writer, Main.getRL(mineralName + "_ingot_from_smelting_raw"));
 
                 SimpleCookingRecipeBuilder.blasting(Ingredient.of(rawOre), RecipeCategory.MISC, ingot, 0.7F, 100)
                         .unlockedBy("has_" + getItemName(rawOre), has(rawOre))
                         .group(mineralName)
-                        .save(writer, getRL(mineralName + "_ingot_from_blasting_raw"));
+                        .save(writer, Main.getRL(mineralName + "_ingot_from_blasting_raw"));
             }
 
             if (createIngotFromSmeltingOreRecipe) {
                 SimpleCookingRecipeBuilder.smelting(Ingredient.of(ore), RecipeCategory.MISC, ingot, 0.7F, 200)
                         .unlockedBy("has_" + getItemName(ore), has(ore))
                         .group(mineralName)
-                        .save(writer, getRL(mineralName + "_ingot_from_smelting"));
+                        .save(writer, Main.getRL(mineralName + "_ingot_from_smelting"));
 
                 SimpleCookingRecipeBuilder.blasting(Ingredient.of(ore), RecipeCategory.MISC, ingot, 0.7F, 100)
                         .unlockedBy("has_" + getItemName(ore), has(ore))
                         .group(mineralName)
-                        .save(writer, getRL(mineralName + "_ingot_from_blasting"));
+                        .save(writer, Main.getRL(mineralName + "_ingot_from_blasting"));
             }
 
             if (createIngotFromSmeltingDeepslateOreRecipe) {
                 SimpleCookingRecipeBuilder.smelting(Ingredient.of(deepslateOre), RecipeCategory.MISC, ingot, 0.7F, 200)
                         .unlockedBy("has_" + getBlockName(deepslateOre), has(deepslateOre))
                         .group(mineralName)
-                        .save(writer, getRL(mineralName + "_ingot_from_smelting_deepslate"));
+                        .save(writer, Main.getRL(mineralName + "_ingot_from_smelting_deepslate"));
 
                 SimpleCookingRecipeBuilder.blasting(Ingredient.of(deepslateOre), RecipeCategory.MISC, ingot, 0.7F, 100)
                         .unlockedBy("has_" + getBlockName(deepslateOre), has(deepslateOre))
                         .group(mineralName)
-                        .save(writer, getRL(mineralName + "_ingot_from_blasting_deepslate"));
+                        .save(writer, Main.getRL(mineralName + "_ingot_from_blasting_deepslate"));
             }
 
             if (createDustFromCrushingIngot) {
                 SimpleSingleRecipeBuilder.crushing(new ItemStack(ingot), RecipeCategory.MISC, new ItemStack(dust, 1), 0.7F, 100, 1000)
-                        .unlockedBy("has_" + getRL(ingot).getPath(), has(ingot))
+                        .unlockedBy("has_" + Main.getKey(ingot).getPath(), has(ingot))
                         .group(mineralName)
-                        .save(writer, getRL(mineralName + "_dust_from_crushing_ingot"));
+                        .save(writer, Main.getRL(mineralName + "_dust_from_crushing_ingot"));
             }
 
             if (createRawBlockFromRawOreRecipe) {
@@ -345,14 +346,14 @@ public class RecipeUtils {
                         .pattern("###")
                         .define('#', rawOre)
                         .unlockedBy("has_" + getBlockName(rawOre), has(rawOre))
-                        .save(writer, getRL("raw_" + mineralName + "_block_from_ore"));
+                        .save(writer, Main.getRL("raw_" + mineralName + "_block_from_ore"));
             }
 
             if (createRawOreFromRawBlockRecipe) {
                 ShapelessRecipeBuilder.shapeless(RecipeCategory.MISC, rawOre, 9)
                         .requires(rawBlock)
                         .unlockedBy("has_" + getBlockName(rawBlock), has(rawBlock))
-                        .save(writer, getRL(mineralName + "_raw_ore_from_raw_block"));
+                        .save(writer, Main.getRL(mineralName + "_raw_ore_from_raw_block"));
             }
         }
 

@@ -1,33 +1,26 @@
 package kivo.millennium.millind.recipe;
 
+import kivo.millennium.millind.Main;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CookingBookCategory;
+import net.minecraft.world.item.crafting.Recipe;
 import net.minecraft.world.item.crafting.RecipeSerializer;
 import net.minecraft.world.item.crafting.RecipeType;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public class PressingRecipe extends GenericRecipe {
-    public PressingRecipe(ResourceLocation id, List<ISlotProxy> input, List<ISlotProxy> output, int time, int energy) {
+    public PressingRecipe(ResourceLocation id, List<RecipeComponent> input, List<RecipeComponent> output, int time, int energy) {
         super(id, input, output, time, energy);
-        /*
-        if (!(input1 instanceof ItemComponent) || !(input2 instanceof ItemComponent) || !(output instanceof ItemComponent)) {
-            throw new IllegalArgumentException("MeltingRecipe input item must be an ItemComponent,input fluid must be an FluidComponent and output must be a FluidComponent.");
-        }*/
     }
 
-    public void costItem(ItemStack itemStack1, ItemStack itemStack2){
-        if (this.inputs.getProxyInSlot(0).asItemProxy().getDamage() > 0) {
-            itemStack1.setDamageValue(itemStack1.getDamageValue() - 1);
-        }
-        if (this.inputs.getProxyInSlot(1).asItemProxy().getDamage() > 0) {
-            itemStack2.setDamageValue(itemStack2.getDamageValue() - 1);
-        }
+    @Override
+    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+        return outputs.get(0).asItemComponent().get().copy();
     }
 
     @Override
@@ -48,7 +41,7 @@ public class PressingRecipe extends GenericRecipe {
 
     public static class Serializer extends GenericRecipe.Serializer<PressingRecipe> {
         public static final Serializer INSTANCE = new Serializer(new FusionRecipeFactory());
-        public static final ResourceLocation ID = getRL("pressing");
+        public static final ResourceLocation ID = Main.getRL("pressing");
 
         public Serializer(RecipeFactory<PressingRecipe> factory) {
             super(factory);
@@ -57,7 +50,7 @@ public class PressingRecipe extends GenericRecipe {
 
     public static class FusionRecipeFactory implements GenericRecipe.Serializer.RecipeFactory<PressingRecipe> {
         @Override
-        public PressingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<ISlotProxy> inputs, List<ISlotProxy> outputs, int time, int energy) {
+        public PressingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time, int energy) {
             /*
             if (inputs.size() != 2 || !(inputs.get(0) instanceof ItemComponent)) {
                 throw new IllegalArgumentException("MeltingRecipe must have exactly one ItemComponent as input.");

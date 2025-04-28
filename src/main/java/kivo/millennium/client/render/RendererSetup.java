@@ -4,6 +4,7 @@ import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
 import kivo.millennium.client.render.blockEntity.HDECBERenderer;
 import kivo.millennium.client.render.blockEntity.NetherStarLaserBER;
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.machine.ResonanceChamber.ResonanceChamberBER;
 import kivo.millennium.client.render.entity.BlackHoleRenderer;
 import kivo.millennium.millind.machine.Crusher.CrusherScreen;
@@ -16,7 +17,6 @@ import kivo.millennium.millind.machine.ResonanceChamber.ResonanceChamberScreen;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.init.MillenniumEntities;
 import kivo.millennium.millind.init.MillenniumMenuTypes;
-import kivo.millennium.millind.pipe.client.PipeModelLoader;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
@@ -28,7 +28,7 @@ import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 
 import static kivo.millennium.millind.Main.MODID;
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class RendererSetup {
@@ -37,7 +37,7 @@ public class RendererSetup {
             DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true,
             RenderType.CompositeState.builder()
                     //.setShaderState()
-                    .setTextureState(new RenderStateShard.TextureStateShard(getRL("textures/entity/black_hole/black_hole.png"), false, false))
+                    .setTextureState(new RenderStateShard.TextureStateShard(Main.getRL("textures/entity/black_hole/black_hole.png"), false, false))
                     .createCompositeState(true));
 
 

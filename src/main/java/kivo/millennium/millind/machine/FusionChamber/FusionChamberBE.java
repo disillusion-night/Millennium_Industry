@@ -14,9 +14,6 @@ import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 
-import java.util.List;
-import java.util.Optional;
-
 
 public class FusionChamberBE extends AbstractRecipeMachineBE<FusionRecipe> {
     public static final int SLOT_COUNT = 2;
@@ -74,43 +71,20 @@ public class FusionChamberBE extends AbstractRecipeMachineBE<FusionRecipe> {
     }
 
     @Override
-    protected NeoContainer getInputs() {
-        return new NeoContainer()
-                .addStack(getFluidTank().getFluidInTank(INPUT_FLUID))
-                .addStack(getItemHandler().getStackInSlot(INPUT_SLOT));
+    protected ProxyContainer getInputs() {
+        return new ProxyContainer()
+                .addProxy(getFluidTank(), INPUT_FLUID)
+                .addProxy(getItemHandler(), INPUT_SLOT);
     }
 
     @Override
-    protected NeoContainer getOutputs() {
-        return new NeoContainer().addStack(getFluidTank().getFluidInTank(OUTPUT_FLUID));
-    }
-
-    @Override
-    protected void acceptOutputs(NeoContainer container) {
-        getFluidTank().setFluidInTank(OUTPUT_FLUID, container.getFluid(0));
+    protected ProxyContainer getOutputs() {
+        return new ProxyContainer().addProxy(getFluidTank(), OUTPUT_FLUID);
     }
 
     @Override
     protected boolean isInputValid() {
         return !(getItemHandler().getStackInSlot(INPUT_SLOT).isEmpty() || getFluidTank().getFluidInTank(INPUT_FLUID).isEmpty());
-    }
-
-    @Override
-    protected boolean canProcess(NeoContainer recipeOutputs) {
-        if (recipeOutputs.isEmpty()) {
-            return false;
-        }
-
-        if (getFluidTank().getFluidInTank(OUTPUT_FLUID).isEmpty()) {
-            return true;
-        }
-
-        if (!(getFluidTank().getFluidInTank(OUTPUT_FLUID).getFluid() == recipeOutputs.getFluid(0).getFluid())) {
-            return false;
-        }
-
-        return getFluidTank().getFluidAmount(OUTPUT_FLUID) + recipeOutputs.getFluid(0).getAmount() <= getFluidTank().getTankCapacity(OUTPUT_FLUID);
-
     }
 
     public MillenniumFluidStorage getFluidTank(){

@@ -1,7 +1,6 @@
 package kivo.millennium.millind;
 
 import com.mojang.logging.LogUtils;
-import kivo.millennium.millind.init.MillenniumBlocks;
 import kivo.millennium.millind.init.MillenniumRecipes;
 import kivo.millennium.millind.pipe.client.PipeModelLoader;
 import net.minecraft.client.Minecraft;
@@ -9,7 +8,6 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
-import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
@@ -19,7 +17,6 @@ import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
-import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -37,6 +34,7 @@ import static kivo.millennium.millind.init.MillenniumFluidTypes.FLUID_TYPES;
 import static kivo.millennium.millind.init.MillenniumFluids.FLUIDS;
 import static kivo.millennium.millind.init.MillenniumItems.ITEMS;
 import static kivo.millennium.millind.init.MillenniumMenuTypes.MENU_TYPES;
+import static kivo.millennium.millind.init.MillenniumLevelNetwork.LEVEL_NETWORK_TYPES_RE;
 
 @Mod(Main.MODID)
 public class Main {
@@ -68,16 +66,21 @@ public class Main {
         FLUID_TYPES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
         MENU_TYPES.register(modEventBus);
+        LEVEL_NETWORK_TYPES_RE.register(modEventBus);
         MillenniumRecipes.register(modEventBus);
 
         MinecraftForge.EVENT_BUS.register(this);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
-
+        //LEVEL_NETWORK_TYPES.register(modEventBus);
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
+
+
+
+
 
     private void commonSetup(final FMLCommonSetupEvent event) {
         // Some common setup code
@@ -127,10 +130,10 @@ public class Main {
     public static ResourceLocation getRL(String path){
         return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
-    public static ResourceLocation getRL(ItemLike itemLike){
+    public static ResourceLocation getKey(ItemLike itemLike){
         return ForgeRegistries.ITEMS.getKey(itemLike.asItem());
     }
-    public static ResourceLocation getRL(Fluid fluid){
+    public static ResourceLocation getKey(Fluid fluid){
         return ForgeRegistries.FLUIDS.getKey(fluid);
     }
     public static ResourceLocation getResourceKey(Item item){

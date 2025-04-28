@@ -2,6 +2,7 @@ package kivo.millennium.client.render.PostRender;
 
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
+import kivo.millennium.millind.Main;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
@@ -9,13 +10,13 @@ import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public class BlackHolePostRender {
 
     private final Minecraft minecraft;
     private final TextureManager textureManager;
-    private final ResourceLocation shaderLocation = getRL("shaders/post/black_hole_shader.json"); // 替换为您的着色器资源位置
+    private final ResourceLocation shaderLocation = Main.getRL("shaders/post/black_hole_shader.json"); // 替换为您的着色器资源位置
 
     public BlackHolePostRender(Minecraft minecraft, TextureManager textureManager) {
         this.minecraft = minecraft;

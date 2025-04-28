@@ -1,5 +1,6 @@
 package kivo.millennium.millind.block.device;
 
+import kivo.millennium.millind.Main;
 import kivo.millennium.millind.capability.CapabilityCache;
 import kivo.millennium.millind.recipe.*;
 import net.minecraft.core.BlockPos;
@@ -8,6 +9,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
+import java.util.List;
 import java.util.Optional;
 
 import static kivo.millennium.millind.block.device.MillenniumBlockProperty.WORKING;
@@ -19,25 +21,24 @@ public abstract class AbstractRecipeMachineBE<R extends GenericRecipe> extends A
     private int totalTime;
     private final RecipeType<R> RecipeType;
 
-    public <T extends AbstractRecipeMachineBE<R>> AbstractRecipeMachineBE(BlockEntityType<?> pType, RecipeType<R> pRecipeType, BlockPos pWorldPosition, BlockState pBlockState, CapabilityCache.Builder builder) {
+    public <T extends AbstractRecipeMachineBE<R>> AbstractRecipeMachineBE(BlockEntityType<T> pType, RecipeType<R> pRecipeType, BlockPos pWorldPosition, BlockState pBlockState, CapabilityCache.Builder builder) {
         super(pType, pWorldPosition, pBlockState, builder.withProgress());
         this.cache = builder.build(this::setCapabilityChanged);
         this.RecipeType = pRecipeType;
     }
 
     @Override
-    protected void tickServer() {
+    public void tickServer() {
         handleEnergyAcceptFromBattery();
         if (isInputValid()) {
-            NeoContainer inputs = getInputs();
+            ProxyContainer inputs = getInputs();
 
             Optional<R> recipeO = level.getRecipeManager().getRecipeFor(RecipeType, inputs, level);
 
             if (recipeO.isPresent()) {
                 R recipe = recipeO.get();
                 boolean canStart = false;
-                NeoContainer recipeOutput = recipe.getOutputs();
-                if (canProcess(recipeOutput) && getEnergyStorage().getEnergyStored() >= getEnergyCost()) {
+                if (recipe.canProcess(getOutputs()) && getEnergyStorage().getEnergyStored() >= getEnergyCost()) {
                     canStart = true;
                 }
 
@@ -107,11 +108,9 @@ public abstract class AbstractRecipeMachineBE<R extends GenericRecipe> extends A
         return (int) (((float) getProgress() / totalTime) * 100);
     }
 
-    protected abstract NeoContainer getInputs();
+    protected abstract ProxyContainer getInputs();
 
-    protected abstract NeoContainer getOutputs();
-
-    protected abstract void acceptOutputs(NeoContainer container);
+    protected abstract ProxyContainer getOutputs();
 
     protected abstract boolean isInputValid();
 
@@ -119,12 +118,9 @@ public abstract class AbstractRecipeMachineBE<R extends GenericRecipe> extends A
         return 0;
     }
 
-    protected abstract boolean canProcess(NeoContainer neoContainer);
-
     protected void process(R recipe,int energycost) {
-        NeoContainer container = getOutputs();
+        ProxyContainer container = getOutputs();
         recipe.process(getInputs(), container, energycost);
-        acceptOutputs(container);
     }
 
     protected void handleEnergyAcceptFromBattery(){
@@ -137,4 +133,13 @@ public abstract class AbstractRecipeMachineBE<R extends GenericRecipe> extends A
             }
         });
     }
+
+    public int getProgressAndLit() {
+        if (isWorking()) {
+            return getProgressPercent() << 1 | 1;
+        } else {
+            return getProgressPercent() << 1;
+        }
+    }
+
 }

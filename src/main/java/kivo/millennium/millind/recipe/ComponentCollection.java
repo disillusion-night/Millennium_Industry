@@ -46,11 +46,11 @@ public class ComponentCollection {
     }
 
     public ComponentCollection addItemStack(ItemStack stack){
-        this.recipeComponents.add(ItemComponent.of(stack));
+        this.recipeComponents.add(new ItemComponent(stack));
         return this;
     }
     public ComponentCollection addFluid(FluidStack stack){
-        this.recipeComponents.add(FluidComponent.of(stack));
+        this.recipeComponents.add(new FluidComponent(stack));
         return this;
     }
 }

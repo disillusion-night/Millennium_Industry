@@ -3,6 +3,7 @@ package kivo.millennium.millind.pipe.client;
 import com.google.gson.JsonDeserializationContext;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
+import kivo.millennium.millind.Main;
 import net.minecraft.client.renderer.block.model.ItemOverrides;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
@@ -18,10 +19,10 @@ import net.minecraftforge.client.model.geometry.IUnbakedGeometry;
 
 import java.util.function.Function;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public class PipeModelLoader implements IGeometryLoader<PipeModelLoader.PipeModelGeometry> {
-    public static final ResourceLocation GENERATOR_LOADER = getRL("pipe_loader");
+    public static final ResourceLocation GENERATOR_LOADER = Main.getRL("pipe_loader");
 
     public static void register(ModelEvent.RegisterGeometryLoaders event) {
         event.register("pipe_loader", new PipeModelLoader());

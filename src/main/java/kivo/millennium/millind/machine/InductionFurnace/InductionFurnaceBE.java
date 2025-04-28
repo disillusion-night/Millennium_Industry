@@ -33,7 +33,7 @@ public class InductionFurnaceBE extends AbstractMachineBE implements IWorkingMac
     }
 
     @Override
-    protected void tickServer() {
+    public void tickServer() {
         ItemStack inputStack = getItemHandler().getStackInSlot(INPUT_SLOT);
         ItemStack outputStack = getItemHandler().getStackInSlot(OUTPUT_SLOT);
         boolean canStartSmelting = false;
@@ -130,5 +130,15 @@ public class InductionFurnaceBE extends AbstractMachineBE implements IWorkingMac
 
         getItemHandler().extractItem(INPUT_SLOT, 1, false);
     }
+
+
+   public int getProgressAndLit() {
+        if (isWorking()) {
+            return getProgressPercent() << 1 | 1;
+        } else {
+            return getProgressPercent() << 1;
+        }
+    }
+
 
 }

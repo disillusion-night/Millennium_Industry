@@ -3,7 +3,7 @@ package kivo.millennium.millind.init;
 import kivo.millennium.millind.machine.FusionChamber.FusionChamberBE;
 import kivo.millennium.millind.machine.HydraulicPress.HydraulicPressBE;
 import kivo.millennium.millind.machine.MeltingFurnace.MeltingFurnaceBE;
-import kivo.millennium.millind.machine.MolecularReformer.MolecularReformerBE;
+import kivo.millennium.millind.machine.PipeBooster.PipeBoosterBE;
 import kivo.millennium.millind.machine.ResonanceChamber.ResonanceChamberBE;
 import kivo.millennium.millind.machine.Crusher.CrusherBE;
 import kivo.millennium.millind.machine.Crystallizer.CrystallizerBE;
@@ -31,7 +31,6 @@ public class MillenniumBlockEntities {
             "hdec_be", () -> BlockEntityType.Builder.of(HDECBE::new,
                     MillenniumBlocks.HDEC_BL.get()).build(null));
 
-
     public static final RegistryObject<BlockEntityType<NetherStarLaserBE>> NETHER_STAR_LASER_BE = BLOCK_ENTITIES.register(
             "nether_star_laser_be", () -> BlockEntityType.Builder.of(NetherStarLaserBE::new,
                     MillenniumBlocks.NETHER_STAR_LASER_BL.get()).build(null));
@@ -40,14 +39,17 @@ public class MillenniumBlockEntities {
             "induction_furnace_be", () -> BlockEntityType.Builder.of(InductionFurnaceBE::new,
                     MillenniumBlocks.INDUCTION_FURNACE_BL.get()).build(null));
 
-
     public static final RegistryObject<BlockEntityType<CrusherBE>> Crusher_BE = BLOCK_ENTITIES.register(
             "crusher_be", () -> BlockEntityType.Builder.of(CrusherBE::new,
                     MillenniumBlocks.CRUSHER_BL.get()).build(null));
 
-    public static final RegistryObject<BlockEntityType<MolecularReformerBE>> MOLECULAR_REFORMER_BE = BLOCK_ENTITIES.register(
+    /*public static final RegistryObject<BlockEntityType<MolecularReformerBE>> MOLECULAR_REFORMER_BE = BLOCK_ENTITIES.register(
             "molecular_reformer_be", () -> BlockEntityType.Builder.of(MolecularReformerBE::new,
-                    MillenniumBlocks.MOLECULAR_REFORMER_BL.get()).build(null));
+                    MillenniumBlocks.MOLECULAR_REFORMER_BL.get()).build(null));*/
+
+    public static final RegistryObject<BlockEntityType<PipeBoosterBE>> PIPE_BOOSTER_BE = BLOCK_ENTITIES.register(
+            "pipe_booster_be", () -> BlockEntityType.Builder.of(PipeBoosterBE::new,
+                    MillenniumBlocks.RESONANCE_CHAMBER_BL.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<ResonanceChamberBE>> RESONANCE_CHAMBER_BE = BLOCK_ENTITIES.register(
             "resonance_chamber_be", () -> BlockEntityType.Builder.of(ResonanceChamberBE::new,
@@ -73,10 +75,5 @@ public class MillenniumBlockEntities {
             "solar_generator_be", () -> BlockEntityType.Builder.of(SolarGeneratorBE::new,
                     MillenniumBlocks.SOLAR_GENERATOR.get()).build(null));
 
-    /*
-    public static final RegistryObject<BlockEntityType<ArcFurnaceBE>> ARC_FURNACE_BE = BLOCK_ENTITIES.register(
-            "arc_furnace_be", () -> BlockEntityType.Builder.of(ArcFurnaceBE::new,
-                    MillenniumBlocks.ARC_FURNACE_BL.get()).build(null));
-    */
 
 }

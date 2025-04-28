@@ -5,12 +5,15 @@ import kivo.millennium.millind.capability.CapabilityCache;
 import kivo.millennium.millind.capability.CapabilityType;
 import kivo.millennium.millind.capability.MillenniumFluidStorage;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
-import kivo.millennium.millind.recipe.ItemProxy;
 import kivo.millennium.millind.recipe.MeltingRecipe;
-import kivo.millennium.millind.recipe.NeoContainer;
+import kivo.millennium.millind.recipe.ProxyContainer;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.fluids.capability.IFluidHandler;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraftforge.common.capabilities.ForgeCapabilities;
+import net.minecraftforge.fluids.FluidStack;
 
 public class MeltingFurnaceBE extends AbstractRecipeMachineBE<MeltingRecipe> {
     public static final int SLOT_COUNT = 2;
@@ -19,6 +22,7 @@ public class MeltingFurnaceBE extends AbstractRecipeMachineBE<MeltingRecipe> {
     public static final int INPUT_SLOT = 1;
     private static final int FLUID_CAPACITY = 12000;
 
+    int fluidIntakeCooldown = 0;
 
     public MeltingFurnaceBE(BlockPos pWorldPosition, BlockState pBlockState) {
         super(MillenniumBlockEntities.MELTING_FURNACE_BE.get(), MeltingRecipe.Type.INSTANCE, pWorldPosition, pBlockState, new CapabilityCache.Builder()
@@ -29,7 +33,14 @@ public class MeltingFurnaceBE extends AbstractRecipeMachineBE<MeltingRecipe> {
         );
     }
 
+    @Override
+    public void tickServer(){
+        super.tickServer();
 
+        if(!this.getFluidTank().getFluidInTank(OUTPUT_SLOT).isEmpty()) {
+            //pushOutput();
+        }
+    }
     @Override
     public void setCapabilityChanged(CapabilityType type) {
         super.setCapabilityChanged(type);
@@ -41,42 +52,19 @@ public class MeltingFurnaceBE extends AbstractRecipeMachineBE<MeltingRecipe> {
     }
 
     @Override
-    protected NeoContainer getInputs() {
-        return new NeoContainer()
-                .addStack((getItemHandler().getStackInSlot(INPUT_SLOT)));
+    protected ProxyContainer getInputs() {
+        return new ProxyContainer()
+                .addProxy(getItemHandler(), INPUT_SLOT);
     }
 
     @Override
-    protected NeoContainer getOutputs() {
-        return new NeoContainer()
-                .addStack(getFluidTank().getFluidInTank(OUTPUT_SLOT));
-    }
-
-    @Override
-    protected void acceptOutputs(NeoContainer container) {
-        getFluidHandler().setFluidInTank(OUTPUT_SLOT, container.getFluid(0));
+    protected ProxyContainer getOutputs() {
+        return new ProxyContainer()
+                .addProxy(getFluidTank(), OUTPUT_SLOT);
     }
 
     @Override
     protected boolean isInputValid() {
         return! getItemHandler().getStackInSlot(INPUT_SLOT).isEmpty();
-    }
-
-    @Override
-    protected boolean canProcess(NeoContainer neoContainer) {
-        if (neoContainer.isEmpty()) {
-            return false;
-        }
-
-        if (getItemHandler().getStackInSlot(OUTPUT_SLOT).isEmpty()) {
-            return true;
-        }
-
-        if (!(getFluidTank().getFluidInTank(OUTPUT_SLOT).getFluid() == neoContainer.getFluid(0).getFluid())) {
-            return false;
-        }
-
-        return getItemHandler().getStackInSlot(OUTPUT_SLOT).getCount() + neoContainer.getAmount(0) <= getItemHandler().getSlotLimit(OUTPUT_SLOT);
-
     }
 }

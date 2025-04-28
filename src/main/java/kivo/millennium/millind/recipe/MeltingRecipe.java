@@ -1,19 +1,23 @@
 package kivo.millennium.millind.recipe;
 
+import kivo.millennium.millind.Main;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.*;
-import net.minecraftforge.fluids.FluidStack;
 
-import java.util.Arrays;
 import java.util.List;
 
-import static kivo.millennium.millind.Main.getRL;
+import static kivo.millennium.millind.Main.getKey;
 
 public class MeltingRecipe extends GenericRecipe {
-    public MeltingRecipe(ResourceLocation id, List<ISlotProxy> input, List<ISlotProxy> output, int time, int energy) {
+    public MeltingRecipe(ResourceLocation id, List<RecipeComponent> input, List<RecipeComponent> output, int time, int energy) {
         super(id, input, output, time, energy);
+    }
+
+    @Override
+    public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+        return ItemStack.EMPTY;
     }
 
     @Override
@@ -34,7 +38,7 @@ public class MeltingRecipe extends GenericRecipe {
 
     public static class Serializer extends GenericRecipe.Serializer<MeltingRecipe> {
         public static final Serializer INSTANCE = new Serializer(new MeltingRecipeFactory());
-        public static final ResourceLocation ID = getRL("melting");
+        public static final ResourceLocation ID = Main.getRL("melting");
 
         public Serializer(RecipeFactory<MeltingRecipe> factory) {
             super(factory);
@@ -43,7 +47,7 @@ public class MeltingRecipe extends GenericRecipe {
 
     public static class MeltingRecipeFactory implements GenericRecipe.Serializer.RecipeFactory<MeltingRecipe> {
         @Override
-        public MeltingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<ISlotProxy> inputs, List<ISlotProxy> outputs, int time, int energy) {
+        public MeltingRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time, int energy) {
             /*
             if (inputs.size() != 1 || !(inputs.get(0) instanceof ItemComponent)) {
                 throw new IllegalArgumentException("MeltingRecipe must have exactly one ItemComponent as input.");

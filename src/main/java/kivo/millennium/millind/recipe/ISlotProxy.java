@@ -3,6 +3,7 @@ package kivo.millennium.millind.recipe;
 import com.google.gson.JsonObject;
 import kivo.millennium.millind.capability.CapabilityType;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.world.item.ItemStack;
 
 public interface ISlotProxy<T> {
     boolean isEmpty();
@@ -13,9 +14,7 @@ public interface ISlotProxy<T> {
 
     int getSlotLimit();
 
-    RecipeComponent getAsRecipeComponent();
-
-    ISlotProxy<T> of(T stack);
+    RecipeComponent convert2RecipeComponent();
 
     T get();
 
@@ -25,43 +24,17 @@ public interface ISlotProxy<T> {
 
     T grow(int amount);
 
-    boolean hasPlaceFor(ISlotProxy slotProxy);
+    boolean hasPlaceFor(RecipeComponent<T> component);
 
     void clear();
 
     CapabilityType getType();
 
-    boolean contains(ISlotProxy proxy);
+    boolean contains(RecipeComponent<T> component);
 
-    boolean remove(ISlotProxy proxy);
+    boolean remove(RecipeComponent<T> component);
 
-
-    boolean add(ISlotProxy proxy);
-    /**
-     * 将此成分写为 JSON 对象。
-     */
-    JsonObject toJson();
-
-    /**
-     * 从 JSON 对象中读取此成分。
-     *
-     * @param jsonObject 要读取的 JSON 对象。
-     */
-    void readFromJson(JsonObject jsonObject);
-
-    /**
-     * 将此成分写入网络缓冲区。
-     *
-     * @param buffer 要写入的网络缓冲区。
-     */
-    void writeToNetwork(FriendlyByteBuf buffer);
-
-    /**
-     * 从网络缓冲区中读取此成分。
-     *
-     * @param buffer 要读取的网络缓冲区。
-     */
-    void readFromNetwork(FriendlyByteBuf buffer);
+    boolean add(RecipeComponent<T> component);
 
     default ItemProxy asItemProxy(){
         if(this.getType() == CapabilityType.ITEM){

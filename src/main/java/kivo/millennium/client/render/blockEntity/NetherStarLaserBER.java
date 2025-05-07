@@ -3,9 +3,10 @@ package kivo.millennium.client.render.blockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import kivo.millennium.millind.block.device.MillenniumBlockProperty;
-import kivo.millennium.millind.block.laser.NetherStarLaserBE;
-import kivo.millennium.millind.util.ShapeUtils;
+
+import kivo.millennium.milltek.block.device.MillenniumBlockProperty;
+import kivo.millennium.milltek.block.laser.NetherStarLaserBE;
+import kivo.millennium.milltek.util.ShapeUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;

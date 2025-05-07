@@ -1,9 +1,9 @@
 package kivo.millennium.client.datagen.language;
 
+import static kivo.millennium.milltek.Main.MODID;
+
 import net.minecraft.data.PackOutput;
 import net.minecraftforge.common.data.LanguageProvider;
-
-import static kivo.millennium.millind.Main.MODID;
 
 
 public class MillenniumLanguageProvider extends LanguageProvider {

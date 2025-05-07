@@ -1,7 +1,8 @@
 package kivo.millennium.client.render.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import kivo.millennium.millind.item.Oopart.IBABackground;
+
+import kivo.millennium.milltek.item.Oopart.IBABackground;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.resources.ResourceLocation;

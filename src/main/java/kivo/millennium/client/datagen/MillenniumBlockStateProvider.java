@@ -1,10 +1,11 @@
 package kivo.millennium.client.datagen;
 
 import com.google.gson.JsonObject;
-import kivo.millennium.millind.Main;
-import kivo.millennium.millind.block.device.MillenniumBlockProperty;
-import kivo.millennium.millind.init.MillenniumBlocks;
-import kivo.millennium.millind.util.ShapeUtils;
+
+import kivo.millennium.milltek.Main;
+import kivo.millennium.milltek.block.device.MillenniumBlockProperty;
+import kivo.millennium.milltek.init.MillenniumBlocks;
+import kivo.millennium.milltek.util.ShapeUtils;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Block;
@@ -15,10 +16,10 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
 
-import javax.annotation.Nullable;
+import static kivo.millennium.milltek.Main.MODID;
+import static kivo.millennium.milltek.Main.getKey;
 
-import static kivo.millennium.millind.Main.MODID;
-import static kivo.millennium.millind.Main.getKey;
+import javax.annotation.Nullable;
 
 public class MillenniumBlockStateProvider extends BlockStateProvider {
     ExistingFileHelper efh;

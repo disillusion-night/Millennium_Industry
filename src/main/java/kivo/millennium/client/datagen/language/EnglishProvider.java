@@ -1,18 +1,18 @@
 package kivo.millennium.client.datagen.language;
 
 
-import kivo.millennium.millind.Main;
-import kivo.millennium.millind.init.MillenniumBlocks;
-import kivo.millennium.millind.init.MillenniumCreativeTab;
-import kivo.millennium.millind.init.MillenniumFluidTypes;
-import kivo.millennium.millind.init.MillenniumItems;
+import static kivo.millennium.milltek.Main.getKey;
+import static kivo.millennium.milltek.Main.log;
+
+import kivo.millennium.milltek.Main;
+import kivo.millennium.milltek.init.MillenniumBlocks;
+import kivo.millennium.milltek.init.MillenniumCreativeTab;
+import kivo.millennium.milltek.init.MillenniumFluidTypes;
+import kivo.millennium.milltek.init.MillenniumItems;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
-
-import static kivo.millennium.millind.Main.getKey;
-import static kivo.millennium.millind.Main.log;
 
 public class EnglishProvider extends MillenniumLanguageProvider {
     public EnglishProvider(PackOutput output) {

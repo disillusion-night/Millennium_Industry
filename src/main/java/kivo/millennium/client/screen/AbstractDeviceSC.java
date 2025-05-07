@@ -1,16 +1,18 @@
 package kivo.millennium.client.screen;
 
-import kivo.millennium.millind.Main;
-import kivo.millennium.millind.container.Device.AbstractDeviceMenu;
-import kivo.millennium.millind.util.NumberUtils;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+
+import static kivo.millennium.milltek.Main.getKey;
+
 import org.joml.Vector2i;
 
-import static kivo.millennium.millind.Main.getKey;
+import kivo.millennium.milltek.Main;
+import kivo.millennium.milltek.container.Device.AbstractDeviceMenu;
+import kivo.millennium.milltek.util.NumberUtils;
 
 public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends AbstractContainerScreen<C> {
 

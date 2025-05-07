@@ -1,16 +1,17 @@
 package kivo.millennium.client.render.PostRender;
 
+import static kivo.millennium.milltek.Main.getKey;
+
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.*;
-import kivo.millennium.millind.Main;
+
+import kivo.millennium.milltek.Main;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.texture.TextureManager;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.phys.Vec2;
-
-import static kivo.millennium.millind.Main.getKey;
 
 public class BlackHolePostRender {
 

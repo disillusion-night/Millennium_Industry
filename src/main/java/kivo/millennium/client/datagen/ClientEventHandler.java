@@ -1,6 +1,6 @@
 package kivo.millennium.client.datagen;
 
-import kivo.millennium.millind.init.MillenniumFluids;
+import kivo.millennium.milltek.init.MillenniumFluids;
 import net.minecraft.client.renderer.ItemBlockRenderTypes;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraftforge.api.distmarker.Dist;

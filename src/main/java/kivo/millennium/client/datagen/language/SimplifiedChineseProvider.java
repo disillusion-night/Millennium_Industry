@@ -1,15 +1,15 @@
 package kivo.millennium.client.datagen.language;
 
-import kivo.millennium.millind.machine.InductionFurnace.InductionFurnaceBL;
-import kivo.millennium.millind.init.MillenniumBlocks;
-import kivo.millennium.millind.init.MillenniumCreativeTab;
-import kivo.millennium.millind.init.MillenniumFluidTypes;
-import kivo.millennium.millind.init.MillenniumItems;
+import static kivo.millennium.milltek.Main.log;
+
+import kivo.millennium.milltek.init.MillenniumBlocks;
+import kivo.millennium.milltek.init.MillenniumCreativeTab;
+import kivo.millennium.milltek.init.MillenniumFluidTypes;
+import kivo.millennium.milltek.init.MillenniumItems;
+import kivo.millennium.milltek.machine.InductionFurnace.InductionFurnaceBL;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-
-import static kivo.millennium.millind.Main.log;
 
 public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
     public SimplifiedChineseProvider(PackOutput output) {

@@ -18,7 +18,7 @@ public class CrusherMenu extends AbstractDeviceMenu<CrusherBE> {
     private static final Vector2i outputpos = new Vector2i(107, 35);
     private int progressAndLit;
     public CrusherMenu(int pContainerId, Player player, BlockPos pos) {
-        super(MillenniumMenuTypes.CRUSHER_CONTAINER.get(), pContainerId, player, pos, new SimpleContainer(CrusherBE.SLOT_COUNT));
+        super(MillenniumMenuTypes.CRUSHER_MENU.get(), pContainerId, player, pos, new SimpleContainer(CrusherBE.SLOT_COUNT));
     }
 
     @Override

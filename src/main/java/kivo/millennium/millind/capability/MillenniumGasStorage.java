@@ -10,7 +10,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
@@ -18,7 +17,7 @@ import java.util.stream.IntStream;
 
 // Assuming IMillenniumStorage provides serializeNBT and deserializeNBT
 
-public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage {
+public class MillenniumGasStorage implements IFluidHandler, IMillenniumStorage {
 
     protected Predicate<FluidStack> validator = f -> true;
 
@@ -47,7 +46,7 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
     }
 
     // Constructor for initializing with existing lists (use cautiously)
-    public MillenniumFluidStorage(int size, @NotNull List<FluidStack> fluids, @NotNull List<Integer> capacities, @NotNull List<Integer> tankAccess){ // Added tankAccess parameter
+    public MillenniumGasStorage(int size, @NotNull List<FluidStack> fluids, @NotNull List<Integer> capacities, @NotNull List<Integer> tankAccess){ // Added tankAccess parameter
         if (fluids.size() != size || capacities.size() != size || tankAccess.size() != size) {
             throw new IllegalArgumentException("Fluid list size, capacity list size, and access list size must match 'size'");
         }
@@ -66,13 +65,13 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
     }
 
     // Constructor for a single tank with a given capacity
-    public MillenniumFluidStorage(int capacity)
+    public MillenniumGasStorage(int capacity)
     {
         this(1, capacity);
     }
 
     // Constructor for multiple tanks with the same capacity
-    public MillenniumFluidStorage(int size, int capacity){
+    public MillenniumGasStorage(int size, int capacity){
         if (size <= 0 || capacity <= 0) {
             throw new IllegalArgumentException("Size and capacity must be positive");
         }
@@ -88,7 +87,7 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
     }
 
     // Constructor for multiple tanks with variable capacities
-    public MillenniumFluidStorage(int size, int... capacityArray){
+    public MillenniumGasStorage(int size, int... capacityArray){
         if (capacityArray.length != size || size <= 0) {
             throw new IllegalArgumentException("Capacity array length must match 'size' and size must be positive");
         }
@@ -111,14 +110,14 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
 
     // --- Callback Setter ---
 
-    public MillenniumFluidStorage setCallback(@Nullable Consumer<CapabilityType> callback) {
+    public MillenniumGasStorage setCallback(@Nullable Consumer<CapabilityType> callback) {
         this.onContentsChangedCallback = callback;
         return this;
     }
 
     // --- Configuration ---
 
-    public MillenniumFluidStorage setCapacity(int tank, int capacity)
+    public MillenniumGasStorage setCapacity(int tank, int capacity)
     {
         if (tank < 0 || tank >= size) throw new IndexOutOfBoundsException("Invalid tank index: " + tank);
         if (capacity <= 0) throw new IllegalArgumentException("Capacity must be positive");
@@ -130,12 +129,12 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
         return this;
     }
 
-    public MillenniumFluidStorage setForInput(int tank){
+    public MillenniumGasStorage setForInput(int tank){
         this.tankAccess.set(tank, 1);
         return this;
     }
 
-    public MillenniumFluidStorage setForOutput(int tank){
+    public MillenniumGasStorage setForOutput(int tank){
         this.tankAccess.set(tank, 2);
         return this;
     }
@@ -148,7 +147,7 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
         return (tankAccess.get(tank) & 2) == 2;
     }
 
-    public MillenniumFluidStorage setValidator(@Nullable Predicate<FluidStack> validator)
+    public MillenniumGasStorage setValidator(@Nullable Predicate<FluidStack> validator)
     {
         this.validator = validator != null ? validator : f -> true;
         return this;

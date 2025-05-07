@@ -59,7 +59,7 @@ public class FusionChamberMenu extends AbstractDeviceMenu<FusionChamberBE> {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return deviceBE.getFluidTank().getFluidAmount(FusionChamberBE.INPUT_FLUID) & 0xffff;
+                return deviceBE.getFluidTank().getFluidAmount(0) & 0xffff;
             }
 
             @Override
@@ -70,7 +70,7 @@ public class FusionChamberMenu extends AbstractDeviceMenu<FusionChamberBE> {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return (deviceBE.getFluidTank().getFluidAmount(FusionChamberBE.INPUT_FLUID) >> 16) & 0xffff;
+                return (deviceBE.getFluidTank().getFluidAmount(0) >> 16) & 0xffff;
             }
 
             @Override
@@ -81,7 +81,7 @@ public class FusionChamberMenu extends AbstractDeviceMenu<FusionChamberBE> {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return deviceBE.getFluidTank().getTankCapacity(FusionChamberBE.OUTPUT_FLUID) & 0xffff;
+                return deviceBE.getFluidTank().getTankCapacity(1) & 0xffff;
             }
 
             @Override
@@ -92,7 +92,7 @@ public class FusionChamberMenu extends AbstractDeviceMenu<FusionChamberBE> {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return (deviceBE.getFluidTank().getTankCapacity(FusionChamberBE.OUTPUT_FLUID) >> 16) & 0xffff;
+                return (deviceBE.getFluidTank().getTankCapacity(1) >> 16) & 0xffff;
             }
 
             @Override
@@ -103,7 +103,7 @@ public class FusionChamberMenu extends AbstractDeviceMenu<FusionChamberBE> {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return deviceBE.getFluidTank().getFluidAmount(FusionChamberBE.OUTPUT_FLUID) & 0xffff;
+                return deviceBE.getFluidTank().getFluidAmount(1) & 0xffff;
             }
 
             @Override
@@ -114,7 +114,7 @@ public class FusionChamberMenu extends AbstractDeviceMenu<FusionChamberBE> {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return (deviceBE.getFluidTank().getFluidAmount(FusionChamberBE.OUTPUT_FLUID) >> 16) & 0xffff;
+                return (deviceBE.getFluidTank().getFluidAmount(1) >> 16) & 0xffff;
             }
 
             @Override
@@ -125,7 +125,7 @@ public class FusionChamberMenu extends AbstractDeviceMenu<FusionChamberBE> {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return deviceBE.getFluidTank().getTankCapacity(FusionChamberBE.OUTPUT_FLUID) & 0xffff;
+                return deviceBE.getFluidTank().getTankCapacity(1) & 0xffff;
             }
 
             @Override
@@ -136,7 +136,7 @@ public class FusionChamberMenu extends AbstractDeviceMenu<FusionChamberBE> {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return (deviceBE.getFluidTank().getTankCapacity(FusionChamberBE.OUTPUT_FLUID) >> 16) & 0xffff;
+                return (deviceBE.getFluidTank().getTankCapacity(1) >> 16) & 0xffff;
             }
 
             @Override
@@ -147,7 +147,7 @@ public class FusionChamberMenu extends AbstractDeviceMenu<FusionChamberBE> {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return BuiltInRegistries.FLUID.getId(deviceBE.getFluidTank().getFluidInTank(FusionChamberBE.INPUT_FLUID).getFluid());
+                return BuiltInRegistries.FLUID.getId(deviceBE.getFluidTank().getFluidInTank(0).getFluid());
             }
 
             @Override
@@ -158,7 +158,7 @@ public class FusionChamberMenu extends AbstractDeviceMenu<FusionChamberBE> {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
-                return BuiltInRegistries.FLUID.getId(deviceBE.getFluidTank().getFluidInTank(FusionChamberBE.OUTPUT_FLUID).getFluid());
+                return BuiltInRegistries.FLUID.getId(deviceBE.getFluidTank().getFluidInTank(1).getFluid());
             }
 
             @Override

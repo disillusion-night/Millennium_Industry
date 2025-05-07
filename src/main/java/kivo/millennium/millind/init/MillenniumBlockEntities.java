@@ -31,7 +31,6 @@ public class MillenniumBlockEntities {
             "fluid_pipe_be", () -> BlockEntityType.Builder.of(FluidPipeBE::new,
                     MillenniumBlocks.IRON_FLUID_PIPE.get()).build(null));
 
-
     public static final RegistryObject<BlockEntityType<HDECBE>> HDEC_BE = BLOCK_ENTITIES.register(
             "hdec_be", () -> BlockEntityType.Builder.of(HDECBE::new,
                     MillenniumBlocks.HDEC_BL.get()).build(null));

@@ -45,8 +45,8 @@ public class MillenniumMenuTypes {
             () -> IForgeMenuType.create((windowId, inv, data) -> new HydraulicPressMenu(windowId, inv.player, data.readBlockPos()))
     );
 
-    public static final RegistryObject<MenuType<CrusherMenu>> CRUSHER_CONTAINER = MENU_TYPES.register(
-            "crusher_container",
+    public static final RegistryObject<MenuType<CrusherMenu>> CRUSHER_MENU = MENU_TYPES.register(
+            "crusher_menu",
             () -> IForgeMenuType.create((windowId, inv, data) -> new CrusherMenu(windowId, inv.player, data.readBlockPos()))
     );
 }

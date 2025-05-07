@@ -1,9 +1,8 @@
 package kivo.millennium.millind.recipe;
 
-import com.google.gson.JsonObject;
 import kivo.millennium.millind.capability.CapabilityType;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.item.ItemStack;
+import kivo.millennium.millind.container.Device.FluidProxy;
+import kivo.millennium.millind.container.Device.ItemProxy;
 
 public interface ISlotProxy<T> {
     boolean isEmpty();

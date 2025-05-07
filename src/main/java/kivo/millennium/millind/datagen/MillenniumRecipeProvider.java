@@ -68,6 +68,16 @@ public class MillenniumRecipeProvider extends RecipeProvider {
         RecipeUtils.createMineralRecipeBuilder(pWriter, "aluminum_alloy")
                 .block(MillenniumBlocks.ALUMINUM_ALLOY_BLOCK.get())
                 .ingot(MillenniumItems.ALUMINUM_ALLOY_INGOT.get())
+                .nugget(MillenniumItems.ALUMINUM_ALLOY_NUGGET.get())
+                .withBlockRecipe()
+                .withIngotFromBlockRecipe()
+                .build();
+
+
+        RecipeUtils.createMineralRecipeBuilder(pWriter, "titanium_alloy")
+                .block(MillenniumBlocks.TITANIUM_ALLOY_BLOCK.get())
+                .ingot(MillenniumItems.TITANIUM_ALLOY_INGOT.get())
+                .nugget(MillenniumItems.TITANIUM_ALLOY_NUGGET.get())
                 .withBlockRecipe()
                 .withIngotFromBlockRecipe()
                 .build();
@@ -118,9 +128,6 @@ public class MillenniumRecipeProvider extends RecipeProvider {
         crystallizing(pWriter, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM_ALLOY.get(), 100), Items.ICE, RecipeCategory.MISC, MillenniumItems.ALUMINUM_ALLOY_INGOT.get(), 100, 1000);
 
         crystallizing(pWriter, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM.get(), 100), Items.ICE, RecipeCategory.MISC, MillenniumItems.ALUMINUM_INGOT.get(), 100, 1000);
-
-        //SimpleSingleRecipeBuilder.crushing()
-        //oneToOneConversionRecipe(pWriter, Blocks.REDSTONE_BLOCK.asItem(), new ItemStack(Items.REDSTONE, 9), "a");
     }
 
 

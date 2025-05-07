@@ -8,6 +8,7 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.client.event.ModelEvent;
@@ -33,24 +34,27 @@ import static kivo.millennium.millind.init.MillenniumEntities.ENTITIES;
 import static kivo.millennium.millind.init.MillenniumFluidTypes.FLUID_TYPES;
 import static kivo.millennium.millind.init.MillenniumFluids.FLUIDS;
 import static kivo.millennium.millind.init.MillenniumItems.ITEMS;
+import static kivo.millennium.millind.init.MillenniumLevelNetworkType.LEVEL_NETWORK_TYPES;
 import static kivo.millennium.millind.init.MillenniumMenuTypes.MENU_TYPES;
+import static kivo.millennium.millind.init.MillenniumRecipes.RECIPE_SERIALIZERS;
 
 @Mod(Main.MODID)
 public class Main {
     public static final String MODID = "millind";
     public static final Logger LOGGER = LogUtils.getLogger();
 
-    public static void log(String string){
+    public static void log(String string) {
         LOGGER.info(string);
     }
 
-    public static void log(Integer integer){
+    public static void log(Integer integer) {
         LOGGER.info(integer.toString());
     }
 
     public ResourceLocation modLoc(String name) {
         return new ResourceLocation(MODID, name);
     }
+
     @SuppressWarnings("removal")
     public Main() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
@@ -65,31 +69,29 @@ public class Main {
         FLUID_TYPES.register(modEventBus);
         CREATIVE_MODE_TABS.register(modEventBus);
         MENU_TYPES.register(modEventBus);
-        MillenniumRecipes.register(modEventBus);
-
+        LEVEL_NETWORK_TYPES.register(modEventBus);
+        RECIPE_SERIALIZERS.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
 
         // Register the item to a creative tab
         modEventBus.addListener(this::addCreative);
-        //LEVEL_NETWORK_TYPES.register(modEventBus);
-        // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
+        // LEVEL_NETWORK_TYPES.register(modEventBus);
+        // Register our mod's ForgeConfigSpec so that Forge can create and load the
+        // config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
-
-
-
-
     private void commonSetup(final FMLCommonSetupEvent event) {
         // Some common setup code
-        //LOGGER.info("HELLO FROM COMMON SETUP");
-        //LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
+        // LOGGER.info("HELLO FROM COMMON SETUP");
+        // LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
 
-        //if (Config.logDirtBlock) LOGGER.info("DIRT BLOCK >> {}", ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
+        // if (Config.logDirtBlock) LOGGER.info("DIRT BLOCK >> {}",
+        // ForgeRegistries.BLOCKS.getKey(Blocks.DIRT));
 
-        //LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
+        // LOGGER.info(Config.magicNumberIntroduction + Config.magicNumber);
 
-        //Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
+        // Config.items.forEach((item) -> LOGGER.info("ITEM >> {}", item.toString()));
     }
 
     // Add the example block item to the building blocks tab
@@ -104,7 +106,8 @@ public class Main {
         LOGGER.info("HELLO from server starting");
     }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
+    // You can use EventBusSubscriber to automatically register all static methods
+    // in the class annotated with @SubscribeEvent
     @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
     public static class ClientModEvents {
 
@@ -125,16 +128,23 @@ public class Main {
         }
     }
 
-    public static ResourceLocation getRL(String path){
+    public static ResourceLocation getRL(String path) {
         return ResourceLocation.fromNamespaceAndPath(MODID, path);
     }
-    public static ResourceLocation getKey(ItemLike itemLike){
+
+    public static ResourceLocation getKey(ItemLike itemLike) {
         return ForgeRegistries.ITEMS.getKey(itemLike.asItem());
     }
-    public static ResourceLocation getKey(Fluid fluid){
+
+    public static ResourceLocation getKey(Fluid fluid) {
         return ForgeRegistries.FLUIDS.getKey(fluid);
     }
-    public static ResourceLocation getResourceKey(Item item){
+
+    public static ResourceLocation getKey(Block block) {
+        return ForgeRegistries.BLOCKS.getKey(block);
+    }
+
+    public static ResourceLocation getResourceKey(Item item) {
         return BuiltInRegistries.ITEM.getKey(item);
     }
 

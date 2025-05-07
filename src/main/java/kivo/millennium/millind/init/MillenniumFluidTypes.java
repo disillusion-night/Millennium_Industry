@@ -14,7 +14,6 @@ public class MillenniumFluidTypes {
 
     public static final RegistryObject<FluidType> ICY_WATER_FLUID_TYPE = FLUID_TYPES.register("icy_water", () -> new IcyWaterFluidType(FluidType.Properties.create()));
 
-
     public static final RegistryObject<FluidType> MOLTEN_ALUMINUM_FT = FLUID_TYPES.register("molten_aluminum", MoltenAluminumFL.FT::new);
 
     public static final RegistryObject<FluidType> MOLTEN_CRYOLITE_FT = FLUID_TYPES.register("molten_cryolite", MoltenCryoliteFL.FT::new);

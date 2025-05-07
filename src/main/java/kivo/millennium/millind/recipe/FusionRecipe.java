@@ -16,9 +16,6 @@ import static kivo.millennium.millind.Main.getKey;
 public class FusionRecipe extends GenericRecipe {
     public FusionRecipe(ResourceLocation id, List<RecipeComponent> input, List<RecipeComponent> output, int time, int energy) {
         super(id, input, output, time, energy);
-        //if (!(inputItem instanceof ItemComponent) || !(inputFluid instanceof FluidComponent) || !(output instanceof FluidComponent)) {
-            //throw new IllegalArgumentException("MeltingRecipe input item must be an ItemComponent,input fluid must be an FluidComponent and output must be a FluidComponent.");
-        //}
     }
 
     @Override
@@ -54,13 +51,7 @@ public class FusionRecipe extends GenericRecipe {
     public static class FusionRecipeFactory implements GenericRecipe.Serializer.RecipeFactory<FusionRecipe> {
         @Override
         public FusionRecipe create(ResourceLocation id, String group, CookingBookCategory category, List<RecipeComponent> inputs, List<RecipeComponent> outputs, int time, int energy) {
-            /*
-            if (inputs.size() != 2 || !(inputs.get(0) instanceof ItemComponent)) {
-                throw new IllegalArgumentException("MeltingRecipe must have exactly one ItemComponent as input.");
-            }
-            if (outputs.size() != 1 || !(outputs.get(0) instanceof FluidComponent)) {
-                throw new IllegalArgumentException("MeltingRecipe must have exactly one FluidComponent as output.");
-            }*/
+
             return new FusionRecipe(id, inputs, outputs, time, energy);
         }
     }

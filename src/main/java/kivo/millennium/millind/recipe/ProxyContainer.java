@@ -1,8 +1,9 @@
 package kivo.millennium.millind.recipe;
 
-import kivo.millennium.millind.Main;
 import kivo.millennium.millind.capability.MillenniumFluidStorage;
 import kivo.millennium.millind.capability.MillenniumItemStorage;
+import kivo.millennium.millind.container.Device.FluidProxy;
+import kivo.millennium.millind.container.Device.ItemProxy;
 import net.minecraft.world.Container;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;

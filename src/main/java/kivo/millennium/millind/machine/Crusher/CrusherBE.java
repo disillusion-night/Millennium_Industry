@@ -4,15 +4,11 @@ import kivo.millennium.millind.block.device.AbstractRecipeMachineBE;
 import kivo.millennium.millind.capability.CapabilityCache;
 import kivo.millennium.millind.init.MillenniumBlockEntities;
 import kivo.millennium.millind.recipe.CrushingRecipe;
-import kivo.millennium.millind.recipe.ItemProxy;
 import kivo.millennium.millind.recipe.ProxyContainer;
-import kivo.millennium.millind.recipe.RecipeComponent;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.List;
 
 import static kivo.millennium.millind.Main.getKey;
 

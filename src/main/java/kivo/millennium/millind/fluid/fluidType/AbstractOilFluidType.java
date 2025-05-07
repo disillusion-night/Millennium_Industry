@@ -1,28 +1,21 @@
-package kivo.millennium.millind.gas;
+package kivo.millennium.millind.fluid.fluidType;
 
 import kivo.millennium.millind.Main;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
+import net.minecraftforge.fluids.FluidType;
 
 import java.util.function.Consumer;
 
-public class GasType {
-    private Gas gas;
+public abstract class AbstractOilFluidType extends FluidType {
     private final int tintColor;
-
-    public GasType(Gas gas, int tintColor){
-        this.tintColor = tintColor;
-    }
-
-    public int getTintColor() {
-        return tintColor;
+    public AbstractOilFluidType(Properties properties, int rgb) {
+        super(properties);
+        this.tintColor = 0xff000000 | rgb;
     }
 
 
-    public int getColor() {
-        return tintColor & 0x00ffffff;
-    }
-
+    @Override
     public void initializeClient(Consumer<IClientFluidTypeExtensions> consumer) {
         consumer.accept(new IClientFluidTypeExtensions() {
             private static final ResourceLocation STILL_TEXTURE = Main.getRL("block/fluid/lava_still_gray");

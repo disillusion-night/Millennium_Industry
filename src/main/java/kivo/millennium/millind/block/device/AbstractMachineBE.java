@@ -39,8 +39,7 @@ public abstract class AbstractMachineBE extends BlockEntity implements IWorkingM
         pBlockEntity.tickServer(); // 调用服务端的 tick 逻辑
     }
 
-    protected void tickServer() {
-    }
+    protected abstract void tickServer();
 
 
     // 从物品槽位中掉落物品

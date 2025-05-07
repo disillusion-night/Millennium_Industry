@@ -18,8 +18,6 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 public class FusionChamberBE extends AbstractRecipeMachineBE<FusionRecipe> {
     public static final int SLOT_COUNT = 2;
     public static final int INPUT_SLOT = 1;
-    public static final int INPUT_FLUID = 0;
-    public static final int OUTPUT_FLUID = 1;
 
     private int fluidIntakeCooldown = 0;
     private static final int FLUID_INTAKE_INTERVAL = 20; // 每隔 20 ticks (1 秒) 尝试吸取流体
@@ -35,55 +33,21 @@ public class FusionChamberBE extends AbstractRecipeMachineBE<FusionRecipe> {
         this.getFluidTank().setForInput(0).setForOutput(1);
     }
 
-
-    // 处理流体吸取逻辑
-    private void handleFluidIntake() {
-        if (fluidIntakeCooldown > 0) {
-            fluidIntakeCooldown--;
-            return;
-        }
-
-        fluidIntakeCooldown = FLUID_INTAKE_INTERVAL;
-
-        // 遍历周围所有方向
-        for (Direction direction : Direction.values()) {
-            BlockPos neighborPos = worldPosition.relative(direction);
-            BlockState neighborState = level.getBlockState(neighborPos);
-            BlockEntity neighborBE = level.getBlockEntity(neighborPos);
-            if (neighborBE == null) break;
-            // 获取相邻方块的流体处理 Capability
-            neighborBE.getCapability(ForgeCapabilities.FLUID_HANDLER, direction.getOpposite()).ifPresent(handler -> {
-                // 检查当前是否有需要吸取的流体
-                if (true) {
-                    FluidStack requestedFluid = new FluidStack(handler.getFluidInTank(0), FLUID_INTAKE_AMOUNT);
-                    // 模拟抽取，判断相邻方块是否有足够的流体
-                    int filledAmount = handler.drain(requestedFluid, IFluidHandler.FluidAction.SIMULATE).getAmount();
-                    if (filledAmount > 0) {
-                        // 实际抽取流体并填充到输入流体槽
-                        FluidStack drained = handler.drain(new FluidStack(requestedFluid.getFluid(), filledAmount), IFluidHandler.FluidAction.EXECUTE);
-                        getFluidTank().addFluidToTank(0, drained, IFluidHandler.FluidAction.EXECUTE);
-                        setChanged(); // 标记方块实体已更改
-                    }
-                }
-            });
-        }
-    }
-
     @Override
     protected ProxyContainer getInputs() {
         return new ProxyContainer()
-                .addProxy(getFluidTank(), INPUT_FLUID)
+                .addProxy(getFluidTank(), 0)
                 .addProxy(getItemHandler(), INPUT_SLOT);
     }
 
     @Override
     protected ProxyContainer getOutputs() {
-        return new ProxyContainer().addProxy(getFluidTank(), OUTPUT_FLUID);
+        return new ProxyContainer().addProxy(getFluidTank(), 1);
     }
 
     @Override
     protected boolean isInputValid() {
-        return !(getItemHandler().getStackInSlot(INPUT_SLOT).isEmpty() || getFluidTank().getFluidInTank(INPUT_FLUID).isEmpty());
+        return !(getItemHandler().getStackInSlot(INPUT_SLOT).isEmpty() || getFluidTank().isEmpty(0));
     }
 
     public MillenniumFluidStorage getFluidTank(){

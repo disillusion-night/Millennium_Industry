@@ -70,7 +70,7 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.TITANIUM_ALLOY_PICKAXE.get(), "钛合金镐");
         add(MillenniumItems.TITANIUM_ALLOY_SHOVEL.get(), "钛合金锹");
         add(MillenniumItems.TITANIUM_ALLOY_SWORD.get(), "钛合金军刀");
-        
+
         add(MillenniumItems.CARBON_DUST.get(), "碳粉");
 
         add(MillenniumItems.CRYOLITE.get(), "冰晶石");
@@ -113,7 +113,7 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.RAW_LEAD_BLOCK.get(), "粗铅块");
         add(MillenniumBlocks.LEAD_ORE.get(), "铅矿石");
         add(MillenniumBlocks.DEEPSLATE_LEAD_ORE.get(), "深板岩铅矿");
-        
+
         add(MillenniumBlocks.WOLFRAM_STEEL_BLOCK.get(), "钨钢块");
         add(MillenniumItems.WOLFRAM_STEEL_INGOT.get(), "钨钢锭");
         add(MillenniumItems.WOLFRAM_STEEL_PANEL.get(), "钨钢板");
@@ -127,7 +127,7 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.WOLFRAM_STEEL_PICKAXE.get(), "钨钢镐");
         add(MillenniumItems.WOLFRAM_STEEL_SHOVEL.get(), "钨钢锹");
         add(MillenniumItems.WOLFRAM_STEEL_SWORD.get(), "钨钢军刀");
-        
+
         add(MillenniumFluidTypes.ICY_WATER_FLUID_TYPE.get().getDescriptionId(), "冰水");
         add(MillenniumFluidTypes.MOLTEN_ALUMINUM_FT.get().getDescriptionId(), "熔融铝");
         add(MillenniumFluidTypes.MOLTEN_CRYOLITE_FT.get().getDescriptionId(), "熔融冰晶石");
@@ -136,13 +136,16 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumFluidTypes.RAW_MOLTEN_ALUMINUM_FT.get().getDescriptionId(), "粗熔融铝");
         add(MillenniumFluidTypes.MOLTEN_ALUMINUM_ALLOY_FT.get().getDescriptionId(), "熔融铝合金");
 
-
-
         add(MillenniumItems.WRENCH.get(), "扳手");
 
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.OOPARTS.get())), "千年科工 神秘古物");
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.ENGINEERING_PARTS.get())), "千年科工 工程组件");
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.MATERIALS.get())), "千年科工 材料");
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.TOOLS.get())), "千年科工 工具");
+        add(Util.makeDescriptionId("item_group",
+                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.OOPARTS.get())), "千年科工 神秘古物");
+        add(Util.makeDescriptionId("item_group",
+                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.ENGINEERING_PARTS.get())),
+                "千年科工 工程组件");
+        add(Util.makeDescriptionId("item_group",
+                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.MATERIALS.get())), "千年科工 材料");
+        add(Util.makeDescriptionId("item_group",
+                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.TOOLS.get())), "千年科工 工具");
     }
 }

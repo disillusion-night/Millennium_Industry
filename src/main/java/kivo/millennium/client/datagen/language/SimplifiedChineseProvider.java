@@ -32,6 +32,7 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.SOLAR_GENERATOR.get(), "太阳能发电机");
 
         add(MillenniumBlocks.ALERT_BLOCK.get(), "警示方块");
+        add(MillenniumBlocks.ALERT_LINE_BL.get(), "警示线方块");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "高纯度沃普赛克钢铁");
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "低纯度沃普赛克钢铁");

@@ -1,0 +1,34 @@
+{
+  "variants": {
+    "facing=east,working=false": {
+      "model": "milltek:block/crystallizer",
+      "y": 90
+    },
+    "facing=east,working=true": {
+      "model": "milltek:block/crystallizer_on",
+      "y": 90
+    },
+    "facing=north,working=false": {
+      "model": "milltek:block/crystallizer"
+    },
+    "facing=north,working=true": {
+      "model": "milltek:block/crystallizer_on"
+    },
+    "facing=south,working=false": {
+      "model": "milltek:block/crystallizer",
+      "y": 180
+    },
+    "facing=south,working=true": {
+      "model": "milltek:block/crystallizer_on",
+      "y": 180
+    },
+    "facing=west,working=false": {
+      "model": "milltek:block/crystallizer",
+      "y": 270
+    },
+    "facing=west,working=true": {
+      "model": "milltek:block/crystallizer_on",
+      "y": 270
+    }
+  }
+}

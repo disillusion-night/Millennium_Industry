@@ -1,6 +1,0 @@
-{
-  "parent": "minecraft:block/cube_all",
-  "textures": {
-    "all": "millind:block/material/aluminum_alloy_block"
-  }
-}

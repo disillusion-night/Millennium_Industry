@@ -5,7 +5,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 
 import kivo.millennium.milltek.capability.CapabilityType;
-import kivo.millennium.milltek.mixin.ItemStackAccessor;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;

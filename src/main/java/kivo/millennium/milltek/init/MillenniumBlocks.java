@@ -18,7 +18,6 @@ import static kivo.millennium.milltek.Main.MODID;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
-import kivo.millennium.milltek.block.alertblock.AlertLineBL;
 import kivo.millennium.milltek.block.fluid.*;
 import kivo.millennium.milltek.block.fluidContainer.MetalTankBL;
 import kivo.millennium.milltek.block.hypercube.HDECBL;
@@ -83,7 +82,7 @@ public class MillenniumBlocks {
 
     public static final RegistryObject<Block> ALERT_BLOCK = registerWithItem("alert_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.IRON_XYLOPHONE).requiresCorrectToolForDrops().strength(5.0F, 6.0F).sound(SoundType.STONE)));
 
-    public static final RegistryObject<Block> ALERT_LINE_BL = registerWithItem("alert_line", () -> new AlertLineBL());
+    //public static final RegistryObject<Block> ALERT_LINE_BL = registerWithItem("alert_line", () -> new AlertLineBL());
 
     public static <I extends Block> RegistryObject<I> registerWithItem(String name, Supplier<I> supplier, ArrayList<RegistryObject<Item>> arrayList){
         RegistryObject<I> object = BLOCKS.register(name, supplier);

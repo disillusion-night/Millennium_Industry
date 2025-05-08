@@ -3,7 +3,6 @@ package kivo.millennium.client.datagen;
 import com.google.gson.JsonObject;
 
 import kivo.millennium.milltek.Main;
-import kivo.millennium.milltek.block.alertblock.AlertLineBL;
 import kivo.millennium.milltek.block.device.MillenniumBlockProperty;
 import kivo.millennium.milltek.init.MillenniumBlocks;
 import kivo.millennium.milltek.util.ShapeUtils;
@@ -32,8 +31,6 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        addWithHaveModel(MillenniumBlocks.METAL_TANK_BL.get(), "metal_tank");
-
         cubeAllBlockWithItem(MillenniumBlocks.STEEL_BLOCK, "material");
         cubeAllBlockWithItem(MillenniumBlocks.LEAD_BLOCK, "material");
         cubeAllBlockWithItem(MillenniumBlocks.LEAD_ORE, "material");
@@ -178,43 +175,6 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         simpleBlockItem(block, new ConfiguredModel(models().getExistingFile(Main.getRL(modelPath))).model);
     }
 
-    private <T extends Block> void alertLineBlock(RegistryObject<T> block, String modelPath) {
-        VariantBlockStateBuilder builder = getVariantBuilder(block.get());
-
-        builder.forAllStates(blockState -> {
-            AlertLineBL.LineShape shape = blockState.getValue(AlertLineBL.SHAPE); // 获取方块的形状属性
-
-            ModelFile blockModel;
-            int rotationY = 0;
-
-            switch (shape) {
-                case EAST_WEST:
-                    blockModel = models().getBuilder(modelPath)
-                            .parent(models().getExistingFile(new ResourceLocation("minecraft:block/cube")))
-                            .texture("line", Main.getRL("block/" + modelPath));
-                    rotationY = 90; // 东西走向需要旋转90度
-                    break;
-                case CROSS:
-                    blockModel = models().getBuilder(modelPath + "_cross")
-                            .parent(models().getExistingFile(new ResourceLocation("minecraft:block/cube")))
-                            .texture("line", Main.getRL("block/" + modelPath + "_cross"));
-                    break;
-                default: // NORTH_SOUTH
-                    blockModel = models().getBuilder(modelPath)
-                            .parent(models().getExistingFile(new ResourceLocation("minecraft:block/cube")))
-                            .texture("line", Main.getRL("block/" + modelPath));
-                    break;
-            }
-
-            return ConfiguredModel.builder()
-                    .modelFile(blockModel)
-                    .rotationY(rotationY)
-                    .build();
-        });
-
-        // 为方块生成对应的物品模型，使用默认横向条状材质
-        simpleBlockItem(block.get(), models().getExistingFile(Main.getRL(modelPath)));
-    }
 
     /**
      * 具有四个朝向和亮灭状态的方块的 BlockState 生成.

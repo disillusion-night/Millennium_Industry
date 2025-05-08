@@ -1,0 +1,13 @@
+{
+  "type": "milltek:crushing",
+  "category": "misc",
+  "energy": 1000,
+  "experience": 0.0,
+  "ingredient": {
+    "item": "minecraft:copper_ingot"
+  },
+  "result": {
+    "item": "milltek:copper_dust"
+  },
+  "time": 100
+}

@@ -56,8 +56,8 @@ public class BlockEntityNetworkTarget extends AbstractNetworkTarget {
     }
 
     @Override
-    public boolean insertEnergy(Level level, int amount) {
-        return false;
+    public int insertEnergy(Level level, int amount) {
+        return 0;
     }
 
     @Override

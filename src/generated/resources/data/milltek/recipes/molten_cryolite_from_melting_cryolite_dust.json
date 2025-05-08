@@ -1,0 +1,14 @@
+{
+  "type": "milltek:melting",
+  "category": "misc",
+  "energy": 1000,
+  "experience": 0.0,
+  "ingredient": {
+    "item": "milltek:cryolite_dust"
+  },
+  "result": {
+    "amount": 100,
+    "fluid": "milltek:molten_cryolite"
+  },
+  "time": 100
+}

@@ -35,7 +35,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.SOLAR_GENERATOR.get(), "Solar Generator");
 
         add(MillenniumBlocks.ALERT_BLOCK.get(), "Alert Block");
-        add(MillenniumBlocks.ALERT_LINE_BL.get(), "Alert Line Block");
+        //add(MillenniumBlocks.ALERT_LINE_BL.get(), "Alert Line Block");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "High-Purity Wolfsegg Steel");
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "Low-Purity Wolfsegg Steel");
@@ -140,6 +140,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.WOLFRAM_STEEL_PICKAXE.get(), "Wolfram Steel Pickaxe");
         add(MillenniumItems.WOLFRAM_STEEL_SHOVEL.get(), "Wolfram Steel Shovel");
         add(MillenniumItems.WOLFRAM_STEEL_SWORD.get(), "Wolfram Steel Sword");
+        
 
         add(MillenniumItems.WRENCH.get(), "Wrench");
 

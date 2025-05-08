@@ -1,8 +1,0 @@
-{
-  "parent": "millind:block/orientable_with_top",
-  "textures": {
-    "front": "millind:block/induction_furnace_front_on",
-    "side": "millind:block/induction_furnace_side",
-    "top": "millind:block/induction_furnace_top"
-  }
-}

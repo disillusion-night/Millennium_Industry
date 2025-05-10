@@ -30,6 +30,7 @@ import kivo.millennium.milltek.machine.HydraulicPress.HydraulicPressBL;
 import kivo.millennium.milltek.machine.InductionFurnace.InductionFurnaceBL;
 import kivo.millennium.milltek.machine.MeltingFurnace.MeltingFurnaceBL;
 import kivo.millennium.milltek.machine.ResonanceChamber.ResonanceChamberBL;
+import kivo.millennium.milltek.pipe.client.CopperPipeBlock;
 import kivo.millennium.milltek.pipe.client.IronPipeBlock;
 
 
@@ -68,6 +69,8 @@ public class MillenniumBlocks {
     public static final RegistryObject<Block> WOLFRAM_STEEL_BLOCK = registerWithItem("wolfram_steel_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).instrument(NoteBlockInstrument.IRON_XYLOPHONE).requiresCorrectToolForDrops().strength(7.0F, 10.0F).sound(SoundType.METAL)));
 
     public static final RegistryObject<Block> IRON_FLUID_PIPE = registerWithItem("iron_fluid_pipe", IronPipeBlock::new);
+
+    public static final RegistryObject<CopperPipeBlock> COPPER_PIPE = registerWithItem("copper_pipe", CopperPipeBlock::new);
 
     public static final RegistryObject<Block> LEAD_ORE = registerWithItem("lead_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.of().mapColor(MapColor.STONE).instrument(NoteBlockInstrument.BASEDRUM).requiresCorrectToolForDrops().strength(3.0F, 3.0F)));
     public static final RegistryObject<Block> DEEPSLATE_LEAD_ORE = registerWithItem("deepslate_lead_ore", () -> new DropExperienceBlock(BlockBehaviour.Properties.copy(LEAD_ORE.get()).mapColor(MapColor.DEEPSLATE).strength(4.5F, 3.0F).sound(SoundType.DEEPSLATE)));

@@ -1,8 +1,8 @@
 {
   "variants": {
-    "facing=east":  { "model": "millind:block/hmi", "y": 90 },
-    "facing=north": { "model": "millind:block/hmi" },
-    "facing=south": { "model": "millind:block/hmi", "y": 180 },
-    "facing=west":  { "model": "millind:block/hmi", "y": 270 }
+    "facing=east":  { "model": "milltek:block/hmi", "y": 90 },
+    "facing=north": { "model": "milltek:block/hmi" },
+    "facing=south": { "model": "milltek:block/hmi", "y": 180 },
+    "facing=west":  { "model": "milltek:block/hmi", "y": 270 }
   }
 }

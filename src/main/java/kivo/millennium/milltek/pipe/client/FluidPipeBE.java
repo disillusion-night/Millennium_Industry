@@ -33,24 +33,23 @@ import java.util.Set;
 import java.util.function.Consumer;
 
 public class FluidPipeBE extends BlockEntity {
-    private static List<Direction> directions = List.of(Direction.NORTH, Direction.UP, Direction.EAST, Direction.SOUTH,Direction.DOWN, Direction.WEST);
+    private static final List<Direction> directions = List.of(Direction.NORTH, Direction.UP, Direction.EAST,
+            Direction.SOUTH, Direction.DOWN, Direction.WEST);
 
-    private FluidTank fluidTank;
-
-    private LazyOptional<IFluidHandler> fluidHandlerLazy = LazyOptional.of(() -> this.fluidTank);
+    private final FluidTank fluidTank;
+    private final LazyOptional<IFluidHandler> fluidHandlerLazy;
 
     public FluidPipeBE(BlockPos pos, BlockState state) {
         super(MillenniumBlockEntities.FLUID_PIPE_BE.get(), pos, state);
         this.fluidTank = new FluidTank(10000);
+        this.fluidHandlerLazy = LazyOptional.of(() -> this.fluidTank);
     }
 
-    // 每 tick 执行的逻辑，由 AbstractDeviceBL 的 Ticker 调用
-    public static void tick(Level pLevel, BlockPos pPos, BlockState pState, FluidPipeBE pBlockEntity) {
-        if (pLevel.isClientSide()) {
-            return; // 客户端不做逻辑处理
+    public static void tick(Level level, BlockPos pos, BlockState state, FluidPipeBE blockEntity) {
+        if (level.isClientSide()) {
+            return; // 客户端不处理逻辑
         }
-
-        pBlockEntity.tickServer(); // 调用服务端的 tick 逻辑
+        blockEntity.tickServer();
     }
 
     public void tickServer() {
@@ -58,67 +57,57 @@ public class FluidPipeBE extends BlockEntity {
             return;
         }
 
+        // 先尝试从相邻方块吸取流体
+        directions.forEach(direction -> {
+            EPipeState pipeState = getBlockState().getValue(getPropertyForDirection(direction));
+            if (pipeState == EPipeState.INSERT) {
+                pullFluidFrom(direction);
+            }
+        });
+
+        // 然后尝试将流体推送到相邻方块
         if (fluidTank.getFluidAmount() > 0) {
             directions.forEach(direction -> {
-                switch (getBlockState().getValue(getPropertyForDirection(direction))) {
-                    case CONNECT, OUTPUT -> {
-                        BlockPos targetPos = getBlockPos().relative(direction);
-                        BlockEntity targetBE = level.getBlockEntity(targetPos);
-                        if (targetBE != null) {
-                            targetBE.getCapability(ForgeCapabilities.FLUID_HANDLER, direction.getOpposite()).ifPresent(targetHandler -> {
-                                FluidStack fluidToTransfer = fluidTank.getFluid().copy();
-                                int filledAmount = targetHandler.fill(fluidToTransfer, IFluidHandler.FluidAction.SIMULATE);
-                                if (filledAmount > 0) {
-                                    FluidStack drained = fluidTank.drain(filledAmount, IFluidHandler.FluidAction.EXECUTE);
-                                    targetHandler.fill(drained, IFluidHandler.FluidAction.EXECUTE);
-                                }
-                            });
-                        }
-                    }
-                    case INSERT -> {
-                        BlockPos sourcePos = getBlockPos().relative(direction);
-                        BlockEntity sourceBE = level.getBlockEntity(sourcePos);
-                        if (sourceBE != null) {
-                            sourceBE.getCapability(ForgeCapabilities.FLUID_HANDLER, direction.getOpposite()).ifPresent(sourceHandler -> {
-                                FluidStack spaceInTank = new FluidStack(fluidTank.getFluid().getFluid(), fluidTank.getCapacity() - fluidTank.getFluidAmount());
-                                if (spaceInTank.getAmount() > 0) {
-                                    FluidStack drained = sourceHandler.drain(spaceInTank, IFluidHandler.FluidAction.SIMULATE);
-                                    if (!drained.isEmpty()) {
-                                        int filled = fluidTank.fill(drained.copy(), IFluidHandler.FluidAction.SIMULATE);
-                                        if (filled > 0) {
-                                            FluidStack actuallyDrained = sourceHandler.drain(new FluidStack(drained.getFluid(), filled), IFluidHandler.FluidAction.EXECUTE);
-                                            fluidTank.fill(actuallyDrained, IFluidHandler.FluidAction.EXECUTE);
-                                        }
-                                    }
-                                }
-                            });
-                        }
-                    }
-                    case NONE, DISCONNECTED -> {
-                        // 不进行任何操作
-                    }
+                EPipeState pipeState = getBlockState().getValue(getPropertyForDirection(direction));
+                if (pipeState == EPipeState.CONNECT || pipeState == EPipeState.OUTPUT) {
+                    transferFluidTo(direction);
                 }
             });
-        } else {
-            // 如果管道是空的，尝试从 INSERT 连接的方块中吸取流体
-            directions.forEach(direction -> {
-                if (getBlockState().getValue(getPropertyForDirection(direction)) == EPipeState.INSERT) {
-                    BlockPos sourcePos = getBlockPos().relative(direction);
-                    BlockEntity sourceBE = level.getBlockEntity(sourcePos);
-                    if (sourceBE != null) {
-                        sourceBE.getCapability(ForgeCapabilities.FLUID_HANDLER, direction.getOpposite()).ifPresent(sourceHandler -> {
-                            int space = fluidTank.getCapacity() - fluidTank.getFluidAmount();
-                            if (space > 0) {
-                                FluidStack drained = sourceHandler.drain(space, IFluidHandler.FluidAction.SIMULATE);
-                                if (!drained.isEmpty()) {
-                                    int filled = fluidTank.fill(drained.copy(), IFluidHandler.FluidAction.EXECUTE);
-                                    sourceHandler.drain(new FluidStack(drained.getFluid(), filled), IFluidHandler.FluidAction.EXECUTE);
-                                }
+        }
+    }
+
+    private void transferFluidTo(Direction direction) {
+        BlockPos targetPos = getBlockPos().relative(direction);
+        BlockEntity targetBE = level.getBlockEntity(targetPos);
+        if (targetBE != null) {
+            targetBE.getCapability(ForgeCapabilities.FLUID_HANDLER, direction.getOpposite())
+                    .ifPresent(targetHandler -> {
+                        FluidStack fluidToTransfer = fluidTank.getFluid().copy();
+                        int filledAmount = targetHandler.fill(fluidToTransfer, IFluidHandler.FluidAction.SIMULATE);
+                        if (filledAmount > 0) {
+                            FluidStack drained = fluidTank.drain(filledAmount, IFluidHandler.FluidAction.EXECUTE);
+                            targetHandler.fill(drained, IFluidHandler.FluidAction.EXECUTE);
+                        }
+                    });
+        }
+    }
+
+    private void pullFluidFrom(Direction direction) {
+        BlockPos sourcePos = getBlockPos().relative(direction);
+        BlockEntity sourceBE = level.getBlockEntity(sourcePos);
+        if (sourceBE != null) {
+            sourceBE.getCapability(ForgeCapabilities.FLUID_HANDLER, direction.getOpposite())
+                    .ifPresent(sourceHandler -> {
+                        int space = fluidTank.getCapacity() - fluidTank.getFluidAmount();
+                        if (space > 0) {
+                            FluidStack drained = sourceHandler.drain(space, IFluidHandler.FluidAction.SIMULATE);
+                            if (!drained.isEmpty()) {
+                                int filled = fluidTank.fill(drained.copy(), IFluidHandler.FluidAction.EXECUTE);
+                                sourceHandler.drain(new FluidStack(drained.getFluid(), filled),
+                                        IFluidHandler.FluidAction.EXECUTE);
                             }
-                        });
-                    }
-                }
-            });
+                        }
+                    });
         }
     }
 
@@ -144,4 +133,3 @@ public class FluidPipeBE extends BlockEntity {
         return super.getCapability(cap, side);
     }
 }
-

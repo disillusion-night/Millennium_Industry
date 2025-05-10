@@ -2,7 +2,7 @@
   "multipart": [
     {
       "apply": {
-        "model": "millind:block/glasspipe_center_ns"
+        "model": "milltek:block/glasspipe_center_ns"
       },
       "when": {
         "north": "CABLE",
@@ -15,7 +15,7 @@
     },
     {
       "apply": {
-        "model": "millind:block/glasspipe_center_ew"
+        "model": "milltek:block/glasspipe_center_ew"
       },
       "when": {
         "east": "CABLE",
@@ -28,7 +28,7 @@
     },
     {
       "apply": {
-        "model": "millind:block/glasspipe_center_ud"
+        "model": "milltek:block/glasspipe_center_ud"
       },
       "when": {
         "up": "CABLE",
@@ -41,7 +41,7 @@
     },
     {
       "apply": {
-        "model": "millind:block/glasspipe_side"
+        "model": "milltek:block/glasspipe_side"
       },
       "when": {
         "north": "CABLE"

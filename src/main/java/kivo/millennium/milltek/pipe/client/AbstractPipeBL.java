@@ -4,6 +4,7 @@ import com.lowdragmc.lowdraglib.client.bakedpipeline.FaceQuad;
 
 import kivo.millennium.milltek.Main;
 import kivo.millennium.milltek.block.device.AbstractMachineBE;
+import kivo.millennium.milltek.pipe.client.network.AbstractLevelNetwork;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.entity.LivingEntity;
@@ -29,6 +30,8 @@ import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.ticks.ScheduledTick;
 
 import static kivo.millennium.milltek.pipe.client.EPipeState.*;
+
+import java.nio.channels.Pipe;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -237,18 +240,18 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
     @Override
     public abstract BlockEntity newBlockEntity(BlockPos pPos, BlockState pState); // 强制子类实现创建 BlockEntity 的方法
 
-
+    /*
     @Nullable
     @Override
-    public <T extends BlockEntity>BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
-        return pLevel.isClientSide() ? null : this.createTickerHelper(pBlockEntityType, blockEntityType(), FluidPipeBE::tick); // 服务端每 tick 调用 BlockEntity 的 tick 方法
+    public <T extends PipeBE>BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+        return pLevel.isClientSide() ? null : this.createTickerHelper(pBlockEntityType, blockEntityType(), PipeBE::tick); // 服务端每 tick 调用 BlockEntity 的 tick 方法
     }
 
-    protected <T extends BlockEntity>BlockEntityTicker<T> createTickerHelper(BlockEntityType<T> pServerType, BlockEntityType<FluidPipeBE> pExpectedType, BlockEntityTicker<FluidPipeBE> pTicker) {
+    protected <T extends PipeBE> BlockEntityTicker<T> createTickerHelper(BlockEntityType<T> pServerType, BlockEntityType<T> pExpectedType, BlockEntityTicker<T> pTicker) {
         return pExpectedType == pServerType ? (BlockEntityTicker<T>)pTicker : null;
     }
 
-    protected abstract BlockEntityType<FluidPipeBE> blockEntityType(); // 强制子类提供其 BlockEntityType
-
+    protected abstract<A extends PipeBE> BlockEntityType<A> blockEntityType(); // 强制子类提供其 BlockEntityType
+        */
 
 }

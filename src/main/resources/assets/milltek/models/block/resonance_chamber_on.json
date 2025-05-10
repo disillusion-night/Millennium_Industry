@@ -3,8 +3,8 @@
 	"texture_size": [4, 4],
 	"textures": {
 		"particle": "#1",
-		"1": "millind:block/resonance_chamber",
-		"2": "millind:block/millennium_logo"
+		"1": "milltek:block/resonance_chamber",
+		"2": "milltek:block/millennium_logo"
 	},
 	"elements": [
 		{

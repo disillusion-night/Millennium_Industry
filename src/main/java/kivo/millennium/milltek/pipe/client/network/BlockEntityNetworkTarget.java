@@ -29,6 +29,19 @@ public class BlockEntityNetworkTarget extends AbstractNetworkTarget {
         this.direction = direction;
     }
 
+    public BlockEntityNetworkTarget(CompoundTag compoundTag) {
+        int[] pos = compoundTag.getIntArray("pos");
+        this.pos = new BlockPos(pos[0], pos[1], pos[2]);
+        if (pos.length != 3) {
+            throw new IllegalArgumentException("Invalid position data");
+        }
+        if (compoundTag.contains("direction")) {
+            this.direction = Direction.from3DDataValue(compoundTag.getInt("direction"));
+        } else {
+            this.direction = null;
+        }
+    }
+
     public IEnergyStorage getEnergyStorage(Level level) {
         BlockEntity blockEntity = getBlockEntity(level);
         if (blockEntity != null && blockEntity.getCapability(ForgeCapabilities.ENERGY, direction).isPresent()) {
@@ -95,12 +108,23 @@ public class BlockEntityNetworkTarget extends AbstractNetworkTarget {
     public CompoundTag writeToNBT() {
         CompoundTag tag = new CompoundTag();
         tag.putIntArray("pos", List.of(pos.getX(), pos.getY(), pos.getZ()));
+        if (direction != null) {
+            tag.putInt("direction", direction.get3DDataValue());
+        }
         return tag;
     }
 
     @Override
     public void readFromNBT(CompoundTag compoundTag) {
+        this.pos = null;
+        this.direction = null;
         int[] pos = compoundTag.getIntArray("pos");
+        if (pos.length != 3) {
+            throw new IllegalArgumentException("Invalid position data");
+        }
         this.pos = new BlockPos(pos[0], pos[1], pos[2]);
+        if (compoundTag.contains("direction")) {
+            this.direction = Direction.from3DDataValue(compoundTag.getInt("direction"));
+        }
     }
 }

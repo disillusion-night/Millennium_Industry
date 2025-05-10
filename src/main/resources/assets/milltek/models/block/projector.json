@@ -3,8 +3,8 @@
 	"texture_size": [128, 128],
 	"render_type": "cutout",
 	"textures": {
-		"0": "millind:block/projector",
-		"particle": "millind:block/projector"
+		"0": "milltek:block/projector",
+		"particle": "milltek:block/projector"
 	},
 	"elements": [
 		{

@@ -15,11 +15,10 @@ import org.jetbrains.annotations.Nullable;
 
 import kivo.millennium.milltek.init.MillenniumBlockEntities;
 
-public class IronPipeBlock extends AbstractPipeBL{
-
+public class CopperPipeBlock extends AbstractPipeBL{
     private static final double PIPE_WIDTH = .5;
 
-    public IronPipeBlock() {
+    public CopperPipeBlock() {
         super(Properties.of().strength(2.0f));
     }
 
@@ -30,7 +29,7 @@ public class IronPipeBlock extends AbstractPipeBL{
 
     @Override
     protected boolean connectionTest(BlockGetter level, BlockPos neighborPos, BlockState neighborState, Direction facing) {
-        if (neighborState.getBlock() instanceof IronPipeBlock && neighborState.getValue(getPropertyForDirection(facing.getOpposite())) != EPipeState.DISCONNECTED) {
+        if (neighborState.getBlock() instanceof CopperPipeBlock && neighborState.getValue(getPropertyForDirection(facing.getOpposite())) != EPipeState.DISCONNECTED) {
             return true;
         }
         BlockEntity be = level.getBlockEntity(neighborPos);
@@ -43,16 +42,16 @@ public class IronPipeBlock extends AbstractPipeBL{
 
     @Override
     public boolean isSamePipe(Block target) {
-        return target instanceof IronPipeBlock;
+        return target instanceof CopperPipeBlock;
     }
 
     @Override
     public @Nullable BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
-        return new FluidPipeBE(pPos, pState);
+        return new CopperPipeBE(pPos, pState);
     }
     /* 
     @Override
     protected BlockEntityType blockEntityType() {
-        return MillenniumBlockEntities.FLUID_PIPE_BE.get();
+        return MillenniumBlockEntities.COPPER_PIPE_BE.get();
     }*/
 }

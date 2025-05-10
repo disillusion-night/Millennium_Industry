@@ -2,8 +2,8 @@
 	"credit": "Made with Blockbench",
 	"texture_size": [32, 32],
 	"textures": {
-		"0": "millind:block/nether_star_laser",
-		"particle": "millind:block/nether_star_laser"
+		"0": "milltek:block/nether_star_laser",
+		"particle": "milltek:block/nether_star_laser"
 	},
 	"elements": [
 		{

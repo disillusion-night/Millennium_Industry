@@ -3,8 +3,8 @@
 	"texture_size": [64, 64],
 	"render_type": "cutout",
 	"textures": {
-		"0": "millind:block/metal_tank",
-		"particle": "millind:block/metal_tank"
+		"0": "milltek:block/metal_tank",
+		"particle": "milltek:block/metal_tank"
 	},
 	"elements": [
 		{

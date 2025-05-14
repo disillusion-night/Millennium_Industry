@@ -1,10 +1,13 @@
 package kivo.millennium.milltek;
 
+import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
 
+import kivo.millennium.milltek.command.PipeNetworkCommand;
 import kivo.millennium.milltek.init.MillenniumRecipes;
 import kivo.millennium.milltek.pipe.client.PipeModelLoader;
 import net.minecraft.client.Minecraft;
+import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.item.Item;
@@ -16,6 +19,7 @@ import net.minecraftforge.client.event.ModelEvent;
 import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
+import net.minecraftforge.event.RegisterCommandsEvent;
 import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -83,6 +87,12 @@ public class Main {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
 
+    @SubscribeEvent
+    public static void onRegisterCommands(RegisterCommandsEvent event) {
+        CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+        PipeNetworkCommand.register(dispatcher);
+    }
+    
     private void commonSetup(final FMLCommonSetupEvent event) {
         // Some common setup code
         // LOGGER.info("HELLO FROM COMMON SETUP");

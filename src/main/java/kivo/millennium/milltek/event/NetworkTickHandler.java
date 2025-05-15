@@ -15,7 +15,6 @@ public class NetworkTickHandler {
 
     @SubscribeEvent
     public static void onWorldTick(TickEvent.ServerTickEvent event) {
-        LevelNetworkSavedData networkData = LevelNetworkSavedData.getInstance();
 
     }
 

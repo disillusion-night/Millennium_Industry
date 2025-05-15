@@ -51,7 +51,7 @@ public class CopperPipeBlock extends AbstractPipeBL {
     }
 
     @Override
-    protected BlockEntityType<CopperPipeBE> blockEntityType() {
+    public BlockEntityType<CopperPipeBE> blockEntityType() {
         return MillenniumBlockEntities.COPPER_PIPE_BE.get();
     }
 }

@@ -15,8 +15,8 @@ import org.jetbrains.annotations.Nullable;
 
 import kivo.millennium.milltek.init.MillenniumBlockEntities;
 
-public class CopperPipeBlock extends AbstractPipeBL{
-    private static final double PIPE_WIDTH = .5;
+public class CopperPipeBlock extends AbstractPipeBL {
+    private static final double PIPE_WIDTH = 0.5;
 
     public CopperPipeBlock() {
         super(Properties.of().strength(2.0f));
@@ -28,16 +28,16 @@ public class CopperPipeBlock extends AbstractPipeBL{
     }
 
     @Override
-    protected boolean connectionTest(BlockGetter level, BlockPos neighborPos, BlockState neighborState, Direction facing) {
-        if (neighborState.getBlock() instanceof CopperPipeBlock && neighborState.getValue(getPropertyForDirection(facing.getOpposite())) != EPipeState.DISCONNECTED) {
+    protected boolean connectionTest(BlockGetter level, BlockPos neighborPos, BlockState neighborState,
+            Direction facing) {
+        // 与自身类型管道连接且对方不是DISCONNECTED
+        if (neighborState.getBlock() instanceof CopperPipeBlock
+                && neighborState.getValue(getPropertyForDirection(facing.getOpposite())) != EPipeState.DISCONNECTED) {
             return true;
         }
+        // 其他方块，判断是否有流体能力
         BlockEntity be = level.getBlockEntity(neighborPos);
-        if(be != null) {
-            return be.getCapability(ForgeCapabilities.FLUID_HANDLER, facing.getOpposite()).isPresent();
-        } else {
-            return false;
-        }
+        return be != null && be.getCapability(ForgeCapabilities.FLUID_HANDLER, facing.getOpposite()).isPresent();
     }
 
     @Override
@@ -46,12 +46,12 @@ public class CopperPipeBlock extends AbstractPipeBL{
     }
 
     @Override
-    public @Nullable BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
+    public @Nullable CopperPipeBE newBlockEntity(BlockPos pPos, BlockState pState) {
         return new CopperPipeBE(pPos, pState);
     }
-    /* 
+
     @Override
-    protected BlockEntityType blockEntityType() {
+    protected BlockEntityType<CopperPipeBE> blockEntityType() {
         return MillenniumBlockEntities.COPPER_PIPE_BE.get();
-    }*/
+    }
 }

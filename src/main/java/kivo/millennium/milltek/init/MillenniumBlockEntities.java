@@ -15,7 +15,6 @@ import kivo.millennium.milltek.machine.MeltingFurnace.MeltingFurnaceBE;
 import kivo.millennium.milltek.machine.PipeBooster.PipeBoosterBE;
 import kivo.millennium.milltek.machine.ResonanceChamber.ResonanceChamberBE;
 import kivo.millennium.milltek.pipe.client.CopperPipeBE;
-import kivo.millennium.milltek.pipe.client.FluidPipeBE;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -31,10 +30,6 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<MetalFluidTankBE>> METAL_FLUID_TANK_BE = BLOCK_ENTITIES.register(
             "metal_tank_be", () -> BlockEntityType.Builder.of(MetalFluidTankBE::new,
                             MillenniumBlocks.METAL_TANK_BL.get()).build(null));
-
-    public static final RegistryObject<BlockEntityType<FluidPipeBE>> FLUID_PIPE_BE = BLOCK_ENTITIES.register(
-            "fluid_pipe_be", () -> BlockEntityType.Builder.of(FluidPipeBE::new,
-                    MillenniumBlocks.IRON_FLUID_PIPE.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<HDECBE>> HDEC_BE = BLOCK_ENTITIES.register(
             "hdec_be", () -> BlockEntityType.Builder.of(HDECBE::new,

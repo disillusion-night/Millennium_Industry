@@ -61,6 +61,19 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
                 .setValue(WATERLOGGED, false));
     }
 
+
+    public static EnumProperty<EPipeState> getPropertyForDirection(Direction direction) {
+        return switch (direction) {
+            case NORTH -> NORTH;
+            case EAST -> EAST;
+            case SOUTH -> SOUTH;
+            case WEST -> WEST;
+            case UP -> UP;
+            case DOWN -> DOWN;
+            default -> throw new IllegalArgumentException("Invalid direction: " + direction);
+        };
+    }
+
     public abstract double getDefaultWidth();
 
     public boolean canConnectTo(BlockGetter level, BlockPos neighborPos, BlockState neighborState, Direction facing) {
@@ -238,20 +251,19 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
 
     @Nullable
     @Override
-    public abstract BlockEntity newBlockEntity(BlockPos pPos, BlockState pState); // 强制子类实现创建 BlockEntity 的方法
+    public abstract PipeBE newBlockEntity(BlockPos pPos, BlockState pState); // 强制子类实现创建 BlockEntity 的方法
 
-    /*
+    
     @Nullable
     @Override
-    public <T extends PipeBE>BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
+    public <T extends BlockEntity>BlockEntityTicker<T> getTicker(Level pLevel, BlockState pState, BlockEntityType<T> pBlockEntityType) {
         return pLevel.isClientSide() ? null : this.createTickerHelper(pBlockEntityType, blockEntityType(), PipeBE::tick); // 服务端每 tick 调用 BlockEntity 的 tick 方法
     }
 
-    protected <T extends PipeBE> BlockEntityTicker<T> createTickerHelper(BlockEntityType<T> pServerType, BlockEntityType<T> pExpectedType, BlockEntityTicker<T> pTicker) {
+    protected <T extends BlockEntity, A extends PipeBE> BlockEntityTicker<T> createTickerHelper(BlockEntityType<T> pServerType, BlockEntityType<A> pExpectedType, BlockEntityTicker<? super A> pTicker) {
         return pExpectedType == pServerType ? (BlockEntityTicker<T>)pTicker : null;
     }
 
-    protected abstract<A extends PipeBE> BlockEntityType<A> blockEntityType(); // 强制子类提供其 BlockEntityType
-        */
+    protected abstract<T extends PipeBE> BlockEntityType<T> blockEntityType(); // 强制子类提供其 BlockEntityType
 
 }

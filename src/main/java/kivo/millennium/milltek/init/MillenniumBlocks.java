@@ -31,7 +31,6 @@ import kivo.millennium.milltek.machine.InductionFurnace.InductionFurnaceBL;
 import kivo.millennium.milltek.machine.MeltingFurnace.MeltingFurnaceBL;
 import kivo.millennium.milltek.machine.ResonanceChamber.ResonanceChamberBL;
 import kivo.millennium.milltek.pipe.client.CopperPipeBlock;
-import kivo.millennium.milltek.pipe.client.IronPipeBlock;
 
 
 public class MillenniumBlocks {
@@ -68,7 +67,7 @@ public class MillenniumBlocks {
     public static final RegistryObject<Block> TITANIUM_ALLOY_BLOCK = registerWithItem("titanium_alloy_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).instrument(NoteBlockInstrument.IRON_XYLOPHONE).requiresCorrectToolForDrops().strength(7.0F, 10.0F).sound(SoundType.METAL)));
     public static final RegistryObject<Block> WOLFRAM_STEEL_BLOCK = registerWithItem("wolfram_steel_block", () -> new Block(BlockBehaviour.Properties.of().mapColor(MapColor.METAL).instrument(NoteBlockInstrument.IRON_XYLOPHONE).requiresCorrectToolForDrops().strength(7.0F, 10.0F).sound(SoundType.METAL)));
 
-    public static final RegistryObject<Block> IRON_FLUID_PIPE = registerWithItem("iron_fluid_pipe", IronPipeBlock::new);
+    //public static final RegistryObject<Block> IRON_FLUID_PIPE = registerWithItem("iron_fluid_pipe", IronPipeBlock::new);
 
     public static final RegistryObject<CopperPipeBlock> COPPER_PIPE = registerWithItem("copper_pipe", CopperPipeBlock::new);
 

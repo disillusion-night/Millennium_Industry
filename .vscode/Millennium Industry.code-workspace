@@ -1,0 +1,17 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		}
+	],
+	"settings": {
+		"vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+		"workbench.sideBar.location": "left",
+		"java.configuration.checkProjectSettingsExclusions": false,
+		"explorer.confirmDelete": false,
+		"window.zoomLevel": 0,
+		"explorer.confirmDragAndDrop": false,
+		"workbench.iconTheme": "vscode-icons",
+		"java.compile.nullAnalysis.mode": "automatic"
+	}
+}

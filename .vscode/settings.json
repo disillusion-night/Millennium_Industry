@@ -22,6 +22,7 @@
     "editor.renderControlCharacters": false,
     "java.compile.nullAnalysis.mode": "automatic",
     "cSpell.words": [
-        "DEEPSLATE"
+        "DEEPSLATE",
+        "MODID"
     ]
 }

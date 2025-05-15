@@ -10,7 +10,7 @@ import net.minecraftforge.registries.ForgeRegistries;
 
 import java.util.Map;
 
-@Mod.EventBusSubscriber
+@Mod.EventBusSubscriber(modid = "milltek")
 public class NetworkTickHandler {
 
     @SubscribeEvent

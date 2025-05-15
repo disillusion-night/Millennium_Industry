@@ -1,60 +1,49 @@
 package kivo.millennium.milltek.pipe.client.network;
 
-import kivo.millennium.milltek.init.MillenniumLevelNetworkType;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.world.level.Level;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.capability.templates.FluidTank;
+import kivo.millennium.milltek.init.MillenniumLevelNetworkType;
+import kivo.millennium.milltek.init.MillenniumLevelNetworkType.LevelNetworkType;
+
+import java.util.UUID;
 
 public class FluidPipeNetwork extends AbstractLevelNetwork {
-    private final FluidTank sharedTank;
+    private final FluidTank tank;
 
-    public FluidPipeNetwork(int id) {
-        super(MillenniumLevelNetworkType.FLUID_PIPE_NETWORK.get(), id);
-        this.sharedTank = new FluidTank(100000); // 共享流体存储池
+    // 用于新建网络（分配新UUID）
+    public FluidPipeNetwork(UUID uuid) {
+        super(MillenniumLevelNetworkType.FLUID_PIPE_NETWORK.get(), uuid);
+        this.tank = new FluidTank(100000);
     }
 
-    public FluidTank getSharedTank() {
-        return sharedTank;
+    // 用于NBT反序列化
+    public FluidPipeNetwork(CompoundTag tag) {
+        super(MillenniumLevelNetworkType.FLUID_PIPE_NETWORK.get(), tag);
+        this.tank = new FluidTank(tag.contains("capacity") ? tag.getInt("capacity") : 100000);
+        tank.readFromNBT(tag.getCompound("fluid"));
     }
 
-    @Override
-    protected void tickServer(Level level) {
-        // 从输入目标吸取流体
-        for (AbstractNetworkTarget input : inputs) {
-            if (input instanceof BlockEntityNetworkTarget target) {
-                IFluidHandler handler = target.getFluidStorage(level);
-                if (handler != null) {
-                    FluidStack drained = handler.drain(sharedTank.getCapacity() - sharedTank.getFluidAmount(), IFluidHandler.FluidAction.EXECUTE);
-                    sharedTank.fill(drained, IFluidHandler.FluidAction.EXECUTE);
-                }
-            }
-        }
+    public FluidTank getTank() {
+        return tank;
+    }
 
-        // 将流体输出到输出目标
-        for (AbstractNetworkTarget output : outputs) {
-            if (output instanceof BlockEntityNetworkTarget target) {
-                IFluidHandler handler = target.getFluidStorage(level);
-                if (handler != null) {
-                    FluidStack toTransfer = sharedTank.drain(sharedTank.getFluidAmount(), IFluidHandler.FluidAction.SIMULATE);
-                    int filled = handler.fill(toTransfer, IFluidHandler.FluidAction.EXECUTE);
-                    sharedTank.drain(filled, IFluidHandler.FluidAction.EXECUTE);
-                }
-            }
-        }
+    public void setCapacity(int capacity) {
+        tank.setCapacity(capacity);
+        setDirty();
     }
 
     @Override
-    public void writeToNBT(CompoundTag compoundTag) {
-        super.writeToNBT(compoundTag);
-        compoundTag.put("sharedTank", sharedTank.writeToNBT(new CompoundTag()));
+    public void writeToNBT(CompoundTag tag) {
+        super.writeToNBT(tag);
+        tag.put("fluid", tank.writeToNBT(new CompoundTag()));
+        tag.putInt("capacity", tank.getCapacity());
     }
 
     @Override
-    public AbstractLevelNetwork readFromNBT(CompoundTag compoundTag) {
-        compoundTag = compoundTag.getCompound("sharedTank");
-        sharedTank.readFromNBT(compoundTag);
-        return super.readFromNBT(compoundTag);
+    public FluidPipeNetwork readFromNBT(CompoundTag tag) {
+        super.readFromNBT(tag);
+        tank.readFromNBT(tag.getCompound("fluid"));
+        tank.setCapacity(tag.getInt("capacity"));
+        return this;
     }
 }

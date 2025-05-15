@@ -3,7 +3,6 @@ package kivo.millennium.milltek;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
 
-import kivo.millennium.milltek.command.PipeNetworkCommand;
 import kivo.millennium.milltek.init.MillenniumRecipes;
 import kivo.millennium.milltek.pipe.client.PipeModelLoader;
 import net.minecraft.client.Minecraft;
@@ -66,6 +65,7 @@ public class Main {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
+        //modEventBus.addListener(this::onRegisterCommands);
 
         ITEMS.register(modEventBus);
         ENTITIES.register(modEventBus);
@@ -78,19 +78,9 @@ public class Main {
         LEVEL_NETWORK_TYPES.register(modEventBus);
         RECIPE_SERIALIZERS.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
-
-        // Register the item to a creative tab
+        
         modEventBus.addListener(this::addCreative);
-        // LEVEL_NETWORK_TYPES.register(modEventBus);
-        // Register our mod's ForgeConfigSpec so that Forge can create and load the
-        // config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
-    }
-
-    @SubscribeEvent
-    public static void onRegisterCommands(RegisterCommandsEvent event) {
-        CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
-        PipeNetworkCommand.register(dispatcher);
     }
     
     private void commonSetup(final FMLCommonSetupEvent event) {
@@ -111,11 +101,10 @@ public class Main {
 
     }
 
-    // You can use SubscribeEvent and let the Event Bus discover methods to call
     @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
+    public void onRegisterCommands(final RegisterCommandsEvent event) {
+        CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
+        //PipeNetworkCommand.register(dispatcher);
     }
 
     // You can use EventBusSubscriber to automatically register all static methods

@@ -1,6 +1,5 @@
 package kivo.millennium.client.datagen.language;
 
-
 import static kivo.millennium.milltek.Main.getKey;
 import static kivo.millennium.milltek.Main.log;
 
@@ -35,7 +34,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.SOLAR_GENERATOR.get(), "Solar Generator");
 
         add(MillenniumBlocks.ALERT_BLOCK.get(), "Alert Block");
-        //add(MillenniumBlocks.ALERT_LINE_BL.get(), "Alert Line Block");
+        // add(MillenniumBlocks.ALERT_LINE_BL.get(), "Alert Line Block");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "High-Purity Wolfsegg Steel");
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "Low-Purity Wolfsegg Steel");
@@ -78,7 +77,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.TITANIUM_ALLOY_PICKAXE.get(), "Titanium Alloy Pickaxe");
         add(MillenniumItems.TITANIUM_ALLOY_SHOVEL.get(), "Titanium Alloy Shovel");
         add(MillenniumItems.TITANIUM_ALLOY_SWORD.get(), "Titanium Alloy Sword");
-        
+
         add(MillenniumItems.CRYOLITE.get(), "Cryolite");
         add(MillenniumItems.CRYOLITE_DUST.get(), "Cryolite Dust");
 
@@ -126,6 +125,8 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumFluidTypes.RAW_MOLTEN_ALUMINUM_FT.get().getDescriptionId(), "Raw Molten Aluminum");
         add(MillenniumFluidTypes.MOLTEN_ALUMINUM_ALLOY_FT.get().getDescriptionId(), "Molten Aluminum Alloy");
 
+        add(MillenniumBlocks.COPPER_PIPE.get(), "Copper Pipe");
+        add(MillenniumBlocks.ENERGY_PIPE.get(), "Energy Pipe");
 
         add(MillenniumBlocks.WOLFRAM_STEEL_BLOCK.get(), "Wolfram Steel Block");
         add(MillenniumItems.WOLFRAM_STEEL_INGOT.get(), "Wolfram Steel Ingot");
@@ -140,18 +141,24 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.WOLFRAM_STEEL_PICKAXE.get(), "Wolfram Steel Pickaxe");
         add(MillenniumItems.WOLFRAM_STEEL_SHOVEL.get(), "Wolfram Steel Shovel");
         add(MillenniumItems.WOLFRAM_STEEL_SWORD.get(), "Wolfram Steel Sword");
-        
 
         add(MillenniumItems.WRENCH.get(), "Wrench");
 
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.OOPARTS.get())), "Millennium Industry:Oopart");
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.ENGINEERING_PARTS.get())), "Millennium Industry:Engineering Parts");
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.MATERIALS.get())), "Millennium Industry:Materials");
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.TOOLS.get())), "Millennium Industry:Tools");
+        add(Util.makeDescriptionId("item_group",
+                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.OOPARTS.get())),
+                "Millennium Industry:Oopart");
+        add(Util.makeDescriptionId("item_group",
+                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.ENGINEERING_PARTS.get())),
+                "Millennium Industry:Engineering Parts");
+        add(Util.makeDescriptionId("item_group",
+                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.MATERIALS.get())),
+                "Millennium Industry:Materials");
+        add(Util.makeDescriptionId("item_group",
+                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.TOOLS.get())),
+                "Millennium Industry:Tools");
     }
 
-
-    private void addEnglishFromId(Item item){
+    private void addEnglishFromId(Item item) {
         add(item, Main.getKey(item).getPath());
     }
 }

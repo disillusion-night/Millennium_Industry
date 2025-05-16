@@ -1,0 +1,10 @@
+{
+  "parent": "milltek:block/pipe/pipe",
+  "textures": {
+    "corner": "milltek:block/pipe/copper_pipe_corner",
+    "cross": "milltek:block/pipe/copper_pipe_cross",
+    "none": "milltek:block/pipe/copper_pipe_none",
+    "normal": "milltek:block/pipe/copper_pipe_normal",
+    "three": "milltek:block/pipe/copper_pipe_three"
+  }
+}

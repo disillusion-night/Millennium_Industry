@@ -1,10 +1,10 @@
 {
   "parent": "milltek:block/pipe/pipe",
   "textures": {
-    "normal": "milltek:block/pipe/cu_pipe_normal",
-    "none": "milltek:block/pipe/cu_pipe_none",
-    "cross": "milltek:block/pipe/cu_pipe_cross",
-    "three": "milltek:block/pipe/cu_pipe_three",
-    "corner": "milltek:block/pipe/cu_pipe_corner"
+    "normal": "milltek:block/pipe/copper_pipe_normal",
+    "none": "milltek:block/pipe/copper_pipe_none",
+    "cross": "milltek:block/pipe/copper_pipe_cross",
+    "three": "milltek:block/pipe/copper_pipe_three",
+    "corner": "milltek:block/pipe/copper_pipe_corner"
   }
 }

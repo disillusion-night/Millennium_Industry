@@ -1,12 +1,14 @@
-// 1.20.1	2025-05-08T14:30:49.9926224	Block States: milltek
+// 1.20.1	2025-05-16T12:23:35.2733897	Block States: milltek
 5f3f381fbd9f6f14fb7e1dcca9d4dcb1770d227c assets/milltek/blockstates/alert_block.json
 13eb60280333f57896e0bb095de8256a81bfaa77 assets/milltek/blockstates/aluminum_alloy_block.json
 a1185072e80ff0fba9f82e31628ad384231bc00e assets/milltek/blockstates/aluminum_block.json
 6387c60d4853fc1d207dc9547fe5d32404407b0f assets/milltek/blockstates/aluminum_ore.json
+fc8298eeb4681ec1f4ce4b301a91855b195c8b8a assets/milltek/blockstates/copper_pipe.json
 ab7b5c3d7d07eb47a6e7e37a19d64455d187cfad assets/milltek/blockstates/crusher.json
 42aceba0185b8033362d85040b3f4235224d469a assets/milltek/blockstates/crystallizer.json
 b0628ef34512b0cbe07bbb451d212fecb168ec15 assets/milltek/blockstates/deepslate_aluminum_ore.json
 29e20fc8c5300f82fc3e70e21ef74a7894ca0194 assets/milltek/blockstates/deepslate_lead_ore.json
+16730b3e6b853ce449fcb4340b8013ff3acad5aa assets/milltek/blockstates/energy_pipe.json
 002c76a34202ddb9b5a7359118bad9a2a9027f1b assets/milltek/blockstates/induction_furnace.json
 c77aaa268e37634b0b7545bedfeb7dc43e103bb4 assets/milltek/blockstates/lead_block.json
 2a5cbece00a5debfe75d007b3a63b998ff8c4fd2 assets/milltek/blockstates/lead_ore.json
@@ -40,15 +42,19 @@ bed505f98aa55edf3b706b37ee5b0a30dd58916d assets/milltek/models/block/material/ra
 a598b5cff54a8df44b6a5fc213269b14c27eb2cf assets/milltek/models/block/material/wolfram_steel_block.json
 44e28518e9a0a841dc4b97ec58a5cbf78326298e assets/milltek/models/block/melting_furnace.json
 7a8ccf7db4e9e6b727b874d605ff5733676416e2 assets/milltek/models/block/melting_furnace_on.json
+5760f3abfd43e023eed7b9320f86e9fe5a2c7822 assets/milltek/models/block/pipe/copper_pipe.json
+fbbfb1e486cdcea0602ccb7ad1bf15f51a38bf9c assets/milltek/models/block/pipe/energy_pipe.json
 ff0d02158ac1fe7eb1a425eb3824d524e5ac1743 assets/milltek/models/block/solar_generator.json
 bde53bbaff4abdbf9e9af656988399f58b286a5a assets/milltek/models/item/alert_block.json
 5836c782d7f835ac0a829729ca735cf121361123 assets/milltek/models/item/aluminum_alloy_block.json
 9f0659010a4b7319dba9f025c70a219e1bbbba3f assets/milltek/models/item/aluminum_block.json
 910126595561d07ecb5dd0d21b6ce7be407abccf assets/milltek/models/item/aluminum_ore.json
+7e74a3435236b60dbfcea5abdb04e31a010caa26 assets/milltek/models/item/copper_pipe.json
 df8cebe2bfcf112e25b6fe7152616cfab724e904 assets/milltek/models/item/crusher.json
 c463da40754284bb9d37fac5e941d2cbf5aba6cf assets/milltek/models/item/crystallizer.json
 9966931d2edef0ae5984530a6f072a0a60c704d4 assets/milltek/models/item/deepslate_aluminum_ore.json
 832d68670b46304e9eeb68c5efca0d8e8cb905da assets/milltek/models/item/deepslate_lead_ore.json
+159a1da842f9dc8a0514df56baba7bce96faf16e assets/milltek/models/item/energy_pipe.json
 4675e89a38a8023807d1d30cfc093acb0d2f0851 assets/milltek/models/item/induction_furnace.json
 6d14a3fec2b12da99fb80dacbecb82450748fcf0 assets/milltek/models/item/lead_block.json
 4f07caa573960a09973e7c4abdde3980cacfb989 assets/milltek/models/item/lead_ore.json

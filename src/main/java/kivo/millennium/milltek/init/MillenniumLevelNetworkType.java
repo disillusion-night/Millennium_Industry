@@ -25,6 +25,14 @@ public class MillenniumLevelNetworkType {
                     "fluid_pipe_network",
                     () -> LevelNetworkType.Builder.of(FluidPipeNetwork::new, FluidPipeNetwork::new).build());
 
+    // 能量网络注册
+    public static final RegistryObject<LevelNetworkType<kivo.millennium.milltek.pipe.client.network.EnergyPipeNetwork>> ENERGY_PIPE_NETWORK = LEVEL_NETWORK_TYPES
+            .register(
+                    "energy_pipe_network",
+                    () -> LevelNetworkType.Builder.of(
+                            kivo.millennium.milltek.pipe.client.network.EnergyPipeNetwork::new,
+                            kivo.millennium.milltek.pipe.client.network.EnergyPipeNetwork::new).build());
+
     public static class LevelNetworkType<T extends AbstractLevelNetwork> {
         private final LevelNetworkSupplier<T> factory;
         private final LevelNetworkNBTFactory<T> nbtFactory;

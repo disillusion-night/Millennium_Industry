@@ -39,7 +39,7 @@ public abstract class AbstractRecipeMachineBE<R extends GenericRecipe> extends A
             if (recipeO.isPresent()) {
                 R recipe = recipeO.get();
                 boolean canStart = false;
-                if (recipe.canProcess(getOutputs()) && getEnergyStorage().getEnergyStored() >= getEnergyCost()) {
+                if (recipe.canProcess(getOutputs()) && getEnergyStorage().getEnergyStored() >= getEnergyCost(recipeO.get())) {
                     canStart = true;
                 }
 
@@ -115,8 +115,8 @@ public abstract class AbstractRecipeMachineBE<R extends GenericRecipe> extends A
 
     protected abstract boolean isInputValid();
 
-    protected int getEnergyCost(){
-        return 0;
+    protected int getEnergyCost(R recipe){
+        return recipe.getEnergyCost();  
     }
 
     protected void process(R recipe,int energycost) {

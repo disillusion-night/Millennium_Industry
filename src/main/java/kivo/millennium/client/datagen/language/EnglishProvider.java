@@ -7,6 +7,7 @@ import kivo.millennium.milltek.Main;
 import kivo.millennium.milltek.init.MillenniumBlocks;
 import kivo.millennium.milltek.init.MillenniumCreativeTab;
 import kivo.millennium.milltek.init.MillenniumFluidTypes;
+import kivo.millennium.milltek.init.MillenniumGases;
 import kivo.millennium.milltek.init.MillenniumItems;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -143,22 +144,16 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.WOLFRAM_STEEL_SWORD.get(), "Wolfram Steel Sword");
 
         add(MillenniumItems.WRENCH.get(), "Wrench");
+        add(MillenniumGases.STEAM.get(), "Steam");
 
-        add(Util.makeDescriptionId("item_group",
-                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.OOPARTS.get())),
-                "Millennium Industry:Oopart");
-        add(Util.makeDescriptionId("item_group",
-                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.ENGINEERING_PARTS.get())),
-                "Millennium Industry:Engineering Parts");
-        add(Util.makeDescriptionId("item_group",
-                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.MATERIALS.get())),
-                "Millennium Industry:Materials");
-        add(Util.makeDescriptionId("item_group",
-                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.TOOLS.get())),
-                "Millennium Industry:Tools");
+        add(MillenniumCreativeTab.OOPARTS.get(), "Millennium Industry:Oopart");
+        add(MillenniumCreativeTab.ENGINEERING_PARTS.get(), "Millennium Industry:Engineering Parts");
+        add(MillenniumCreativeTab.OOPARTS.get(), "Millennium Industry:Materials");
+        add(MillenniumCreativeTab.TOOLS.get(), "Millennium Industry:Tools");
     }
 
     private void addEnglishFromId(Item item) {
         add(item, Main.getKey(item).getPath());
     }
+
 }

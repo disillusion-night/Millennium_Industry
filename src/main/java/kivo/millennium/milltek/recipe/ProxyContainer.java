@@ -9,10 +9,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicBoolean;
 
-import kivo.millennium.milltek.capability.MillenniumFluidStorage;
-import kivo.millennium.milltek.capability.MillenniumItemStorage;
 import kivo.millennium.milltek.container.Device.FluidProxy;
 import kivo.millennium.milltek.container.Device.ItemProxy;
+import kivo.millennium.milltek.storage.MillenniumFluidStorage;
+import kivo.millennium.milltek.storage.MillenniumItemStorage;
 
 public class ProxyContainer implements Container {
     private ArrayList<ISlotProxy> slotProxies;

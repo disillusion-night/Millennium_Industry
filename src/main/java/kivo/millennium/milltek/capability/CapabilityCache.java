@@ -13,6 +13,9 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.util.IConsumer;
 
 import kivo.millennium.milltek.init.MillenniumItems;
+import kivo.millennium.milltek.storage.MillenniumEnergyStorage;
+import kivo.millennium.milltek.storage.MillenniumFluidStorage;
+import kivo.millennium.milltek.storage.MillenniumItemStorage;
 
 import static kivo.millennium.milltek.capability.CapabilityType.*;
 

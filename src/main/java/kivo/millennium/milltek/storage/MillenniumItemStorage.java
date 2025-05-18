@@ -1,5 +1,6 @@
-package kivo.millennium.milltek.capability;
+package kivo.millennium.milltek.storage;
 
+import kivo.millennium.milltek.capability.IMillenniumStorage;
 import kivo.millennium.milltek.container.Device.ItemProxy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
@@ -10,8 +11,7 @@ import net.minecraftforge.items.ItemStackHandler;
 
 public class MillenniumItemStorage extends ItemStackHandler implements IMillenniumStorage {
 
-    public MillenniumItemStorage()
-    {
+    public MillenniumItemStorage() {
         this(1);
     }
 
@@ -23,11 +23,11 @@ public class MillenniumItemStorage extends ItemStackHandler implements IMillenni
         this.stacks = stacks;
     }
 
-    public ItemProxy getSlotProxy(int slot){
+    public ItemProxy getSlotProxy(int slot) {
         return new ItemProxy(this, slot);
     }
 
-    public void drops(Level level, BlockPos worldPosition){
+    public void drops(Level level, BlockPos worldPosition) {
         Containers.dropContents(level, worldPosition, stacks);
     }
 

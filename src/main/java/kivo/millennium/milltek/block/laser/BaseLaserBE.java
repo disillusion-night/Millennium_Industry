@@ -15,7 +15,7 @@ import net.minecraftforge.energy.IEnergyStorage;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import kivo.millennium.milltek.capability.MillenniumEnergyStorage;
+import kivo.millennium.milltek.storage.MillenniumEnergyStorage;
 
 import javax.annotation.Nonnull;
 

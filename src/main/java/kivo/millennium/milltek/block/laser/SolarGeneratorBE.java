@@ -2,8 +2,8 @@ package kivo.millennium.milltek.block.laser;
 
 import kivo.millennium.milltek.block.device.AbstractMachineBE;
 import kivo.millennium.milltek.capability.CapabilityCache;
-import kivo.millennium.milltek.capability.MillenniumEnergyStorage;
 import kivo.millennium.milltek.init.MillenniumBlockEntities;
+import kivo.millennium.milltek.storage.MillenniumEnergyStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

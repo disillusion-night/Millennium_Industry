@@ -1,5 +1,5 @@
 {
-  "parent": "milltek:block/pipe/pipe",
+  "loader": "milltek:pipe_loader",
   "textures": {
     "corner": "milltek:block/pipe/energy_pipe_corner",
     "cross": "milltek:block/pipe/energy_pipe_cross",

@@ -1,5 +1,6 @@
-package kivo.millennium.milltek.capability;
+package kivo.millennium.milltek.storage;
 
+import kivo.millennium.milltek.capability.IMillenniumStorage;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.energy.EnergyStorage;

@@ -2,10 +2,10 @@ package kivo.millennium.milltek.machine.FusionChamber;
 
 import kivo.millennium.milltek.block.device.AbstractRecipeMachineBE;
 import kivo.millennium.milltek.capability.CapabilityCache;
-import kivo.millennium.milltek.capability.MillenniumFluidStorage;
 import kivo.millennium.milltek.init.MillenniumBlockEntities;
 import kivo.millennium.milltek.init.MillenniumFluids;
 import kivo.millennium.milltek.recipe.*;
+import kivo.millennium.milltek.storage.MillenniumFluidStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.entity.BlockEntity;

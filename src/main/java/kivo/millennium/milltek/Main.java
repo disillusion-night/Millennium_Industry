@@ -37,6 +37,7 @@ import static kivo.millennium.milltek.init.MillenniumEntities.ENTITIES;
 import static kivo.millennium.milltek.init.MillenniumFluidTypes.FLUID_TYPES;
 import static kivo.millennium.milltek.init.MillenniumFluids.FLUIDS;
 import static kivo.millennium.milltek.init.MillenniumItems.ITEMS;
+import static kivo.millennium.milltek.init.MillenniumGases.GASES;
 import static kivo.millennium.milltek.init.MillenniumLevelNetworkType.LEVEL_NETWORK_TYPES;
 import static kivo.millennium.milltek.init.MillenniumMenuTypes.MENU_TYPES;
 import static kivo.millennium.milltek.init.MillenniumRecipes.RECIPE_SERIALIZERS;
@@ -77,6 +78,7 @@ public class Main {
         MENU_TYPES.register(modEventBus);
         LEVEL_NETWORK_TYPES.register(modEventBus);
         RECIPE_SERIALIZERS.register(modEventBus);
+        GASES.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
         
         modEventBus.addListener(this::addCreative);

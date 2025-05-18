@@ -7,9 +7,9 @@ import java.util.List;
 
 import kivo.millennium.milltek.block.device.AbstractRecipeMachineBE;
 import kivo.millennium.milltek.capability.CapabilityCache;
-import kivo.millennium.milltek.capability.MillenniumFluidStorage;
 import kivo.millennium.milltek.init.MillenniumBlockEntities;
 import kivo.millennium.milltek.recipe.*;
+import kivo.millennium.milltek.storage.MillenniumFluidStorage;
 
 public class CrystallizerBE extends AbstractRecipeMachineBE<CrystallizingRecipe> {
     public static final int SLOT_COUNT = 3;

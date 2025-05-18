@@ -20,6 +20,9 @@ import org.jetbrains.annotations.Nullable;
 
 import kivo.millennium.milltek.block.IWorkingMachine;
 import kivo.millennium.milltek.capability.*;
+import kivo.millennium.milltek.storage.MillenniumEnergyStorage;
+import kivo.millennium.milltek.storage.MillenniumFluidStorage;
+import kivo.millennium.milltek.storage.MillenniumItemStorage;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 

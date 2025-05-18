@@ -70,13 +70,6 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
                         super(loader, parent, existingFileHelper);
                         this.facade = facade;
                 }
-
-                @Override
-                public JsonObject toJson(JsonObject json) {
-                        JsonObject obj = super.toJson(json);
-                        obj.addProperty("facade", facade);
-                        return obj;
-                }
         }
 
         public void addWithHaveModel(Block block, String name) {
@@ -353,26 +346,41 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         }
 
         /**
-         * 自动为管道类方块生成 blockstate 和 model（block/item），结构与 copper_pipe.json 一致
+         * 自动为管道类方块生成 blockstate 和 model（block/item），结构与 copper_pipe.json
+         * 一致，自动使用pipe_loader自定义loader
          * 
          * @param block 管道方块实例
-         * @param name  资源名（如"copper_pipe"）
          */
         public void pipeBlockWithItem(RegistryObject<? extends AbstractPipeBL> block) {
-        String name = block.getId().getPath();
-
-        // blockstate: 指向唯一模型
-                // block model: parent为pipe/pipe，textures自动拼接
-                ModelFile blockModel = models().getBuilder("block/pipe/" + name)
-                                .parent(models().getExistingFile(Main.getRL("block/pipe/pipe")))
+                String name = block.getId().getPath();
+                ModelFile.UncheckedModelFile parent = new ModelFile.UncheckedModelFile(Main.getRL("block/pipe/pipe"));
+                JsonObject customData = new JsonObject();
+                customData.addProperty("loader", Main.getRL("pipe_loader").toString());
+                models().getBuilder("block/pipe/" + name)
+                                .parent(parent)
                                 .texture("normal", Main.getRL("block/pipe/" + name + "_normal"))
                                 .texture("none", Main.getRL("block/pipe/" + name + "_none"))
                                 .texture("cross", Main.getRL("block/pipe/" + name + "_cross"))
                                 .texture("three", Main.getRL("block/pipe/" + name + "_three"))
                                 .texture("corner", Main.getRL("block/pipe/" + name + "_corner"));
+                                //.customData(customData);
                 getVariantBuilder(block.get()).partialState().setModels(
-                                new ConfiguredModel(blockModel));
-                // item model: parent为block/pipe/{name}
+                                new ConfiguredModel(models().getExistingFile(Main.getRL("block/pipe/" + name))));
                 itemModels().getBuilder(name).parent(models().getExistingFile(Main.getRL("block/pipe/" + name)));
+        }
+
+        /**
+         * 生成管道手持物品模型，6面均使用none贴图
+         * 
+         * @param name 资源名（如"copper_pipe"）
+         */
+        public void pipeHandheldItemModel(String name) {
+                itemModels().getBuilder(name)
+                                .parent(models().getExistingFile(Main.getRL("block/pipe/pipe")))
+                                .texture("normal", Main.getRL("block/pipe/" + name + "_none"))
+                                .texture("none", Main.getRL("block/pipe/" + name + "_none"))
+                                .texture("cross", Main.getRL("block/pipe/" + name + "_none"))
+                                .texture("three", Main.getRL("block/pipe/" + name + "_none"))
+                                .texture("corner", Main.getRL("block/pipe/" + name + "_none"));
         }
 }

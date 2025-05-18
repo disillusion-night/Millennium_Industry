@@ -1,9 +1,9 @@
 package kivo.millennium.milltek.container.Device;
 
 import kivo.millennium.milltek.capability.CapabilityType;
-import kivo.millennium.milltek.capability.MillenniumItemStorage;
 import kivo.millennium.milltek.recipe.ISlotProxy;
 import kivo.millennium.milltek.recipe.RecipeComponent;
+import kivo.millennium.milltek.storage.MillenniumItemStorage;
 import net.minecraft.world.item.ItemStack;
 
 public class ItemProxy implements ISlotProxy<ItemStack> {

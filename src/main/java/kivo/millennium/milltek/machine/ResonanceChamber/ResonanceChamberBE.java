@@ -2,10 +2,10 @@ package kivo.millennium.milltek.machine.ResonanceChamber;
 
 import kivo.millennium.milltek.block.device.AbstractRecipeMachineBE;
 import kivo.millennium.milltek.capability.CapabilityCache;
-import kivo.millennium.milltek.capability.MillenniumItemStorage;
 import kivo.millennium.milltek.init.MillenniumBlockEntities;
 import kivo.millennium.milltek.recipe.ProxyContainer;
 import kivo.millennium.milltek.recipe.ResonanceRecipe;
+import kivo.millennium.milltek.storage.MillenniumItemStorage;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.block.state.BlockState;
 

@@ -1,4 +1,4 @@
-package kivo.millennium.milltek.capability;
+package kivo.millennium.milltek.storage;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
@@ -8,6 +8,8 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import kivo.millennium.milltek.capability.IMillenniumStorage;
 
 import java.util.ArrayList;
 import java.util.Arrays;

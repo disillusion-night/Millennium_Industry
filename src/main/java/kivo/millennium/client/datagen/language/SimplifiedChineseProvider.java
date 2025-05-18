@@ -5,6 +5,7 @@ import static kivo.millennium.milltek.Main.log;
 import kivo.millennium.milltek.init.MillenniumBlocks;
 import kivo.millennium.milltek.init.MillenniumCreativeTab;
 import kivo.millennium.milltek.init.MillenniumFluidTypes;
+import kivo.millennium.milltek.init.MillenniumGases;
 import kivo.millennium.milltek.init.MillenniumItems;
 import kivo.millennium.milltek.machine.InductionFurnace.InductionFurnaceBL;
 import net.minecraft.Util;
@@ -142,18 +143,11 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
 
                 add(MillenniumItems.WRENCH.get(), "扳手");
 
-                add(Util.makeDescriptionId("item_group",
-                                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.OOPARTS.get())),
-                                "千年科工 神秘古物");
-                add(Util.makeDescriptionId("item_group",
-                                BuiltInRegistries.CREATIVE_MODE_TAB
-                                                .getKey(MillenniumCreativeTab.ENGINEERING_PARTS.get())),
-                                "千年科工 工程组件");
-                add(Util.makeDescriptionId("item_group",
-                                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.MATERIALS.get())),
-                                "千年科工 材料");
-                add(Util.makeDescriptionId("item_group",
-                                BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.TOOLS.get())),
-                                "千年科工 工具");
+                add(MillenniumGases.STEAM.get(), "蒸汽");
+
+                add(MillenniumCreativeTab.OOPARTS.get(), "千年科工 神秘古物");
+                add(MillenniumCreativeTab.ENGINEERING_PARTS.get(), "千年科工 工程组件");
+                add(MillenniumCreativeTab.OOPARTS.get(), "千年科工 材料");
+                add(MillenniumCreativeTab.TOOLS.get(), "千年科工 工具");
         }
 }

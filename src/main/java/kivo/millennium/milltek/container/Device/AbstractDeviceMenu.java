@@ -16,7 +16,7 @@ import org.joml.Vector2i;
 
 import kivo.millennium.milltek.block.device.AbstractMachineBE;
 import kivo.millennium.milltek.capability.CapabilityCache;
-import kivo.millennium.milltek.capability.MillenniumEnergyStorage;
+import kivo.millennium.milltek.storage.MillenniumEnergyStorage;
 
 import java.util.List;
 

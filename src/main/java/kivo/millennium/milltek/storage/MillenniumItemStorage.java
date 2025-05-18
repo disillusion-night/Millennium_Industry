@@ -1,6 +1,5 @@
 package kivo.millennium.milltek.storage;
 
-import kivo.millennium.milltek.capability.IMillenniumStorage;
 import kivo.millennium.milltek.container.Device.ItemProxy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;

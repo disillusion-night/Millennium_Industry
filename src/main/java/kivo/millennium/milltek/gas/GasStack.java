@@ -12,6 +12,7 @@ import java.util.Objects;
  * 气体堆栈，类似于FluidStack，包含气体类型和数量。
  */
 public class GasStack {
+  public static final GasStack EMPTY = new GasStack(new Gas("empty", 0), 0);
   private final Gas gas;
   private int amount;
 
@@ -52,10 +53,10 @@ public class GasStack {
     String name = tag.getString("GasName");
     int amount = tag.getInt("Amount");
     Gas gas = MillenniumGases.GASES.getEntries().stream()
-      .filter(e -> e.getId().getPath().equals(name))
-      .findFirst()
-      .map(RegistryObject::get)
-      .orElse(null);
+        .filter(e -> e.getId().getPath().equals(name))
+        .findFirst()
+        .map(RegistryObject::get)
+        .orElse(null);
     if (gas == null)
       return null;
     return new GasStack(gas, amount);

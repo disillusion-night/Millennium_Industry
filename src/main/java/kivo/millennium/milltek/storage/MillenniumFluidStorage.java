@@ -9,7 +9,7 @@ import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import kivo.millennium.milltek.capability.IMillenniumStorage;
+import kivo.millennium.milltek.capability.CapabilityType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -20,7 +20,7 @@ import java.util.stream.IntStream;
 
 // Assuming IMillenniumStorage provides serializeNBT and deserializeNBT
 
-public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage {
+public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage<FluidStack> {
 
     protected Predicate<FluidStack> validator = f -> true;
 
@@ -36,7 +36,6 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
     @Nullable
     private Consumer<CapabilityType> onContentsChangedCallback;
 
-
     // --- Constructors ---
 
     // Helper to initialize tankAccess list
@@ -49,9 +48,11 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
     }
 
     // Constructor for initializing with existing lists (use cautiously)
-    public MillenniumFluidStorage(int size, @NotNull List<FluidStack> fluids, @NotNull List<Integer> capacities, @NotNull List<Integer> tankAccess){ // Added tankAccess parameter
+    public MillenniumFluidStorage(int size, @NotNull List<FluidStack> fluids, @NotNull List<Integer> capacities,
+            @NotNull List<Integer> tankAccess) { // Added tankAccess parameter
         if (fluids.size() != size || capacities.size() != size || tankAccess.size() != size) {
-            throw new IllegalArgumentException("Fluid list size, capacity list size, and access list size must match 'size'");
+            throw new IllegalArgumentException(
+                    "Fluid list size, capacity list size, and access list size must match 'size'");
         }
         if (capacities.stream().anyMatch(cap -> cap <= 0)) {
             System.err.println("MillenniumFluidStorage constructed with non-positive capacities: " + capacities);
@@ -60,7 +61,6 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
             System.err.println("MillenniumFluidStorage constructed with invalid tank access levels: " + tankAccess);
         }
 
-
         this.size = size;
         this.fluids = new ArrayList<>(fluids);
         this.capacities = new ArrayList<>(capacities);
@@ -68,13 +68,12 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
     }
 
     // Constructor for a single tank with a given capacity
-    public MillenniumFluidStorage(int capacity)
-    {
+    public MillenniumFluidStorage(int capacity) {
         this(1, capacity);
     }
 
     // Constructor for multiple tanks with the same capacity
-    public MillenniumFluidStorage(int size, int capacity){
+    public MillenniumFluidStorage(int size, int capacity) {
         if (size <= 0 || capacity <= 0) {
             throw new IllegalArgumentException("Size and capacity must be positive");
         }
@@ -90,7 +89,7 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
     }
 
     // Constructor for multiple tanks with variable capacities
-    public MillenniumFluidStorage(int size, int... capacityArray){
+    public MillenniumFluidStorage(int size, int... capacityArray) {
         if (capacityArray.length != size || size <= 0) {
             throw new IllegalArgumentException("Capacity array length must match 'size' and size must be positive");
         }
@@ -106,7 +105,7 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
         for (int i = 0; i < size; i++) {
             this.fluids.add(FluidStack.EMPTY);
         }
-        for (int cap : capacityArray){
+        for (int cap : capacityArray) {
             this.capacities.add(cap);
         }
     }
@@ -120,10 +119,11 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
 
     // --- Configuration ---
 
-    public MillenniumFluidStorage setCapacity(int tank, int capacity)
-    {
-        if (tank < 0 || tank >= size) throw new IndexOutOfBoundsException("Invalid tank index: " + tank);
-        if (capacity <= 0) throw new IllegalArgumentException("Capacity must be positive");
+    public MillenniumFluidStorage setCapacity(int tank, int capacity) {
+        if (tank < 0 || tank >= size)
+            throw new IndexOutOfBoundsException("Invalid tank index: " + tank);
+        if (capacity <= 0)
+            throw new IllegalArgumentException("Capacity must be positive");
         this.capacities.set(tank, capacity);
         FluidStack currentFluid = this.fluids.get(tank);
         if (!currentFluid.isEmpty() && currentFluid.getAmount() > capacity) {
@@ -132,26 +132,25 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
         return this;
     }
 
-    public MillenniumFluidStorage setForInput(int tank){
+    public MillenniumFluidStorage setForInput(int tank) {
         this.tankAccess.set(tank, 1);
         return this;
     }
 
-    public MillenniumFluidStorage setForOutput(int tank){
+    public MillenniumFluidStorage setForOutput(int tank) {
         this.tankAccess.set(tank, 2);
         return this;
     }
 
-    public boolean isForInput(int tank){
+    public boolean isForInput(int tank) {
         return (tankAccess.get(tank) & 1) == 1;
     }
 
-    public boolean isForOutput(int tank){
+    public boolean isForOutput(int tank) {
         return (tankAccess.get(tank) & 2) == 2;
     }
 
-    public MillenniumFluidStorage setValidator(@Nullable Predicate<FluidStack> validator)
-    {
+    public MillenniumFluidStorage setValidator(@Nullable Predicate<FluidStack> validator) {
         this.validator = validator != null ? validator : f -> true;
         return this;
     }
@@ -159,8 +158,7 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
     // --- Getters ---
 
     @NotNull
-    public List<FluidStack> getFluids()
-    {
+    public List<FluidStack> getFluids() {
         List<FluidStack> fluidsCopy = new ArrayList<>(size);
         for (FluidStack fluid : this.fluids) {
             fluidsCopy.add(fluid.copy());
@@ -168,19 +166,19 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
         return fluidsCopy;
     }
 
-    public int getFluidAmount(int tank)
-    {
-        if (tank < 0 || tank >= size) return 0;
+    public int getFluidAmount(int tank) {
+        if (tank < 0 || tank >= size)
+            return 0;
         return getFluidRefInTank(tank).getAmount();
     }
 
     // --- NBT Serialization ---
 
-    public CompoundTag serializeNBT(){
+    public CompoundTag serializeNBT() {
         return writeToNBT(new CompoundTag());
     }
 
-    public void deserializeNBT(CompoundTag nbt){
+    public void deserializeNBT(CompoundTag nbt) {
         this.fluids = new ArrayList<>();
         this.capacities = new ArrayList<>();
         this.tankAccess = new ArrayList<>(); // Initialize access list
@@ -202,10 +200,9 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
             this.tankAccess.add(3); // Initialize with default access 3
         }
 
-
         if (nbt.contains("fluids", Tag.TAG_LIST)) {
             ListTag tag = nbt.getList("fluids", Tag.TAG_COMPOUND);
-            for(int i = 0; i < tag.size() && i < size; i++){
+            for (int i = 0; i < tag.size() && i < size; i++) {
                 CompoundTag fluidTag = tag.getCompound(i);
                 FluidStack fluid = FluidStack.loadFluidStackFromNBT(fluidTag);
                 if (fluid != null) {
@@ -225,12 +222,14 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
                 if (loadedCapacities[i] > 0) {
                     this.capacities.set(i, loadedCapacities[i]);
                 } else {
-                    System.err.println("Loaded non-positive capacity for tank " + i + ": " + loadedCapacities[i] + ". Using 0 capacity.");
+                    System.err.println("Loaded non-positive capacity for tank " + i + ": " + loadedCapacities[i]
+                            + ". Using 0 capacity.");
                     this.capacities.set(i, 0);
                 }
             }
         } else {
-            System.err.println("MillenniumFluidStorage NBT missing 'capacities' int array tag! Tanks will have 0 capacity.");
+            System.err.println(
+                    "MillenniumFluidStorage NBT missing 'capacities' int array tag! Tanks will have 0 capacity.");
         }
 
         // Load tank access levels
@@ -241,19 +240,22 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
                 if (loadedAccess[i] >= 0 && loadedAccess[i] <= 3) {
                     this.tankAccess.set(i, loadedAccess[i]);
                 } else {
-                    System.err.println("Loaded invalid access level for tank " + i + ": " + loadedAccess[i] + ". Using default access 3.");
+                    System.err.println("Loaded invalid access level for tank " + i + ": " + loadedAccess[i]
+                            + ". Using default access 3.");
                     this.tankAccess.set(i, 3); // Use default access if invalid loaded value
                 }
             }
         } else {
-            System.err.println("MillenniumFluidStorage NBT missing 'tank_access' int array tag! Tanks will have default access 3.");
+            System.err.println(
+                    "MillenniumFluidStorage NBT missing 'tank_access' int array tag! Tanks will have default access 3.");
         }
     }
 
+    @Override
     public CompoundTag writeToNBT(CompoundTag nbt) {
         nbt.putInt("size", size);
         ListTag tag = new ListTag();
-        for(int i = 0; i < size; i++){
+        for (int i = 0; i < size; i++) {
             CompoundTag fluid = new CompoundTag();
             this.fluids.get(i).writeToNBT(fluid);
             tag.add(fluid);
@@ -275,18 +277,18 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
         return size;
     }
 
-    public boolean isEmpty(int tank){
+    public boolean isEmpty(int tank) {
         return fluids.get(tank).isEmpty();
     }
 
-    public int addFluidToTank(int tank, FluidStack resource, FluidAction action){
-        if (tank < 0 || tank >= size) return 0;
+    public int addFluidToTank(int tank, FluidStack resource, FluidAction action) {
+        if (tank < 0 || tank >= size)
+            return 0;
 
         FluidStack stack = this.fluids.get(tank);
         int capacity = getTankCapacity(tank);
 
-        if (resource.isEmpty() || capacity <= 0)
-        {
+        if (resource.isEmpty() || capacity <= 0) {
             return 0;
         }
         if (!isFluidValid(tank, resource)) {
@@ -313,21 +315,23 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
         return filled;
     }
 
-
-    public FluidStack setFluidInTank(int tank, FluidStack fluidStack){
-        if (tank < 0 || tank >= size) return FluidStack.EMPTY;
+    public FluidStack setFluidInTank(int tank, FluidStack fluidStack) {
+        if (tank < 0 || tank >= size)
+            return FluidStack.EMPTY;
         this.fluids.set(tank, fluidStack != null && !fluidStack.isEmpty() ? fluidStack.copy() : FluidStack.EMPTY);
         return this.fluids.get(tank);
     }
 
-    public FluidStack setFluidInTank(int tank, Fluid fluid, int amount){
-        if (tank < 0 || tank >= size) return FluidStack.EMPTY;
+    public FluidStack setFluidInTank(int tank, Fluid fluid, int amount) {
+        if (tank < 0 || tank >= size)
+            return FluidStack.EMPTY;
         FluidStack stack = new FluidStack(fluid, amount);
         return setFluidInTank(tank, stack);
     }
 
-    public FluidStack setEmptyInTank(int tank){
-        if (tank < 0 || tank >= size) return FluidStack.EMPTY;
+    public FluidStack setEmptyInTank(int tank) {
+        if (tank < 0 || tank >= size)
+            return FluidStack.EMPTY;
         this.fluids.set(tank, FluidStack.EMPTY);
         return FluidStack.EMPTY;
     }
@@ -335,26 +339,31 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
     @NotNull
     @Override
     public FluidStack getFluidInTank(int tank) {
-        if (tank < 0 || tank >= size) return FluidStack.EMPTY;
+        if (tank < 0 || tank >= size)
+            return FluidStack.EMPTY;
         return this.fluids.get(tank).copy();
     }
 
     @NotNull
     public FluidStack getFluidRefInTank(int tank) {
-        if (tank < 0 || tank >= size) return FluidStack.EMPTY;
+        if (tank < 0 || tank >= size)
+            return FluidStack.EMPTY;
         return this.fluids.get(tank);
     }
 
     @Override
     public int getTankCapacity(int tank) {
-        if (tank < 0 || tank >= size) return 0;
+        if (tank < 0 || tank >= size)
+            return 0;
         return capacities.get(tank);
     }
 
     @Override
     public boolean isFluidValid(int tank, @NotNull FluidStack stack) {
-        if (tank < 0 || tank >= size) return false;
-        if (stack.isEmpty()) return false;
+        if (tank < 0 || tank >= size)
+            return false;
+        if (stack.isEmpty())
+            return false;
         if (validator != null && !validator.test(stack)) {
             return false;
         }
@@ -366,15 +375,16 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
     }
 
     @Override
-    public int fill(FluidStack resource, FluidAction action)
-    {
-        if (resource.isEmpty()) return 0;
+    public int fill(FluidStack resource, FluidAction action) {
+        if (resource.isEmpty())
+            return 0;
 
         int totalFilled = 0;
         FluidStack resourceToFill = resource.copy();
 
         for (int tank = 0; tank < size; tank++) {
-            if (!isForInput(tank)) continue;
+            if (!isForInput(tank))
+                continue;
             int filledInTank = addFluidToTank(tank, resourceToFill, action); // addFluidToTank handles access check
             totalFilled += filledInTank;
 
@@ -389,16 +399,17 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
 
     @NotNull
     @Override
-    public FluidStack drain(FluidStack resource, FluidAction action)
-    {
-        if (resource.isEmpty()) return FluidStack.EMPTY;
+    public FluidStack drain(FluidStack resource, FluidAction action) {
+        if (resource.isEmpty())
+            return FluidStack.EMPTY;
 
         int amountToDrain = resource.getAmount();
         int totalDrained = 0;
         FluidStack drainedStack = FluidStack.EMPTY;
 
         for (int tank = size - 1; tank >= 0; tank--) {
-            if (!isForOutput(tank)) continue;
+            if (!isForOutput(tank))
+                continue;
 
             FluidStack internalTankFluid = this.fluids.get(tank);
 
@@ -434,12 +445,13 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
 
     @NotNull
     @Override
-    public FluidStack drain(int maxDrain, FluidAction action)
-    {
-        if (maxDrain <= 0) return FluidStack.EMPTY;
+    public FluidStack drain(int maxDrain, FluidAction action) {
+        if (maxDrain <= 0)
+            return FluidStack.EMPTY;
 
         for (int tank = size - 1; tank >= 0; tank--) {
-            if (!isForOutput(tank)) continue;
+            if (!isForOutput(tank))
+                continue;
 
             FluidStack internalTankFluid = this.fluids.get(tank);
 
@@ -465,15 +477,13 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
         return FluidStack.EMPTY;
     }
 
-    protected void onContentsChanged(int tank)
-    {
+    protected void onContentsChanged(int tank) {
         if (this.onContentsChangedCallback != null) {
             this.onContentsChangedCallback.accept(CapabilityType.FLUID);
         }
     }
 
-    public boolean hasNoTanks()
-    {
+    public boolean hasNoTanks() {
         return size <= 0;
     }
 
@@ -489,7 +499,8 @@ public class MillenniumFluidStorage implements IFluidHandler, IMillenniumStorage
     // Custom method to set the entire fluids list (use cautiously)
     public void setFluids(@NotNull List<FluidStack> fluids) {
         if (fluids.size() != this.size) {
-            System.err.println("Attempted to set fluids list with incorrect size. Expected " + this.size + ", got " + fluids.size());
+            System.err.println("Attempted to set fluids list with incorrect size. Expected " + this.size + ", got "
+                    + fluids.size());
             return;
         }
         this.fluids.clear();

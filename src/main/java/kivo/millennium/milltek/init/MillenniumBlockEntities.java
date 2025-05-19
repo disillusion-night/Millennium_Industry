@@ -8,6 +8,7 @@ import kivo.millennium.milltek.block.laser.NetherStarLaserBE;
 import kivo.millennium.milltek.block.laser.SolarGeneratorBE;
 import kivo.millennium.milltek.machine.Crusher.CrusherBE;
 import kivo.millennium.milltek.machine.Crystallizer.CrystallizerBE;
+import kivo.millennium.milltek.machine.Electrolyzer.ElectrolyzerBE;
 import kivo.millennium.milltek.machine.FusionChamber.FusionChamberBE;
 import kivo.millennium.milltek.machine.HydraulicPress.HydraulicPressBE;
 import kivo.millennium.milltek.machine.InductionFurnace.InductionFurnaceBE;
@@ -65,6 +66,10 @@ public class MillenniumBlockEntities {
         public static final RegistryObject<BlockEntityType<PipeBoosterBE>> PIPE_BOOSTER_BE = BLOCK_ENTITIES.register(
                         "pipe_booster_be", () -> BlockEntityType.Builder.of(PipeBoosterBE::new,
                                         MillenniumBlocks.RESONANCE_CHAMBER_BL.get()).build(null));
+                                        
+        public static final RegistryObject<BlockEntityType<ElectrolyzerBE>> ELECTROLYZER_BE = BLOCK_ENTITIES.register(
+                        "electrolyzer", () -> BlockEntityType.Builder
+                                        .of(ElectrolyzerBE::new, MillenniumBlocks.ELECTROLYZER.get()).build(null));
 
         public static final RegistryObject<BlockEntityType<ResonanceChamberBE>> RESONANCE_CHAMBER_BE = BLOCK_ENTITIES
                         .register(

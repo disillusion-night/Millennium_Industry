@@ -1,5 +1,6 @@
 package kivo.millennium.milltek.storage;
 
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.energy.EnergyStorage;
@@ -32,25 +33,23 @@ public class MillenniumEnergyStorage extends EnergyStorage implements IMillenniu
         this.canReceive = true;
     }
 
-    public int costEnergy(int cost){
+    public int costEnergy(int cost) {
         int temp = this.energy;
-        if(cost < this.energy){
+        if (cost < this.energy) {
             this.energy -= cost;
             return cost;
-        }else{
+        } else {
             this.energy = 0;
             return temp;
         }
     }
 
-    public void setEnergy(int energy){
+    public void setEnergy(int energy) {
         this.energy = energy;
     }
 
-
     @Override
-    public int receiveEnergy(int maxReceive, boolean simulate)
-    {
+    public int receiveEnergy(int maxReceive, boolean simulate) {
         return super.receiveEnergy(maxReceive, simulate);
     }
 
@@ -64,25 +63,31 @@ public class MillenniumEnergyStorage extends EnergyStorage implements IMillenniu
         return canReceive && super.canReceive();
     }
 
-    public void setCanExact(boolean canExact){
+    public void setCanExact(boolean canExact) {
         this.canExact = canExact;
     }
 
-    public void setCanReceive(boolean canReceive){
+    public void setCanReceive(boolean canReceive) {
         this.canReceive = canReceive;
     }
 
     @Override
-    public Tag serializeNBT()
-    {
+    public Tag serializeNBT() {
         return IntTag.valueOf(this.getEnergyStored());
     }
 
     @Override
-    public void deserializeNBT(Tag nbt)
-    {
+    public void deserializeNBT(Tag nbt) {
         if (!(nbt instanceof IntTag intNbt))
-            throw new IllegalArgumentException("Can not deserialize to an instance that isn't the default implementation");
+            throw new IllegalArgumentException(
+                    "Can not deserialize to an instance that isn't the default implementation");
         this.energy = intNbt.getAsInt();
+    }
+
+    @Override
+    public CompoundTag writeToNBT(CompoundTag nbt) {
+        CompoundTag tag = new CompoundTag();
+        deserializeNBT(nbt);
+        return tag;
     }
 }

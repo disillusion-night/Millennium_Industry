@@ -2,9 +2,9 @@ package kivo.millennium.milltek.container.Device;
 
 import kivo.millennium.milltek.Main;
 import kivo.millennium.milltek.capability.CapabilityType;
-import kivo.millennium.milltek.recipe.FluidComponent;
 import kivo.millennium.milltek.recipe.ISlotProxy;
 import kivo.millennium.milltek.recipe.RecipeComponent;
+import kivo.millennium.milltek.recipe.component.FluidComponent;
 import kivo.millennium.milltek.storage.MillenniumFluidStorage;
 import net.minecraftforge.fluids.FluidStack;
 

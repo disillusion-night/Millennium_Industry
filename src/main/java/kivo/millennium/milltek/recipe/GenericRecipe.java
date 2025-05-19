@@ -7,6 +7,8 @@ import com.google.gson.JsonSyntaxException;
 
 import kivo.millennium.milltek.Main;
 import kivo.millennium.milltek.capability.CapabilityType;
+import kivo.millennium.milltek.recipe.component.FluidComponent;
+import kivo.millennium.milltek.recipe.component.ItemComponent;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.network.FriendlyByteBuf;

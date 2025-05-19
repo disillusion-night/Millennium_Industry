@@ -3,6 +3,7 @@ package kivo.millennium.milltek.storage;
 import kivo.millennium.milltek.container.Device.ItemProxy;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.NonNullList;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Containers;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
@@ -28,6 +29,13 @@ public class MillenniumItemStorage extends ItemStackHandler implements IMillenni
 
     public void drops(Level level, BlockPos worldPosition) {
         Containers.dropContents(level, worldPosition, stacks);
+    }
+
+    @Override
+    public CompoundTag writeToNBT(CompoundTag nbt) {
+        CompoundTag tag = new CompoundTag();
+        deserializeNBT(nbt);
+        return tag;
     }
 
 }

@@ -33,12 +33,7 @@ public class MillenniumGasStorage implements IGasHandler, IMillenniumStorage<Gas
         }
         return defaultAccess;
     }
-
-    // ===================== 仅保留一份实现，避免冗余 =====================
-    // 构造方法、判空、容量、访问权限等仅保留一份实现，接口方法命名与IFluidHandler一致
-    // 其它辅助方法如areAllTanksEmpty、setGases等仅保留一份，无需重复
-
-    // 构造方法
+    
     public MillenniumGasStorage(int size, @NotNull List<GasStack> gases, @NotNull List<Integer> capacities,
             @NotNull List<Integer> tankAccess) {
         if (gases.size() != size || capacities.size() != size || tankAccess.size() != size) {

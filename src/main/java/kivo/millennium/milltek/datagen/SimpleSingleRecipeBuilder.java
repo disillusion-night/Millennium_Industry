@@ -6,6 +6,8 @@ import com.google.gson.JsonObject;
 import kivo.millennium.milltek.container.Device.ItemProxy;
 import kivo.millennium.milltek.init.MillenniumRecipes;
 import kivo.millennium.milltek.recipe.*;
+import kivo.millennium.milltek.recipe.component.FluidComponent;
+import kivo.millennium.milltek.recipe.component.ItemComponent;
 
 import java.util.function.Consumer;
 import javax.annotation.Nullable;

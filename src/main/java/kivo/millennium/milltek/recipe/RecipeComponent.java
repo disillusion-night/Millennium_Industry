@@ -4,6 +4,8 @@ package kivo.millennium.milltek.recipe;
 import com.google.gson.JsonObject;
 
 import kivo.millennium.milltek.capability.CapabilityType;
+import kivo.millennium.milltek.recipe.component.FluidComponent;
+import kivo.millennium.milltek.recipe.component.ItemComponent;
 import net.minecraft.network.FriendlyByteBuf;
 
 public interface RecipeComponent<T> {

@@ -10,6 +10,7 @@ import kivo.millennium.milltek.init.MillenniumBlockEntities;
 import kivo.millennium.milltek.machine.EIOState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import static kivo.millennium.milltek.machine.EIOState.getPropertyForDirection;
 
 public class EnergyPipeBlock extends AbstractPipeBL {
     public EnergyPipeBlock() {

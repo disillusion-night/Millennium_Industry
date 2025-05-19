@@ -9,12 +9,11 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 
-import static kivo.millennium.milltek.machine.EIOState.getPropertyForDirection;
-
 import org.jetbrains.annotations.Nullable;
 
 import kivo.millennium.milltek.init.MillenniumBlockEntities;
 import kivo.millennium.milltek.machine.EIOState;
+import static kivo.millennium.milltek.machine.EIOState.getPropertyForDirection;
 
 public class CopperPipeBlock extends AbstractPipeBL {
     private static final double PIPE_WIDTH = 0.5;

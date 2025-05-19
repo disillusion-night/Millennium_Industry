@@ -1,0 +1,10 @@
+{
+  "loader": "milltek:pipe_loader",
+  "textures": {
+    "corner": "milltek:block/pipe/energy_pipe_corner",
+    "cross": "milltek:block/pipe/energy_pipe_cross",
+    "none": "milltek:block/pipe/energy_pipe_none",
+    "normal": "milltek:block/pipe/energy_pipe_normal",
+    "three": "milltek:block/pipe/energy_pipe_three"
+  }
+}

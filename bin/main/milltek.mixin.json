@@ -1,0 +1,17 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "kivo.millennium.milltek.mixin",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "millind.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+    "AbstractContainerScreenMixin",
+    "CreativeModeInventoryScreenMixin",
+    "GuiGraphicsMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:item/handheld",
+  "textures": {
+    "layer0": "milltek:item/tool/wolfram_steel_axe"
+  }
+}

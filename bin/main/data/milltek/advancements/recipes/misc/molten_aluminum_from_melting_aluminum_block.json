@@ -1,0 +1,35 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_aluminum_block": {
+      "conditions": {
+        "items": [
+          {
+            "items": [
+              "milltek:aluminum_block"
+            ]
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "milltek:molten_aluminum_from_melting_aluminum_block"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_aluminum_block",
+      "has_the_recipe"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "milltek:molten_aluminum_from_melting_aluminum_block"
+    ]
+  },
+  "sends_telemetry_event": false
+}

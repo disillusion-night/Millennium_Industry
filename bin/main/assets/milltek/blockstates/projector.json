@@ -1,0 +1,8 @@
+{
+  "variants": {
+    "facing=east":  { "model": "milltek:block/projector", "y": 90 },
+    "facing=north": { "model": "milltek:block/projector" },
+    "facing=south": { "model": "milltek:block/projector", "y": 180 },
+    "facing=west":  { "model": "milltek:block/projector", "y": 270 }
+  }
+}

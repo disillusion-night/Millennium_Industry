@@ -56,18 +56,6 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
                 .setValue(WATERLOGGED, false));
     }
 
-    public static EnumProperty<EIOState> getPropertyForDirection(Direction direction) {
-        return switch (direction) {
-            case NORTH -> NORTH;
-            case EAST -> EAST;
-            case SOUTH -> SOUTH;
-            case WEST -> WEST;
-            case UP -> UP;
-            case DOWN -> DOWN;
-            default -> throw new IllegalArgumentException("Invalid direction: " + direction);
-        };
-    }
-
     public abstract double getDefaultWidth();
 
     public boolean canConnectTo(BlockGetter level, BlockPos neighborPos, BlockState neighborState, Direction facing) {

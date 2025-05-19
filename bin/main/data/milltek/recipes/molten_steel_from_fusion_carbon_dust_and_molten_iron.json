@@ -1,0 +1,20 @@
+{
+  "type": "milltek:fusion",
+  "category": "misc",
+  "energy": 1000,
+  "experience": 0.0,
+  "ingredients": [
+    {
+      "amount": 100,
+      "fluid": "milltek:molten_iron"
+    },
+    {
+      "item": "milltek:carbon_dust"
+    }
+  ],
+  "result": {
+    "amount": 100,
+    "fluid": "milltek:molten_steel"
+  },
+  "time": 200
+}

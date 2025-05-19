@@ -1,0 +1,13 @@
+{
+  "type": "milltek:crushing",
+  "category": "misc",
+  "energy": 100,
+  "experience": 0.0,
+  "ingredient": {
+    "item": "minecraft:redstone_block"
+  },
+  "result": {
+    "item": "minecraft:redstone"
+  },
+  "time": 9
+}

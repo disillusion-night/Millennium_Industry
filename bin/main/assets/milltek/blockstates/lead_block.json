@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "milltek:block/material/lead_block"
+    }
+  }
+}

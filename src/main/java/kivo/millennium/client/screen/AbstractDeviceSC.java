@@ -1,20 +1,23 @@
 package kivo.millennium.client.screen;
 
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.components.Button;
+import net.minecraft.client.gui.components.Tooltip;
+import javax.annotation.Nonnull;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 
-import static kivo.millennium.milltek.Main.getKey;
-
 import org.joml.Vector2i;
 
 import kivo.millennium.milltek.Main;
 import kivo.millennium.milltek.container.Device.AbstractDeviceMenu;
+import kivo.millennium.milltek.network.DeviceButtonPacket;
+import kivo.millennium.milltek.network.MillenniumNetwork;
 import kivo.millennium.milltek.util.NumberUtils;
 
-public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends AbstractContainerScreen<C> {
+public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu<?>> extends AbstractContainerScreen<C> {
 
     protected Vector2i renderPos;
     // 默认 GUI 纹理，子类可以覆写
@@ -53,11 +56,27 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends Abs
     public void init() {
         super.init();
         this.titleLabelX = (this.imageWidth - this.font.width(this.title)) / 2;
+        // 添加右上角按钮
+        int btnSize = 20;
+        int btnX = this.leftPos + this.imageWidth - btnSize - 4;
+        int btnY = this.topPos + 4;
+        this.addRenderableWidget(Button.builder(Component.literal("!"), btn -> onTopRightButtonClicked())
+                .pos(btnX, btnY)
+                .size(btnSize, btnSize)
+                .tooltip(Tooltip.create(Component.literal("执行服务端操作")))
+                .build());
+    }
 
+    /**
+     * 右上角按钮点击事件，发送网络包到服务端
+     */
+    protected void onTopRightButtonClicked() {
+        // 客户端发送数据包到服务端
+        MillenniumNetwork.INSTANCE.sendToServer(new DeviceButtonPacket());
     }
 
     @Override
-    protected void renderBg(GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
+    protected void renderBg(@Nonnull GuiGraphics pGuiGraphics, float pPartialTick, int pMouseX, int pMouseY) {
         int i = this.leftPos;
         int j = this.topPos;
         pGuiGraphics.blit(this.GUI_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth,
@@ -125,7 +144,7 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends Abs
     }
 
     @Override
-    public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTick) {
+    public void render(@Nonnull GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTick) {
 
         this.renderBackground(pGuiGraphics);
         super.render(pGuiGraphics, mouseX, mouseY, partialTick);
@@ -135,7 +154,7 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu> extends Abs
     }
 
     @Override
-    protected void renderLabels(GuiGraphics guiGraphics, int pMouseX, int pMouseY) {
+    protected void renderLabels(@Nonnull GuiGraphics guiGraphics, int pMouseX, int pMouseY) {
         guiGraphics.drawString(this.font, this.title, this.titleLabelX, this.titleLabelY, 0x404040, false); // 渲染标题文本
         guiGraphics.drawString(this.font, this.playerInventoryTitle, this.inventoryLabelX, this.inventoryLabelY,
                 0x404040, false); // 渲染玩家物品栏标题文本

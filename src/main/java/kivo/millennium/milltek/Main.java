@@ -4,6 +4,7 @@ import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
 
 import kivo.millennium.milltek.init.MillenniumRecipes;
+import kivo.millennium.milltek.network.MillenniumNetwork;
 import kivo.millennium.milltek.pipe.client.PipeModelLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
@@ -66,7 +67,7 @@ public class Main {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
 
         modEventBus.addListener(this::commonSetup);
-        //modEventBus.addListener(this::onRegisterCommands);
+        // modEventBus.addListener(this::onRegisterCommands);
 
         ITEMS.register(modEventBus);
         ENTITIES.register(modEventBus);
@@ -80,11 +81,13 @@ public class Main {
         RECIPE_SERIALIZERS.register(modEventBus);
         GASES.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
-        
+        // 注册网络包
+        MillenniumNetwork.register();
+
         modEventBus.addListener(this::addCreative);
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, Config.SPEC);
     }
-    
+
     private void commonSetup(final FMLCommonSetupEvent event) {
         // Some common setup code
         // LOGGER.info("HELLO FROM COMMON SETUP");
@@ -106,7 +109,7 @@ public class Main {
     @SubscribeEvent
     public void onRegisterCommands(final RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
-        //PipeNetworkCommand.register(dispatcher);
+        // PipeNetworkCommand.register(dispatcher);
     }
 
     // You can use EventBusSubscriber to automatically register all static methods

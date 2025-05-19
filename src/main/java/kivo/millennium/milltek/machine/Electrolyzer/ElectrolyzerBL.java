@@ -1,4 +1,4 @@
-package kivo.millennium.milltek.machine.electrolyzer;
+package kivo.millennium.milltek.machine.Electrolyzer;
 
 import kivo.millennium.milltek.block.laser.HorizontalMachineBL;
 import kivo.millennium.milltek.init.MillenniumBlockEntities;

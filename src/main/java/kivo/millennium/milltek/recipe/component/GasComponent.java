@@ -44,7 +44,7 @@ public class GasComponent implements RecipeComponent<GasStack> {
     @Override
     public JsonObject toJson() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("gas", get().getGas().getName());
+        jsonObject.addProperty("gas", get().getGas().getRegistryName().getPath());
         jsonObject.addProperty("amount", get().getAmount());
         return jsonObject;
     }
@@ -66,7 +66,7 @@ public class GasComponent implements RecipeComponent<GasStack> {
             buf.writeBoolean(false);
         } else {
             buf.writeBoolean(true);
-            buf.writeUtf(gasStack.getGas().getName());
+            buf.writeUtf(gasStack.getGas().getRegistryName().getPath());
             buf.writeInt(gasStack.getAmount());
         }
     }

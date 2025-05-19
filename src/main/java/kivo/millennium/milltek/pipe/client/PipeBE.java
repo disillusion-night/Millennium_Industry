@@ -18,7 +18,7 @@ import java.util.*;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
-
+import static kivo.millennium.milltek.machine.EIOState.getPropertyForDirection;
 public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity {
     private UUID networkUUID = null;
     private final LevelNetworkType<T> networkType;
@@ -106,8 +106,8 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
                 continue;
 
             // 判断本方块该面的连接状态
-            EIOState pipeState = state.hasProperty(AbstractPipeBL.getPropertyForDirection(dir))
-                    ? state.getValue(AbstractPipeBL.getPropertyForDirection(dir))
+            EIOState pipeState = state.hasProperty(getPropertyForDirection(dir))
+                    ? state.getValue(getPropertyForDirection(dir))
                     : EIOState.NONE;
 
             // connect 视为输出

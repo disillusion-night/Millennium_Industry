@@ -1,4 +1,4 @@
-package kivo.millennium.milltek.pipe.client;
+package kivo.millennium.milltek.machine;
 
 import static kivo.millennium.milltek.pipe.client.AbstractPipeBL.*;
 
@@ -6,26 +6,25 @@ import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 
-public enum EPipeState implements StringRepresentable {
+public enum EIOState implements StringRepresentable {
     CONNECT,
-    INSERT,
+    PULL,
     NONE,
-    OUTPUT,
+    PUSH,
     DISCONNECTED;
 
-    public static final EPipeState[] VALUES = values();
+    public static final EIOState[] VALUES = values();
 
     @Override
     public String toString() {
         return super.toString().toLowerCase();
     }
 
-    public boolean isConnected(){
-        return this.equals(CONNECT) || this.equals(INSERT) || this.equals(OUTPUT);
+    public boolean isConnected() {
+        return this.equals(CONNECT) || this.equals(PULL) || this.equals(PUSH);
     }
 
-
-    public static EnumProperty<EPipeState> getPropertyForDirection(Direction direction) {
+    public static EnumProperty<EIOState> getPropertyForDirection(Direction direction) {
         return switch (direction) {
             case NORTH -> NORTH;
             case EAST -> EAST;
@@ -35,6 +34,7 @@ public enum EPipeState implements StringRepresentable {
             case DOWN -> DOWN;
         };
     }
+
     @Override
     public String getSerializedName() {
         return toString();

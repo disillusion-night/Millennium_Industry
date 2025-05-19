@@ -7,6 +7,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import kivo.millennium.milltek.init.MillenniumBlockEntities;
+import kivo.millennium.milltek.machine.EIOState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 
@@ -39,7 +40,7 @@ public class EnergyPipeBlock extends AbstractPipeBL {
     protected boolean connectionTest(BlockGetter level, BlockPos pos, BlockState state, Direction facing) {
         // 与自身类型管道连接且对方不是DISCONNECTED
         if (state.getBlock() instanceof EnergyPipeBlock
-                && state.getValue(getPropertyForDirection(facing.getOpposite())) != EPipeState.DISCONNECTED) {
+                && state.getValue(getPropertyForDirection(facing.getOpposite())) != EIOState.DISCONNECTED) {
             return true;
         }
         // 其他方块，判断是否有能量能力

@@ -1,6 +1,6 @@
 package kivo.millennium.milltek.block.device;
 
-import kivo.millennium.milltek.pipe.client.EPipeState;
+import kivo.millennium.milltek.machine.EIOState;
 import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.EnumProperty;
 

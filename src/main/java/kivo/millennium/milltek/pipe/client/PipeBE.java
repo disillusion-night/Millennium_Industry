@@ -1,6 +1,7 @@
 package kivo.millennium.milltek.pipe.client;
 
 import kivo.millennium.milltek.init.MillenniumLevelNetworkType.LevelNetworkType;
+import kivo.millennium.milltek.machine.EIOState;
 import kivo.millennium.milltek.pipe.client.network.AbstractLevelNetwork;
 import kivo.millennium.milltek.world.LevelNetworkSavedData;
 import net.minecraft.core.BlockPos;
@@ -105,16 +106,16 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
                 continue;
 
             // 判断本方块该面的连接状态
-            EPipeState pipeState = state.hasProperty(AbstractPipeBL.getPropertyForDirection(dir))
+            EIOState pipeState = state.hasProperty(AbstractPipeBL.getPropertyForDirection(dir))
                     ? state.getValue(AbstractPipeBL.getPropertyForDirection(dir))
-                    : EPipeState.NONE;
+                    : EIOState.NONE;
 
             // connect 视为输出
-            if (pipeState == EPipeState.CONNECT || pipeState == EPipeState.OUTPUT) {
+            if (pipeState == EIOState.CONNECT || pipeState == EIOState.PUSH) {
                 outputTargets.add(new IOEntry(neighbor, dir));
             }
 
-            if (pipeState == EPipeState.INSERT) {
+            if (pipeState == EIOState.PULL) {
                 inputTargets.add(new IOEntry(neighbor, dir));
             }
         }
@@ -134,7 +135,7 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
     public void setRemoved() {
         if (level == null || level.isClientSide)
             return;
-        
+
         // 检查当前位置的 Block 是否还是本类型
         if (level.isLoaded(getBlockPos()) && level.getBlockState(getBlockPos()).getBlock() != getBlock()) {
             logger.info("[PipeBE] Block is not the same, removing networkUUID: " + networkUUID);
@@ -200,7 +201,7 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
                     BlockEntity be = level.getBlockEntity(pos);
                     if (be instanceof PipeBE<?> pipe && pipe.networkType == this.networkType) {
                         ((PipeBE<T>) pipe).setNetworkUUID(newUUID);
-                        //be.setChanged();
+                        // be.setChanged();
                         pipes.add((PipeBE<T>) pipe);
                     }
                 }
@@ -225,7 +226,8 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
         super.onLoad();
         if (level == null || level.isClientSide)
             return;
-        if (this.networkUUID != null) return; // 已有网络，不要重复分配
+        if (this.networkUUID != null)
+            return; // 已有网络，不要重复分配
         // 尝试连接周围相同Type的网络
         for (Direction dir : Direction.values()) {
             BlockPos neighborPos = worldPosition.relative(dir);
@@ -299,7 +301,7 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
         super.invalidateCaps();
         this.inputTargets.clear();
         this.outputTargets.clear();
-        
+
         this.networkUUID = null;
     }
 

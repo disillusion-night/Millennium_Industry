@@ -24,20 +24,22 @@ import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
 import net.minecraft.world.ticks.ScheduledTick;
 
-import static kivo.millennium.milltek.pipe.client.EPipeState.*;
+import static kivo.millennium.milltek.machine.EIOState.*;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import kivo.millennium.milltek.machine.EIOState;
+
 public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedBlock, EntityBlock {
 
     // 连接状态属性
-    public static final EnumProperty<EPipeState> NORTH = EnumProperty.create("north", EPipeState.class);
-    public static final EnumProperty<EPipeState> EAST = EnumProperty.create("east", EPipeState.class);
-    public static final EnumProperty<EPipeState> SOUTH = EnumProperty.create("south", EPipeState.class);
-    public static final EnumProperty<EPipeState> WEST = EnumProperty.create("west", EPipeState.class);
-    public static final EnumProperty<EPipeState> UP = EnumProperty.create("up", EPipeState.class);
-    public static final EnumProperty<EPipeState> DOWN = EnumProperty.create("down", EPipeState.class);
+    public static final EnumProperty<EIOState> NORTH = EnumProperty.create("north", EIOState.class);
+    public static final EnumProperty<EIOState> EAST = EnumProperty.create("east", EIOState.class);
+    public static final EnumProperty<EIOState> SOUTH = EnumProperty.create("south", EIOState.class);
+    public static final EnumProperty<EIOState> WEST = EnumProperty.create("west", EIOState.class);
+    public static final EnumProperty<EIOState> UP = EnumProperty.create("up", EIOState.class);
+    public static final EnumProperty<EIOState> DOWN = EnumProperty.create("down", EIOState.class);
 
     // 含水状态属性
     public static final BooleanProperty WATERLOGGED = BooleanProperty.create("waterlogged");
@@ -45,16 +47,16 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
     public AbstractPipeBL(Properties properties) {
         super(properties);
         this.registerDefaultState(this.stateDefinition.any()
-                .setValue(NORTH, EPipeState.NONE)
-                .setValue(EAST, EPipeState.NONE)
-                .setValue(SOUTH, EPipeState.NONE)
-                .setValue(WEST, EPipeState.NONE)
-                .setValue(UP, EPipeState.NONE)
-                .setValue(DOWN, EPipeState.NONE)
+                .setValue(NORTH, EIOState.NONE)
+                .setValue(EAST, EIOState.NONE)
+                .setValue(SOUTH, EIOState.NONE)
+                .setValue(WEST, EIOState.NONE)
+                .setValue(UP, EIOState.NONE)
+                .setValue(DOWN, EIOState.NONE)
                 .setValue(WATERLOGGED, false));
     }
 
-    public static EnumProperty<EPipeState> getPropertyForDirection(Direction direction) {
+    public static EnumProperty<EIOState> getPropertyForDirection(Direction direction) {
         return switch (direction) {
             case NORTH -> NORTH;
             case EAST -> EAST;
@@ -73,7 +75,7 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
             return false;
         if (neighborState.getBlock() instanceof AbstractPipeBL) {
             if (neighborState.hasProperty(getPropertyForDirection(facing.getOpposite())) && neighborState
-                    .getValue(getPropertyForDirection(facing.getOpposite())).equals(EPipeState.DISCONNECTED))
+                    .getValue(getPropertyForDirection(facing.getOpposite())).equals(EIOState.DISCONNECTED))
                 return false;
             else
                 return true;
@@ -91,13 +93,13 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
         return false;
     }
 
-    protected EPipeState getPipeStateForNeighbor(BlockGetter level, BlockPos pos, Direction facing) {
+    protected EIOState getPipeStateForNeighbor(BlockGetter level, BlockPos pos, Direction facing) {
 
         BlockState currentState = level.getBlockState(pos);
 
         if (currentState.hasProperty(getPropertyForDirection(facing))
                 && currentState.getValue(getPropertyForDirection(facing)) == DISCONNECTED) {
-            return EPipeState.DISCONNECTED;
+            return EIOState.DISCONNECTED;
         }
 
         BlockPos neighborPos = pos.relative(facing);
@@ -107,16 +109,16 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
 
             if (currentState.hasProperty(getPropertyForDirection(facing))) {
                 switch (currentState.getValue(getPropertyForDirection(facing))) {
-                    case INSERT, OUTPUT: {
+                    case PULL, PUSH: {
                         return isPipe(neighborState, neighborState.getBlock()) ? CONNECT
                                 : currentState.getValue(getPropertyForDirection(facing));
                     }
                 }
             }
-            return EPipeState.CONNECT;
+            return EIOState.CONNECT;
         }
         // TODO: 添加判断 INSERT 和 OUTPUT 状态的逻辑
-        return EPipeState.NONE;
+        return EIOState.NONE;
     }
 
     @Override
@@ -137,7 +139,8 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
 
     @Nonnull
     @Override
-    public BlockState updateShape(@Nonnull BlockState state, @Nonnull Direction direction, @Nonnull BlockState neighbourState,
+    public BlockState updateShape(@Nonnull BlockState state, @Nonnull Direction direction,
+            @Nonnull BlockState neighbourState,
             @Nonnull LevelAccessor world, @Nonnull BlockPos current, @Nonnull BlockPos offset) {
         if (state.getValue(WATERLOGGED)) {
             world.getFluidTicks()
@@ -149,7 +152,8 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
     }
 
     @Nonnull
-    public BlockState calculateStateWhenUpdate(@Nonnull LevelAccessor level, @Nonnull BlockPos pos, @Nonnull BlockState state) {
+    public BlockState calculateStateWhenUpdate(@Nonnull LevelAccessor level, @Nonnull BlockPos pos,
+            @Nonnull BlockState state) {
         BlockState newState = state
                 .setValue(NORTH, getPipeStateForNeighbor(level, pos, Direction.NORTH))
                 .setValue(EAST, getPipeStateForNeighbor(level, pos, Direction.EAST))
@@ -175,13 +179,14 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
     @Override
     @Nonnull
     public FluidState getFluidState(@Nonnull BlockState state) {
-        //noinspection deprecation
+        // noinspection deprecation
         return state.getValue(WATERLOGGED) ? Fluids.WATER.getSource(false) : super.getFluidState(state);
     }
 
     @Override
     @Deprecated
-    public void neighborChanged(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos, @Nonnull Block block, @Nonnull BlockPos fromPos,
+    public void neighborChanged(@Nonnull BlockState state, @Nonnull Level level, @Nonnull BlockPos pos,
+            @Nonnull Block block, @Nonnull BlockPos fromPos,
             boolean isMoving) {
         if (!level.isClientSide) {
             Direction facing = Direction
@@ -189,8 +194,8 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
                     .getOpposite();
 
             if (facing != null) {
-                EnumProperty<EPipeState> property = getPropertyForDirection(facing);
-                if (state.getValue(property) != EPipeState.DISCONNECTED) {
+                EnumProperty<EIOState> property = getPropertyForDirection(facing);
+                if (state.getValue(property) != EIOState.DISCONNECTED) {
                     BlockState newState = state.setValue(property, getPipeStateForNeighbor(level, pos, facing));
                     if (newState.getValue(WATERLOGGED)) {
                         level.scheduleTick(pos, Fluids.WATER, Fluids.WATER.getTickDelay(level));
@@ -223,7 +228,8 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
 
     @Override
     @Nonnull
-    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos, @Nonnull CollisionContext context) {
+    public VoxelShape getShape(@Nonnull BlockState state, @Nonnull BlockGetter level, @Nonnull BlockPos pos,
+            @Nonnull CollisionContext context) {
         float width = (float) getDefaultWidth();
         float center = 0.5F;
         float radius = width / 2.0F;
@@ -232,27 +238,27 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
                 center + radius, center + radius);
         VoxelShape finalShape = baseShape;
 
-        if (state.getValue(NORTH) != EPipeState.NONE && state.getValue(NORTH) != EPipeState.DISCONNECTED) {
+        if (state.getValue(NORTH) != EIOState.NONE && state.getValue(NORTH) != EIOState.DISCONNECTED) {
             finalShape = Shapes.or(finalShape, Shapes.box(center - radius, center - radius, 0.0D, center + radius,
                     center + radius, center - radius));
         }
-        if (state.getValue(EAST) != EPipeState.NONE && state.getValue(EAST) != EPipeState.DISCONNECTED) {
+        if (state.getValue(EAST) != EIOState.NONE && state.getValue(EAST) != EIOState.DISCONNECTED) {
             finalShape = Shapes.or(finalShape, Shapes.box(center + radius, center - radius, center - radius, 1.0D,
                     center + radius, center + radius));
         }
-        if (state.getValue(SOUTH) != EPipeState.NONE && state.getValue(SOUTH) != EPipeState.DISCONNECTED) {
+        if (state.getValue(SOUTH) != EIOState.NONE && state.getValue(SOUTH) != EIOState.DISCONNECTED) {
             finalShape = Shapes.or(finalShape, Shapes.box(center - radius, center - radius, center + radius,
                     center + radius, center + radius, 1.0D));
         }
-        if (state.getValue(WEST) != EPipeState.NONE && state.getValue(WEST) != EPipeState.DISCONNECTED) {
+        if (state.getValue(WEST) != EIOState.NONE && state.getValue(WEST) != EIOState.DISCONNECTED) {
             finalShape = Shapes.or(finalShape, Shapes.box(0.0D, center - radius, center - radius, center - radius,
                     center + radius, center + radius));
         }
-        if (state.getValue(UP) != EPipeState.NONE && state.getValue(UP) != EPipeState.DISCONNECTED) {
+        if (state.getValue(UP) != EIOState.NONE && state.getValue(UP) != EIOState.DISCONNECTED) {
             finalShape = Shapes.or(finalShape, Shapes.box(center - radius, center + radius, center - radius,
                     center + radius, 1.0D, center + radius));
         }
-        if (state.getValue(DOWN) != EPipeState.NONE && state.getValue(DOWN) != EPipeState.DISCONNECTED) {
+        if (state.getValue(DOWN) != EIOState.NONE && state.getValue(DOWN) != EIOState.DISCONNECTED) {
             finalShape = Shapes.or(finalShape, Shapes.box(center - radius, 0.0D, center - radius, center + radius,
                     center - radius, center + radius));
         }
@@ -278,7 +284,8 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
 
     @SuppressWarnings("unchecked")
     protected <T extends BlockEntity, A extends PipeBE<?>> BlockEntityTicker<T> createTickerHelper(
-            @Nonnull BlockEntityType<T> pServerType, @Nonnull BlockEntityType<A> pExpectedType, @Nullable BlockEntityTicker<? super A> pTicker) {
+            @Nonnull BlockEntityType<T> pServerType, @Nonnull BlockEntityType<A> pExpectedType,
+            @Nullable BlockEntityTicker<? super A> pTicker) {
         return pExpectedType == pServerType ? (BlockEntityTicker<T>) pTicker : null;
     }
 

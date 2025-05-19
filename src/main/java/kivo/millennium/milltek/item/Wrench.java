@@ -1,10 +1,10 @@
 package kivo.millennium.milltek.item;
 
-import static kivo.millennium.milltek.pipe.client.EPipeState.*;
+import static kivo.millennium.milltek.machine.EIOState.*;
 
 import kivo.millennium.milltek.Main;
+import kivo.millennium.milltek.machine.EIOState;
 import kivo.millennium.milltek.pipe.client.AbstractPipeBL;
-import kivo.millennium.milltek.pipe.client.EPipeState;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
@@ -27,18 +27,21 @@ public class Wrench extends Item {
     @Override
     public InteractionResult useOn(UseOnContext pContext) {
         Level level = pContext.getLevel();
-        if(level.isClientSide) return InteractionResult.PASS;
+        if (level.isClientSide)
+            return InteractionResult.PASS;
         BlockPos clickedPos = pContext.getClickedPos();
         BlockState blockState = level.getBlockState(clickedPos);
-        if(blockState.getBlock() instanceof AbstractPipeBL abstractPipeBL){
-           return configurePipe(level, blockState,abstractPipeBL, pContext.getPlayer(), pContext.getClickLocation(), clickedPos);
+        if (blockState.getBlock() instanceof AbstractPipeBL abstractPipeBL) {
+            return configurePipe(level, blockState, abstractPipeBL, pContext.getPlayer(), pContext.getClickLocation(),
+                    clickedPos);
         }
-        //Player player = pContext.getPlayer();
-        //BlockState blockState = pContext.getPlayer().getBlockStateOn();
+        // Player player = pContext.getPlayer();
+        // BlockState blockState = pContext.getPlayer().getBlockStateOn();
         return InteractionResult.SUCCESS;
     }
 
-    public InteractionResult configurePipe(Level level, BlockState pipeBlock,AbstractPipeBL pipeBL, Player player, Vec3 hitLocation, BlockPos blockPos){
+    public InteractionResult configurePipe(Level level, BlockState pipeBlock, AbstractPipeBL pipeBL, Player player,
+            Vec3 hitLocation, BlockPos blockPos) {
         Direction direction = null;
         Vec3 blockCenter = Vec3.atCenterOf(blockPos);
         Vec3 relativeHit = hitLocation.subtract(blockCenter);
@@ -47,7 +50,7 @@ public class Wrench extends Item {
         double absY = Math.abs(relativeHit.y);
         double absZ = Math.abs(relativeHit.z);
 
-        double threshold = pipeBL.getDefaultWidth()/2;
+        double threshold = pipeBL.getDefaultWidth() / 2;
 
         if (absX > threshold && absX > absY && absX > absZ) {
             direction = relativeHit.x > 0 ? Direction.EAST : Direction.WEST;
@@ -68,43 +71,46 @@ public class Wrench extends Item {
         Main.log(relativeHit.x + "," + relativeHit.y + "," + relativeHit.z);
 
         if (direction != null) {
-            EPipeState newState = getNewSideState(level,blockPos.relative(direction), pipeBlock, level.getBlockState(blockPos.relative(direction)),pipeBL, direction);
+            EIOState newState = getNewSideState(level, blockPos.relative(direction), pipeBlock,
+                    level.getBlockState(blockPos.relative(direction)), pipeBL, direction);
 
             level.setBlock(blockPos, pipeBlock.setValue(getPropertyForDirection(direction), newState), 3); // 触发客户端更新
-            //level.setBlockAndUpdate(pos, state.setValue(getPropertyForDirection(direction), newState));
-            player.sendSystemMessage(Component.literal("Switch " + direction.getName() + " to " + newState.getSerializedName()));
+            // level.setBlockAndUpdate(pos,
+            // state.setValue(getPropertyForDirection(direction), newState));
+            player.sendSystemMessage(
+                    Component.literal("Switch " + direction.getName() + " to " + newState.getSerializedName()));
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
     }
 
-
-    public EPipeState getNewSideState(BlockGetter blockGetter,BlockPos neighborPos, BlockState state, BlockState neighborState, AbstractPipeBL pipeBL, Direction direction){
-        EPipeState curr = state.getValue(getPropertyForDirection(direction));
-        EPipeState next = NONE;
-        switch (curr){
-            case CONNECT ->  {
-                if(pipeBL.isSamePipe(neighborState.getBlock())){
+    public EIOState getNewSideState(BlockGetter blockGetter, BlockPos neighborPos, BlockState state,
+            BlockState neighborState, AbstractPipeBL pipeBL, Direction direction) {
+        EIOState curr = state.getValue(getPropertyForDirection(direction));
+        EIOState next = NONE;
+        switch (curr) {
+            case CONNECT -> {
+                if (pipeBL.isSamePipe(neighborState.getBlock())) {
                     next = DISCONNECTED;
                     return next;
-                }else {
-                    next = INSERT;
+                } else {
+                    next = PULL;
                     return next;
                 }
             }
-            case INSERT ->  {
-                next = OUTPUT;
+            case PULL -> {
+                next = PUSH;
                 return next;
             }
-            case OUTPUT ->  {
+            case PUSH -> {
                 next = DISCONNECTED;
                 return next;
             }
-            case DISCONNECTED ->  {
-                if(pipeBL.canConnectTo(blockGetter, neighborPos, neighborState, direction)){
+            case DISCONNECTED -> {
+                if (pipeBL.canConnectTo(blockGetter, neighborPos, neighborState, direction)) {
                     next = CONNECT;
                     return next;
-                }else {
+                } else {
                     next = NONE;
                     return next;
                 }

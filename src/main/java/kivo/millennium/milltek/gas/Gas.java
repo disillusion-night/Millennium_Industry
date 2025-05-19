@@ -3,7 +3,6 @@ package kivo.millennium.milltek.gas;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.core.Holder;
-import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import kivo.millennium.milltek.init.MillenniumGases;
 
@@ -11,13 +10,11 @@ import kivo.millennium.milltek.init.MillenniumGases;
  * 表示一种气体类型，类似于Fluid
  */
 public class Gas {
-  private final String name;
   private final int color;
-  // 注册表引用，便于数据驱动、序列化、唯一性
+  // 注册表引用
   private Holder.Reference<Gas> builtInRegistryHolder;
 
-  public Gas(@NotNull String name, int color) {
-    this.name = name;
+  public Gas(int color) {
     this.color = color;
   }
 
@@ -42,11 +39,6 @@ public class Gas {
     return MillenniumGases.getGas(this);
   }
 
-  @NotNull
-  public String getName() {
-    return name;
-  }
-
   public int getColor() {
     return color;
   }
@@ -58,11 +50,14 @@ public class Gas {
     if (o == null || getClass() != o.getClass())
       return false;
     Gas gas = (Gas) o;
-    return name.equals(gas.name);
+    ResourceLocation rl1 = this.getRegistryName();
+    ResourceLocation rl2 = gas.getRegistryName();
+    return rl1 != null && rl1.equals(rl2);
   }
 
   @Override
   public int hashCode() {
-    return name.hashCode();
+    ResourceLocation rl = getRegistryName();
+    return rl != null ? rl.hashCode() : 0;
   }
 }

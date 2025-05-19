@@ -17,11 +17,13 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import org.jetbrains.annotations.NotNull;
 
+import kivo.millennium.milltek.machine.EIOState;
+
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import static kivo.millennium.milltek.machine.EIOState.*;
 import static kivo.millennium.milltek.pipe.client.AbstractPipeBL.*;
-import static kivo.millennium.milltek.pipe.client.EPipeState.*;
 import static kivo.millennium.milltek.pipe.client.PipePatterns.SpriteIdx.*;
 import static kivo.millennium.milltek.util.BakedModelHelper.quad;
 import static kivo.millennium.milltek.util.BakedModelHelper.v;
@@ -142,12 +144,12 @@ public class PipeBakedModel implements IDynamicBakedModel {
         double m = (1 - AbstractPipeBL.getDefaultWidth()) / 2;
         double n = 1 - m;
 
-        EPipeState north = state.getValue(NORTH);
-        EPipeState east = state.getValue(EAST);
-        EPipeState south = state.getValue(SOUTH);
-        EPipeState west = state.getValue(WEST);
-        EPipeState up = state.getValue(UP);
-        EPipeState down = state.getValue(DOWN);
+        EIOState north = state.getValue(NORTH);
+        EIOState east = state.getValue(EAST);
+        EIOState south = state.getValue(SOUTH);
+        EIOState west = state.getValue(WEST);
+        EIOState up = state.getValue(UP);
+        EIOState down = state.getValue(DOWN);
 
         TextureAtlasSprite spriteCable = spriteNormalCable;
 

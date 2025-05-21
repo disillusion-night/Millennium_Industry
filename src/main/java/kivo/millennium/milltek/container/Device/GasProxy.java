@@ -39,7 +39,7 @@ public class GasProxy implements ISlotProxy<GasStack> {
 
     @Override
     public RecipeComponent<GasStack> convert2RecipeComponent() {
-        return new kivo.millennium.milltek.recipe.component.GasComponent(get());
+        return new GasComponent(get());
     }
 
     @Override

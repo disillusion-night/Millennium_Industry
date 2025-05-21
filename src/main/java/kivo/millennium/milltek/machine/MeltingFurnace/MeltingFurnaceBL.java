@@ -1,7 +1,6 @@
 package kivo.millennium.milltek.machine.MeltingFurnace;
 
 import kivo.millennium.milltek.block.laser.HorizontalMachineBL;
-import kivo.millennium.milltek.container.Device.MeltingFurnaceMenu;
 import kivo.millennium.milltek.init.MillenniumBlockEntities;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.player.Inventory;

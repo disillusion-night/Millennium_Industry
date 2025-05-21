@@ -8,6 +8,7 @@ import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
+import net.minecraftforge.fluids.FluidStack;
 
 import org.joml.Vector2i;
 
@@ -81,6 +82,19 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu<?>> extends 
         int j = this.topPos;
         pGuiGraphics.blit(this.GUI_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth,
                 this.imageHeight);
+        renderFluidSlots(pGuiGraphics);
+    }
+
+    protected void renderFluidSlots(GuiGraphics pGuiGraphics) {
+        for (var slot : menu.getFluidSlots()) {
+            FluidStack stack = slot.getFluidStack();
+            int x = leftPos + slot.getX();
+            int y = topPos + slot.getY();
+            int w = slot.getWidth();
+            int h = slot.getHeight();
+            int cap = slot.getFluidCapacity();
+            kivo.millennium.milltek.util.RenderUtils.renderFluid(pGuiGraphics, stack, x, y, w, h, 0, cap);
+        }
     }
 
     protected void renderEnergyArea(GuiGraphics pGuiGraphics) {

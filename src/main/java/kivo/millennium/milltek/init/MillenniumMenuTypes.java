@@ -5,6 +5,7 @@ import static kivo.millennium.milltek.Main.MODID;
 import kivo.millennium.milltek.container.Device.*;
 import kivo.millennium.milltek.machine.Electrolyzer.ElectrolyzerMenu;
 import kivo.millennium.milltek.machine.FusionChamber.FusionChamberMenu;
+import kivo.millennium.milltek.machine.MeltingFurnace.MeltingFurnaceMenu;
 import kivo.millennium.milltek.machine.ResonanceChamber.ResonanceChamberMenu;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.world.inventory.MenuType;

@@ -12,13 +12,20 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.items.ItemStackHandler;
+import net.minecraftforge.network.PacketDistributor;
+import net.minecraft.server.level.ServerPlayer;
 import org.joml.Vector2i;
 
 import kivo.millennium.milltek.block.device.AbstractMachineBE;
 import kivo.millennium.milltek.capability.CapabilityCache;
 import kivo.millennium.milltek.storage.MillenniumEnergyStorage;
+import kivo.millennium.milltek.container.FluidSlot;
+import kivo.millennium.milltek.network.MillenniumNetwork;
+import kivo.millennium.milltek.network.SyncFluidSlotPacket;
 
+import java.util.ArrayList;
 import java.util.List;
+import javax.annotation.Nonnull;
 
 public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends AbstractContainerMenu {
 
@@ -34,15 +41,21 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
     protected Level level;
     protected FluidStack[] fluidStacks;
 
-    protected AbstractDeviceMenu(MenuType<?> pType, int pContainerId, Player player, BlockPos pos, Container pContainer) {
+    // FluidSlot支持
+    protected final List<FluidSlot> fluidSlots = new ArrayList<>();
+
+    protected AbstractDeviceMenu(MenuType<?> pType, int pContainerId, Player player, BlockPos pos,
+            Container pContainer) {
         super(pType, pContainerId);
         this.player = player;
         this.level = player.level();
         this.pos = pos;
         BlockEntity entity = level.getBlockEntity(pos);
-        if (entity instanceof AbstractMachineBE deviceBE) {
-            setupDataSlot(pContainer, (M) deviceBE);
-            setupSlot(pContainer,(M) deviceBE);
+        @SuppressWarnings("unchecked")
+        M deviceBE = (M) entity;
+        if (entity instanceof AbstractMachineBE) {
+            setupDataSlot(pContainer, deviceBE);
+            setupSlot(pContainer, deviceBE);
             layoutPlayerInventorySlots(player.getInventory(), this.getPlayerInvPos());
         } else {
             throw new IllegalStateException("Container Provider is not valid BlockEntity"); // 如果方块实体类型不匹配，抛出异常
@@ -51,17 +64,10 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
 
     protected void setupDataSlot(Container container, M deviceBE) {
         addEnergySlot(deviceBE);
-        /*
-        CapabilityCache cache = deviceBE.cache;
-        if (cache.getFluidCapability() != null){
-            for (int i = 0; i < cache.getFluidCapability().getFluids().size(); i++) {
-                addFluidSlot();
-            }
-        }*/
+
     }
 
-
-    protected void addEnergySlot(M deviceBE){
+    protected void addEnergySlot(M deviceBE) {
         addDataSlot(new DataSlot() {
             @Override
             public int get() {
@@ -103,7 +109,8 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
 
             @Override
             public void set(int pValue) {
-                AbstractDeviceMenu.this.maxpower = (AbstractDeviceMenu.this.maxpower & 0xffff) | ((pValue & 0xffff) << 16);
+                AbstractDeviceMenu.this.maxpower = (AbstractDeviceMenu.this.maxpower & 0xffff)
+                        | ((pValue & 0xffff) << 16);
             }
         });
     }
@@ -113,7 +120,7 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
         this.addBatterySlot(container, deviceBE.getItemHandler());
     }
 
-    public Vector2i getBatterySlotPos(){
+    public Vector2i getBatterySlotPos() {
         return new Vector2i(152, 62);
     }
 
@@ -123,7 +130,8 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
 
     // 添加电池槽位
     protected void addBatterySlot(Container container, ItemStackHandler itemHandler) {
-        if (itemHandler == null || getBatterySlotPos() == null) return; // 如果物品处理器为空，则不添加电池槽位 (安全检查)
+        if (itemHandler == null || getBatterySlotPos() == null)
+            return; // 如果物品处理器为空，则不添加电池槽位 (安全检查)
         this.addSlot(new BatterySlot(container, itemHandler, 0, getBatterySlotPos())); // 使用 BatterySlot 类添加电池槽位
     }
 
@@ -141,7 +149,8 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
         return index;
     }
 
-    private int addSlotBox(Container playerInventory, int index, int x, int y, int horAmount, int dx, int verAmount, int dy) {
+    private int addSlotBox(Container playerInventory, int index, int x, int y, int horAmount, int dx, int verAmount,
+            int dy) {
         for (int j = 0; j < verAmount; j++) {
             index = addSlotRange(playerInventory, index, x, y, horAmount, dx);
             y += dy;
@@ -162,33 +171,9 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
         addSlotRange(playerInventory, 0, leftCol, topRow, 9, 18);
     }
 
-    // 能量传输逻辑（从设备容器到玩家物品栏）
-    protected void transferEnergyToPlayerInventory() {
-        if (this.energyStorage == null || !this.energyStorage.canExtract()) {
-            return; // 没有能量存储或不允许提取能量，直接返回
-        }
-
-        Inventory playerInventory = this.player.getInventory();
-        int transferRate = this.energyStorage.getMaxEnergyStored(); // 假设最大传输速率等于最大存储量，可以根据需要调整
-
-        for (int i = 0; i < playerInventory.getContainerSize(); i++) {
-            ItemStack stackInSlot = playerInventory.getItem(i);
-            if (!stackInSlot.isEmpty()) {
-                stackInSlot.getCapability(ForgeCapabilities.ENERGY).ifPresent(playerEnergyStorage -> {
-                    if (playerEnergyStorage.canReceive()) {
-                        int energyToTransfer = Math.min(this.energyStorage.getEnergyStored(), transferRate); // 计算可以传输的能量
-                        int energyTransfered = playerEnergyStorage.receiveEnergy(energyToTransfer, false); // 尝试向玩家物品栏物品传输能量
-                        this.energyStorage.extractEnergy(energyTransfered, false); // 从设备容器能量存储中提取已传输的能量
-                    }
-                });
-            }
-        }
-    }
-
-
     // 容器逻辑
     @Override
-    public ItemStack quickMoveStack(Player pPlayer, int pIndex) {
+    public ItemStack quickMoveStack(@Nonnull Player pPlayer, int pIndex) {
         ItemStack itemstack = ItemStack.EMPTY;
         Slot slot = this.slots.get(pIndex);
         if (slot != null && slot.hasItem()) {
@@ -232,14 +217,49 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
         return maxpower;
     }
 
+    public void addFluidSlot(FluidSlot slot) {
+        this.fluidSlots.add(slot);
+    }
+
+    public List<FluidSlot> getFluidSlots() {
+        return this.fluidSlots;
+    }
+
     @Override
-    public boolean stillValid(Player player) {
+    public boolean stillValid(@Nonnull Player player) {
         return stillValid(ContainerLevelAccess.create(player.level(), pos), player, getBlock());
     }
 
-    protected abstract Block getBlock(); //  强制子类提供其 Block 实例
+    protected abstract Block getBlock(); // 强制子类提供其 Block 实例
 
     protected int getSlotCount() {
         return SLOT_COUNT; // 返回槽位数量
+    }
+
+    @Override
+    public void sendAllDataToRemote() {
+        super.sendAllDataToRemote();
+        // 同步所有FluidSlot的流体内容到客户端
+        if (player instanceof ServerPlayer sp) {
+            for (FluidSlot slot : fluidSlots) {
+                MillenniumNetwork.INSTANCE.send(
+                        PacketDistributor.PLAYER.with(() -> sp),
+                        new SyncFluidSlotPacket(this.containerId, slot.getTankIndex(), slot.getFluidCapacity(),
+                                slot.getFluidStack()));
+            }
+        }
+    }
+
+    @Override
+    public void broadcastChanges() {
+        super.broadcastChanges();
+        // 实时同步所有FluidSlot的流体内容到客户端
+        if (player instanceof ServerPlayer sp) {
+            for (FluidSlot slot : fluidSlots) {
+                kivo.millennium.milltek.network.MillenniumNetwork.INSTANCE.send(
+                        net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> sp),
+                        new kivo.millennium.milltek.network.SyncFluidSlotPacket(this.containerId, slot.getTankIndex(), slot.getFluidCapacity(), slot.getFluidStack()));
+            }
+        }
     }
 }

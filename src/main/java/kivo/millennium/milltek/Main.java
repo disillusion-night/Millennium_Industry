@@ -3,6 +3,7 @@ package kivo.millennium.milltek;
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
 
+import kivo.millennium.milltek.init.MillenniumGases;
 import kivo.millennium.milltek.init.MillenniumRecipes;
 import kivo.millennium.milltek.network.MillenniumNetwork;
 import kivo.millennium.milltek.pipe.client.PipeModelLoader;
@@ -79,7 +80,7 @@ public class Main {
         MENU_TYPES.register(modEventBus);
         LEVEL_NETWORK_TYPES.register(modEventBus);
         RECIPE_SERIALIZERS.register(modEventBus);
-        GASES.register(modEventBus);
+        MillenniumGases.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(this);
         // 注册网络包
         MillenniumNetwork.register();

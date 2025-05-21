@@ -12,7 +12,7 @@ import java.util.Objects;
  * 气体堆栈，类似于FluidStack，包含气体类型和数量。
  */
 public class GasStack {
-  public static final GasStack EMPTY = new GasStack(new Gas(0), 0);
+  public static final GasStack EMPTY = new GasStack(new Gas("empty", 0), 0);
   private final Gas gas;
   private int amount;
 

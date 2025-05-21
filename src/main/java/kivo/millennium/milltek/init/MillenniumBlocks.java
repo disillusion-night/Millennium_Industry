@@ -37,7 +37,9 @@ import kivo.millennium.milltek.pipe.client.EnergyPipeBlock;
 
 public class MillenniumBlocks {
         public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
-        public static final RegistryObject<Block> ELECTROLYZER = BLOCKS.register("electrolyzer", ElectrolyzerBL::new);
+
+        public static final RegistryObject<ElectrolyzerBL> ELECTROLYZER = registerWithItem("electrolyzer",
+                        ElectrolyzerBL::new, MillenniumItems.ENGINEERING_PARTS);
 
         public static final RegistryObject<LiquidBlock> ICY_WATER_BL = BLOCKS.register("icy_water", IcyWaterBlock::new);
 

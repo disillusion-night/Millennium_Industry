@@ -2,6 +2,8 @@ package kivo.millennium.milltek.init;
 
 import static kivo.millennium.milltek.Main.MODID;
 
+import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
+
 import kivo.millennium.milltek.block.fluidContainer.MetalFluidTankBE;
 import kivo.millennium.milltek.block.hypercube.HDECBE;
 import kivo.millennium.milltek.block.laser.NetherStarLaserBE;
@@ -24,6 +26,9 @@ import net.minecraftforge.registries.RegistryObject;
 public class MillenniumBlockEntities {
         public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister
                         .create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
+
+        public static final RegistryObject<BlockEntityType<ElectrolyzerBE>> ELECTROLYZER_BE = BLOCK_ENTITIES
+                        .register("electrolyzer_be", () -> BlockEntityType.Builder.of(ElectrolyzerBE::new,MillenniumBlocks.ELECTROLYZER.get()).build(null));
 
         public static final RegistryObject<BlockEntityType<CopperPipeBE>> COPPER_PIPE_BE = BLOCK_ENTITIES.register(
                         "copper_pipe_be", () -> BlockEntityType.Builder.of(CopperPipeBE::new,
@@ -62,9 +67,6 @@ public class MillenniumBlockEntities {
          * MillenniumBlocks.MOLECULAR_REFORMER_BL.get()).build(null));
          */
 
-        public static final RegistryObject<BlockEntityType<ElectrolyzerBE>> ELECTROLYZER_BE = BLOCK_ENTITIES.register(
-                        "electrolyzer", () -> BlockEntityType.Builder
-                                        .of(ElectrolyzerBE::new, MillenniumBlocks.ELECTROLYZER.get()).build(null));
 
         public static final RegistryObject<BlockEntityType<ResonanceChamberBE>> RESONANCE_CHAMBER_BE = BLOCK_ENTITIES
                         .register(

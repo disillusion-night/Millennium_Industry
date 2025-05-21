@@ -32,7 +32,7 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
     protected final List<IOEntry> outputTargets = new ArrayList<>();
 
     /** 控制是否在tickServer时打印调试信息 */
-    public static boolean DEBUG_TICK_LOG = true;
+    public static boolean DEBUG_TICK_LOG = false;
 
     public PipeBE(BlockEntityType<?> pType, LevelNetworkType<T> networkType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);

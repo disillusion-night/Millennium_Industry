@@ -18,5 +18,10 @@ public class MillenniumNetwork {
         DeviceButtonPacket::toBytes,
         DeviceButtonPacket::new,
         (msg, ctx) -> msg.handle(ctx));
+    INSTANCE.registerMessage(id++, SyncFluidSlotPacket.class,
+        SyncFluidSlotPacket::toBytes,
+        SyncFluidSlotPacket::new,
+        (msg, ctx) -> msg.handle(ctx));
+
   }
 }

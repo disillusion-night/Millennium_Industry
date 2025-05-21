@@ -3,6 +3,7 @@ package kivo.millennium.milltek.recipe;
 import kivo.millennium.milltek.Main;
 import net.minecraft.core.RegistryAccess;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.CookingBookCategory;
 import net.minecraft.world.item.crafting.RecipeSerializer;
@@ -15,10 +16,10 @@ public class ElectrolyzingRecipe extends GenericRecipe {
       int energyCost) {
     super(id, inputs, outputs, time, energyCost);
   }
-
+  
   @Override
-  public ItemStack getResultItem(RegistryAccess registryAccess) {
-    return outputs.get(0).asItemComponent().get().copy();
+  public ItemStack getResultItem(RegistryAccess pRegistryAccess) {
+    return ItemStack.EMPTY;
   }
 
   @Override
@@ -56,4 +57,5 @@ public class ElectrolyzingRecipe extends GenericRecipe {
       return new ElectrolyzingRecipe(id, inputs, outputs, time, energyCost);
     }
   }
+
 }

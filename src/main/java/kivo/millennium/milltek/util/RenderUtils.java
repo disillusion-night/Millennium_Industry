@@ -108,7 +108,7 @@ public class RenderUtils {
         pGuiGraphics.blit(SNOW_TEXTURE, x, y, 0, 0, 14, 14, 14, 14);
     }
 
-    public static void renderfluidTip(GuiGraphics pGuiGraphics, Font font, FluidStack fluidStack, int capability,
+    public static void renderFluidTip(GuiGraphics pGuiGraphics, Font font, FluidStack fluidStack, int capability,
             int mouseX, int mouseY) {
         pGuiGraphics.renderTooltip(font, List.of(Component
                 .literal(fluidStack.getDisplayName().getString()).getVisualOrderText(),
@@ -119,7 +119,8 @@ public class RenderUtils {
                 mouseX, mouseY);
     }
 
-    public static void renderGas(GuiGraphics guiGraphics, kivo.millennium.milltek.gas.GasStack gasStack, int x, int y, int width, int height, int blitOffset, int capacity) {
+
+    public static void renderGas(GuiGraphics guiGraphics, GasStack gasStack, int x, int y, int width, int height, int blitOffset, int capacity) {
         if (gasStack.isEmpty()) return;
         // 这里简单用气体颜色填充矩形，实际可用气体专属贴图
         int color = gasStack.getGas().getColor();
@@ -129,12 +130,12 @@ public class RenderUtils {
         float a = 0.8f;
         int gasHeight = (int) (height * (double) gasStack.getAmount() / capacity);
         int yOffset = y + height - gasHeight;
-        RenderSystem.disableTexture();
+        //RenderSystem.disableTexture();
         RenderSystem.enableBlend();
         RenderSystem.setShaderColor(r, g, b, a);
         guiGraphics.fill(x, yOffset, x + width, yOffset + gasHeight, color | 0xCC000000);
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        RenderSystem.enableTexture();
+        //RenderSystem.enableTexture();
         RenderSystem.disableBlend();
     }
 }

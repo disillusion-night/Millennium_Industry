@@ -17,6 +17,7 @@ import kivo.millennium.milltek.container.Device.AbstractDeviceMenu;
 import kivo.millennium.milltek.network.DeviceButtonPacket;
 import kivo.millennium.milltek.network.MillenniumNetwork;
 import kivo.millennium.milltek.util.NumberUtils;
+import kivo.millennium.milltek.util.RenderUtils;    
 
 public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu<?>> extends AbstractContainerScreen<C> {
 
@@ -195,7 +196,7 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu<?>> extends 
                 var stack = slot.getFluidStack();
                 int cap = slot.getFluidCapacity();
                 if (!stack.isEmpty()) {
-                    kivo.millennium.milltek.util.RenderUtils.renderfluidTip(pGuiGraphics, font, stack, cap, mouseX, mouseY);
+                    RenderUtils.renderFluidTip(pGuiGraphics, font, stack, cap, mouseX, mouseY);
                 }
             }
         }
@@ -214,7 +215,7 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu<?>> extends 
                 var stack = slot.getGasStack();
                 int cap = slot.getGasCapacity();
                 if (!stack.isEmpty()) {
-                    kivo.millennium.milltek.util.RenderUtils.renderGasTip(pGuiGraphics, font, stack, cap, mouseX, mouseY);
+                    RenderUtils.renderGasTip(pGuiGraphics, font, stack, cap, mouseX, mouseY);
                 }
             }
         }

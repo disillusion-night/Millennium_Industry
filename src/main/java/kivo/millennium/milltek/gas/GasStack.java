@@ -5,6 +5,7 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import kivo.millennium.milltek.init.MillenniumGases;
 import net.minecraftforge.registries.RegistryObject;
+import net.minecraft.network.FriendlyByteBuf;
 
 import static kivo.millennium.milltek.init.MillenniumGases.getGasById;
 

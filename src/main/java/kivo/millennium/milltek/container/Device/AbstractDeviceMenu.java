@@ -44,6 +44,9 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
     // FluidSlot支持
     protected final List<FluidSlot> fluidSlots = new ArrayList<>();
 
+    // 气体槽支持
+    protected final java.util.List<kivo.millennium.milltek.container.Device.GasSlot> gasSlots = new java.util.ArrayList<>();
+
     protected AbstractDeviceMenu(MenuType<?> pType, int pContainerId, Player player, BlockPos pos,
             Container pContainer) {
         super(pType, pContainerId);
@@ -225,6 +228,14 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
         return this.fluidSlots;
     }
 
+    protected void addGasSlot(kivo.millennium.milltek.container.Device.GasSlot slot) {
+        gasSlots.add(slot);
+    }
+
+    public java.util.List<kivo.millennium.milltek.container.Device.GasSlot> getGasSlots() {
+        return gasSlots;
+    }
+
     @Override
     public boolean stillValid(@Nonnull Player player) {
         return stillValid(ContainerLevelAccess.create(player.level(), pos), player, getBlock());
@@ -258,7 +269,8 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
             for (FluidSlot slot : fluidSlots) {
                 kivo.millennium.milltek.network.MillenniumNetwork.INSTANCE.send(
                         net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> sp),
-                        new kivo.millennium.milltek.network.SyncFluidSlotPacket(this.containerId, slot.getTankIndex(), slot.getFluidCapacity(), slot.getFluidStack()));
+                        new kivo.millennium.milltek.network.SyncFluidSlotPacket(this.containerId, slot.getTankIndex(),
+                                slot.getFluidCapacity(), slot.getFluidStack()));
             }
         }
     }

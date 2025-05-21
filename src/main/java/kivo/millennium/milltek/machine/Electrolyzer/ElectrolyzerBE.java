@@ -14,6 +14,9 @@ public class ElectrolyzerBE extends AbstractRecipeMachineBE<ElectrolyzingRecipe>
   public static final int BATTERY_SLOT = 0;
   public static final int INPUT_SLOT = 1;
   public static final int OUTPUT_SLOT = 2;
+  private static final int GAS_OUTPUT1 = 0;
+  private static final int GAS_OUTPUT2 = 1;
+  private static final int FLUID_INPUT = 0;
   private static final int FLUID_CAPACITY = 12000;
 
   public ElectrolyzerBE(BlockPos pos, BlockState state) {
@@ -21,9 +24,12 @@ public class ElectrolyzerBE extends AbstractRecipeMachineBE<ElectrolyzingRecipe>
         new CapabilityCache.Builder()
             .withEnergy(100000, 2000)
             .withFluid(1, FLUID_CAPACITY)
+            .withGas(2, FLUID_CAPACITY)
             .withItems(SLOT_COUNT)
             .withProgress());
-    this.getFluidTank().setForInput(0);
+    this.getFluidTank().setForInput(FLUID_INPUT);
+    this.getGasTank().setForOutput(GAS_OUTPUT1);
+    this.getGasTank().setForOutput(GAS_OUTPUT2);
   }
 
   @Override
@@ -46,5 +52,9 @@ public class ElectrolyzerBE extends AbstractRecipeMachineBE<ElectrolyzingRecipe>
 
   public MillenniumFluidStorage getFluidTank() {
     return this.cache.getFluidCapability();
+  }
+
+  public kivo.millennium.milltek.storage.MillenniumGasStorage getGasTank() {
+    return this.cache.getGasCapability();
   }
 }

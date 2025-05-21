@@ -9,7 +9,6 @@ import net.minecraft.world.level.block.state.BlockState;
 import org.jetbrains.annotations.Nullable;
 
 import kivo.millennium.milltek.block.laser.HorizontalMachineBL;
-import kivo.millennium.milltek.container.Device.CrusherMenu;
 import kivo.millennium.milltek.init.MillenniumBlockEntities;
 
 public class CrusherBL extends HorizontalMachineBL<CrusherBE> {

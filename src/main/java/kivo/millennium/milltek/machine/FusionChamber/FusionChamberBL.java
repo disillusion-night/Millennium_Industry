@@ -26,7 +26,8 @@ public class FusionChamberBL extends HorizontalMachineBL<FusionChamberBE> {
     }
 
     @Override
-    protected AbstractContainerMenu createContainerMenu(int containerId, Inventory playerInventory, BlockPos pos, Player player) {
+    protected AbstractContainerMenu createContainerMenu(int containerId, Inventory playerInventory, BlockPos pos,
+            Player player) {
         return new FusionChamberMenu(containerId, player, pos);
     }
 }

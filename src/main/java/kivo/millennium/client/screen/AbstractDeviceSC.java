@@ -83,6 +83,7 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu<?>> extends 
         pGuiGraphics.blit(this.GUI_TEXTURE, i, j, 0, 0, this.imageWidth, this.imageHeight, this.imageWidth,
                 this.imageHeight);
         renderFluidSlots(pGuiGraphics);
+        renderGasSlots(pGuiGraphics);
     }
 
     protected void renderFluidSlots(GuiGraphics pGuiGraphics) {
@@ -93,7 +94,19 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu<?>> extends 
             int w = slot.getWidth();
             int h = slot.getHeight();
             int cap = slot.getFluidCapacity();
-            kivo.millennium.milltek.util.RenderUtils.renderFluid(pGuiGraphics, stack, x, y, w, h, 0, cap);
+            RenderUtils.renderFluid(pGuiGraphics, stack, x, y, w, h, 0, cap);
+        }
+    }
+
+    protected void renderGasSlots(GuiGraphics pGuiGraphics) {
+        for (var slot : menu.getGasSlots()) {
+            var stack = slot.getGasStack();
+            int x = leftPos + slot.getX();
+            int y = topPos + slot.getY();
+            int w = slot.getWidth();
+            int h = slot.getHeight();
+            int cap = slot.getGasCapacity();
+            RenderUtils.renderGas(pGuiGraphics, stack, x, y, w, h, 0, cap);
         }
     }
 
@@ -165,7 +178,8 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu<?>> extends 
         renderTooltip(pGuiGraphics, mouseX, mouseY); // 渲染 Tooltip
         renderEnergyArea(pGuiGraphics);
         checkPowerTip(pGuiGraphics, mouseX, mouseY);
-        checkFluidSlotTips(pGuiGraphics, mouseX, mouseY); // 渲染提示
+        checkFluidSlotTips(pGuiGraphics, mouseX, mouseY); // 渲染流体提示
+        checkGasSlotTips(pGuiGraphics, mouseX, mouseY); // 渲染气体提示
     }
 
     /**
@@ -182,6 +196,25 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu<?>> extends 
                 int cap = slot.getFluidCapacity();
                 if (!stack.isEmpty()) {
                     kivo.millennium.milltek.util.RenderUtils.renderfluidTip(pGuiGraphics, font, stack, cap, mouseX, mouseY);
+                }
+            }
+        }
+    }
+
+    /**
+     * 自动检测所有gasSlots的鼠标悬浮并渲染气体信息Tooltip
+     */
+    protected void checkGasSlotTips(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
+        for (var slot : menu.getGasSlots()) {
+            int x = leftPos + slot.getX();
+            int y = topPos + slot.getY();
+            int w = slot.getWidth();
+            int h = slot.getHeight();
+            if (mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < y + h) {
+                var stack = slot.getGasStack();
+                int cap = slot.getGasCapacity();
+                if (!stack.isEmpty()) {
+                    kivo.millennium.milltek.util.RenderUtils.renderGasTip(pGuiGraphics, font, stack, cap, mouseX, mouseY);
                 }
             }
         }

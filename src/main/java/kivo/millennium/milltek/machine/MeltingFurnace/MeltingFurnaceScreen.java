@@ -22,8 +22,6 @@ public class MeltingFurnaceScreen extends AbstractDeviceSC<MeltingFurnaceMenu> {
     @Override
     public void render(GuiGraphics pGuiGraphics, int mouseX, int mouseY, float partialTick) {
         super.render(pGuiGraphics, mouseX, mouseY, partialTick);
-        FluidStack fluidStack = getMenu().getFluid(0);
-        if(!fluidStack.isEmpty()) checkfluidTip(pGuiGraphics, mouseX, mouseY);
         if(this.menu.getLit()) RenderUtils.renderFlame(pGuiGraphics, leftPos + FlamePos.x, topPos + FlamePos.y);
     }
 
@@ -37,20 +35,5 @@ public class MeltingFurnaceScreen extends AbstractDeviceSC<MeltingFurnaceMenu> {
         super.renderBg(pGuiGraphics, pPartialTick, pMouseX, pMouseY); // 调用父类方法渲染默认背景
 
         RenderUtils.renderProgress(pGuiGraphics, 76 + leftPos, 36 + topPos, menu.getProgress());
-
-        FluidStack fluidStack = getMenu().getFluid(0);
-
-        //RenderUtils.renderFluid(pGuiGraphics, fluidStack, fluidSlotPos.x + leftPos, fluidSlotPos.y + topPos, fluidSlotSize.x, fluidSlotSize.y,0, menu.getFluidCapacity(0));
     }
-
-    protected void checkfluidTip(GuiGraphics pGuiGraphics, int mouseX, int mouseY){
-        if (mouseX >= leftPos + fluidSlotPos.x
-                && mouseX < leftPos + fluidSlotPos.x + fluidSlotSize.x
-                && mouseY >= topPos + fluidSlotPos.y
-                && mouseY < topPos + fluidSlotPos.y + fluidSlotSize.y
-        ) {
-           RenderUtils.renderfluidTip(pGuiGraphics,font,this.menu.getFluid(0),this.menu.getFluidCapacity(0), mouseX, mouseY);;
-        }
-    }
-
 }

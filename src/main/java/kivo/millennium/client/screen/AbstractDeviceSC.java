@@ -165,6 +165,26 @@ public abstract class AbstractDeviceSC<C extends AbstractDeviceMenu<?>> extends 
         renderTooltip(pGuiGraphics, mouseX, mouseY); // 渲染 Tooltip
         renderEnergyArea(pGuiGraphics);
         checkPowerTip(pGuiGraphics, mouseX, mouseY);
+        checkFluidSlotTips(pGuiGraphics, mouseX, mouseY); // 渲染提示
+    }
+
+    /**
+     * 自动检测所有fluidSlots的鼠标悬浮并渲染流体信息Tooltip
+     */
+    protected void checkFluidSlotTips(GuiGraphics pGuiGraphics, int mouseX, int mouseY) {
+        for (var slot : menu.getFluidSlots()) {
+            int x = leftPos + slot.getX();
+            int y = topPos + slot.getY();
+            int w = slot.getWidth();
+            int h = slot.getHeight();
+            if (mouseX >= x && mouseX < x + w && mouseY >= y && mouseY < y + h) {
+                var stack = slot.getFluidStack();
+                int cap = slot.getFluidCapacity();
+                if (!stack.isEmpty()) {
+                    kivo.millennium.milltek.util.RenderUtils.renderfluidTip(pGuiGraphics, font, stack, cap, mouseX, mouseY);
+                }
+            }
+        }
     }
 
     @Override

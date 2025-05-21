@@ -1,4 +1,4 @@
-package kivo.millennium.milltek.machine.MeltingFurnace;
+package kivo.millennium.milltek.machine.Crystallizer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.registries.BuiltInRegistries;
@@ -11,32 +11,34 @@ import net.minecraftforge.fluids.FluidStack;
 import org.joml.Vector2i;
 
 import kivo.millennium.milltek.capability.ExtendedSlot;
-import kivo.millennium.milltek.container.Device.AbstractDeviceMenu;
 import kivo.millennium.milltek.container.FluidSlot;
+import kivo.millennium.milltek.container.Device.AbstractDeviceMenu;
 import kivo.millennium.milltek.init.MillenniumBlocks;
 import kivo.millennium.milltek.init.MillenniumMenuTypes;
 
-public class MeltingFurnaceMenu extends AbstractDeviceMenu<MeltingFurnaceBE> {
-    private static final Vector2i inputpos = new Vector2i(53, 37);
-    private static final Vector2i outputpos = new Vector2i(107, 35);
-
+public class CrystallizerMenu extends AbstractDeviceMenu<CrystallizerBE> {
+    private static final Vector2i inputpos = new Vector2i(116, 17);
+    private static final Vector2i outputpos = new Vector2i(116, 54);
+    private int fluidCapacity;
+    private int fluidAmount;
     private int progressAndLit;
+    private int fluidId;
 
-    public MeltingFurnaceMenu(int pContainerId, Player player, BlockPos pos) {
-        super(MillenniumMenuTypes.MELTING_FURNACE_MENU.get(), pContainerId, player, pos,
-                new SimpleContainer(MeltingFurnaceBE.SLOT_COUNT));
+    public CrystallizerMenu(int pContainerId, Player player, BlockPos pos) {
+        super(MillenniumMenuTypes.CRYSTALLIZER_MENU.get(), pContainerId, player, pos,
+                new SimpleContainer(CrystallizerBE.SLOT_COUNT));
     }
 
     @Override
-    protected void setupSlot(Container container, MeltingFurnaceBE deviceBE) {
+    protected void setupSlot(Container container, CrystallizerBE deviceBE) {
         super.setupSlot(container, deviceBE);
-        addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), MeltingFurnaceBE.INPUT_SLOT, inputpos));
-        
-        addFluidSlot(new FluidSlot(deviceBE.getFluidTank(), 0, 107, 16));
+        addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), CrystallizerBE.INPUT_SLOT, inputpos));
+        addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), CrystallizerBE.OUTPUT_SLOT, outputpos));
+        addFluidSlot(new FluidSlot(deviceBE.getFluidHandler(), 0, 44, 17));
     }
 
     @Override
-    protected void setupDataSlot(Container container, MeltingFurnaceBE deviceBE) {
+    protected void setupDataSlot(Container container, CrystallizerBE deviceBE) {
         super.setupDataSlot(container, deviceBE);
         addDataSlot(new DataSlot() {
             @Override
@@ -46,12 +48,11 @@ public class MeltingFurnaceMenu extends AbstractDeviceMenu<MeltingFurnaceBE> {
 
             @Override
             public void set(int pValue) {
-                MeltingFurnaceMenu.this.progressAndLit = (MeltingFurnaceMenu.this.progressAndLit & 0xffff0000)
+                CrystallizerMenu.this.progressAndLit = (CrystallizerMenu.this.progressAndLit & 0xffff0000)
                         | (pValue & 0xffff);
             }
         });
     }
-
 
     public int getProgress() {
         return progressAndLit >> 1;
@@ -63,6 +64,6 @@ public class MeltingFurnaceMenu extends AbstractDeviceMenu<MeltingFurnaceBE> {
 
     @Override
     protected Block getBlock() {
-        return MillenniumBlocks.MELTING_FURNACE_BL.get();
+        return MillenniumBlocks.CRYSTALLIZER_BL.get();
     }
 }

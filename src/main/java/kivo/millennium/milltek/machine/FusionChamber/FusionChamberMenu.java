@@ -12,35 +12,30 @@ import org.joml.Vector2i;
 
 import kivo.millennium.milltek.capability.ExtendedSlot;
 import kivo.millennium.milltek.container.Device.AbstractDeviceMenu;
+import kivo.millennium.milltek.container.FluidSlot;
 import kivo.millennium.milltek.init.MillenniumBlocks;
 import kivo.millennium.milltek.init.MillenniumMenuTypes;
+
+import java.util.List;
+import java.util.Arrays;
 
 public class FusionChamberMenu extends AbstractDeviceMenu<FusionChamberBE> {
     private static final Vector2i inputpos = new Vector2i(56, 37);
     private static final Vector2i outputpos = new Vector2i(107, 35);
-    private int fluidCapacityIn;
-    private int fluidAmountIn;
-    private int fluidCapacityOut;
-    private int fluidAmountOut;
     private int progressAndLit;
-    private int fluidIdIn;
-    private int fluidIdOut;
+
     public FusionChamberMenu(int pContainerId, Player player, BlockPos pos) {
-        super(MillenniumMenuTypes.FUSION_FURNACE_MENU.get(), pContainerId, player, pos, new SimpleContainer(FusionChamberBE.SLOT_COUNT));
+        super(MillenniumMenuTypes.FUSION_FURNACE_MENU.get(), pContainerId, player, pos,
+                new SimpleContainer(FusionChamberBE.SLOT_COUNT));
     }
 
     @Override
     protected void setupSlot(Container container, FusionChamberBE deviceBE) {
         super.setupSlot(container, deviceBE);
-        addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(),FusionChamberBE.INPUT_SLOT, inputpos));
-    }
-
-    public Vector2i getBatterySlotPos(){
-        return new Vector2i(152, 66);
-    }
-
-    public Vector2i getPlayerInvPos() {
-        return new Vector2i(8, 88);
+        addSlot(new ExtendedSlot(container, deviceBE.getItemHandler(), FusionChamberBE.INPUT_SLOT, inputpos));
+        // 标准化流体槽，直接添加两个FluidSlot
+        addFluidSlot(new FluidSlot(deviceBE.getFluidTank(), 0, 26, 16));
+        addFluidSlot(new FluidSlot(deviceBE.getFluidTank(), 1, 116, 16));
     }
 
     @Override
@@ -54,169 +49,30 @@ public class FusionChamberMenu extends AbstractDeviceMenu<FusionChamberBE> {
 
             @Override
             public void set(int pValue) {
-                FusionChamberMenu.this.progressAndLit = (FusionChamberMenu.this.progressAndLit & 0xffff0000) | (pValue & 0xffff);
-            }
-        });
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return deviceBE.getFluidTank().getFluidAmount(0) & 0xffff;
-            }
-
-            @Override
-            public void set(int pValue) {
-                FusionChamberMenu.this.fluidAmountIn = (FusionChamberMenu.this.fluidAmountIn & 0xffff0000) | (pValue & 0xffff);
-            }
-        });
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return (deviceBE.getFluidTank().getFluidAmount(0) >> 16) & 0xffff;
-            }
-
-            @Override
-            public void set(int pValue) {
-                FusionChamberMenu.this.fluidAmountIn = (FusionChamberMenu.this.fluidAmountIn & 0xffff) | ((pValue & 0xffff) << 16);
-            }
-        });
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return deviceBE.getFluidTank().getTankCapacity(1) & 0xffff;
-            }
-
-            @Override
-            public void set(int pValue) {
-                FusionChamberMenu.this.fluidCapacityIn = (FusionChamberMenu.this.fluidCapacityIn & 0xffff0000) | (pValue & 0xffff);
-            }
-        });
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return (deviceBE.getFluidTank().getTankCapacity(1) >> 16) & 0xffff;
-            }
-
-            @Override
-            public void set(int pValue) {
-                FusionChamberMenu.this.fluidCapacityIn = (FusionChamberMenu.this.fluidCapacityIn & 0xffff) | ((pValue & 0xffff) << 16);
-            }
-        });
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return deviceBE.getFluidTank().getFluidAmount(1) & 0xffff;
-            }
-
-            @Override
-            public void set(int pValue) {
-                FusionChamberMenu.this.fluidAmountOut = (FusionChamberMenu.this.fluidAmountOut & 0xffff0000) | (pValue & 0xffff);
-            }
-        });
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return (deviceBE.getFluidTank().getFluidAmount(1) >> 16) & 0xffff;
-            }
-
-            @Override
-            public void set(int pValue) {
-                FusionChamberMenu.this.fluidAmountOut = (FusionChamberMenu.this.fluidAmountOut & 0xffff) | ((pValue & 0xffff) << 16);
-            }
-        });
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return deviceBE.getFluidTank().getTankCapacity(1) & 0xffff;
-            }
-
-            @Override
-            public void set(int pValue) {
-                FusionChamberMenu.this.fluidCapacityOut = (FusionChamberMenu.this.fluidCapacityOut & 0xffff0000) | (pValue & 0xffff);
-            }
-        });
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return (deviceBE.getFluidTank().getTankCapacity(1) >> 16) & 0xffff;
-            }
-
-            @Override
-            public void set(int pValue) {
-                FusionChamberMenu.this.fluidCapacityOut = (FusionChamberMenu.this.fluidCapacityOut & 0xffff) | ((pValue & 0xffff) << 16);
-            }
-        });
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return BuiltInRegistries.FLUID.getId(deviceBE.getFluidTank().getFluidInTank(0).getFluid());
-            }
-
-            @Override
-            public void set(int pValue) {
-                FusionChamberMenu.this.fluidIdIn = pValue;
-            }
-        });
-        addDataSlot(new DataSlot() {
-            @Override
-            public int get() {
-                return BuiltInRegistries.FLUID.getId(deviceBE.getFluidTank().getFluidInTank(1).getFluid());
-            }
-
-            @Override
-            public void set(int pValue) {
-                FusionChamberMenu.this.fluidIdOut = pValue;
+                FusionChamberMenu.this.progressAndLit = (FusionChamberMenu.this.progressAndLit & 0xffff0000)
+                        | (pValue & 0xffff);
             }
         });
     }
 
-    public int getProgress(){
+    public int getProgress() {
         return progressAndLit >> 1;
     }
 
-    public boolean getLit(){
+    public boolean getLit() {
         return (progressAndLit & 1) > 0;
     }
 
-    public int getFluidAmountIn(){
-        return fluidAmountIn;
+    public FluidStack getFluid(int index) {
+        return fluidSlots.get(index).getFluidStack();
     }
 
-    public int getFluidCapacityIn(){
-        return fluidCapacityIn;
+    public int getFluidAmount(int index) {
+        return fluidSlots.get(index).getFluidStack().getAmount();
     }
 
-    public int getFluidAmountOut(){
-        return fluidAmountOut;
-    }
-
-    public int getFluidCapacityOut(){
-        return fluidCapacityOut;
-    }
-
-    public int getFluidIdIn(){
-        return fluidIdIn;
-    }
-
-    public int getFluidIdOut(){
-        return fluidIdOut;
-    }
-
-    public FluidStack getFluidIn() {
-        int amount = this.getFluidAmountIn();
-        int fluidId = this.getFluidIdIn();
-        if (fluidId == -1 || amount <= 0) {
-            return FluidStack.EMPTY;
-        }
-        return new FluidStack(BuiltInRegistries.FLUID.byId(fluidId), amount);
-    }
-
-    public FluidStack getFluidOut() {
-        int amount = this.getFluidAmountOut();
-        int fluidId = this.getFluidIdOut();
-        if (fluidId == -1 || amount <= 0) {
-            return FluidStack.EMPTY;
-        }
-        return new FluidStack(BuiltInRegistries.FLUID.byId(fluidId), amount);
+    public int getFluidCapacity(int index) {
+        return fluidSlots.get(index).getFluidHandler().getTankCapacity(index);
     }
 
     @Override

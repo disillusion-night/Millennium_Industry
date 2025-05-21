@@ -1,4 +1,4 @@
-package kivo.millennium.milltek.container.Device;
+package kivo.millennium.milltek.container.slot;
 
 import kivo.millennium.milltek.gas.GasStack;
 import kivo.millennium.milltek.storage.MillenniumGasStorage;

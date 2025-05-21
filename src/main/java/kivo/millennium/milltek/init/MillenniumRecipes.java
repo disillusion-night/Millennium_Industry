@@ -30,4 +30,7 @@ public class MillenniumRecipes {
 
     public static final RegistryObject<RecipeSerializer<CrystallizingRecipe>> CRYSTALLIZING_RECIPE =
             RECIPE_SERIALIZERS.register("crystallizing", () -> CrystallizingRecipe.Serializer.INSTANCE);
+    
+    public static final RegistryObject<RecipeSerializer<ElectrolyzingRecipe>> ELECTROLYZING_RECIPE =    
+            RECIPE_SERIALIZERS.register("electrolyzing", () -> ElectrolyzingRecipe.Serializer.INSTANCE);
 }

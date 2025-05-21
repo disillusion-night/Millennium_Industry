@@ -148,7 +148,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
 
         add(MillenniumCreativeTab.OOPARTS.get(), "Millennium Industry:Oopart");
         add(MillenniumCreativeTab.ENGINEERING_PARTS.get(), "Millennium Industry:Engineering Parts");
-        add(MillenniumCreativeTab.OOPARTS.get(), "Millennium Industry:Materials");
+        add(MillenniumCreativeTab.MATERIALS.get(), "Millennium Industry:Materials");
         add(MillenniumCreativeTab.TOOLS.get(), "Millennium Industry:Tools");
     }
 

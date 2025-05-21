@@ -1,11 +1,14 @@
 package kivo.millennium.milltek.gas;
 
+import net.minecraft.Util;
 import net.minecraft.nbt.CompoundTag;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import kivo.millennium.milltek.init.MillenniumGases;
+import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.network.chat.Component;
 
 import static kivo.millennium.milltek.init.MillenniumGases.getGasById;
 

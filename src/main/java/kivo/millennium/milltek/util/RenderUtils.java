@@ -119,6 +119,17 @@ public class RenderUtils {
                 mouseX, mouseY);
     }
 
+    public static void renderGasTip(GuiGraphics pGuiGraphics, Font font, GasStack gasStack, int capability,
+            int mouseX, int mouseY) {
+        pGuiGraphics.renderTooltip(font, List.of(Component
+                .literal(gasStack.getGas().getDisplayName().getString()).getVisualOrderText(),
+                Component
+                        .literal(NumberUtils.int2String(gasStack.getAmount()) + "/"
+                                + NumberUtils.int2String(capability) + " mB")
+                        .withStyle(ChatFormatting.GRAY).getVisualOrderText()),
+                mouseX, mouseY);
+    }
+
 
     public static void renderGas(GuiGraphics guiGraphics, GasStack gasStack, int x, int y, int width, int height, int blitOffset, int capacity) {
         if (gasStack.isEmpty()) return;

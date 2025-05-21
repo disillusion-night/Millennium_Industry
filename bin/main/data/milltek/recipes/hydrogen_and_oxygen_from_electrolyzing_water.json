@@ -1,0 +1,17 @@
+{
+  "type": "milltek:electrolyzing",
+  "category": "misc",
+  "energy": 2000,
+  "experience": 0.0,
+  "ingredient": {
+    "amount": 1000,
+    "fluid": "minecraft:water"
+  },
+  "results": [
+    {
+      "amount": 1000,
+      "fluid": "minecraft:water"
+    }
+  ],
+  "time": 200
+}

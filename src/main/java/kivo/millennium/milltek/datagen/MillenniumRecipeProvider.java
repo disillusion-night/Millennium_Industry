@@ -129,8 +129,14 @@ public class MillenniumRecipeProvider extends RecipeProvider {
         crystallizing(pWriter, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM_ALLOY.get(), 100), Items.ICE, RecipeCategory.MISC, MillenniumItems.ALUMINUM_ALLOY_INGOT.get(), 100, 1000);
 
         crystallizing(pWriter, new FluidStack(MillenniumFluids.MOLTEN_ALUMINUM.get(), 100), Items.ICE, RecipeCategory.MISC, MillenniumItems.ALUMINUM_INGOT.get(), 100, 1000);
+        
+        electrolyzing(pWriter, new FluidStack(Fluids.WATER, 1000), RecipeCategory.MISC,
+            new kivo.millennium.milltek.gas.GasStack(MillenniumGases.HYDROGEN.get(), 1000),
+            new kivo.millennium.milltek.gas.GasStack(MillenniumGases.OXYGEN.get(), 500),
+            200, 2000);
     }
 
+    
 
     protected static void crystallizing(Consumer<FinishedRecipe> pFinishedRecipeConsumer,FluidStack fluidStack, Item model, RecipeCategory pCategory, ItemLike pResult, int pCookingTime, int energy) {
         SimpleSingleRecipeBuilder
@@ -174,5 +180,12 @@ public class MillenniumRecipeProvider extends RecipeProvider {
                 .crushing(new ItemStack(pIngredient), pCategory, new ItemStack(pResult, count), 0, pCookingTime, energy)
                 .unlockedBy("has_" + Main.getKey(pIngredient).getPath(), has(pIngredient))
                 .save(pFinishedRecipeConsumer,  Main.getRL(Main.getKey(pResult).getPath() + "_from_crushing_" + Main.getKey(pIngredient).getPath()));
+    }
+
+    protected static void electrolyzing(Consumer<FinishedRecipe> pFinishedRecipeConsumer, FluidStack fluidInput, RecipeCategory pCategory, kivo.millennium.milltek.gas.GasStack gasResult1, kivo.millennium.milltek.gas.GasStack gasResult2, int pCookingTime, int energy) {
+        SimpleSingleRecipeBuilder
+                .electrolyzing(fluidInput, pCategory, gasResult1, gasResult2, 0, pCookingTime, energy)
+                .unlockedBy("has_" + Main.getKey(MillenniumBlocks.ELECTROLYZER.get()), has(MillenniumBlocks.ELECTROLYZER.get()))
+                .save(pFinishedRecipeConsumer, Main.getRL(gasResult1.getGas().getRegistryName().getPath() + "_and_" + gasResult2.getGas().getRegistryName().getPath() + "_from_electrolyzing_" + getKey(fluidInput.getFluid()).getPath()));
     }
 }

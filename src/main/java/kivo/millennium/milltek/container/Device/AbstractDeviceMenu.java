@@ -18,8 +18,9 @@ import org.joml.Vector2i;
 
 import kivo.millennium.milltek.block.device.AbstractMachineBE;
 import kivo.millennium.milltek.capability.CapabilityCache;
+import kivo.millennium.milltek.container.slot.FluidSlot;
+import kivo.millennium.milltek.container.slot.GasSlot;
 import kivo.millennium.milltek.storage.MillenniumEnergyStorage;
-import kivo.millennium.milltek.container.FluidSlot;
 import kivo.millennium.milltek.network.MillenniumNetwork;
 import kivo.millennium.milltek.network.SyncFluidSlotPacket;
 
@@ -45,7 +46,7 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
     protected final List<FluidSlot> fluidSlots = new ArrayList<>();
 
     // 气体槽支持
-    protected final java.util.List<kivo.millennium.milltek.container.Device.GasSlot> gasSlots = new java.util.ArrayList<>();
+    protected final java.util.List<GasSlot> gasSlots = new java.util.ArrayList<>();
 
     protected AbstractDeviceMenu(MenuType<?> pType, int pContainerId, Player player, BlockPos pos,
             Container pContainer) {
@@ -228,11 +229,11 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
         return this.fluidSlots;
     }
 
-    protected void addGasSlot(kivo.millennium.milltek.container.Device.GasSlot slot) {
+    protected void addGasSlot(GasSlot slot) {
         gasSlots.add(slot);
     }
 
-    public java.util.List<kivo.millennium.milltek.container.Device.GasSlot> getGasSlots() {
+    public java.util.List<GasSlot> getGasSlots() {
         return gasSlots;
     }
 

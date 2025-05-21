@@ -14,8 +14,6 @@ import org.joml.Vector2i;
 @OnlyIn(Dist.CLIENT)
 public class ElectrolyzerScreen extends AbstractDeviceSC<ElectrolyzerMenu> {
   private static final Vector2i ProgressPos = new Vector2i(76, 36);
-  private static final Vector2i fluidSlotPos = new Vector2i(44, 17);
-  private static final Vector2i fluidSlotSize = new Vector2i(16, 57);
 
   public ElectrolyzerScreen(ElectrolyzerMenu menu, Inventory playerInventory, Component title) {
     super(menu, playerInventory, title);

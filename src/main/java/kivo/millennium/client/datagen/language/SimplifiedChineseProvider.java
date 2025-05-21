@@ -147,7 +147,7 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
 
                 add(MillenniumCreativeTab.OOPARTS.get(), "千年科工 神秘古物");
                 add(MillenniumCreativeTab.ENGINEERING_PARTS.get(), "千年科工 工程组件");
-                add(MillenniumCreativeTab.OOPARTS.get(), "千年科工 材料");
+                add(MillenniumCreativeTab.MATERIALS.get(), "千年科工 材料");
                 add(MillenniumCreativeTab.TOOLS.get(), "千年科工 工具");
         }
 }

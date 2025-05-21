@@ -1,7 +1,8 @@
 package kivo.millennium.milltek.machine.Electrolyzer;
 
 import kivo.millennium.milltek.container.Device.AbstractDeviceMenu;
-import kivo.millennium.milltek.container.FluidSlot;
+import kivo.millennium.milltek.container.slot.FluidSlot;
+import kivo.millennium.milltek.container.slot.GasSlot;
 import kivo.millennium.milltek.init.MillenniumBlocks;
 import kivo.millennium.milltek.init.MillenniumMenuTypes;
 import net.minecraft.core.BlockPos;
@@ -25,9 +26,9 @@ public class ElectrolyzerMenu extends AbstractDeviceMenu<ElectrolyzerBE> {
         // 液体输入槽
         addFluidSlot(new FluidSlot(deviceBE.getFluidTank(), FLUID_INPUT, 26, 16, 16, 57));
         // 气体输出槽
-        addGasSlot(new kivo.millennium.milltek.container.Device.GasSlot(deviceBE.getGasTank(), GAS_OUTPUT1, 134, 16, 16,
+        addGasSlot(new GasSlot(deviceBE.getGasTank(), GAS_OUTPUT1, 134, 16, 16,
                 57));
-        addGasSlot(new kivo.millennium.milltek.container.Device.GasSlot(deviceBE.getGasTank(), GAS_OUTPUT2, 152, 16, 16,
+        addGasSlot(new GasSlot(deviceBE.getGasTank(), GAS_OUTPUT2, 152, 16, 16,
                 57));
     }
 

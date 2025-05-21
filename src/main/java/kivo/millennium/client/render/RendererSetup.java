@@ -14,6 +14,7 @@ import kivo.millennium.milltek.init.MillenniumEntities;
 import kivo.millennium.milltek.init.MillenniumMenuTypes;
 import kivo.millennium.milltek.machine.Crusher.CrusherScreen;
 import kivo.millennium.milltek.machine.Crystallizer.CrystallizerScreen;
+import kivo.millennium.milltek.machine.Electrolyzer.ElectrolyzerScreen;
 import kivo.millennium.milltek.machine.FusionChamber.FusionChamberScreen;
 import kivo.millennium.milltek.machine.HydraulicPress.HydraulicPressScreen;
 import kivo.millennium.milltek.machine.InductionFurnace.InductionFurnaceScreen;
@@ -55,6 +56,7 @@ public class RendererSetup {
             MenuScreens.register(MillenniumMenuTypes.CRYSTALLIZER_MENU.get(), CrystallizerScreen::new);
             MenuScreens.register(MillenniumMenuTypes.MELTING_FURNACE_MENU.get(), MeltingFurnaceScreen::new);
             MenuScreens.register(MillenniumMenuTypes.RESONANCE_CHAMBER_MENU.get(), ResonanceChamberScreen::new);
+            MenuScreens.register(MillenniumMenuTypes.ELECTOLYZER_MENU.get(), ElectrolyzerScreen::new);
             //IClientItemExtensions.of(MillenniumBlocks.HDEC_BL.get().asItem()).getCustomRenderer();
         });
     }

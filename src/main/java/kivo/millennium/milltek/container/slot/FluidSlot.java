@@ -1,4 +1,4 @@
-package kivo.millennium.milltek.container;
+package kivo.millennium.milltek.container.slot;
 
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.FluidStack;

@@ -4,11 +4,12 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 
 import kivo.millennium.milltek.container.Device.ItemProxy;
+import kivo.millennium.milltek.gas.GasStack;
 import kivo.millennium.milltek.init.MillenniumRecipes;
 import kivo.millennium.milltek.recipe.*;
 import kivo.millennium.milltek.recipe.component.FluidComponent;
 import kivo.millennium.milltek.recipe.component.ItemComponent;
-
+import kivo.millennium.milltek.recipe.component.GasComponent;
 import java.util.function.Consumer;
 import javax.annotation.Nullable;
 
@@ -85,6 +86,15 @@ public class SimpleSingleRecipeBuilder {
 
     public static SimpleSingleRecipeBuilder melting(ItemStack pIngredient, RecipeCategory pCategory, FluidStack pResult, float pExperience, int pCookingTime, int pEnergyCost) {
         return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, NonNullList.withSize(1, new FluidComponent(pResult)),NonNullList.withSize(1, new ItemComponent(pIngredient)), pExperience, pCookingTime,pEnergyCost, MillenniumRecipes.MELTING_RECIPE.get());
+    }
+
+    public static SimpleSingleRecipeBuilder electrolyzing(FluidStack fluidInput, RecipeCategory pCategory, GasStack gasResult1, GasStack gasResult2, float pExperience, int pCookingTime, int pEnergyCost) {
+        NonNullList<RecipeComponent> recipeComponents = NonNullList.create();
+        recipeComponents.add(new FluidComponent(fluidInput));
+        NonNullList<RecipeComponent> results = NonNullList.create();
+        results.add(new GasComponent(gasResult1));
+        results.add(new GasComponent(gasResult2));
+        return new SimpleSingleRecipeBuilder(pCategory, CookingBookCategory.MISC, results, recipeComponents, pExperience, pCookingTime, pEnergyCost, MillenniumRecipes.ELECTROLYZING_RECIPE.get());
     }
 
     public SimpleSingleRecipeBuilder unlockedBy(String pCriterionName, CriterionTriggerInstance pCriterionTrigger) {

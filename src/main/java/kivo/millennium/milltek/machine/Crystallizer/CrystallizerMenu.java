@@ -11,8 +11,9 @@ import net.minecraftforge.fluids.FluidStack;
 import org.joml.Vector2i;
 
 import kivo.millennium.milltek.capability.ExtendedSlot;
-import kivo.millennium.milltek.container.FluidSlot;
+
 import kivo.millennium.milltek.container.Device.AbstractDeviceMenu;
+import kivo.millennium.milltek.container.slot.FluidSlot;
 import kivo.millennium.milltek.init.MillenniumBlocks;
 import kivo.millennium.milltek.init.MillenniumMenuTypes;
 

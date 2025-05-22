@@ -15,6 +15,9 @@
 		"window.zoomLevel": 0,
 		"explorer.confirmDragAndDrop": false,
 		"workbench.iconTheme": "vscode-icons",
-		"java.compile.nullAnalysis.mode": "automatic"
+        "java.compile.nullAnalysis.mode": "automatic",
+        "cSpell.words": [
+            "electolyzer"
+        ]
 	}
 }

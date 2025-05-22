@@ -30,6 +30,7 @@ public class GasStack {
     public void grow(int amount) {
         this.amount += amount;
     }
+
     public void shrink(int amount) {
         this.amount -= amount;
         if (this.amount < 0)
@@ -69,7 +70,7 @@ public class GasStack {
         int amount = tag.getInt("Amount");
         if (name.isEmpty())
             return EMPTY;
-        Gas gas = MillenniumGases.getGasById(name); 
+        Gas gas = MillenniumGases.getGasById(name);
         if (gas == null)
             return null;
         return new GasStack(gas, amount);
@@ -101,7 +102,7 @@ public class GasStack {
 
     public boolean isGasEqual(GasStack other) {
         return this.gas.equals(other.gas);
-    }   
+    }
 
     @Override
     public int hashCode() {

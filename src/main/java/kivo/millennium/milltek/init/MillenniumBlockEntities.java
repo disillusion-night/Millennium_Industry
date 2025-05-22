@@ -124,7 +124,7 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<CreativeGasContainerBE>> CREATIVE_GAS_CONTAINER_BE = BLOCK_ENTITIES
             .register("creative_gas_container_be",
                     () -> BlockEntityType.Builder.of(CreativeGasContainerBE::new,
-                                    MillenniumBlocks.CREATIVE_GAS_CONTAINER.get())
+                            MillenniumBlocks.CREATIVE_GAS_CONTAINER.get())
                             .build(null));
 
 }

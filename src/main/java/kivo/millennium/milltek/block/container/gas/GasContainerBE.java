@@ -37,7 +37,7 @@ public abstract class GasContainerBE extends AbstractContainerBE {
 
     @Override
     public <T> LazyOptional<T> getCapability(Capability<T> cap, @Nullable Direction side) {
-        if (cap == MillenniumCapabilities.GAS) {
+        if (cap == MillenniumCapabilities.GAS && getFaceMode(side) != EFaceMode.DISCONNECT) {
             return gasHandler.cast();
         }
         return super.getCapability(cap, side);
@@ -53,8 +53,18 @@ public abstract class GasContainerBE extends AbstractContainerBE {
             return;
         BlockEntity neighbor = lvl.getBlockEntity(worldPosition.relative(dir));
         if (neighbor != null) {
-            // neighbor.getCapability(ForgeCapabilities.GAS_HANDLER, dir.getOpposite()) ...
-            // 伪代码：实现与fluid类似的pull逻辑
+            neighbor.getCapability(MillenniumCapabilities.GAS, dir.getOpposite()).ifPresent(handler -> {
+                int amount = getMaxInputRate();
+                for (int tank = 0; tank < handler.getTanks(); tank++) {
+                    var drain = handler.drain(amount, IGasHandler.GasAction.SIMULATE);
+                    if (!drain.isEmpty() && drain.getAmount() > 0) {
+                        int filled = self.fill(drain, IGasHandler.GasAction.EXECUTE);
+                        if (filled > 0) {
+                            handler.drain(filled, IGasHandler.GasAction.EXECUTE);
+                        }
+                    }
+                }
+            });
         }
     }
 
@@ -68,8 +78,20 @@ public abstract class GasContainerBE extends AbstractContainerBE {
             return;
         BlockEntity neighbor = lvl.getBlockEntity(worldPosition.relative(dir));
         if (neighbor != null) {
-            // neighbor.getCapability(ForgeCapabilities.GAS_HANDLER, dir.getOpposite()) ...
-            // 伪代码：实现与fluid类似的push逻辑
+            neighbor.getCapability(MillenniumCapabilities.GAS, dir.getOpposite()).ifPresent(handler -> {
+                int amount = getMaxOutputRate();
+                for (int tank = 0; tank < self.getTanks(); tank++) {
+                    var stack = self.getGasInTank(tank);
+                    if (!stack.isEmpty() && stack.getAmount() > 0) {
+                        var toSend = stack.copy();
+                        toSend.setAmount(Math.min(amount, stack.getAmount()));
+                        int filled = handler.fill(toSend, IGasHandler.GasAction.EXECUTE);
+                        if (filled > 0) {
+                            self.drain(filled, IGasHandler.GasAction.EXECUTE);
+                        }
+                    }
+                }
+            });
         }
     }
 }

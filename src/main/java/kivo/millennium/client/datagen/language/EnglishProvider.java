@@ -146,7 +146,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.WRENCH.get(), "Wrench");
         add(MillenniumGases.STEAM.get(), "Steam");
 
-        add(MillenniumCreativeTab.OOPARTS.get(), "Millennium Industry:Oopart");
+        add(MillenniumCreativeTab.OOPARTS.get(), "Millennium Industry:Ooparts");
         add(MillenniumCreativeTab.ENGINEERING_PARTS.get(), "Millennium Industry:Engineering Parts");
         add(MillenniumCreativeTab.MATERIALS.get(), "Millennium Industry:Materials");
         add(MillenniumCreativeTab.TOOLS.get(), "Millennium Industry:Tools");

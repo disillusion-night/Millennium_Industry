@@ -132,10 +132,25 @@ public class PipeBakedModel implements IDynamicBakedModel {
         initTextures();
         List<BakedQuad> quads = new ArrayList<>();
 
-        if (state == null || side != null || (layer != null && !layer.equals(RenderType.solid()))) {
+        TextureAtlasSprite spriteCable = spriteNormalCable;
+        if (state == null) {
+            double width = 0.5;
+            
+            
+            quads.add(quad(v(0, 1, 1), v(1, 1, 1), v(1, 1, 0), v(0, 1, 0), spriteNoneCable));
+            quads.add(quad(v(0, 0, 0), v(1, 0, 0), v(1, 0, 1), v(0, 0, 1), spriteNoneCable));
+            quads.add(quad(v(1, 0, 0), v(1, 1, 0), v(1, 1, 1), v(1, 0, 1), spriteNoneCable));
+            quads.add(quad(v(0, 0, 1), v(0, 1, 1), v(0, 1, 0), v(0, 0, 0), spriteNoneCable));
+            quads.add(quad(v(0, 1, 0), v(1, 1, 0), v(1, 0, 0), v(0, 0, 0), spriteNoneCable));
+            quads.add(quad(v(0, 0, 1), v(1, 0, 1), v(1, 1, 1), v(0, 1, 1), spriteNoneCable));
 
             return quads;
+
         }
+        /* 
+        if (state == null || side != null || (layer != null && !layer.equals(RenderType.solid()))) {
+            return quads;
+        }*/
 
         if (!(state.getBlock() instanceof AbstractPipeBL AbstractPipeBL)) {
             return quads;
@@ -150,8 +165,6 @@ public class PipeBakedModel implements IDynamicBakedModel {
         EIOState west = state.getValue(WEST);
         EIOState up = state.getValue(UP);
         EIOState down = state.getValue(DOWN);
-
-        TextureAtlasSprite spriteCable = spriteNormalCable;
 
         if (up == CONNECT) {
             quads.add(quad(v(n, 1, m), v(n, 1, n), v(n, n, n), v(n, n, m), spriteCable));

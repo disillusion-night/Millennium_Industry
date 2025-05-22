@@ -19,6 +19,7 @@ import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
 import static kivo.millennium.milltek.machine.EIOState.getPropertyForDirection;
+
 public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity {
     private UUID networkUUID = null;
     private final LevelNetworkType<T> networkType;
@@ -253,7 +254,9 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
         super.saveAdditional(tag);
         if (networkUUID != null) {
             tag.putUUID("networkUUID", networkUUID);
-            logger.info("[PipeBE] Saving networkUUID: " + networkUUID);
+            if (DEBUG_TICK_LOG) {
+                logger.info("[PipeBE] Saving networkUUID: " + networkUUID);
+            }
         } else {
             tag.remove("networkUUID");
         }
@@ -264,7 +267,9 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
         super.load(tag);
         if (tag.hasUUID("networkUUID")) {
             this.networkUUID = tag.getUUID("networkUUID");
-            logger.info("[PipeBE] Loading networkUUID: " + networkUUID);
+            if (DEBUG_TICK_LOG) {
+                logger.info("[PipeBE] Loading networkUUID: " + networkUUID);
+            }
         } else {
             this.networkUUID = null;
         }

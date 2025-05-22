@@ -18,6 +18,7 @@ public class ClientEventHandler {
             ItemBlockRenderTypes.setRenderLayer(MillenniumFluids.ICY_WATER.get(), RenderType.translucent());
             ItemBlockRenderTypes.setRenderLayer(MillenniumFluids.FLOWING_ICY_WATER.get(), RenderType.translucent());
             
+
         });
 
     }

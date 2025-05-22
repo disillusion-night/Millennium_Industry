@@ -7,6 +7,7 @@ import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
 import kivo.millennium.milltek.block.container.energy.CreativeEnergyContainerBE;
 import kivo.millennium.milltek.block.container.energy.CreativeEnergyContainerBL;
 import kivo.millennium.milltek.block.container.fluid.CreativeFluidContainerBE;
+import kivo.millennium.milltek.block.container.gas.CreativeGasContainerBE;
 import kivo.millennium.milltek.block.fluidContainer.MetalFluidTankBE;
 import kivo.millennium.milltek.block.hypercube.HDECBE;
 import kivo.millennium.milltek.block.laser.NetherStarLaserBE;
@@ -110,14 +111,20 @@ public class MillenniumBlockEntities {
             .register("creative_energy_container_be",
                     () -> BlockEntityType.Builder
                             .of(CreativeEnergyContainerBE::new,
-                                    kivo.millennium.milltek.init.MillenniumBlocks.CREATIVE_ENERGY_CONTAINER.get())
+                                    MillenniumBlocks.CREATIVE_ENERGY_CONTAINER.get())
                             .build(null));
 
     public static final RegistryObject<BlockEntityType<CreativeFluidContainerBE>> CREATIVE_FLUID_CONTAINER_BE = BLOCK_ENTITIES
             .register("creative_fluid_container_be",
                     () -> BlockEntityType.Builder
                             .of(CreativeFluidContainerBE::new,
-                                    kivo.millennium.milltek.init.MillenniumBlocks.CREATIVE_FLUID_CONTAINER.get())
+                                    MillenniumBlocks.CREATIVE_FLUID_CONTAINER.get())
+                            .build(null));
+
+    public static final RegistryObject<BlockEntityType<CreativeGasContainerBE>> CREATIVE_GAS_CONTAINER_BE = BLOCK_ENTITIES
+            .register("creative_gas_container_be",
+                    () -> BlockEntityType.Builder.of(CreativeGasContainerBE::new,
+                                    MillenniumBlocks.CREATIVE_GAS_CONTAINER.get())
                             .build(null));
 
 }

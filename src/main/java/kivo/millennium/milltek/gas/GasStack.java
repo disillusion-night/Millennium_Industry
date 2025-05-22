@@ -27,6 +27,15 @@ public class GasStack {
         this.amount = amount;
     }
 
+    public void grow(int amount) {
+        this.amount += amount;
+    }
+    public void shrink(int amount) {
+        this.amount -= amount;
+        if (this.amount < 0)
+            this.amount = 0;
+    }
+
     @NotNull
     public Gas getGas() {
         return gas;
@@ -89,6 +98,10 @@ public class GasStack {
         GasStack gasStack = (GasStack) o;
         return amount == gasStack.amount && gas.equals(gasStack.gas);
     }
+
+    public boolean isGasEqual(GasStack other) {
+        return this.gas.equals(other.gas);
+    }   
 
     @Override
     public int hashCode() {

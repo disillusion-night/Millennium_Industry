@@ -20,6 +20,7 @@ import java.util.function.Supplier;
 
 import kivo.millennium.milltek.block.container.energy.CreativeEnergyContainerBL;
 import kivo.millennium.milltek.block.container.fluid.CreativeFluidContainerBL;
+import kivo.millennium.milltek.block.container.gas.CreativeGasContainerBL;
 import kivo.millennium.milltek.block.fluid.*;
 import kivo.millennium.milltek.block.fluidContainer.MetalTankBL;
 import kivo.millennium.milltek.block.hypercube.HDECBL;
@@ -161,10 +162,16 @@ public class MillenniumBlocks {
             .register(
                     "creative_energy_container",
                     () -> new CreativeEnergyContainerBL(BlockBehaviour.Properties.of().strength(5.0F, 6.0F)));
+
     public static final RegistryObject<CreativeFluidContainerBL> CREATIVE_FLUID_CONTAINER = BLOCKS.register(
             "creative_fluid_container",
             () -> new CreativeFluidContainerBL(
-                    net.minecraft.world.level.block.state.BlockBehaviour.Properties.of().strength(5.0F, 6.0F)));
+                    BlockBehaviour.Properties.of().strength(5.0F, 6.0F)));
+
+    public static final RegistryObject<CreativeGasContainerBL> CREATIVE_GAS_CONTAINER = BLOCKS.register(
+            "creative_gas_container",
+            () -> new CreativeGasContainerBL(
+                    BlockBehaviour.Properties.of().strength(5.0F, 6.0F)));
 
     public static <I extends Block> RegistryObject<I> registerWithItem(String name, Supplier<I> supplier,
             ArrayList<RegistryObject<Item>> arrayList) {

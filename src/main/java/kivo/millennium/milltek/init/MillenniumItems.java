@@ -12,6 +12,8 @@ import static kivo.millennium.milltek.item.Oopart.BAItemLevel.*;
 import java.util.ArrayList;
 import java.util.function.Supplier;
 
+import org.checkerframework.checker.units.qual.s;
+
 import kivo.millennium.milltek.item.Wrench;
 import kivo.millennium.milltek.item.Oopart.BAItemLevel;
 import kivo.millennium.milltek.item.Oopart.Oopart;
@@ -23,6 +25,7 @@ public class MillenniumItems {
     public static ArrayList<RegistryObject<Item>> ENGINEERING_PARTS = new ArrayList<>();
     public static ArrayList<RegistryObject<Item>> MATERIALS = new ArrayList<>();
     public static ArrayList<RegistryObject<Item>> TOOLS = new ArrayList<>();
+    public static ArrayList<RegistryObject<Item>> CONTAINERS = new ArrayList<>();    
 
     public static final RegistryObject<Oopart> HighPurityWolfseggSteel = createOopart("high_purity_wolfsegg_steel",
             SSR);

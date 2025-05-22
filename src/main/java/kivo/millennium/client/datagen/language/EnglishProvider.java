@@ -150,6 +150,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumCreativeTab.ENGINEERING_PARTS.get(), "Millennium Industry:Engineering Parts");
         add(MillenniumCreativeTab.MATERIALS.get(), "Millennium Industry:Materials");
         add(MillenniumCreativeTab.TOOLS.get(), "Millennium Industry:Tools");
+        add(MillenniumCreativeTab.CONTAINERS.get(), "Millennium Industry:Containers");
     }
 
     private void addEnglishFromId(Item item) {

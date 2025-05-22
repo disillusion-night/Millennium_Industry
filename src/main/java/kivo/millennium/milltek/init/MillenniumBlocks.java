@@ -158,17 +158,16 @@ public class MillenniumBlocks {
 
     public static final RegistryObject<EnergyPipeBlock> ENERGY_PIPE = registerWithItem("energy_pipe",
             EnergyPipeBlock::new, MillenniumItems.ENGINEERING_PARTS);
-    public static final RegistryObject<CreativeEnergyContainerBL> CREATIVE_ENERGY_CONTAINER = MillenniumBlocks.BLOCKS
-            .register(
+    public static final RegistryObject<CreativeEnergyContainerBL> CREATIVE_ENERGY_CONTAINER = registerWithItem(
                     "creative_energy_container",
                     () -> new CreativeEnergyContainerBL(BlockBehaviour.Properties.of().strength(5.0F, 6.0F)));
 
-    public static final RegistryObject<CreativeFluidContainerBL> CREATIVE_FLUID_CONTAINER = BLOCKS.register(
+    public static final RegistryObject<CreativeFluidContainerBL> CREATIVE_FLUID_CONTAINER = registerWithItem(
             "creative_fluid_container",
             () -> new CreativeFluidContainerBL(
                     BlockBehaviour.Properties.of().strength(5.0F, 6.0F)));
 
-    public static final RegistryObject<CreativeGasContainerBL> CREATIVE_GAS_CONTAINER = BLOCKS.register(
+    public static final RegistryObject<CreativeGasContainerBL> CREATIVE_GAS_CONTAINER = registerWithItem(
             "creative_gas_container",
             () -> new CreativeGasContainerBL(
                     BlockBehaviour.Properties.of().strength(5.0F, 6.0F)));

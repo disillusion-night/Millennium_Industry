@@ -56,6 +56,18 @@ public class MillenniumCreativeTab {
                         }
                     }).build());
 
+                    
+
+    public static final RegistryObject<CreativeModeTab> CONTAINERS = CREATIVE_MODE_TABS.register("containers",
+            () -> CreativeModeTab.builder()
+                    .title(Component.translatable(getCreativeTabTranslationKey("containers")))
+                    .icon(() -> MillenniumItems.WRENCH.get().getDefaultInstance())
+                    .displayItems((parameters, output) -> {
+                        for (RegistryObject<Item> item : MillenniumItems.CONTAINERS) {
+                            output.accept(item.get());
+                        }
+                    }).build());
+
     // 一个物品栏用于存放特定的容器
 
     public static final String getCreativeTabTranslationKey(RegistryObject<CreativeModeTab> tab) {

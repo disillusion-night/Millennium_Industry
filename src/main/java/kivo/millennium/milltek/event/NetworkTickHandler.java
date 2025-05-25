@@ -1,7 +1,7 @@
 package kivo.millennium.milltek.event;
 
+import kivo.millennium.milltek.pipe.network.AbstractLevelNetwork;
 import kivo.millennium.milltek.world.LevelNetworkSavedData;
-import kivo.millennium.milltek.pipe.client.network.AbstractLevelNetwork;
 import net.minecraft.resources.ResourceKey;
 import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;

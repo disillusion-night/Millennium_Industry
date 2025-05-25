@@ -1,6 +1,6 @@
 package kivo.millennium.milltek.machine;
 
-import static kivo.millennium.milltek.pipe.client.AbstractPipeBL.*;
+import static kivo.millennium.milltek.pipe.network.AbstractPipeBL.*;
 
 import net.minecraft.core.Direction;
 import net.minecraft.util.StringRepresentable;

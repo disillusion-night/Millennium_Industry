@@ -1,10 +1,11 @@
 package kivo.millennium.milltek.init;
 
-import kivo.millennium.milltek.pipe.client.network.AbstractLevelNetwork;
-import kivo.millennium.milltek.pipe.client.network.FluidPipeNetwork;
 import net.minecraftforge.registries.*;
 
 import javax.annotation.Nullable;
+
+import kivo.millennium.milltek.pipe.network.AbstractLevelNetwork;
+import kivo.millennium.milltek.pipe.network.FluidPipeNetwork;
 import net.minecraft.nbt.CompoundTag;
 import java.util.UUID;
 
@@ -26,12 +27,12 @@ public class MillenniumLevelNetworkType {
                     () -> LevelNetworkType.Builder.of(FluidPipeNetwork::new, FluidPipeNetwork::new).build());
 
     // 能量网络注册
-    public static final RegistryObject<LevelNetworkType<kivo.millennium.milltek.pipe.client.network.EnergyPipeNetwork>> ENERGY_PIPE_NETWORK = LEVEL_NETWORK_TYPES
+    public static final RegistryObject<LevelNetworkType<kivo.millennium.milltek.pipe.network.EnergyPipeNetwork>> ENERGY_PIPE_NETWORK = LEVEL_NETWORK_TYPES
             .register(
                     "energy_pipe_network",
                     () -> LevelNetworkType.Builder.of(
-                            kivo.millennium.milltek.pipe.client.network.EnergyPipeNetwork::new,
-                            kivo.millennium.milltek.pipe.client.network.EnergyPipeNetwork::new).build());
+                            kivo.millennium.milltek.pipe.network.EnergyPipeNetwork::new,
+                            kivo.millennium.milltek.pipe.network.EnergyPipeNetwork::new).build());
 
     public static class LevelNetworkType<T extends AbstractLevelNetwork> {
         private final LevelNetworkSupplier<T> factory;

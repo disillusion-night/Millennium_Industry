@@ -179,7 +179,7 @@ public class SimpleSingleRecipeBuilder {
             }
             else {
                 JsonArray jsonArray = new JsonArray();
-                this.ingredients.forEach(recipeComponent -> {
+                this.results.forEach(recipeComponent -> {
                     jsonArray.add(recipeComponent.toJson());
                 });
                 pJson.add("results", jsonArray);

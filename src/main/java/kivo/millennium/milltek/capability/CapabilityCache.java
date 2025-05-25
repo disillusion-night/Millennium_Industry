@@ -157,6 +157,7 @@ public class CapabilityCache {
         }
 
         public Builder withGas(int size, int capacity) {
+            this.hasGasCapability = true;
             this.gasCapability = new MillenniumGasStorage(size, capacity) {
                 @Override
                 protected void onContentsChanged(int tank) {

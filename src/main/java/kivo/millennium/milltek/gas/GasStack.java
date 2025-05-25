@@ -1,24 +1,28 @@
 package kivo.millennium.milltek.gas;
 
-import net.minecraft.Util;
+import com.mojang.serialization.Codec;
+import com.mojang.serialization.codecs.RecordCodecBuilder;
+import java.util.Optional;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+
 import kivo.millennium.milltek.init.MillenniumGases;
-import net.minecraftforge.registries.ForgeRegistries;
-import net.minecraftforge.registries.RegistryObject;
 import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.network.chat.Component;
-
-import static kivo.millennium.milltek.init.MillenniumGases.getGasById;
-
-import java.util.Objects;
+import net.minecraftforge.registries.ForgeRegistries;
 
 /**
  * 气体堆栈，类似于FluidStack，包含气体类型和数量。
  */
 public class GasStack {
-    public static final GasStack EMPTY = new GasStack(new Gas("empty", 0), 0);
+    public static final GasStack EMPTY = new GasStack(MillenniumGases.EMPTY.get(), 0);
+    public static final Codec<GasStack> CODEC = RecordCodecBuilder.create(
+            instance -> instance.group(
+                    ResourceLocation.CODEC.fieldOf("Gas").forGetter(stack -> stack.getGas().getRegistryName()),
+                    Codec.INT.fieldOf("Amount").forGetter(GasStack::getAmount)).apply(instance, (rl, amount) -> {
+                        Gas gas = MillenniumGases.getGasById(rl.toString());
+                        return gas == null ? GasStack.EMPTY : new GasStack(gas, amount);
+                    }));
     private final Gas gas;
     private int amount;
 
@@ -60,7 +64,7 @@ public class GasStack {
 
     public CompoundTag writeToNBT() {
         CompoundTag tag = new CompoundTag();
-        tag.putString("Gas", gas.getRegistryName().toString());
+        tag.putString("Gas", MillenniumGases.getRL(gas).toString());
         tag.putInt("Amount", amount);
         return tag;
     }
@@ -77,16 +81,17 @@ public class GasStack {
     }
 
     public static GasStack readFromPacket(FriendlyByteBuf buf) {
-        String gasId = buf.readUtf();
+        Gas gas = buf.readRegistryId();
         int amount = buf.readVarInt();
-        Gas gas = getGasById(gasId);
-        if (gas == null)
-            return GasStack.EMPTY;
-        return new GasStack(gas, amount);
+        if (gas == null) {
+            return EMPTY;
+        } else {
+            return new GasStack(gas, amount);
+        }
     }
 
     public void writeToPacket(FriendlyByteBuf buf) {
-        buf.writeUtf(this.getGas().getRegistryName().toString());
+        buf.writeRegistryId(MillenniumGases.GAS_REGISTRY.get(), getGas());
         buf.writeVarInt(this.getAmount());
     }
 

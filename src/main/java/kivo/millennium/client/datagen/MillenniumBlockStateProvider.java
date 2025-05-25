@@ -5,8 +5,8 @@ import com.google.gson.JsonObject;
 import kivo.millennium.milltek.Main;
 import kivo.millennium.milltek.block.device.MillenniumBlockProperty;
 import kivo.millennium.milltek.init.MillenniumBlocks;
-import kivo.millennium.milltek.pipe.client.AbstractPipeBL;
 import kivo.millennium.milltek.pipe.client.PipeModelLoader;
+import kivo.millennium.milltek.pipe.network.AbstractPipeBL;
 import kivo.millennium.milltek.util.ShapeUtils;
 import net.minecraft.data.PackOutput;
 import net.minecraft.resources.ResourceLocation;
@@ -55,7 +55,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         simpleOrientableWithTop(MillenniumBlocks.CRUSHER_BL.get(), "crusher");
         simpleOrientableExtra(MillenniumBlocks.CRYSTALLIZER_BL.get(), "crystallizer");
 
-        solarGenerator(MillenniumBlocks.SOLAR_GENERATOR);
+        solarGenerator(MillenniumBlocks.SOLAR_GENERATOR_BL);
 
         pipeBlockWithItem(MillenniumBlocks.COPPER_PIPE);
         pipeBlockWithItem(MillenniumBlocks.ENERGY_PIPE);
@@ -357,7 +357,9 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
                 .texture("cross", Main.getRL("block/pipe/" + name + "_cross"))
                 .texture("three", Main.getRL("block/pipe/" + name + "_three"))
                 .texture("corner", Main.getRL("block/pipe/" + name + "_corner"))
-                .customLoader((builder, helper) -> new PipeLoaderBuilder(PipeModelLoader.GENERATOR_LOADER, builder, helper)).end();
+                .customLoader(
+                        (builder, helper) -> new PipeLoaderBuilder(PipeModelLoader.GENERATOR_LOADER, builder, helper))
+                .end();
         // .customData(customData);
         getVariantBuilder(block.get()).partialState().setModels(
                 new ConfiguredModel(models().getExistingFile(Main.getRL("block/pipe/" + name))));

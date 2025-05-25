@@ -32,7 +32,8 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.MELTING_FURNACE_BL.get(), "Melting Furnace");
         add(MillenniumBlocks.RESONANCE_CHAMBER_BL.get(), "Resonance Chamber");
         add(MillenniumBlocks.CRYSTALLIZER_BL.get(), "Crystallizer");
-        add(MillenniumBlocks.SOLAR_GENERATOR.get(), "Solar Generator");
+        add(MillenniumBlocks.SOLAR_GENERATOR_BL.get(), "Solar Generator");
+        add(MillenniumBlocks.ELECTROLYZER_BL.get(), "Electrolyzer");
 
         add(MillenniumBlocks.ALERT_BLOCK.get(), "Alert Block");
         // add(MillenniumBlocks.ALERT_LINE_BL.get(), "Alert Line Block");
@@ -144,13 +145,28 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.WOLFRAM_STEEL_SWORD.get(), "Wolfram Steel Sword");
 
         add(MillenniumItems.WRENCH.get(), "Wrench");
-        add(MillenniumGases.STEAM.get(), "Steam");
 
         add(MillenniumCreativeTab.OOPARTS.get(), "Millennium Industry:Ooparts");
         add(MillenniumCreativeTab.ENGINEERING_PARTS.get(), "Millennium Industry:Engineering Parts");
         add(MillenniumCreativeTab.MATERIALS.get(), "Millennium Industry:Materials");
         add(MillenniumCreativeTab.TOOLS.get(), "Millennium Industry:Tools");
         add(MillenniumCreativeTab.CONTAINERS.get(), "Millennium Industry:Containers");
+
+
+        // gas
+        add(MillenniumGases.OXYGEN.get(), "Oxygen");
+        add(MillenniumGases.HYDROGEN.get(), "Hydrogen");
+        add(MillenniumGases.NITROGEN.get(), "Nitrogen");
+        add(MillenniumGases.CARBON_DIOXIDE.get(), "Carbon Dioxide");
+        add(MillenniumGases.METHANE.get(), "Methane");
+        add(MillenniumGases.AMMONIA.get(), "Ammonia");
+        add(MillenniumGases.SULFUR_DIOXIDE.get(), "Sulfur Dioxide");
+        add(MillenniumGases.CHLORINE.get(), "Chlorine");
+        add(MillenniumGases.CARBON_MONOXIDE.get(), "Carbon Monoxide");
+        add(MillenniumGases.ETHYLENE.get(), "Ethylene");
+        add(MillenniumGases.PROPANE.get(), "Propane");
+        add(MillenniumGases.STEAM.get(), "Steam");
+
     }
 
     private void addEnglishFromId(Item item) {

@@ -2,7 +2,7 @@ package kivo.millennium.milltek.world;
 
 import kivo.millennium.milltek.init.MillenniumLevelNetworkType;
 import kivo.millennium.milltek.init.MillenniumLevelNetworkType.LevelNetworkType;
-import kivo.millennium.milltek.pipe.client.network.AbstractLevelNetwork;
+import kivo.millennium.milltek.pipe.network.AbstractLevelNetwork;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.ListTag;
 import net.minecraft.nbt.Tag;

@@ -4,7 +4,7 @@ import static kivo.millennium.milltek.machine.EIOState.*;
 
 import kivo.millennium.milltek.Main;
 import kivo.millennium.milltek.machine.EIOState;
-import kivo.millennium.milltek.pipe.client.AbstractPipeBL;
+import kivo.millennium.milltek.pipe.network.AbstractPipeBL;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;

@@ -24,7 +24,7 @@ public class MillenniumLanguageProvider extends LanguageProvider {
     }
 
     public void add(Gas gas, String value) {
-        add(MillenniumGases.getGas(gas).toLanguageKey("gas"), value);
+        add(MillenniumGases.getRL(gas).toLanguageKey("gas"), value);
     }
 
     public void add(CreativeModeTab tab, String value) {

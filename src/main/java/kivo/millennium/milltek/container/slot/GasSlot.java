@@ -7,8 +7,8 @@ public class GasSlot {
     private final MillenniumGasStorage gasHandler;
     private final int tankIndex;
     private final int x, y, width, height;
-    private GasStack gasStack = GasStack.EMPTY;
-    private int capacity;
+    public static final int default_width = 16;
+    public static final int default_height = 57;
 
     public GasSlot(MillenniumGasStorage gasHandler, int tankIndex, int x, int y, int width, int height) {
         this.gasHandler = gasHandler;
@@ -17,8 +17,15 @@ public class GasSlot {
         this.y = y;
         this.width = width;
         this.height = height;
-        this.capacity = gasHandler.getTankCapacity(tankIndex);
-        this.gasStack = gasHandler.getGasInTank(tankIndex);
+    }
+
+    public GasSlot(MillenniumGasStorage gasHandler, int tankIndex, int x, int y) {
+        this.gasHandler = gasHandler;
+        this.tankIndex = tankIndex;
+        this.x = x;
+        this.y = y;
+        this.width = default_width;
+        this.height = default_height;
     }
 
     public int getX() {
@@ -38,11 +45,11 @@ public class GasSlot {
     }
 
     public int getGasCapacity() {
-        return capacity;
+        return gasHandler.getTankCapacity(tankIndex);
     }
 
     public GasStack getGasStack() {
-        return gasStack;
+        return gasHandler.getGasInTank(tankIndex);
     }
 
     public MillenniumGasStorage getGasHandler() {
@@ -50,6 +57,10 @@ public class GasSlot {
     }
 
     public void setGasStack(GasStack stack) {
-        this.gasStack = stack;
+        gasHandler.setGasInTank(tankIndex, stack);
+    }
+
+    public int getTankIndex() {
+        return tankIndex;
     }
 }

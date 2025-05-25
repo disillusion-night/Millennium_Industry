@@ -1,4 +1,4 @@
-package kivo.millennium.milltek.pipe.client.network;
+package kivo.millennium.milltek.pipe.network;
 
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;

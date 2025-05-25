@@ -20,8 +20,8 @@ import kivo.millennium.milltek.machine.HydraulicPress.HydraulicPressBE;
 import kivo.millennium.milltek.machine.InductionFurnace.InductionFurnaceBE;
 import kivo.millennium.milltek.machine.MeltingFurnace.MeltingFurnaceBE;
 import kivo.millennium.milltek.machine.ResonanceChamber.ResonanceChamberBE;
-import kivo.millennium.milltek.pipe.client.CopperPipeBE;
-import kivo.millennium.milltek.pipe.client.EnergyPipeBE;
+import kivo.millennium.milltek.pipe.network.CopperPipeBE;
+import kivo.millennium.milltek.pipe.network.EnergyPipeBE;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -33,7 +33,7 @@ public class MillenniumBlockEntities {
 
     public static final RegistryObject<BlockEntityType<ElectrolyzerBE>> ELECTROLYZER_BE = BLOCK_ENTITIES
             .register("electrolyzer_be", () -> BlockEntityType.Builder
-                    .of(ElectrolyzerBE::new, MillenniumBlocks.ELECTROLYZER.get()).build(null));
+                    .of(ElectrolyzerBE::new, MillenniumBlocks.ELECTROLYZER_BL.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<CopperPipeBE>> COPPER_PIPE_BE = BLOCK_ENTITIES.register(
             "copper_pipe_be", () -> BlockEntityType.Builder.of(CopperPipeBE::new,
@@ -101,7 +101,7 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<SolarGeneratorBE>> SOLAR_GENERATOR_BE = BLOCK_ENTITIES
             .register(
                     "solar_generator_be", () -> BlockEntityType.Builder.of(SolarGeneratorBE::new,
-                            MillenniumBlocks.SOLAR_GENERATOR.get()).build(null));
+                            MillenniumBlocks.SOLAR_GENERATOR_BL.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<EnergyPipeBE>> ENERGY_PIPE_BE = BLOCK_ENTITIES.register(
             "energy_pipe_be", () -> BlockEntityType.Builder.of(EnergyPipeBE::new,

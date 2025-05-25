@@ -18,13 +18,14 @@ import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import org.jetbrains.annotations.NotNull;
 
 import kivo.millennium.milltek.machine.EIOState;
+import kivo.millennium.milltek.pipe.network.AbstractPipeBL;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 import static kivo.millennium.milltek.machine.EIOState.*;
-import static kivo.millennium.milltek.pipe.client.AbstractPipeBL.*;
 import static kivo.millennium.milltek.pipe.client.PipePatterns.SpriteIdx.*;
+import static kivo.millennium.milltek.pipe.network.AbstractPipeBL.*;
 import static kivo.millennium.milltek.util.BakedModelHelper.quad;
 import static kivo.millennium.milltek.util.BakedModelHelper.v;
 
@@ -135,8 +136,7 @@ public class PipeBakedModel implements IDynamicBakedModel {
         TextureAtlasSprite spriteCable = spriteNormalCable;
         if (state == null) {
             double width = 0.5;
-            
-            
+
             quads.add(quad(v(0, 1, 1), v(1, 1, 1), v(1, 1, 0), v(0, 1, 0), spriteNoneCable));
             quads.add(quad(v(0, 0, 0), v(1, 0, 0), v(1, 0, 1), v(0, 0, 1), spriteNoneCable));
             quads.add(quad(v(1, 0, 0), v(1, 1, 0), v(1, 1, 1), v(1, 0, 1), spriteNoneCable));
@@ -147,10 +147,12 @@ public class PipeBakedModel implements IDynamicBakedModel {
             return quads;
 
         }
-        /* 
-        if (state == null || side != null || (layer != null && !layer.equals(RenderType.solid()))) {
-            return quads;
-        }*/
+        /*
+         * if (state == null || side != null || (layer != null &&
+         * !layer.equals(RenderType.solid()))) {
+         * return quads;
+         * }
+         */
 
         if (!(state.getBlock() instanceof AbstractPipeBL AbstractPipeBL)) {
             return quads;

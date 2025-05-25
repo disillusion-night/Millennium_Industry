@@ -34,14 +34,14 @@ import kivo.millennium.milltek.machine.HydraulicPress.HydraulicPressBL;
 import kivo.millennium.milltek.machine.InductionFurnace.InductionFurnaceBL;
 import kivo.millennium.milltek.machine.MeltingFurnace.MeltingFurnaceBL;
 import kivo.millennium.milltek.machine.ResonanceChamber.ResonanceChamberBL;
-import kivo.millennium.milltek.pipe.client.CopperPipeBlock;
-import kivo.millennium.milltek.pipe.client.EnergyPipeBE;
-import kivo.millennium.milltek.pipe.client.EnergyPipeBlock;
+import kivo.millennium.milltek.pipe.network.CopperPipeBlock;
+import kivo.millennium.milltek.pipe.network.EnergyPipeBE;
+import kivo.millennium.milltek.pipe.network.EnergyPipeBlock;
 
 public class MillenniumBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, MODID);
 
-    public static final RegistryObject<ElectrolyzerBL> ELECTROLYZER = registerWithItem("electrolyzer",
+    public static final RegistryObject<ElectrolyzerBL> ELECTROLYZER_BL = registerWithItem("electrolyzer",
             ElectrolyzerBL::new, MillenniumItems.ENGINEERING_PARTS);
 
     public static final RegistryObject<LiquidBlock> ICY_WATER_BL = BLOCKS.register("icy_water", IcyWaterBlock::new);
@@ -88,7 +88,7 @@ public class MillenniumBlocks {
     public static final RegistryObject<CrystallizerBL> CRYSTALLIZER_BL = registerWithItem("crystallizer",
             CrystallizerBL::new, MillenniumItems.ENGINEERING_PARTS);
 
-    public static final RegistryObject<SolarGeneratorBL> SOLAR_GENERATOR = registerWithItem("solar_generator",
+    public static final RegistryObject<SolarGeneratorBL> SOLAR_GENERATOR_BL = registerWithItem("solar_generator",
             SolarGeneratorBL::new, MillenniumItems.ENGINEERING_PARTS);
 
     public static final RegistryObject<Block> STEEL_BLOCK = registerWithItem("steel_block",

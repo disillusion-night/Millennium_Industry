@@ -1,4 +1,4 @@
-package kivo.millennium.milltek.pipe.client;
+package kivo.millennium.milltek.pipe.network;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;

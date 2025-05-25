@@ -197,21 +197,6 @@ public class MillenniumGasStorage implements IGasHandler, IMillenniumStorage<Gas
             System.err.println(
                     "MillenniumGasStorage NBT missing 'capacities' int array tag! Tanks will have 0 capacity.");
         }
-        if (nbt.contains("tank_access", Tag.TAG_INT_ARRAY)) {
-            int[] loadedAccess = nbt.getIntArray("tank_access");
-            for (int i = 0; i < loadedAccess.length && i < size; i++) {
-                if (loadedAccess[i] >= 0 && loadedAccess[i] <= 3) {
-                    this.tankAccess.set(i, loadedAccess[i]);
-                } else {
-                    System.err.println("Loaded invalid access level for tank " + i + ": " + loadedAccess[i]
-                            + ". Using default access 3.");
-                    this.tankAccess.set(i, 3);
-                }
-            }
-        } else {
-            System.err.println(
-                    "MillenniumGasStorage NBT missing 'tank_access' int array tag! Tanks will have default access 3.");
-        }
     }
 
     public CompoundTag writeToNBT(CompoundTag nbt) {
@@ -222,7 +207,6 @@ public class MillenniumGasStorage implements IGasHandler, IMillenniumStorage<Gas
         }
         nbt.put("gases", tag);
         nbt.putIntArray("capacities", capacities.stream().mapToInt(Integer::intValue).toArray());
-        nbt.putIntArray("tank_access", tankAccess.stream().mapToInt(Integer::intValue).toArray());
         return nbt;
     }
 

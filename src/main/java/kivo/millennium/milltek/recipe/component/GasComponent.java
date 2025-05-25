@@ -4,8 +4,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import kivo.millennium.milltek.capability.CapabilityType;
 import kivo.millennium.milltek.gas.GasStack;
+import kivo.millennium.milltek.init.MillenniumGases;
 import kivo.millennium.milltek.recipe.RecipeComponent;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.GsonHelper;
 import org.jetbrains.annotations.Nullable;
 
@@ -20,11 +22,7 @@ public class GasComponent implements RecipeComponent<GasStack> {
     public GasComponent(JsonObject jsonObject) {
         String gasName = GsonHelper.getAsString(jsonObject, "gas");
         int amount = GsonHelper.getAsInt(jsonObject, "amount");
-        this.gasStack = kivo.millennium.milltek.init.MillenniumGases.GASES.getEntries().stream()
-                .filter(e -> e.getId().getPath().equals(gasName))
-                .findFirst()
-                .map(e -> new GasStack(e.get(), amount))
-                .orElseThrow(() -> new JsonSyntaxException("Unknown gas: " + gasName));
+        this.gasStack = new GasStack(MillenniumGases.getGasById(gasName), amount);
     }
 
     @Override
@@ -44,7 +42,7 @@ public class GasComponent implements RecipeComponent<GasStack> {
     @Override
     public JsonObject toJson() {
         JsonObject jsonObject = new JsonObject();
-        jsonObject.addProperty("gas", get().getGas().getRegistryName().getPath());
+        jsonObject.addProperty("gas", get().getGas().getRegistryName().toString());
         jsonObject.addProperty("amount", get().getAmount());
         return jsonObject;
     }
@@ -53,8 +51,8 @@ public class GasComponent implements RecipeComponent<GasStack> {
     public void readFromJson(JsonObject jsonObject) {
         String gasName = GsonHelper.getAsString(jsonObject, "gas");
         int amount = GsonHelper.getAsInt(jsonObject, "amount");
-        this.gasStack = kivo.millennium.milltek.init.MillenniumGases.GASES.getEntries().stream()
-                .filter(e -> e.getId().getPath().equals(gasName))
+        this.gasStack = MillenniumGases.GASES.getEntries().stream()
+                .filter(e -> e.getId().toString().equals(gasName))
                 .findFirst()
                 .map(e -> new GasStack(e.get(), amount))
                 .orElseThrow(() -> new JsonSyntaxException("Unknown gas: " + gasName));
@@ -74,13 +72,9 @@ public class GasComponent implements RecipeComponent<GasStack> {
     @Override
     public void readFromNetwork(FriendlyByteBuf buf) {
         if (buf.readBoolean()) {
-            String gasName = buf.readUtf();
+            String gas = buf.readUtf();
             int amount = buf.readInt();
-            this.gasStack = kivo.millennium.milltek.init.MillenniumGases.GASES.getEntries().stream()
-                    .filter(e -> e.getId().getPath().equals(gasName))
-                    .findFirst()
-                    .map(e -> new GasStack(e.get(), amount))
-                    .orElse(GasStack.EMPTY);
+            this.gasStack = new GasStack(MillenniumGases.getGas(new ResourceLocation(gas)), amount);
         } else {
             this.gasStack = GasStack.EMPTY;
         }

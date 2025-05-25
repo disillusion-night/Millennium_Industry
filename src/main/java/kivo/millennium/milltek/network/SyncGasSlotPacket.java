@@ -1,6 +1,9 @@
 package kivo.millennium.milltek.network;
 
+import kivo.millennium.milltek.container.Device.AbstractDeviceMenu;
 import kivo.millennium.milltek.gas.GasStack;
+import kivo.millennium.milltek.init.MillenniumGases;
+import net.minecraft.client.Minecraft;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraftforge.network.NetworkEvent;
 import org.slf4j.Logger;
@@ -42,13 +45,13 @@ public class SyncGasSlotPacket {
         ctx.get().enqueueWork(() -> {
             LOGGER.info("[SyncGasSlotPacket][RECV] containerId={}, slotIndex={}, gasStack={}", containerId, slotIndex,
                     gasStack);
-            net.minecraft.client.Minecraft mc = net.minecraft.client.Minecraft.getInstance();
+            Minecraft mc = Minecraft.getInstance();
             var player = mc != null ? mc.player : null;
             if (player == null)
                 return;
             var menu = player.containerMenu;
             if (menu != null && menu.containerId == this.containerId
-                    && menu instanceof kivo.millennium.milltek.container.Device.AbstractDeviceMenu<?> devMenu) {
+                    && menu instanceof AbstractDeviceMenu<?> devMenu) {
                 var gasSlots = devMenu.getGasSlots();
                 if (slotIndex >= 0 && slotIndex < gasSlots.size()) {
                     gasSlots.get(slotIndex).setGasStack(gasStack);

@@ -1,8 +1,7 @@
-package kivo.millennium.milltek.pipe.client;
+package kivo.millennium.milltek.pipe.network;
 
 import kivo.millennium.milltek.init.MillenniumLevelNetworkType.LevelNetworkType;
 import kivo.millennium.milltek.machine.EIOState;
-import kivo.millennium.milltek.pipe.client.network.AbstractLevelNetwork;
 import kivo.millennium.milltek.world.LevelNetworkSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -136,85 +135,62 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
     public void setRemoved() {
         if (level == null || level.isClientSide)
             return;
-
-        // 检查当前位置的 Block 是否还是本类型
         if (level.isLoaded(getBlockPos()) && level.getBlockState(getBlockPos()).getBlock() != getBlock()) {
             logger.info("[PipeBE] Block is not the same, removing networkUUID: " + networkUUID);
-            // 方块被移除（破坏或替换），此时可安全进行网络分裂等逻辑
-            // ...分裂/断网处理...
             if (level == null || level.isClientSide || networkUUID == null || isRemoved())
                 return;
             UUID uuid = networkUUID;
-            // 1. 收集所有与本方块同 networkUUID 的管道
+            T network = getNetworkData().getNetworkByUuid(networkType, uuid);
+            if (network != null)
+                network.removePipe(worldPosition);
+            // 新逻辑：如果网络只剩下自己，才移除网络；否则只移除自己
             Set<BlockPos> allPipes = new HashSet<>();
-            for (Direction dir : Direction.values()) {
-                BlockPos neighborPos = worldPosition.relative(dir);
-                BlockEntity neighbor = level.getBlockEntity(neighborPos);
-                if (neighbor instanceof PipeBE<?> neighborPipe
-                        && neighborPipe.networkType == this.networkType
-                        && networkUUID.equals(neighborPipe.networkUUID)) {
-                    allPipes.add(neighborPos);
-                }
+            if (network != null) {
+                allPipes.addAll(network.getPipePositions());
             }
-
-            // 2. Flood Fill/BFS分裂网络
-            Set<BlockPos> visited = new HashSet<>();
-            List<Set<BlockPos>> groups = new ArrayList<>();
-
-            for (BlockPos start : allPipes) {
-                if (visited.contains(start))
-                    continue;
-                Set<BlockPos> group = new HashSet<>();
-                Queue<BlockPos> queue = new ArrayDeque<>();
-                queue.add(start);
-
-                while (!queue.isEmpty()) {
-                    BlockPos pos = queue.poll();
-                    if (!visited.add(pos))
-                        continue;
-                    group.add(pos);
-
-                    for (Direction dir : Direction.values()) {
-                        BlockPos next = pos.relative(dir);
-                        if (visited.contains(next))
-                            continue;
-                        BlockEntity be = level.getBlockEntity(next);
-                        if (be instanceof PipeBE<?> pipe
-                                && pipe.networkType == this.networkType
-                                && networkUUID.equals(pipe.networkUUID)) {
-                            queue.add(next);
-                        }
-                    }
-                }
-                if (!group.isEmpty())
-                    groups.add(group);
+            allPipes.remove(worldPosition); // 移除自己
+            if (allPipes.isEmpty()) {
+                // 网络已无其他管道，移除网络
+                this.networkUUID = null;
+                getNetworkData().removeNetwork(networkType, uuid);
+                super.setRemoved();
+                return;
             }
-
-            // 3. 为每个连通块分配新networkUUID和新网络，并委托子类迁移内容
+            // 如果还有其他管道，检查是否需要分裂
+            List<Set<BlockPos>> groups = splitPipeGroups(allPipes, uuid);
+            if (groups.size() <= 1) {
+                // 只剩一个连通块，无需分裂
+                this.networkUUID = null;
+                super.setRemoved();
+                return;
+            }
+            // 多个连通块，分裂网络
             List<T> newNetworks = new ArrayList<>();
             List<List<PipeBE<T>>> pipeGroups = new ArrayList<>();
             for (Set<BlockPos> group : groups) {
                 UUID newUUID = UUID.randomUUID();
                 T newNetwork = networkType.create(newUUID);
+                if (newNetwork == null)
+                    continue;
                 getNetworkData().addNetwork(networkType, newNetwork);
                 List<PipeBE<T>> pipes = new ArrayList<>();
                 for (BlockPos pos : group) {
-                    BlockEntity be = level.getBlockEntity(pos);
-                    if (be instanceof PipeBE<?> pipe && pipe.networkType == this.networkType) {
-                        ((PipeBE<T>) pipe).setNetworkUUID(newUUID);
-                        // be.setChanged();
-                        pipes.add((PipeBE<T>) pipe);
+                    if (level != null) {
+                        BlockEntity be = level.getBlockEntity(pos);
+                        if (be instanceof PipeBE<?> pipe && pipe.networkType == this.networkType) {
+                            @SuppressWarnings("unchecked")
+                            PipeBE<T> typedPipe = (PipeBE<T>) pipe;
+                            typedPipe.setNetworkUUID(newUUID);
+                            newNetwork.addPipe(pos);
+                            pipes.add(typedPipe);
+                        }
                     }
                 }
                 newNetworks.add(newNetwork);
                 pipeGroups.add(pipes);
             }
-            // 委托子类实现内容迁移（如流体、能量等）
             redistributeNetworkContent(newNetworks, pipeGroups);
-
-            // 4. 清除自身networkUUID
             this.networkUUID = null;
-            // 5. 清除网络数据
             getNetworkData().removeNetwork(networkType, uuid);
         } else {
             // 只是区块卸载，不做分裂等破坏性操作
@@ -229,28 +205,77 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
             return;
         if (this.networkUUID != null)
             return; // 已有网络，不要重复分配
-        // 尝试连接周围相同Type的网络
+        // 尝试连接周围相同Type的网络，收集所有不同的networkUUID
+        Set<UUID> neighborNetworks = new HashSet<>();
+        Map<UUID, T> neighborNetworkMap = new HashMap<>();
         for (Direction dir : Direction.values()) {
             BlockPos neighborPos = worldPosition.relative(dir);
             BlockEntity neighbor = level.getBlockEntity(neighborPos);
             if (neighbor instanceof PipeBE<?> neighborPipe) {
-                if (neighborPipe.networkType == this.networkType) {
-                    UUID neighborUUID = neighborPipe.networkUUID;
-                    if (neighborUUID != null) {
-                        this.setNetworkUUID(neighborUUID);
-                        return;
-                    }
+                if (neighborPipe.networkType == this.networkType && neighborPipe.networkUUID != null) {
+                    neighborNetworks.add(neighborPipe.networkUUID);
+                    T net = getNetworkData().getNetworkByUuid(networkType, neighborPipe.networkUUID);
+                    if (net != null)
+                        neighborNetworkMap.put(neighborPipe.networkUUID, net);
                 }
             }
         }
+        if (!neighborNetworks.isEmpty()) {
+            if (neighborNetworks.size() == 1) {
+                // 只有一个邻居网络，直接加入该网络
+                UUID onlyUUID = neighborNetworks.iterator().next();
+                this.setNetworkUUID(onlyUUID);
+                T net = neighborNetworkMap.get(onlyUUID);
+                if (net != null)
+                    net.addPipe(worldPosition);
+                return;
+            } else {
+                // 合并所有不同的网络，创建新网络
+                UUID newUUID = UUID.randomUUID();
+                T newNetwork = networkType.create(newUUID);
+                getNetworkData().addNetwork(networkType, newNetwork);
+                this.setNetworkUUID(newUUID);
+                newNetwork.addPipe(worldPosition);
+                // 合并所有内容到新网络，并合并所有管道坐标
+                for (UUID oldUUID : neighborNetworks) {
+                    T oldNetwork = neighborNetworkMap.get(oldUUID);
+                    if (oldNetwork != null && newNetwork != null) {
+                        mergeNetworkContent(newNetwork, oldNetwork);
+                        for (BlockPos pos : oldNetwork.getPipePositions()) {
+                            newNetwork.addPipe(pos);
+                        }
+                    }
+                }
+                // 用DFS递归更新所有连通管道的networkUUID为新UUID
+                Set<BlockPos> visited = new HashSet<>();
+                for (UUID oldUUID : neighborNetworks) {
+                    T oldNetwork = neighborNetworkMap.get(oldUUID);
+                    if (oldNetwork != null) {
+                        for (BlockPos pos : oldNetwork.getPipePositions()) {
+                            dfsUpdateNetworkUUID(level, pos, oldUUID, newUUID, visited);
+                        }
+                    }
+                }
+                for (UUID oldUUID : neighborNetworks) {
+                    getNetworkData().removeNetwork(networkType, oldUUID);
+                }
+                return;
+            }
+        }
         // 若未找到可用网络，则新建
-        T newNetwork = networkType.create(java.util.UUID.randomUUID());
+        T newNetwork = networkType.create(UUID.randomUUID());
         getNetworkData().addNetwork(networkType, newNetwork);
         this.setNetworkUUID(newNetwork.getUuid());
+        newNetwork.addPipe(worldPosition);
     }
 
+    /**
+     * 合并otherNetwork内容到mainNetwork，子类需实现具体合并逻辑
+     */
+    protected abstract void mergeNetworkContent(T mainNetwork, T otherNetwork);
+
     @Override
-    protected void saveAdditional(CompoundTag tag) {
+    protected void saveAdditional(@javax.annotation.Nonnull CompoundTag tag) {
         super.saveAdditional(tag);
         if (networkUUID != null) {
             tag.putUUID("networkUUID", networkUUID);
@@ -263,7 +288,7 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
     }
 
     @Override
-    public void load(CompoundTag tag) {
+    public void load(@javax.annotation.Nonnull CompoundTag tag) {
         super.load(tag);
         if (tag.hasUUID("networkUUID")) {
             this.networkUUID = tag.getUUID("networkUUID");
@@ -316,4 +341,74 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
     }
 
     protected abstract Block getBlock();
+
+    /**
+     * DFS递归更新所有连通管道的networkUUID
+     */
+    private void dfsUpdateNetworkUUID(Level level, BlockPos pos, UUID oldUUID, UUID newUUID, Set<BlockPos> visited) {
+        if (!visited.add(pos))
+            return;
+        BlockEntity be = level.getBlockEntity(pos);
+        if (!(be instanceof PipeBE<?> pipe) || pipe.networkType != this.networkType
+                || !oldUUID.equals(pipe.networkUUID))
+            return;
+        ((PipeBE<?>) pipe).setNetworkUUID(newUUID);
+        for (Direction dir : Direction.values()) {
+            BlockPos next = pos.relative(dir);
+            dfsUpdateNetworkUUID(level, next, oldUUID, newUUID, visited);
+        }
+    }
+
+    /**
+     * 判断某BlockEntity是否为本类型管道且networkUUID匹配
+     */
+    private boolean isSameNetworkPipe(BlockEntity be, UUID uuid) {
+        return be instanceof PipeBE<?> pipe && pipe.networkType == this.networkType && uuid.equals(pipe.networkUUID);
+    }
+
+    /**
+     * 收集与本方块同networkUUID的所有相邻管道位置
+     */
+    private Set<BlockPos> collectNeighborPipePositions(UUID uuid) {
+        Set<BlockPos> result = new HashSet<>();
+        for (Direction dir : Direction.values()) {
+            BlockPos neighborPos = worldPosition.relative(dir);
+            BlockEntity neighbor = level.getBlockEntity(neighborPos);
+            if (isSameNetworkPipe(neighbor, uuid)) {
+                result.add(neighborPos);
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Flood Fill/BFS分组所有连通管道
+     */
+    private List<Set<BlockPos>> splitPipeGroups(Set<BlockPos> allPipes, UUID uuid) {
+        Set<BlockPos> visited = new HashSet<>();
+        List<Set<BlockPos>> groups = new ArrayList<>();
+        for (BlockPos start : allPipes) {
+            if (visited.contains(start))
+                continue;
+            Set<BlockPos> group = new HashSet<>();
+            Queue<BlockPos> queue = new ArrayDeque<>();
+            queue.add(start);
+            while (!queue.isEmpty()) {
+                BlockPos pos = queue.poll();
+                if (!visited.add(pos))
+                    continue;
+                group.add(pos);
+                for (Direction dir : Direction.values()) {
+                    BlockPos next = pos.relative(dir);
+                    BlockEntity be = level.getBlockEntity(next);
+                    if (isSameNetworkPipe(be, uuid) && !visited.contains(next)) {
+                        queue.add(next);
+                    }
+                }
+            }
+            if (!group.isEmpty())
+                groups.add(group);
+        }
+        return groups;
+    }
 }

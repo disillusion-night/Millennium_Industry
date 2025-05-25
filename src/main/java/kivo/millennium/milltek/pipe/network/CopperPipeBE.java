@@ -1,9 +1,8 @@
-package kivo.millennium.milltek.pipe.client;
+package kivo.millennium.milltek.pipe.network;
 
 import kivo.millennium.milltek.init.MillenniumBlockEntities;
 import kivo.millennium.milltek.init.MillenniumBlocks;
 import kivo.millennium.milltek.init.MillenniumLevelNetworkType;
-import kivo.millennium.milltek.pipe.client.network.FluidPipeNetwork;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.world.level.block.Block;
@@ -89,6 +88,29 @@ public class CopperPipeBE extends PipeBE<FluidPipeNetwork> {
         }
         // 清空原网络流体
         oldNetwork.getTank().drain(totalFluid, FluidAction.EXECUTE);
+    }
+
+    @Override
+    protected void mergeNetworkContent(FluidPipeNetwork mainNetwork, FluidPipeNetwork otherNetwork) {
+        // 合并otherNetwork的流体到mainNetwork，超出容量部分丢弃
+        var mainTank = mainNetwork.getTank();
+        var otherTank = otherNetwork.getTank();
+        FluidStack mainFluid = mainTank.getFluid();
+        FluidStack otherFluid = otherTank.getFluid();
+        if (!mainFluid.isEmpty() && !otherFluid.isEmpty() && mainFluid.isFluidEqual(otherFluid)) {
+            int total = mainFluid.getAmount() + otherFluid.getAmount();
+            int max = mainTank.getCapacity();
+            mainFluid.setAmount(Math.min(total, max));
+            mainTank.setFluid(mainFluid);
+            otherTank.drain(otherFluid.getAmount(), FluidAction.EXECUTE);
+        } else if (mainFluid.isEmpty() && !otherFluid.isEmpty()) {
+            int toFill = Math.min(otherFluid.getAmount(), mainTank.getCapacity());
+            FluidStack copy = otherFluid.copy();
+            copy.setAmount(toFill);
+            mainTank.setFluid(copy);
+            otherTank.drain(toFill, FluidAction.EXECUTE);
+        }
+        // 若流体类型不同，优先保留mainNetwork内容，otherNetwork内容丢弃
     }
 
     @Override

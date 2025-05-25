@@ -1,5 +1,8 @@
 package kivo.millennium.milltek.gas;
 
+import static kivo.millennium.milltek.Main.MODID;
+
+import kivo.millennium.milltek.init.MillenniumGases;
 import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
@@ -9,19 +12,13 @@ import net.minecraft.resources.ResourceLocation;
  */
 public class Gas {
     private final int color;
-    private final String id; // 形如 "milltek:oxygen"
 
-    public Gas(String id, int color) {
-        this.id = id;
+    public Gas(int color) {
         this.color = color;
     }
 
-    public String getId() {
-        return id;
-    }
-
     public ResourceLocation getRegistryName() {
-        return new ResourceLocation("milltek", id);
+        return MillenniumGases.getRL(this);
     }
 
     public int getColor() {
@@ -35,7 +32,7 @@ public class Gas {
         if (o == null || getClass() != o.getClass())
             return false;
         Gas gas = (Gas) o;
-        return id.equals(gas.id);
+        return getRegistryName().equals(gas.getRegistryName());
     }
 
     public Component getDisplayName() {
@@ -44,10 +41,5 @@ public class Gas {
 
     public String getDescriptionID() {
         return Util.makeDescriptionId("gas", getRegistryName());
-    }
-
-    @Override
-    public int hashCode() {
-        return id.hashCode();
     }
 }

@@ -1,4 +1,4 @@
-package kivo.millennium.milltek.pipe.client;
+package kivo.millennium.milltek.pipe.network;
 
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Block;

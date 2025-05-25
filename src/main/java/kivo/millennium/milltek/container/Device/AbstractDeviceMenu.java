@@ -20,9 +20,11 @@ import kivo.millennium.milltek.block.device.AbstractMachineBE;
 import kivo.millennium.milltek.capability.CapabilityCache;
 import kivo.millennium.milltek.container.slot.FluidSlot;
 import kivo.millennium.milltek.container.slot.GasSlot;
+import kivo.millennium.milltek.gas.GasStack;
 import kivo.millennium.milltek.storage.MillenniumEnergyStorage;
 import kivo.millennium.milltek.network.MillenniumNetwork;
 import kivo.millennium.milltek.network.SyncFluidSlotPacket;
+import kivo.millennium.milltek.network.SyncGasSlotPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -41,12 +43,13 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
     protected MillenniumEnergyStorage energyStorage;
     protected Level level;
     protected FluidStack[] fluidStacks;
+    protected GasStack[] gasStacks;
 
     // FluidSlot支持
     protected final List<FluidSlot> fluidSlots = new ArrayList<>();
 
     // 气体槽支持
-    protected final java.util.List<GasSlot> gasSlots = new java.util.ArrayList<>();
+    protected final List<GasSlot> gasSlots = new ArrayList<>();
 
     protected AbstractDeviceMenu(MenuType<?> pType, int pContainerId, Player player, BlockPos pos,
             Container pContainer) {
@@ -254,10 +257,21 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
         // 同步所有FluidSlot的流体内容到客户端
         if (player instanceof ServerPlayer sp) {
             for (FluidSlot slot : fluidSlots) {
+                if (slot.getFluidStack().isEmpty())
+                    continue; // 如果槽位为空，则不发送同步包
                 MillenniumNetwork.INSTANCE.send(
                         PacketDistributor.PLAYER.with(() -> sp),
                         new SyncFluidSlotPacket(this.containerId, slot.getTankIndex(), slot.getFluidCapacity(),
                                 slot.getFluidStack()));
+            }
+
+            for (GasSlot slot : gasSlots) {
+                if (slot.getGasStack().isEmpty())
+                    continue; // 如果槽位为空，则不发送同步包
+                MillenniumNetwork.INSTANCE.send(
+                        PacketDistributor.PLAYER.with(() -> sp),
+                        new SyncGasSlotPacket(this.containerId, slot.getTankIndex(),
+                                slot.getGasCapacity(), slot.getGasStack()));
             }
         }
     }
@@ -268,10 +282,21 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
         // 实时同步所有FluidSlot的流体内容到客户端
         if (player instanceof ServerPlayer sp) {
             for (FluidSlot slot : fluidSlots) {
-                kivo.millennium.milltek.network.MillenniumNetwork.INSTANCE.send(
-                        net.minecraftforge.network.PacketDistributor.PLAYER.with(() -> sp),
-                        new kivo.millennium.milltek.network.SyncFluidSlotPacket(this.containerId, slot.getTankIndex(),
+                if (slot.getFluidStack().isEmpty())
+                    continue; // 如果槽位为空，则不发送同步包
+                MillenniumNetwork.INSTANCE.send(
+                        PacketDistributor.PLAYER.with(() -> sp),
+                        new SyncFluidSlotPacket(this.containerId, slot.getTankIndex(),
                                 slot.getFluidCapacity(), slot.getFluidStack()));
+            }
+
+            for (GasSlot slot : gasSlots) {
+                if (slot.getGasStack().isEmpty())
+                    continue; // 如果槽位为空，则不发送同步包
+                MillenniumNetwork.INSTANCE.send(
+                        PacketDistributor.PLAYER.with(() -> sp),
+                        new SyncGasSlotPacket(this.containerId, slot.getTankIndex(),
+                                slot.getGasCapacity(), slot.getGasStack()));
             }
         }
     }

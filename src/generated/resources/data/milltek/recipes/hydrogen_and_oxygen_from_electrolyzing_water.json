@@ -10,7 +10,11 @@
   "results": [
     {
       "amount": 1000,
-      "fluid": "minecraft:water"
+      "gas": "milltek:hydrogen"
+    },
+    {
+      "amount": 500,
+      "gas": "milltek:oxygen"
     }
   ],
   "time": 200

@@ -7,7 +7,9 @@ import com.google.gson.JsonSyntaxException;
 
 import kivo.millennium.milltek.Main;
 import kivo.millennium.milltek.capability.CapabilityType;
+import kivo.millennium.milltek.gas.GasStack;
 import kivo.millennium.milltek.recipe.component.FluidComponent;
+import kivo.millennium.milltek.recipe.component.GasComponent;
 import kivo.millennium.milltek.recipe.component.ItemComponent;
 import net.minecraft.core.NonNullList;
 import net.minecraft.core.RegistryAccess;
@@ -250,6 +252,9 @@ public abstract class GenericRecipe implements Recipe<ProxyContainer> {
                 } else if (jsonObject.has("fluid")) {
                     FluidComponent component = new FluidComponent(jsonObject);
                     return component;
+                } else if (jsonObject.has("gas")) {
+                    GasComponent component = new GasComponent(jsonObject);
+                    return component;
                 }
             } else if (element.isJsonPrimitive() && element.getAsJsonPrimitive().isString()) {
                 // 如果是简单的字符串，默认作为物品处理
@@ -265,6 +270,8 @@ public abstract class GenericRecipe implements Recipe<ProxyContainer> {
                 return new ItemComponent(ItemStack.EMPTY);
             } else if (CapabilityType.FLUID.toString().equals(type)) {
                 return new FluidComponent(FluidStack.EMPTY);
+            } else if (CapabilityType.GAS.toString().equals(type)) {
+                return new GasComponent(GasStack.EMPTY);
             }
             return null;
         }

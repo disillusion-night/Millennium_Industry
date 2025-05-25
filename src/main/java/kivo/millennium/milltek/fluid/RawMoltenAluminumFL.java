@@ -12,7 +12,8 @@ import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fluids.ForgeFlowingFluid;
 
 public abstract class RawMoltenAluminumFL extends ForgeFlowingFluid {
-    public static final Properties PROPERTIES = new Properties(MillenniumFluidTypes.RAW_MOLTEN_ALUMINUM_FT, MillenniumFluids.RAW_MOLTEN_ALUMINUM, MillenniumFluids.FLOWING_RAW_MOLTEN_ALUMINUM)
+    public static final Properties PROPERTIES = new Properties(MillenniumFluidTypes.RAW_MOLTEN_ALUMINUM_FT,
+            MillenniumFluids.RAW_MOLTEN_ALUMINUM, MillenniumFluids.FLOWING_RAW_MOLTEN_ALUMINUM)
             .explosionResistance(100f).tickRate(5).block(MillenniumBlocks.RAW_MOLTEN_ALUMINUM_BL);
 
     protected RawMoltenAluminumFL() {
@@ -43,6 +44,7 @@ public abstract class RawMoltenAluminumFL extends ForgeFlowingFluid {
             return false;
         }
     }
+
     public static class FT extends AbstractMoltenFluidType {
         public FT() {
             super(FluidType.Properties.create().temperature(2000), 0xe6e0dc);

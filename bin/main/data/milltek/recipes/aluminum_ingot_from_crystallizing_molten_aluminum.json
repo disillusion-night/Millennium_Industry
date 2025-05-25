@@ -1,0 +1,19 @@
+{
+  "type": "milltek:crystallizing",
+  "category": "misc",
+  "energy": 1000,
+  "experience": 0.0,
+  "ingredients": [
+    {
+      "amount": 100,
+      "fluid": "milltek:molten_aluminum"
+    },
+    {
+      "item": "minecraft:ice"
+    }
+  ],
+  "result": {
+    "item": "milltek:aluminum_ingot"
+  },
+  "time": 100
+}

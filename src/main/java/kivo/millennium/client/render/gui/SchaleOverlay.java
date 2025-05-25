@@ -1,13 +1,15 @@
 package kivo.millennium.client.render.gui;
 
 import com.mojang.blaze3d.systems.RenderSystem;
-import kivo.millennium.millind.Main;
-import kivo.millennium.millind.init.MillenniumCreativeTab;
+
+import kivo.millennium.milltek.Main;
+import kivo.millennium.milltek.init.MillenniumCreativeTab;
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.world.item.CreativeModeTab;
-import org.joml.Vector2i;
 
-import static kivo.millennium.millind.Main.getKey;
+import static kivo.millennium.milltek.Main.getKey;
+
+import org.joml.Vector2i;
 
 public class SchaleOverlay {
     public static void renderCustomOverlayer(GuiGraphics pGuiGraphics, int leftpos, int toppos, int width, int height, CreativeModeTab selectedTab){

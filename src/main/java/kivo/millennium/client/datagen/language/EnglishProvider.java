@@ -1,18 +1,18 @@
 package kivo.millennium.client.datagen.language;
 
+import static kivo.millennium.milltek.Main.getKey;
+import static kivo.millennium.milltek.Main.log;
 
-import kivo.millennium.millind.Main;
-import kivo.millennium.millind.init.MillenniumBlocks;
-import kivo.millennium.millind.init.MillenniumCreativeTab;
-import kivo.millennium.millind.init.MillenniumFluidTypes;
-import kivo.millennium.millind.init.MillenniumItems;
+import kivo.millennium.milltek.Main;
+import kivo.millennium.milltek.init.MillenniumBlocks;
+import kivo.millennium.milltek.init.MillenniumCreativeTab;
+import kivo.millennium.milltek.init.MillenniumFluidTypes;
+import kivo.millennium.milltek.init.MillenniumGases;
+import kivo.millennium.milltek.init.MillenniumItems;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.Item;
-
-import static kivo.millennium.millind.Main.getKey;
-import static kivo.millennium.millind.Main.log;
 
 public class EnglishProvider extends MillenniumLanguageProvider {
     public EnglishProvider(PackOutput output) {
@@ -32,9 +32,11 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.MELTING_FURNACE_BL.get(), "Melting Furnace");
         add(MillenniumBlocks.RESONANCE_CHAMBER_BL.get(), "Resonance Chamber");
         add(MillenniumBlocks.CRYSTALLIZER_BL.get(), "Crystallizer");
-        add(MillenniumBlocks.SOLAR_GENERATOR.get(), "Solar Generator");
+        add(MillenniumBlocks.SOLAR_GENERATOR_BL.get(), "Solar Generator");
+        add(MillenniumBlocks.ELECTROLYZER_BL.get(), "Electrolyzer");
 
         add(MillenniumBlocks.ALERT_BLOCK.get(), "Alert Block");
+        // add(MillenniumBlocks.ALERT_LINE_BL.get(), "Alert Line Block");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "High-Purity Wolfsegg Steel");
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "Low-Purity Wolfsegg Steel");
@@ -77,7 +79,7 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.TITANIUM_ALLOY_PICKAXE.get(), "Titanium Alloy Pickaxe");
         add(MillenniumItems.TITANIUM_ALLOY_SHOVEL.get(), "Titanium Alloy Shovel");
         add(MillenniumItems.TITANIUM_ALLOY_SWORD.get(), "Titanium Alloy Sword");
-        
+
         add(MillenniumItems.CRYOLITE.get(), "Cryolite");
         add(MillenniumItems.CRYOLITE_DUST.get(), "Cryolite Dust");
 
@@ -125,6 +127,8 @@ public class EnglishProvider extends MillenniumLanguageProvider {
         add(MillenniumFluidTypes.RAW_MOLTEN_ALUMINUM_FT.get().getDescriptionId(), "Raw Molten Aluminum");
         add(MillenniumFluidTypes.MOLTEN_ALUMINUM_ALLOY_FT.get().getDescriptionId(), "Molten Aluminum Alloy");
 
+        add(MillenniumBlocks.COPPER_PIPE.get(), "Copper Pipe");
+        add(MillenniumBlocks.ENERGY_PIPE.get(), "Energy Pipe");
 
         add(MillenniumBlocks.WOLFRAM_STEEL_BLOCK.get(), "Wolfram Steel Block");
         add(MillenniumItems.WOLFRAM_STEEL_INGOT.get(), "Wolfram Steel Ingot");
@@ -142,14 +146,31 @@ public class EnglishProvider extends MillenniumLanguageProvider {
 
         add(MillenniumItems.WRENCH.get(), "Wrench");
 
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.OOPARTS.get())), "Millennium Industry:Oopart");
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.ENGINEERING_PARTS.get())), "Millennium Industry:Engineering Parts");
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.MATERIALS.get())), "Millennium Industry:Materials");
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.TOOLS.get())), "Millennium Industry:Tools");
+        add(MillenniumCreativeTab.OOPARTS.get(), "Millennium Industry:Ooparts");
+        add(MillenniumCreativeTab.ENGINEERING_PARTS.get(), "Millennium Industry:Engineering Parts");
+        add(MillenniumCreativeTab.MATERIALS.get(), "Millennium Industry:Materials");
+        add(MillenniumCreativeTab.TOOLS.get(), "Millennium Industry:Tools");
+        add(MillenniumCreativeTab.CONTAINERS.get(), "Millennium Industry:Containers");
+
+
+        // gas
+        add(MillenniumGases.OXYGEN.get(), "Oxygen");
+        add(MillenniumGases.HYDROGEN.get(), "Hydrogen");
+        add(MillenniumGases.NITROGEN.get(), "Nitrogen");
+        add(MillenniumGases.CARBON_DIOXIDE.get(), "Carbon Dioxide");
+        add(MillenniumGases.METHANE.get(), "Methane");
+        add(MillenniumGases.AMMONIA.get(), "Ammonia");
+        add(MillenniumGases.SULFUR_DIOXIDE.get(), "Sulfur Dioxide");
+        add(MillenniumGases.CHLORINE.get(), "Chlorine");
+        add(MillenniumGases.CARBON_MONOXIDE.get(), "Carbon Monoxide");
+        add(MillenniumGases.ETHYLENE.get(), "Ethylene");
+        add(MillenniumGases.PROPANE.get(), "Propane");
+        add(MillenniumGases.STEAM.get(), "Steam");
+
     }
 
-
-    private void addEnglishFromId(Item item){
+    private void addEnglishFromId(Item item) {
         add(item, Main.getKey(item).getPath());
     }
+
 }

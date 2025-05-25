@@ -1,0 +1,14 @@
+{
+  "type": "milltek:melting",
+  "category": "misc",
+  "energy": 1000,
+  "experience": 0.0,
+  "ingredient": {
+    "item": "milltek:aluminum_ingot"
+  },
+  "result": {
+    "amount": 100,
+    "fluid": "milltek:molten_aluminum"
+  },
+  "time": 100
+}

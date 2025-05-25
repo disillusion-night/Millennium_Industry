@@ -3,9 +3,10 @@ package kivo.millennium.client.render.blockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import kivo.millennium.millind.block.device.MillenniumBlockProperty;
-import kivo.millennium.millind.block.laser.NetherStarLaserBE;
-import kivo.millennium.millind.util.ShapeUtils;
+
+import kivo.millennium.milltek.block.device.MillenniumBlockProperty;
+import kivo.millennium.milltek.block.laser.NetherStarLaserBE;
+import kivo.millennium.milltek.util.ShapeUtils;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
@@ -26,16 +27,17 @@ import net.minecraft.world.phys.Vec3;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
 
-
 public class NetherStarLaserBER implements BlockEntityRenderer<NetherStarLaserBE> {
 
-    private static final ResourceLocation BEAM_TEXTURE = new ResourceLocation("minecraft", "textures/entity/beacon_beam.png"); // 原版信标光束纹理，你可以替换为自定义纹理
+    private static final ResourceLocation BEAM_TEXTURE = new ResourceLocation("minecraft",
+            "textures/entity/beacon_beam.png"); // 原版信标光束纹理，你可以替换为自定义纹理
 
     public NetherStarLaserBER(BlockEntityRendererProvider.Context context) {
 
     }
 
-    public void render(NetherStarLaserBE blockEntity, float partialTick, PoseStack pPoseStack, MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
+    public void render(NetherStarLaserBE blockEntity, float partialTick, PoseStack pPoseStack,
+            MultiBufferSource bufferSource, int packedLight, int packedOverlay) {
         BlockState blockState = blockEntity.getBlockState();
 
         long GameTime = blockEntity.getLevel().getGameTime();
@@ -51,14 +53,15 @@ public class NetherStarLaserBER implements BlockEntityRenderer<NetherStarLaserBE
         if (blockState.getValue(MillenniumBlockProperty.WORKING)) {
             renderCore(blockEntity, partialTick, GameTime, pPoseStack, bufferSource, packedLight, packedOverlay);
 
-            float[] color = new float[]{1, 1, 1};
+            float[] color = new float[] { 1, 1, 1 };
             renderBeam(pPoseStack, bufferSource, partialTick, blockEntity.getLevel().getGameTime(), 50, color);
         }
 
         pPoseStack.popPose();
     }
 
-    public void renderCore(NetherStarLaserBE pBlockEntity, float partialTick, long pGameTime,PoseStack pPoseStack, MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
+    public void renderCore(NetherStarLaserBE pBlockEntity, float partialTick, long pGameTime, PoseStack pPoseStack,
+            MultiBufferSource pBuffer, int pPackedLight, int pPackedOverlay) {
         pPoseStack.pushPose();
 
         pPoseStack.translate(0.0f, -0.3f, 0.0f);
@@ -73,30 +76,33 @@ public class NetherStarLaserBER implements BlockEntityRenderer<NetherStarLaserBE
 
         pPoseStack.mulPose(Axis.YP.rotationDegrees(RotationYaw));
 
-
         ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
 
         ItemStack stack = new ItemStack(Items.NETHER_STAR);
 
-        BakedModel bakedModel = itemRenderer.getModel(stack,pBlockEntity.getLevel(),null,0);
+        BakedModel bakedModel = itemRenderer.getModel(stack, pBlockEntity.getLevel(), null, 0);
 
-        itemRenderer.render(stack, ItemDisplayContext.FIXED,true,pPoseStack,pBuffer,pPackedLight,pPackedOverlay,bakedModel);
-
+        itemRenderer.render(stack, ItemDisplayContext.FIXED, true, pPoseStack, pBuffer, pPackedLight, pPackedOverlay,
+                bakedModel);
 
         pPoseStack.popPose();
     }
 
-    private static void renderBeam(PoseStack pPoseStack, MultiBufferSource pBufferSource, float pPartialTick, long pGameTime, int pHeight, float[] pColors) {
-        renderBeaconBeam(pPoseStack, pBufferSource, BEAM_TEXTURE, pPartialTick, 1.0F, pGameTime, pHeight, pColors, 0.08F, 0.15F);
+    private static void renderBeam(PoseStack pPoseStack, MultiBufferSource pBufferSource, float pPartialTick,
+            long pGameTime, int pHeight, float[] pColors) {
+        renderBeaconBeam(pPoseStack, pBufferSource, BEAM_TEXTURE, pPartialTick, 1.0F, pGameTime, pHeight, pColors,
+                0.08F, 0.15F);
     }
 
-    public static void renderBeaconBeam(PoseStack pPoseStack, MultiBufferSource pBufferSource, ResourceLocation pBeamLocation, float pPartialTick, float pTextureScale, long pGameTime, int pHeight, float[] pColors, float pBeamRadius, float pGlowRadius) {
+    public static void renderBeaconBeam(PoseStack pPoseStack, MultiBufferSource pBufferSource,
+            ResourceLocation pBeamLocation, float pPartialTick, float pTextureScale, long pGameTime, int pHeight,
+            float[] pColors, float pBeamRadius, float pGlowRadius) {
         int i = pHeight;
         pPoseStack.pushPose();
         pPoseStack.translate(0, 0.25D, 0);
-        float f = (float)Math.floorMod(pGameTime, 40) + pPartialTick;
+        float f = (float) Math.floorMod(pGameTime, 40) + pPartialTick;
         float f1 = pHeight < 0 ? f : -f;
-        float f2 = Mth.frac(f1 * 0.2F - (float)Mth.floor(f1 * 0.1F));
+        float f2 = Mth.frac(f1 * 0.2F - (float) Mth.floor(f1 * 0.1F));
         float f3 = pColors[0];
         float f4 = pColors[1];
         float f5 = pColors[2];
@@ -111,8 +117,9 @@ public class NetherStarLaserBER implements BlockEntityRenderer<NetherStarLaserBE
         float f13 = 0.0F;
         float f14 = 1.0F;
         float f15 = -1.0F + f2;
-        float f16 = (float)pHeight * pTextureScale * (0.5F / pBeamRadius) + f15;
-        renderPart(pPoseStack, pBufferSource.getBuffer(RenderType.beaconBeam(pBeamLocation, false)), f3, f4, f5, 1.0F,0, i, 0.0F, pBeamRadius, pBeamRadius, 0.0F, f9, 0.0F, 0.0F, f12, 0.0F, 1.0F, f16, f15);
+        float f16 = (float) pHeight * pTextureScale * (0.5F / pBeamRadius) + f15;
+        renderPart(pPoseStack, pBufferSource.getBuffer(RenderType.beaconBeam(pBeamLocation, false)), f3, f4, f5, 1.0F,
+                0, i, 0.0F, pBeamRadius, pBeamRadius, 0.0F, f9, 0.0F, 0.0F, f12, 0.0F, 1.0F, f16, f15);
         pPoseStack.popPose();
         f6 = -pGlowRadius;
         float f7 = -pGlowRadius;
@@ -121,30 +128,41 @@ public class NetherStarLaserBER implements BlockEntityRenderer<NetherStarLaserBE
         f13 = 0.0F;
         f14 = 1.0F;
         f15 = -1.0F + f2;
-        f16 = (float)pHeight * pTextureScale + f15;
-        renderPart(pPoseStack, pBufferSource.getBuffer(RenderType.beaconBeam(pBeamLocation, true)), f3, f4, f5, 0.125F, 0, i, f6, f7, pGlowRadius, f8, f9, pGlowRadius, pGlowRadius, pGlowRadius, 0.0F, 1.0F, f16, f15);
+        f16 = (float) pHeight * pTextureScale + f15;
+        renderPart(pPoseStack, pBufferSource.getBuffer(RenderType.beaconBeam(pBeamLocation, true)), f3, f4, f5, 0.125F,
+                0, i, f6, f7, pGlowRadius, f8, f9, pGlowRadius, pGlowRadius, pGlowRadius, 0.0F, 1.0F, f16, f15);
         pPoseStack.popPose();
     }
 
-    private static void renderPart(PoseStack pPoseStack, VertexConsumer pConsumer, float pRed, float pGreen, float pBlue, float pAlpha, int pMinY, int pMaxY, float pX0, float pZ0, float pX1, float pZ1, float pX2, float pZ2, float pX3, float pZ3, float pMinU, float pMaxU, float pMinV, float pMaxV) {
+    private static void renderPart(PoseStack pPoseStack, VertexConsumer pConsumer, float pRed, float pGreen,
+            float pBlue, float pAlpha, int pMinY, int pMaxY, float pX0, float pZ0, float pX1, float pZ1, float pX2,
+            float pZ2, float pX3, float pZ3, float pMinU, float pMaxU, float pMinV, float pMaxV) {
         PoseStack.Pose posestack$pose = pPoseStack.last();
         Matrix4f matrix4f = posestack$pose.pose();
         Matrix3f matrix3f = posestack$pose.normal();
-        renderQuad(matrix4f, matrix3f, pConsumer, pRed, pGreen, pBlue, pAlpha, pMinY, pMaxY, pX0, pZ0, pX1, pZ1, pMinU, pMaxU, pMinV, pMaxV);
-        renderQuad(matrix4f, matrix3f, pConsumer, pRed, pGreen, pBlue, pAlpha, pMinY, pMaxY, pX3, pZ3, pX2, pZ2, pMinU, pMaxU, pMinV, pMaxV);
-        renderQuad(matrix4f, matrix3f, pConsumer, pRed, pGreen, pBlue, pAlpha, pMinY, pMaxY, pX1, pZ1, pX3, pZ3, pMinU, pMaxU, pMinV, pMaxV);
-        renderQuad(matrix4f, matrix3f, pConsumer, pRed, pGreen, pBlue, pAlpha, pMinY, pMaxY, pX2, pZ2, pX0, pZ0, pMinU, pMaxU, pMinV, pMaxV);
+        renderQuad(matrix4f, matrix3f, pConsumer, pRed, pGreen, pBlue, pAlpha, pMinY, pMaxY, pX0, pZ0, pX1, pZ1, pMinU,
+                pMaxU, pMinV, pMaxV);
+        renderQuad(matrix4f, matrix3f, pConsumer, pRed, pGreen, pBlue, pAlpha, pMinY, pMaxY, pX3, pZ3, pX2, pZ2, pMinU,
+                pMaxU, pMinV, pMaxV);
+        renderQuad(matrix4f, matrix3f, pConsumer, pRed, pGreen, pBlue, pAlpha, pMinY, pMaxY, pX1, pZ1, pX3, pZ3, pMinU,
+                pMaxU, pMinV, pMaxV);
+        renderQuad(matrix4f, matrix3f, pConsumer, pRed, pGreen, pBlue, pAlpha, pMinY, pMaxY, pX2, pZ2, pX0, pZ0, pMinU,
+                pMaxU, pMinV, pMaxV);
     }
 
-    private static void renderQuad(Matrix4f pPose, Matrix3f pNormal, VertexConsumer pConsumer, float pRed, float pGreen, float pBlue, float pAlpha, int pMinY, int pMaxY, float pMinX, float pMinZ, float pMaxX, float pMaxZ, float pMinU, float pMaxU, float pMinV, float pMaxV) {
+    private static void renderQuad(Matrix4f pPose, Matrix3f pNormal, VertexConsumer pConsumer, float pRed, float pGreen,
+            float pBlue, float pAlpha, int pMinY, int pMaxY, float pMinX, float pMinZ, float pMaxX, float pMaxZ,
+            float pMinU, float pMaxU, float pMinV, float pMaxV) {
         addVertex(pPose, pNormal, pConsumer, pRed, pGreen, pBlue, pAlpha, pMaxY, pMinX, pMinZ, pMaxU, pMinV);
         addVertex(pPose, pNormal, pConsumer, pRed, pGreen, pBlue, pAlpha, pMinY, pMinX, pMinZ, pMaxU, pMaxV);
         addVertex(pPose, pNormal, pConsumer, pRed, pGreen, pBlue, pAlpha, pMinY, pMaxX, pMaxZ, pMinU, pMaxV);
         addVertex(pPose, pNormal, pConsumer, pRed, pGreen, pBlue, pAlpha, pMaxY, pMaxX, pMaxZ, pMinU, pMinV);
     }
 
-    private static void addVertex(Matrix4f pPose, Matrix3f pNormal, VertexConsumer pConsumer, float pRed, float pGreen, float pBlue, float pAlpha, int pY, float pX, float pZ, float pU, float pV) {
-        pConsumer.vertex(pPose, pX, (float)pY, pZ).color(pRed, pGreen, pBlue, pAlpha).uv(pU, pV).overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(pNormal, 0.0F, 1.0F, 0.0F).endVertex();
+    private static void addVertex(Matrix4f pPose, Matrix3f pNormal, VertexConsumer pConsumer, float pRed, float pGreen,
+            float pBlue, float pAlpha, int pY, float pX, float pZ, float pU, float pV) {
+        pConsumer.vertex(pPose, pX, (float) pY, pZ).color(pRed, pGreen, pBlue, pAlpha).uv(pU, pV)
+                .overlayCoords(OverlayTexture.NO_OVERLAY).uv2(15728880).normal(pNormal, 0.0F, 1.0F, 0.0F).endVertex();
     }
 
     @Override

@@ -1,15 +1,16 @@
 package kivo.millennium.client.datagen.language;
 
-import kivo.millennium.millind.machine.InductionFurnace.InductionFurnaceBL;
-import kivo.millennium.millind.init.MillenniumBlocks;
-import kivo.millennium.millind.init.MillenniumCreativeTab;
-import kivo.millennium.millind.init.MillenniumFluidTypes;
-import kivo.millennium.millind.init.MillenniumItems;
+import static kivo.millennium.milltek.Main.log;
+
+import kivo.millennium.milltek.init.MillenniumBlocks;
+import kivo.millennium.milltek.init.MillenniumCreativeTab;
+import kivo.millennium.milltek.init.MillenniumFluidTypes;
+import kivo.millennium.milltek.init.MillenniumGases;
+import kivo.millennium.milltek.init.MillenniumItems;
+import kivo.millennium.milltek.machine.InductionFurnace.InductionFurnaceBL;
 import net.minecraft.Util;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
-
-import static kivo.millennium.millind.Main.log;
 
 public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
     public SimplifiedChineseProvider(PackOutput output) {
@@ -29,9 +30,11 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.MELTING_FURNACE_BL.get(), "熔融炉");
         add(MillenniumBlocks.RESONANCE_CHAMBER_BL.get(), "谐振仓");
         add(MillenniumBlocks.CRYSTALLIZER_BL.get(), "结晶器");
-        add(MillenniumBlocks.SOLAR_GENERATOR.get(), "太阳能发电机");
+        add(MillenniumBlocks.SOLAR_GENERATOR_BL.get(), "太阳能发电机");
+        add(MillenniumBlocks.ELECTROLYZER_BL.get(), "电解槽");
 
         add(MillenniumBlocks.ALERT_BLOCK.get(), "警示方块");
+        // add(MillenniumBlocks.ALERT_LINE_BL.get(), "警示线方块");
 
         add(MillenniumItems.HighPurityWolfseggSteel.get(), "高纯度沃普赛克钢铁");
         add(MillenniumItems.LowPurityWolfseggSteel.get(), "低纯度沃普赛克钢铁");
@@ -70,7 +73,7 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.TITANIUM_ALLOY_PICKAXE.get(), "钛合金镐");
         add(MillenniumItems.TITANIUM_ALLOY_SHOVEL.get(), "钛合金锹");
         add(MillenniumItems.TITANIUM_ALLOY_SWORD.get(), "钛合金军刀");
-        
+
         add(MillenniumItems.CARBON_DUST.get(), "碳粉");
 
         add(MillenniumItems.CRYOLITE.get(), "冰晶石");
@@ -113,7 +116,7 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumBlocks.RAW_LEAD_BLOCK.get(), "粗铅块");
         add(MillenniumBlocks.LEAD_ORE.get(), "铅矿石");
         add(MillenniumBlocks.DEEPSLATE_LEAD_ORE.get(), "深板岩铅矿");
-        
+
         add(MillenniumBlocks.WOLFRAM_STEEL_BLOCK.get(), "钨钢块");
         add(MillenniumItems.WOLFRAM_STEEL_INGOT.get(), "钨钢锭");
         add(MillenniumItems.WOLFRAM_STEEL_PANEL.get(), "钨钢板");
@@ -127,7 +130,10 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumItems.WOLFRAM_STEEL_PICKAXE.get(), "钨钢镐");
         add(MillenniumItems.WOLFRAM_STEEL_SHOVEL.get(), "钨钢锹");
         add(MillenniumItems.WOLFRAM_STEEL_SWORD.get(), "钨钢军刀");
-        
+
+        add(MillenniumBlocks.COPPER_PIPE.get(), "铜管道");
+        add(MillenniumBlocks.ENERGY_PIPE.get(), "能量管线");
+
         add(MillenniumFluidTypes.ICY_WATER_FLUID_TYPE.get().getDescriptionId(), "冰水");
         add(MillenniumFluidTypes.MOLTEN_ALUMINUM_FT.get().getDescriptionId(), "熔融铝");
         add(MillenniumFluidTypes.MOLTEN_CRYOLITE_FT.get().getDescriptionId(), "熔融冰晶石");
@@ -136,13 +142,26 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
         add(MillenniumFluidTypes.RAW_MOLTEN_ALUMINUM_FT.get().getDescriptionId(), "粗熔融铝");
         add(MillenniumFluidTypes.MOLTEN_ALUMINUM_ALLOY_FT.get().getDescriptionId(), "熔融铝合金");
 
-
-
         add(MillenniumItems.WRENCH.get(), "扳手");
 
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.OOPARTS.get())), "千年科工 神秘古物");
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.ENGINEERING_PARTS.get())), "千年科工 工程组件");
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.MATERIALS.get())), "千年科工 材料");
-        add(Util.makeDescriptionId("item_group", BuiltInRegistries.CREATIVE_MODE_TAB.getKey(MillenniumCreativeTab.TOOLS.get())), "千年科工 工具");
+        add(MillenniumCreativeTab.OOPARTS.get(), "千年科工 神秘古物");
+        add(MillenniumCreativeTab.ENGINEERING_PARTS.get(), "千年科工 工程组件");
+        add(MillenniumCreativeTab.MATERIALS.get(), "千年科工 材料");
+        add(MillenniumCreativeTab.TOOLS.get(), "千年科工 工具");
+        add(MillenniumCreativeTab.CONTAINERS.get(), "千年科工 容器");
+
+        //gas
+        add(MillenniumGases.OXYGEN.get(), "氧气");
+        add(MillenniumGases.HYDROGEN.get(), "氢气");
+        add(MillenniumGases.NITROGEN.get(), "氮气");
+        add(MillenniumGases.CARBON_DIOXIDE.get(), "二氧化碳");
+        add(MillenniumGases.METHANE.get(), "甲烷");
+        add(MillenniumGases.AMMONIA.get(), "氨气");
+        add(MillenniumGases.SULFUR_DIOXIDE.get(), "二氧化硫");
+        add(MillenniumGases.CHLORINE.get(), "氯气");
+        add(MillenniumGases.CARBON_MONOXIDE.get(), "一氧化碳");
+        add(MillenniumGases.ETHYLENE.get(), "乙烯");
+        add(MillenniumGases.PROPANE.get(), "丙烷");
+        add(MillenniumGases.STEAM.get(), "水蒸气");
     }
 }

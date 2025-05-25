@@ -1,7 +1,9 @@
 package kivo.millennium.client.datagen;
 
-import kivo.millennium.millind.init.MillenniumItems;
-import kivo.millennium.millind.item.Oopart.Oopart;
+import static kivo.millennium.milltek.Main.*;
+
+import kivo.millennium.milltek.init.MillenniumItems;
+import kivo.millennium.milltek.item.Oopart.Oopart;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.data.PackOutput;
 import net.minecraft.world.item.BlockItem;
@@ -11,8 +13,6 @@ import net.minecraftforge.client.model.generators.ItemModelProvider;
 import net.minecraftforge.client.model.generators.ModelFile;
 import net.minecraftforge.common.data.ExistingFileHelper;
 import net.minecraftforge.registries.RegistryObject;
-
-import static kivo.millennium.millind.Main.*;
 
 public class MillenniumItemModelProvider extends ItemModelProvider {
 

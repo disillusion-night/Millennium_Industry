@@ -1,9 +1,0 @@
-{
-  "parent": "millind:block/orientable_with_bottom_extra",
-  "textures": {
-    "bottom": "millind:block/crystallizer_bottom",
-    "front": "millind:block/crystallizer_front_off",
-    "side": "millind:block/crystallizer_side",
-    "top": "millind:block/crystallizer_top"
-  }
-}

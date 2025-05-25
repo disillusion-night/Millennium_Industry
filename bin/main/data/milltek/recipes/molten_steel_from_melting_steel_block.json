@@ -1,0 +1,14 @@
+{
+  "type": "milltek:melting",
+  "category": "misc",
+  "energy": 1000,
+  "experience": 0.0,
+  "ingredient": {
+    "item": "milltek:steel_block"
+  },
+  "result": {
+    "amount": 900,
+    "fluid": "milltek:molten_steel"
+  },
+  "time": 100
+}

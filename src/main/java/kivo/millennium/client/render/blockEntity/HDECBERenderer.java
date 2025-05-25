@@ -4,8 +4,9 @@ import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import com.mojang.math.Axis;
-import kivo.millennium.millind.block.hypercube.HDECBE;
-import kivo.millennium.millind.util.HyperCubeRenderUtils;
+
+import kivo.millennium.milltek.block.hypercube.HDECBE;
+import kivo.millennium.milltek.util.HyperCubeRenderUtils;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;

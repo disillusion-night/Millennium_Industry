@@ -136,7 +136,6 @@ public abstract class PipeBE<T extends AbstractLevelNetwork> extends BlockEntity
         if (level == null || level.isClientSide)
             return;
         if (level.isLoaded(getBlockPos()) && level.getBlockState(getBlockPos()).getBlock() != getBlock()) {
-            logger.info("[PipeBE] Block is not the same, removing networkUUID: " + networkUUID);
             if (level == null || level.isClientSide || networkUUID == null || isRemoved())
                 return;
             UUID uuid = networkUUID;

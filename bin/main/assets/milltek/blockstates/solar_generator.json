@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "working=false": {
+      "model": "milltek:block/solar_generator"
+    },
+    "working=true": {
+      "model": "milltek:block/solar_generator"
+    }
+  }
+}

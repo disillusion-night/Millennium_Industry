@@ -1,0 +1,13 @@
+{
+  "type": "milltek:crushing",
+  "category": "misc",
+  "energy": 1000,
+  "experience": 0.0,
+  "ingredient": {
+    "item": "milltek:raw_aluminum"
+  },
+  "result": {
+    "item": "milltek:raw_aluminum_dust"
+  },
+  "time": 100
+}

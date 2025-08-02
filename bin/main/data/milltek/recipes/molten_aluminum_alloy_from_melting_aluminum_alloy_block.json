@@ -1,0 +1,14 @@
+{
+  "type": "milltek:melting",
+  "category": "misc",
+  "energy": 1000,
+  "experience": 0.0,
+  "ingredient": {
+    "item": "milltek:aluminum_alloy_block"
+  },
+  "result": {
+    "amount": 900,
+    "fluid": "milltek:molten_aluminum_alloy"
+  },
+  "time": 100
+}

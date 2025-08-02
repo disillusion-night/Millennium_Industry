@@ -1,0 +1,9 @@
+{
+  "parent": "milltek:block/orientable_with_bottom_extra",
+  "textures": {
+    "bottom": "milltek:block/crystallizer_bottom",
+    "front": "milltek:block/crystallizer_front_on",
+    "side": "milltek:block/crystallizer_side",
+    "top": "milltek:block/crystallizer_top"
+  }
+}

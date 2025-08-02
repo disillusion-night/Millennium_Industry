@@ -1,0 +1,13 @@
+{
+  "type": "milltek:crushing",
+  "category": "misc",
+  "energy": 1000,
+  "experience": 0.0,
+  "ingredient": {
+    "item": "minecraft:gravel"
+  },
+  "result": {
+    "item": "minecraft:sand"
+  },
+  "time": 100
+}

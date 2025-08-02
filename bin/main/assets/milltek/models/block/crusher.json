@@ -1,0 +1,8 @@
+{
+  "parent": "milltek:block/orientable_with_top",
+  "textures": {
+    "front": "milltek:block/crusher_front_off",
+    "side": "milltek:block/crusher_side",
+    "top": "milltek:block/crusher_top"
+  }
+}

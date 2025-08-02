@@ -1,0 +1,8 @@
+{
+  "parent": "milltek:block/orientable_with_top",
+  "textures": {
+    "front": "milltek:block/melting_furnace_front_off",
+    "side": "milltek:block/melting_furnace_side",
+    "top": "milltek:block/melting_furnace_top_off"
+  }
+}

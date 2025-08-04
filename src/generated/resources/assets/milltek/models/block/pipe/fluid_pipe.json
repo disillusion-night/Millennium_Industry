@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/cube",
+  "loader": "milltek:pipe_loader",
+  "textures": {
+    "corner": "milltek:block/pipe/fluid_pipe_corner",
+    "cross": "milltek:block/pipe/fluid_pipe_cross",
+    "none": "milltek:block/pipe/fluid_pipe_none",
+    "normal": "milltek:block/pipe/fluid_pipe_normal",
+    "three": "milltek:block/pipe/fluid_pipe_three"
+  }
+}

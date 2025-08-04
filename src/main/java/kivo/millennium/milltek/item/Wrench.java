@@ -6,9 +6,12 @@ import static kivo.millennium.milltek.pipe.network.EPipeState.*;
 import kivo.millennium.milltek.Main;
 import kivo.millennium.milltek.pipe.network.AbstractPipeBL;
 import kivo.millennium.milltek.pipe.network.EPipeState;
+import kivo.millennium.milltek.pipe.network.PipeBE;
+import kivo.millennium.milltek.world.LevelNetworkSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.network.chat.Component;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -17,6 +20,7 @@ import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 
@@ -73,54 +77,71 @@ public class Wrench extends Item {
         Main.log(relativeHit.x + "," + relativeHit.y + "," + relativeHit.z);
 
         if (direction != null) {
-            EPipeState newState = getNewSideState(level, blockPos.relative(direction), pipeBlock,
-                    level.getBlockState(blockPos.relative(direction)), pipeBL, direction);
-
-            level.setBlock(blockPos, pipeBlock.setValue(getPropertyForDirection(direction), newState), 3); // 触发客户端更新
-            // level.setBlockAndUpdate(pos,
-            // state.setValue(getPropertyForDirection(direction), newState));
+            if (!(level instanceof ServerLevel)) {
+                return InteractionResult.SUCCESS; // 仅在服务器端处理
+            }
+            ServerLevel serverLevel = (ServerLevel) level;
+            PipeBE<?> pipeBE = (PipeBE<?>) serverLevel.getBlockEntity(blockPos);
+            EPipeState newState = setNewSideState(serverLevel, blockPos.relative(direction), pipeBlock,
+                    level.getBlockState(blockPos.relative(direction)), pipeBE, direction);
+            //level.setBlock(blockPos, pipeBlock.setValue(getPropertyForDirection(direction), newState), 3); // 触发客户端更新
             player.sendSystemMessage(
-                    Component.literal("Switch " + direction.getName() + " to " + newState.getSerializedName()));
+                    Component.literal("Switch " + direction.getName() + " to " + newState.toString()));
             return InteractionResult.SUCCESS;
         }
         return InteractionResult.PASS;
     }
 
-    public EPipeState getNewSideState(LevelAccessor blockGetter, BlockPos neighborPos, BlockState state, BlockState neighborState, AbstractPipeBL pipeBL, Direction direction) {
+    public EPipeState setNewSideState(ServerLevel level, BlockPos neighborPos, BlockState state, BlockState neighborState, PipeBE<?> pipeBE, Direction direction) {
         EPipeState curr = state.getValue(getPropertyForDirection(direction));
-        EPipeState next = NONE;
         switch (curr) {
             case CONNECT -> {
-                if (pipeBL.isSamePipe(neighborState.getBlock())) {
-                    next = DISCONNECT;
-                    return next;
-                } else {
-                    next = PULL;
-                    return next;
-                }
+                pipeBE.setDirectionState(direction, PULL, 3);
+                return  PULL;
             }
             case PULL -> {
-                next = PUSH;
-                return next;
+                pipeBE.setDirectionState(direction, PUSH, 3);
+                return  PUSH;
             }
             case PUSH -> {
-                next = DISCONNECT;
-                return next;
+                pipeBE.setDirectionState(direction, DISCONNECT, 3);
+                return DISCONNECT;
             }
             case DISCONNECT -> {
-                if (neighborState.isAir()) return next; // 如果邻居是空气，直接返回NONE
-
-                if (!neighborState.hasBlockEntity()) return next; // 如果邻居没有BlockEntity，直接返回NONE
-
-                if (neighborState.getBlock() instanceof AbstractPipeBL) {
-                    next = NONE; // 如果邻居是管道，断开连接，暂时不处理
-                } else if (neighborState.getBlock().hasAnalogOutputSignal(neighborState)) {
-                    next = PULL; // 如果邻居是有信号的方块，设置为PULL
+                if (neighborState.isAir() || !neighborState.hasBlockEntity()) {
+                    pipeBE.setDirectionState(direction, NONE, 3);
+                    return NONE;
+                } else if (neighborState.getBlock() instanceof AbstractPipeBL) {
+                    if (neighborState.getValue(getPropertyForDirection(direction)) == DISCONNECT) {
+                        pipeBE.setDirectionState(direction, NONE, 3);
+                        return NONE;
+                    } else {
+                        if (pipeBE.getCapabilityType().equals(((PipeBE<?>) level.getBlockEntity(neighborPos)).getCapabilityType())) {
+                            pipeBE.setDirectionState(direction, CONNECT, 3);
+                            return CONNECT;
+                        } else {
+                            pipeBE.setDirectionState(direction, NONE, 3);
+                            return NONE;
+                        }
+                    }
                 } else {
-                    next = NONE; // 否则断开连接
+                    pipeBE.setDirectionState(direction, CONNECT, 3);
+                    return CONNECT;
                 }
             }
+            case PIPE -> {
+                pipeBE.setDirectionState(direction, DISCONNECT, 3);
+                pipeBE.recalculateNetwork();
+                return DISCONNECT;
+            }
+            case NONE -> {
+                pipeBE.setDirectionState(direction, DISCONNECT, 3);
+                return DISCONNECT;
+            }
+            default -> {
+                pipeBE.setDirectionState(direction, NONE, 3);
+                return NONE;
+            }
         }
-        return next;
     }
 }

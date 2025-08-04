@@ -19,7 +19,7 @@ public class FluidPipeBE extends PipeBE<FluidPipeNetwork> {
     }
 
     @Override
-    protected Capability<?> getCapabilityType() {
+    public Capability<?> getCapabilityType() {
         return ForgeCapabilities.FLUID_HANDLER;
     }
 }

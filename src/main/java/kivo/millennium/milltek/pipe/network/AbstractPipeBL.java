@@ -137,7 +137,6 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
     }
 
     public abstract boolean isSamePipe(Block target);
-    // TODO: 添加设置和获取特定面连接状态的方法 (如果需要)
 
     @Override
     @Nonnull

@@ -25,7 +25,7 @@ public class EnergyPipeBE extends PipeBE<EnergyPipeNetwork> {
     }
 
     @Override
-    protected Capability<?> getCapabilityType() {
+    public Capability<?> getCapabilityType() {
         return ForgeCapabilities.ENERGY;
     }
 }

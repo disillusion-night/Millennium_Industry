@@ -72,15 +72,13 @@ public class FluidPipeNetwork extends AbstractLevelNetwork implements ICapabilit
         // 简单平均分配流体输入
         int n = inputTargets.size();
         if (n == 0) return;
-        int totalCapacity = this.fluidStorage.getFluidInTank(0).getAmount();
-        int avgCapacity = totalCapacity / n;
         for (TargetContext ctx : inputTargets) {
             BlockEntity blockEntity = level.getBlockEntity(ctx.pos.relative(ctx.direction));
             if (blockEntity != null) {
                 LazyOptional<IFluidHandler> fluidCap = blockEntity.getCapability(ForgeCapabilities.FLUID_HANDLER, ctx.direction.getOpposite());
                 fluidCap.ifPresent(fluidHandler -> {
-                    int fluidToReceive = Math.min(ctx.pipeData.maxInputPerTick, avgCapacity);
-                    int received = this.fluidStorage.fill(fluidHandler.drain(fluidToReceive, EXECUTE), EXECUTE);
+                    int max_drain = 10000;
+                    int received = this.fluidStorage.fill(fluidHandler.drain(max_drain, EXECUTE), EXECUTE);
                     if (DEBUG_TICK_LOG && received > 0) {
                         logger.info("[FluidPipeNetwork] Received " + received + "mb fluid from " + ctx.direction + " at " + ctx.pos);
                     }
@@ -93,16 +91,14 @@ public class FluidPipeNetwork extends AbstractLevelNetwork implements ICapabilit
     protected void handleOutput(ServerLevel level, List<TargetContext> outputTargets) {
         int n = outputTargets.size();
         if (n == 0) return;
-        int totalFluid = this.fluidStorage.getFluidInTank(0).getAmount();
-        int avgFluid = totalFluid / n;
+        //int totalFluid = this.fluidStorage.getFluidInTank(0).getAmount();
+        //int avgFluid = totalFluid / n;
         for (TargetContext ctx : outputTargets) {
             BlockEntity blockEntity = level.getBlockEntity(ctx.pos.relative(ctx.direction));
-            if (blockEntity instanceof PipeBE<?>) continue;
             if (blockEntity != null) {
                 LazyOptional<IFluidHandler> fluidCap = blockEntity.getCapability(ForgeCapabilities.FLUID_HANDLER, ctx.direction.getOpposite());
                 fluidCap.ifPresent(fluidHandler -> {
-                    int fluidToSend = Math.min(ctx.pipeData.maxOutputPerTick, avgFluid);
-                    int sent = fluidHandler.fill(new FluidStack(getFluidStorage().getFluidInTank(0).getFluid(), getFluidStorage().drain(fluidToSend, EXECUTE).getAmount()), EXECUTE);
+                    int sent = fluidHandler.fill(getFluidStorage().getFluid(), EXECUTE);
                     if (DEBUG_TICK_LOG && sent > 0) {
                         logger.info("[FluidPipeNetwork] Sent " + sent + "mb fluid to " + ctx.direction + " at " + ctx.pos);
                     }

@@ -85,6 +85,16 @@ public abstract class PipeBE<NET extends AbstractLevelNetwork> extends BlockEnti
     public void updateNetwork(UUID networkUUID) {
         this.networkUUID = networkUUID;
     }
+    public void syncBlockState2Network() {
+        pipeData.setStateFromDirection(Direction.UP, getBlockState().getValue(AbstractPipeBL.UP));
+        pipeData.setStateFromDirection(Direction.DOWN, getBlockState().getValue(AbstractPipeBL.DOWN));
+        pipeData.setStateFromDirection(Direction.NORTH, getBlockState().getValue(AbstractPipeBL.NORTH));
+        pipeData.setStateFromDirection(Direction.SOUTH, getBlockState().getValue(AbstractPipeBL.SOUTH));
+        pipeData.setStateFromDirection(Direction.EAST, getBlockState().getValue(AbstractPipeBL.EAST));
+        pipeData.setStateFromDirection(Direction.WEST, getBlockState().getValue(AbstractPipeBL.WEST));
+        NET network = getNetwork();
+        network.pipeDataHashMap.put(worldPosition, pipeData);
+    }
 
     public void syncBlockStateFromNetwork() {
         pipeData = getNetwork().getPipeData(worldPosition);
@@ -275,6 +285,30 @@ public abstract class PipeBE<NET extends AbstractLevelNetwork> extends BlockEnti
         return super.getCapability(cap, side);
     }
 
+    public PipeData setDirectionState(Direction direction, EPipeState state, int pFlags) {
+        pipeData.setStateFromDirection(direction, state);
+        BlockState newState = getBlockState();
+        newState = newState.setValue(AbstractPipeBL.getPropertyForDirection(direction), state);
+        level.setBlock(worldPosition, newState, pFlags);
+        getNetwork().pipeDataHashMap.put(worldPosition, pipeData);
+        return pipeData;
+    }
+
+    public void recalculateNetwork() {
+        if (level == null || level.isClientSide) {
+            return;
+        }
+        NET network = getNetwork();
+        if (network != null) {
+            network.recalculateNetwork(getNetworkData(), (ServerLevel) level);
+            if (DEBUG_TICK_LOG) {
+                logger.info("[PipeBE] Recalculated network: " + networkUUID + " at position: " + worldPosition);
+            }
+        } else {
+            logger.warn("[PipeBE] Network is null for UUID: " + networkUUID + " at position: " + worldPosition);
+        }
+    }
+
     @Override
     public void reviveCaps() {
         super.reviveCaps();
@@ -286,5 +320,5 @@ public abstract class PipeBE<NET extends AbstractLevelNetwork> extends BlockEnti
 
     protected abstract <B extends AbstractPipeBL> B getBlock();
 
-    protected abstract Capability<?> getCapabilityType();
+    public abstract Capability<?> getCapabilityType();
 }

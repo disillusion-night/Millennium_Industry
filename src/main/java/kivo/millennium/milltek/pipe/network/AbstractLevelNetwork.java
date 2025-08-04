@@ -209,7 +209,7 @@ public abstract class AbstractLevelNetwork {
             }
         }
         // 新增：分配内容到子网络（如能量/流体等），由子类实现
-        distributeCapas(subNetwork, network.size() / this.pipeDataHashMap.size());
+        distributeCapas(subNetwork, (float) network.size() / this.pipeDataHashMap.size());
 
         // 将子网络添加到保存数据中
         savedData.addNetwork(levelNetworkType, subNetwork);

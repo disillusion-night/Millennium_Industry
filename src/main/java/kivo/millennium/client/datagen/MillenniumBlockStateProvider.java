@@ -58,8 +58,8 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
         solarGenerator(MillenniumBlocks.SOLAR_GENERATOR_BL);
 
-        //pipeBlockWithItem(MillenniumBlocks.COPPER_PIPE);
         pipeBlockWithItem(MillenniumBlocks.ENERGY_PIPE);
+        pipeBlockWithItem(MillenniumBlocks.FLUID_PIPE);
     }
 
 
@@ -348,7 +348,6 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         String name = block.getId().getPath();
         models().getBuilder("block/pipe/" + name)
                 .parent(models().getExistingFile(mcLoc("cube")))
-                //.renderType("translucent")
                 .texture("normal", Main.getRL("block/pipe/" + name + "_normal"))
                 .texture("none", Main.getRL("block/pipe/" + name + "_none"))
                 .texture("cross", Main.getRL("block/pipe/" + name + "_cross"))

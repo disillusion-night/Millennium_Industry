@@ -1,0 +1,26 @@
+{
+  "targets": [
+    {
+      "name": "minecraft:final",
+      "input": "minecraft:main",
+      "output": "minecraft:final",
+      "uniforms": [
+        { "name": "BlackHoleCenter", "type": "vec3" },
+        { "name": "BlackHoleRadius", "type": "float" },
+        { "name": "BlackHoleRotation", "type": "float" }
+      ],
+      "passes": [
+        {
+          "name": "black_hole",
+          "intarget": "minecraft:main",
+          "outtarget": "minecraft:final",
+          "auxtargets": [
+            { "name": "blackholedata", "id": "minecraft:main" }
+          ],
+          "program": "black_hole"
+        }
+      ]
+    }
+  ]
+}
+

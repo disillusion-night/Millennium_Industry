@@ -26,7 +26,7 @@ public class LevelNetworkSavedData extends SavedData {
     public static final Logger logger = LogUtils.getLogger();
 
     // 控制是否打印调试信息
-    public static boolean DEBUG_LOG = true;
+    public static boolean DEBUG_LOG = false;
 
     // 使用实例变量而非静态变量
     private final Map<LevelNetworkType<?>, Map<UUID, AbstractLevelNetwork>> networksByType = new HashMap<>();

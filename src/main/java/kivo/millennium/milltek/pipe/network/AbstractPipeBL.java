@@ -87,7 +87,7 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
         }
 
         if (neighbourState.isAir()){
-            if (state.getValue(getPropertyForDirection(direction)) == EPipeState.CONNECT) {
+            if (state.getValue(getPropertyForDirection(direction)).isNormal()) {
                 // 如果当前状态是连接状态，但邻居是空气，则断开连接
                 if(!world.isClientSide())
                     ((PipeBE<?>) world.getBlockEntity(current)).getPipeData().setStateFromDirection(direction, EPipeState.NONE);
@@ -102,12 +102,12 @@ public abstract class AbstractPipeBL extends Block implements SimpleWaterloggedB
         }
 
         if (neighbourState.getBlock() instanceof AbstractPipeBL) {
-            if (neighbourState.getValue(getPropertyForDirection(direction.getOpposite())) == EPipeState.CONNECT) {
+            if (neighbourState.getValue(getPropertyForDirection(direction.getOpposite())) == EPipeState.PIPE) {
                 if (!world.isClientSide()) {
-                    // 如果邻居管道的对应方向是连接状态，则连接
-                    ((PipeBE<?>) world.getBlockEntity(current)).getPipeData().setStateFromDirection(direction, EPipeState.CONNECT);
+                    // 如果邻居管道的对应方向是Pipe状态，则连接
+                    ((PipeBE<?>) world.getBlockEntity(current)).getPipeData().setStateFromDirection(direction, EPipeState.PIPE);
                 }
-                return state.setValue(getPropertyForDirection(direction), EPipeState.CONNECT);
+                return state.setValue(getPropertyForDirection(direction), EPipeState.PIPE);
             }
         }
 

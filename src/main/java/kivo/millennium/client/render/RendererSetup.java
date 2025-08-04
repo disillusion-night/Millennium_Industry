@@ -5,6 +5,13 @@ import static kivo.millennium.milltek.Main.getKey;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
+import net.minecraft.Util;
+import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraft.resources.ResourceLocation;
+import net.minecraftforge.client.event.RegisterShadersEvent;
+import java.io.IOException;
+import java.util.function.Function;
+
 import kivo.millennium.client.render.blockEntity.HDECBERenderer;
 import kivo.millennium.client.render.blockEntity.NetherStarLaserBER;
 import kivo.millennium.client.render.entity.BlackHoleRenderer;
@@ -37,13 +44,9 @@ import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
 public class RendererSetup {
 
-    public static final RenderType BLACK_HOLE_LAYER = RenderType.create("black_hole_layer",
-            DefaultVertexFormat.NEW_ENTITY, VertexFormat.Mode.QUADS, 256, true, true,
-            RenderType.CompositeState.builder()
-                    //.setShaderState()
-                    .setTextureState(new RenderStateShard.TextureStateShard(Main.getRL("textures/entity/black_hole/beam.png"), false, false))
-                    .createCompositeState(true));
+    public static ShaderInstance BLACK_HOLE_SHADER;
 
+    public static RenderType blackHoleRenderType;
 
     @SubscribeEvent
     public static void onClientEvent(FMLClientSetupEvent event){
@@ -61,7 +64,31 @@ public class RendererSetup {
             MenuScreens.register(MillenniumMenuTypes.MELTING_FURNACE_MENU.get(), MeltingFurnaceScreen::new);
             MenuScreens.register(MillenniumMenuTypes.RESONANCE_CHAMBER_MENU.get(), ResonanceChamberScreen::new);
             MenuScreens.register(MillenniumMenuTypes.ELECTOLYZER_MENU.get(), ElectrolyzerScreen::new);
-            //IClientItemExtensions.of(MillenniumBlocks.HDEC_BL.get().asItem()).getCustomRenderer();
+        });
+    }
+
+    @SubscribeEvent
+    public static void onRegisterShaders(RegisterShadersEvent event) throws IOException {
+        event.registerShader(new ShaderInstance(event.getResourceProvider(), Main.getRL("rendertype_black_hole"), DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP), shader -> {
+            BLACK_HOLE_SHADER = shader;
+            blackHoleRenderType = RenderType.create("rendertype_black_hole", DefaultVertexFormat.POSITION_COLOR_TEX_LIGHTMAP, VertexFormat.Mode.QUADS, 256, false, true,
+                    RenderType.CompositeState.builder()
+                            .setShaderState(new RenderStateShard.ShaderStateShard(() -> BLACK_HOLE_SHADER))
+                            .setTextureState(new RenderStateShard.TextureStateShard(Main.getRL("textures/entity/black_hole/black_hole.png"), false, false))
+                            .setTransparencyState(new RenderStateShard.TransparencyStateShard("translucent_transparency",
+                                    () -> {
+                                        com.mojang.blaze3d.systems.RenderSystem.enableBlend();
+                                        com.mojang.blaze3d.systems.RenderSystem.defaultBlendFunc();
+                                        com.mojang.blaze3d.systems.RenderSystem.disableCull();
+                                    },
+                                    () -> {
+                                        com.mojang.blaze3d.systems.RenderSystem.disableBlend();
+                                        com.mojang.blaze3d.systems.RenderSystem.enableCull();
+                                    }
+                            ))
+                            .setLightmapState(new RenderStateShard.LightmapStateShard(true))
+                            .setOverlayState(new RenderStateShard.OverlayStateShard(true))
+                            .createCompositeState(false));
         });
     }
 

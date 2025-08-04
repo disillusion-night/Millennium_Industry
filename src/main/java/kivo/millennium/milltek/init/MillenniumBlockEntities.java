@@ -2,8 +2,6 @@ package kivo.millennium.milltek.init;
 
 import static kivo.millennium.milltek.Main.MODID;
 
-import org.antlr.v4.parse.ANTLRParser.finallyClause_return;
-
 import kivo.millennium.milltek.block.container.energy.CreativeEnergyContainerBE;
 import kivo.millennium.milltek.block.container.energy.CreativeEnergyContainerBL;
 import kivo.millennium.milltek.block.container.fluid.CreativeFluidContainerBE;
@@ -21,11 +19,13 @@ import kivo.millennium.milltek.machine.InductionFurnace.InductionFurnaceBE;
 import kivo.millennium.milltek.machine.MeltingFurnace.MeltingFurnaceBE;
 import kivo.millennium.milltek.machine.ResonanceChamber.ResonanceChamberBE;
 import kivo.millennium.milltek.pipe.network.EnergyPipeBE;
+import kivo.millennium.milltek.pipe.network.FluidPipeBE;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 
+@SuppressWarnings("unchecked")
 public class MillenniumBlockEntities {
     public static final DeferredRegister<BlockEntityType<?>> BLOCK_ENTITIES = DeferredRegister
             .create(ForgeRegistries.BLOCK_ENTITY_TYPES, MODID);
@@ -101,6 +101,10 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<EnergyPipeBE>> ENERGY_PIPE_BE = BLOCK_ENTITIES.register(
             "energy_pipe_be", () -> BlockEntityType.Builder.of(EnergyPipeBE::new,
                     MillenniumBlocks.ENERGY_PIPE.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<FluidPipeBE>> FLUID_PIPE_BE = BLOCK_ENTITIES.register(
+            "fluid_pipe_be", () -> BlockEntityType.Builder.of(FluidPipeBE::new,
+                    MillenniumBlocks.FLUID_PIPE.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<CreativeEnergyContainerBE>> CREATIVE_ENERGY_CONTAINER_BE = BLOCK_ENTITIES
             .register("creative_energy_container_be",

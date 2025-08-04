@@ -1,6 +1,7 @@
 # User-specific stuff
 .idea/
-.vscode/
+# 保留VS Code配置以便协作
+# .vscode/
 run/
 src/generated/resources/.cache/
 

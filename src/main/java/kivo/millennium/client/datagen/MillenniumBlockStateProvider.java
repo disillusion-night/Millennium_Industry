@@ -2,6 +2,7 @@ package kivo.millennium.client.datagen;
 
 import com.google.gson.JsonObject;
 
+import kivo.millennium.client.datagen.loaderbuilder.PipeLoaderBuilder;
 import kivo.millennium.milltek.Main;
 import kivo.millennium.milltek.block.device.MillenniumBlockProperty;
 import kivo.millennium.milltek.init.MillenniumBlocks;
@@ -61,13 +62,8 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         pipeBlockWithItem(MillenniumBlocks.ENERGY_PIPE);
     }
 
-    public static class PipeLoaderBuilder extends CustomLoaderBuilder<BlockModelBuilder> {
 
-        public PipeLoaderBuilder(ResourceLocation loader, BlockModelBuilder parent,
-                ExistingFileHelper existingFileHelper) {
-            super(loader, parent, existingFileHelper);
-        }
-    }
+
 
     public void addWithHaveModel(Block block, String name) {
         var model_path = models().getExistingFile(Main.getRL(name));
@@ -352,14 +348,14 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
         String name = block.getId().getPath();
         models().getBuilder("block/pipe/" + name)
                 .parent(models().getExistingFile(mcLoc("cube")))
+                //.renderType("translucent")
                 .texture("normal", Main.getRL("block/pipe/" + name + "_normal"))
                 .texture("none", Main.getRL("block/pipe/" + name + "_none"))
                 .texture("cross", Main.getRL("block/pipe/" + name + "_cross"))
                 .texture("three", Main.getRL("block/pipe/" + name + "_three"))
                 .texture("corner", Main.getRL("block/pipe/" + name + "_corner"))
                 .customLoader(
-                        (builder, helper) -> new PipeLoaderBuilder(PipeModelLoader.GENERATOR_LOADER, builder, helper))
-                .end();
+                        (builder, helper) -> new PipeLoaderBuilder(PipeModelLoader.GENERATOR_LOADER, builder, helper)).end();
         // .customData(customData);
         getVariantBuilder(block.get()).partialState().setModels(
                 new ConfiguredModel(models().getExistingFile(Main.getRL("block/pipe/" + name))));

@@ -7,19 +7,8 @@ import net.minecraftforge.client.model.generators.CustomLoaderBuilder;
 import net.minecraftforge.common.data.ExistingFileHelper;
 
 public class PipeLoaderBuilder extends CustomLoaderBuilder<BlockModelBuilder> {
-    private final boolean facade;
 
-    public PipeLoaderBuilder(ResourceLocation loader, BlockModelBuilder parent, ExistingFileHelper existingFileHelper,
-                              boolean facade) {
+    public PipeLoaderBuilder(ResourceLocation loader, BlockModelBuilder parent, ExistingFileHelper existingFileHelper) {
         super(loader, parent, existingFileHelper);
-        this.facade = facade;
     }
-
-    @Override
-    public JsonObject toJson(JsonObject json) {
-        JsonObject obj = super.toJson(json);
-        obj.addProperty("facade", facade);
-        return obj;
-    }
-
 }

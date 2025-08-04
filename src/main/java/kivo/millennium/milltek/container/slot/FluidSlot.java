@@ -2,6 +2,7 @@ package kivo.millennium.milltek.container.slot;
 
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import net.minecraftforge.fluids.FluidStack;
+import kivo.millennium.milltek.storage.MillenniumFluidStorage;
 
 public class FluidSlot {
     private final IFluidHandler fluidHandler;
@@ -58,8 +59,8 @@ public class FluidSlot {
     }
 
     public void setFluidStack(FluidStack stack) {
-        // 直接设置流体内容（需你的存储类支持）
-        if (fluidHandler instanceof kivo.millennium.milltek.storage.MillenniumFluidStorage storage) {
+        // 直接设置流体内容
+        if (fluidHandler instanceof MillenniumFluidStorage storage) {
             storage.setFluidInTank(tankIndex, stack);
         }
     }

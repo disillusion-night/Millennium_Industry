@@ -135,29 +135,25 @@ public abstract class PipeBE<NET extends AbstractLevelNetwork> extends BlockEnti
                     // 如果邻居管道的状态不是断开，且自己没有网络，则加入它的网络
                     if (networkUUID == null) {
                         joinNetwork((NET) neighborPipe.getNetwork());
-                        pipeData.setStateFromDirection(direction, EPipeState.CONNECT);
-                        pState = pState.setValue(AbstractPipeBL.getPropertyForDirection(direction), EPipeState.CONNECT);
+                        pipeData.setStateFromDirection(direction, EPipeState.PIPE);
+                        pState = pState.setValue(AbstractPipeBL.getPropertyForDirection(direction), EPipeState.PIPE);
                         if (DEBUG_TICK_LOG) {
                             //打印设置连接状态信息
                             logger.info("[PipeBE] Joining network: " + neighborPipe.networkUUID + " from direction: " + direction);
                         }
                     } else {
-                        // 如果已经有网络UUID，检查两个网络能否合并，尝试合并
-                        if (getNetwork().canMerge(neighborPipe.getNetwork())) {
+                        if (networkUUID != ((PipeBE<?>) neighborBE).networkUUID && getNetwork().canMerge(neighborPipe.getNetwork())) {
                             NET mergedNetwork = (NET) getNetwork().merge(level, neighborPipe.getNetwork());
                             if (DEBUG_TICK_LOG) {
                                 logger.info("[PipeBE] Merging networks: " + networkUUID + " and " + neighborPipe.networkUUID);
                             }
                             this.networkUUID = mergedNetwork.getUUID();
                             getNetworkData().addNetwork(networkType, mergedNetwork);
-                            pState = pState.setValue(AbstractPipeBL.getPropertyForDirection(direction), EPipeState.CONNECT);
+                            pState = pState.setValue(AbstractPipeBL.getPropertyForDirection(direction), EPipeState.PIPE);
                         }
                     }
                 }
-            }
-
-            // 如果邻居方块有对应的能力，则连接
-            if (neighborBE.getCapability(getCapabilityType(), direction.getOpposite()).isPresent()) {
+            } else if (neighborBE.getCapability(getCapabilityType(), direction.getOpposite()).isPresent()) {
                 this.pipeData.setStateFromDirection(direction, EPipeState.CONNECT);
                 pState = pState.setValue(AbstractPipeBL.getPropertyForDirection(direction), EPipeState.CONNECT);
             }

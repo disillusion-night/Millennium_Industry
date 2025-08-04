@@ -14,6 +14,8 @@ import org.jetbrains.annotations.Nullable;
 import kivo.millennium.milltek.init.MillenniumLevelNetworkType;
 import kivo.millennium.milltek.init.MillenniumLevelNetworkType.LevelNetworkType;
 import static kivo.millennium.milltek.pipe.network.EPipeState.DISCONNECT;
+import static kivo.millennium.milltek.pipe.network.EPipeState.PIPE;
+
 import kivo.millennium.milltek.world.LevelNetworkSavedData;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -82,46 +84,32 @@ public abstract class AbstractLevelNetwork {
 
     public abstract boolean canMerge(AbstractLevelNetwork other);
 
-    public abstract <T extends AbstractLevelNetwork> T merge(ServerLevel level, T other);
+    public <T extends AbstractLevelNetwork> T merge(ServerLevel level, T other){
+        // 如果其他网络的管道数据更多，则将当前网络合并到其他网络
+        if (other.pipeDataHashMap.size() > this.pipeDataHashMap.size()) {
+            return other.merge(level, (T) this);
+        }
+
+        mergeCapabilities(other);
+
+        // 合并管道数据
+        this.pipeDataHashMap.putAll(other.pipeDataHashMap);
+
+        // 清理被合并的网络
+        other.remove();
+
+        // 更新所有管道的网络引用
+        updatePipeNetworkReferences(level);
+
+        setDirty();
+        return (T) this;
+    }
     
     /**
      * 子类实现此方法来合并自己特有的能力数据（如能量存储、流体存储等）
      * @param other 要合并的其他网络
      */
     protected abstract void mergeCapabilities(AbstractLevelNetwork other);
-    
-    /**
-     * 通用的合并方法，处理节点管理逻辑
-     * @param level 服务器世界
-     * @param other 要合并的其他网络
-     * @return 合并后的网络
-     */
-    @SuppressWarnings("unchecked")
-    protected <T extends AbstractLevelNetwork> T performMerge(ServerLevel level, T other) {
-        if (!canMerge(other)) {
-            throw new IllegalArgumentException("Cannot merge incompatible network types");
-        }
-        
-        // 如果其他网络的管道数据更多，则将当前网络合并到其他网络
-        if (other.pipeDataHashMap.size() > this.pipeDataHashMap.size()) {
-            return other.performMerge(level, (T) this);
-        }
-        
-        // 合并子类特有的能力数据
-        mergeCapabilities(other);
-        
-        // 合并管道数据
-        this.pipeDataHashMap.putAll(other.pipeDataHashMap);
-        
-        // 清理被合并的网络
-        other.remove();
-        
-        // 更新所有管道的网络引用
-        updatePipeNetworkReferences(level);
-        
-        setDirty();
-        return (T) this;
-    }
     
     /**
      * 更新所有管道的网络引用
@@ -196,7 +184,7 @@ public abstract class AbstractLevelNetwork {
             if (pipeData == null) continue;
             
             for (Direction direction : Direction.values()) {
-                if (pipeData.getStateFromDirection(direction) == DISCONNECT) continue;
+                if (pipeData.getStateFromDirection(direction) == PIPE) continue;
                 
                 BlockPos neighbor = current.relative(direction);
                 if (pipeDataHashMap.containsKey(neighbor) && !visited.contains(neighbor)) {
@@ -220,21 +208,63 @@ public abstract class AbstractLevelNetwork {
                 subNetwork.addPipe(level, pos, pipeData);
             }
         }
+        // 新增：分配内容到子网络（如能量/流体等），由子类实现
+        distributeCapas(subNetwork, network.size() / this.pipeDataHashMap.size());
 
         // 将子网络添加到保存数据中
         savedData.addNetwork(levelNetworkType, subNetwork);
     }
+    /**
+     * 子类实现：按照比例将主网络内容分配到子网络
+     * @param subNetwork 子网络实例
+     * @param ratio 子网络应获得的比例（0~1）
+     */
+    protected abstract void distributeCapas(AbstractLevelNetwork subNetwork, float ratio);
 
-    public abstract void handleNetworkInput(ServerLevel level);
-
-    public abstract void handleNetworkOutput(ServerLevel level);
-
-    public void tick(ServerLevel level){
-        // 计算每个节点的输入 / 输出
-        handleNetworkInput(level);
-        handleNetworkOutput(level);
+    /**
+     * 通用tick方法：遍历所有管道节点，计算输入/输出目标，并分别调用子类handleInput/handleOutput
+     */
+    public void tick(ServerLevel level) {
+        List<TargetContext> inputTargets = new ArrayList<>();
+        List<TargetContext> outputTargets = new ArrayList<>();
+        for (BlockPos pos : pipeDataHashMap.keySet()) {
+            PipeData pipeData = pipeDataHashMap.get(pos);
+            for (Direction direction : Direction.values()) {
+                EPipeState state = pipeData.getStateFromDirection(direction);
+                if (state == EPipeState.PULL) {
+                    inputTargets.add(new TargetContext(pos, direction, pipeData));
+                } else if (state == EPipeState.PUSH || state == EPipeState.CONNECT) {
+                    outputTargets.add(new TargetContext(pos, direction, pipeData));
+                }
+            }
+        }
+        handleInput(level, inputTargets);
+        handleOutput(level, outputTargets);
         setDirty();
     }
+
+    /**
+     * 输入/输出目标���下文
+     */
+    protected static class TargetContext {
+        public final BlockPos pos;
+        public final Direction direction;
+        public final PipeData pipeData;
+        public TargetContext(BlockPos pos, Direction direction, PipeData pipeData) {
+            this.pos = pos;
+            this.direction = direction;
+            this.pipeData = pipeData;
+        }
+    }
+
+    /**
+     * 子类实现：处理所有输入目标
+     */
+    protected abstract void handleInput(ServerLevel level, List<TargetContext> inputTargets);
+    /**
+     * 子类实现：处理所有输出目标
+     */
+    protected abstract void handleOutput(ServerLevel level, List<TargetContext> outputTargets);
 
     public void updatePipeData(BlockPos pos, PipeData pipeData) {
         if (pipeDataHashMap.containsKey(pos)) {
@@ -301,3 +331,4 @@ public abstract class AbstractLevelNetwork {
                 '}';
     }
 }
+

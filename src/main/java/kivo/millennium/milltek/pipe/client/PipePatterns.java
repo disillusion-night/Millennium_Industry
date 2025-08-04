@@ -16,7 +16,7 @@ public class PipePatterns {
     // return the sprite index and rotation
     // for the quad that we are looking at.
     public static QuadSetting findPattern(EPipeState s1, EPipeState s2, EPipeState s3, EPipeState s4) {
-        return PATTERNS.get(new Pattern(s1.isConnected(), s2.isConnected(), s3.isConnected(), s4.isConnected()));
+        return PATTERNS.get(new Pattern(s1.isNormal(), s2.isNormal(), s3.isNormal(), s4.isNormal()));
     }
 
     // This enum represents the type of sprite (texture)

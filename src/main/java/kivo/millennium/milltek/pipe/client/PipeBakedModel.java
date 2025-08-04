@@ -26,7 +26,6 @@ import javax.annotation.Nullable;
 
 import static kivo.millennium.milltek.pipe.client.PipePatterns.SpriteIdx.*;
 import static kivo.millennium.milltek.pipe.network.AbstractPipeBL.*;
-import static kivo.millennium.milltek.pipe.network.EPipeState.CONNECT;
 import static kivo.millennium.milltek.util.BakedModelHelper.quad;
 import static kivo.millennium.milltek.util.BakedModelHelper.v;
 
@@ -169,7 +168,7 @@ public class PipeBakedModel implements IDynamicBakedModel {
         EPipeState up = state.getValue(UP);
         EPipeState down = state.getValue(DOWN);
 
-        if (up == CONNECT) {
+        if (up.isNormal()) {
             quads.add(quad(v(n, 1, m), v(n, 1, n), v(n, n, n), v(n, n, m), spriteCable));
             quads.add(quad(v(m, 1, n), v(m, 1, m), v(m, n, m), v(m, n, n), spriteCable));
             quads.add(quad(v(m, 1, m), v(n, 1, m), v(n, n, m), v(m, n, m), spriteCable));
@@ -180,7 +179,7 @@ public class PipeBakedModel implements IDynamicBakedModel {
                     pattern.rotation()));
         }
 
-        if (down == CONNECT) {
+        if (down.isNormal()) {
             quads.add(quad(v(n, m, m), v(n, m, n), v(n, 0, n), v(n, 0, m), spriteCable));
             quads.add(quad(v(m, m, n), v(m, m, m), v(m, 0, m), v(m, 0, n), spriteCable));
             quads.add(quad(v(m, m, m), v(n, m, m), v(n, 0, m), v(m, 0, m), spriteCable));
@@ -191,7 +190,7 @@ public class PipeBakedModel implements IDynamicBakedModel {
                     pattern.rotation()));
         }
 
-        if (east == CONNECT) {
+        if (east.isNormal()) {
             quads.add(quad(v(1, n, n), v(1, n, m), v(n, n, m), v(n, n, n), spriteCable));
             quads.add(quad(v(1, m, m), v(1, m, n), v(n, m, n), v(n, m, m), spriteCable));
             quads.add(quad(v(1, n, m), v(1, m, m), v(n, m, m), v(n, n, m), spriteCable));
@@ -202,7 +201,7 @@ public class PipeBakedModel implements IDynamicBakedModel {
                     pattern.rotation()));
         }
 
-        if (west == CONNECT) {
+        if (west.isNormal()) {
             quads.add(quad(v(m, n, n), v(m, n, m), v(0, n, m), v(0, n, n), spriteCable));
             quads.add(quad(v(m, m, m), v(m, m, n), v(0, m, n), v(0, m, m), spriteCable));
             quads.add(quad(v(m, n, m), v(m, m, m), v(0, m, m), v(0, n, m), spriteCable));
@@ -213,7 +212,7 @@ public class PipeBakedModel implements IDynamicBakedModel {
                     pattern.rotation()));
         }
 
-        if (north == CONNECT) {
+        if (north.isNormal()) {
             quads.add(quad(v(m, n, m), v(n, n, m), v(n, n, 0), v(m, n, 0), spriteCable));
             quads.add(quad(v(m, m, 0), v(n, m, 0), v(n, m, m), v(m, m, m), spriteCable));
             quads.add(quad(v(n, m, 0), v(n, n, 0), v(n, n, m), v(n, m, m), spriteCable));
@@ -224,7 +223,7 @@ public class PipeBakedModel implements IDynamicBakedModel {
                     pattern.rotation()));
         }
 
-        if (south == CONNECT) {
+        if (south.isNormal()) {
             quads.add(quad(v(m, n, 1), v(n, n, 1), v(n, n, n), v(m, n, n), spriteCable));
             quads.add(quad(v(m, m, n), v(n, m, n), v(n, m, 1), v(m, m, 1), spriteCable));
             quads.add(quad(v(n, m, n), v(n, n, n), v(n, n, 1), v(n, m, 1), spriteCable));
@@ -238,6 +237,8 @@ public class PipeBakedModel implements IDynamicBakedModel {
         return quads;
     }
 
+
+
     @Override
     public boolean useAmbientOcclusion() {
         return true;
@@ -250,14 +251,14 @@ public class PipeBakedModel implements IDynamicBakedModel {
 
     @Override
     public boolean isCustomRenderer() {
-        return false;
+        return true;
     }
 
     @Override
     @Nonnull
     public ChunkRenderTypeSet getRenderTypes(@NotNull BlockState state, @NotNull RandomSource rand,
             @NotNull ModelData data) {
-        return ChunkRenderTypeSet.all();
+        return ChunkRenderTypeSet.of(RenderType.translucent());
     }
 
     @Nonnull

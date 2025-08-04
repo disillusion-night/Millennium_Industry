@@ -1,5 +1,6 @@
 package kivo.millennium.milltek.init;
 
+import kivo.millennium.milltek.pipe.network.FluidPipeNetwork;
 import net.minecraftforge.registries.*;
 
 import javax.annotation.Nullable;
@@ -20,12 +21,12 @@ public class MillenniumLevelNetworkType {
 
     private static final Supplier<IForgeRegistry<LevelNetworkType<?>>> L = LEVEL_NETWORK_TYPES
             .makeRegistry(RegistryBuilder::new);
-    /* 
+
     public static final RegistryObject<LevelNetworkType<FluidPipeNetwork>> FLUID_PIPE_NETWORK = LEVEL_NETWORK_TYPES
             .register(
                     "fluid_pipe_network",
                     () -> LevelNetworkType.Builder.of(FluidPipeNetwork::new, FluidPipeNetwork::new).build());
-    */
+
     // 能量网络注册
     public static final RegistryObject<LevelNetworkType<EnergyPipeNetwork>> ENERGY_PIPE_NETWORK = LEVEL_NETWORK_TYPES
             .register(

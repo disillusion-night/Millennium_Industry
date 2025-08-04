@@ -14,6 +14,10 @@ public enum EPipeState implements StringRepresentable {
         return this == CONNECT || this == PUSH || this == PULL || this == PIPE;
     }
 
+    public boolean isNormal(){
+        return this == CONNECT || this == PIPE;
+    }
+
     @Override
     public String getSerializedName() {
         return this.name().toLowerCase();

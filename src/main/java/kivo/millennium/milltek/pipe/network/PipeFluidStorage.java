@@ -7,7 +7,7 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class PipeFluidStorage implements IFluidHandler, INBTSerializable<CompoundTag>, IMergeableStorage<PipeFluidStorage> {
+public class PipeFluidStorage implements IFluidHandler, INBTSerializable<CompoundTag>, IPipeStorage<PipeFluidStorage> {
 
     private int capacity;
     private FluidStack fluidStack;

@@ -14,14 +14,11 @@ import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
-import net.minecraft.world.level.material.WaterFluid;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.extensions.common.IClientFluidTypeExtensions;
 import net.minecraftforge.fluids.FluidStack;
 import org.joml.Matrix4f;
-
-import static kivo.millennium.milltek.Main.getKey;
 
 import java.util.List;
 
@@ -133,20 +130,30 @@ public class RenderUtils {
 
     public static void renderGas(GuiGraphics guiGraphics, GasStack gasStack, int x, int y, int width, int height, int blitOffset, int capacity) {
         if (gasStack.isEmpty()) return;
-        // 这里简单用气体颜色填充矩形，实际可用气体专属贴图
+        ResourceLocation textureLocation = Main.getRL("block/fluid/lava_still_gray");
+        TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(TextureAtlas.LOCATION_BLOCKS).apply(textureLocation);
         int color = gasStack.getGas().getColor();
-        float r = ((color >> 16) & 0xFF) / 255.0f;
-        float g = ((color >> 8) & 0xFF) / 255.0f;
-        float b = (color & 0xFF) / 255.0f;
-        float a = 0.8f;
+        RenderSystem.setShaderTexture(0, sprite.atlasLocation());
+        RenderSystem.setShaderColor(((color >> 16) & 0xFF) / 255.0f,
+                ((color >> 8) & 0xFF) / 255.0f,
+                (color & 0xFF) / 255.0f, 0.8f);
         int gasHeight = (int) (height * (double) gasStack.getAmount() / capacity);
-        int yOffset = y + height - gasHeight;
-        //RenderSystem.disableTexture();
-        RenderSystem.enableBlend();
-        RenderSystem.setShaderColor(r, g, b, a);
-        guiGraphics.fill(x, yOffset, x + width, yOffset + gasHeight, color | 0xCC000000);
+        int numFullTiles = gasHeight / 16;
+        int remainingHeight = gasHeight % 16;
+        float u0 = sprite.getU0();
+        float u1 = sprite.getU1();
+        float v0 = sprite.getV0();
+        float v1 = sprite.getV1();
+        for (int i = 0; i < numFullTiles; i++) {
+            int yOffset = y + height - (i + 1) * 16;
+            innerBlit(guiGraphics, sprite.atlasLocation(), x, x + width, yOffset, yOffset + 16, blitOffset, u0, u1, v0, v1);
+        }
+        if (remainingHeight > 0) {
+            int topY = y + height - numFullTiles * 16 - remainingHeight;
+            float vTop = v1;
+            float vBottom = v1 + (v0 - v1) * ((float) remainingHeight / 16.0f);
+            innerBlit(guiGraphics, sprite.atlasLocation(), x, x + width, topY, topY + remainingHeight, blitOffset, u0, u1, vTop, vBottom);
+        }
         RenderSystem.setShaderColor(1.0F, 1.0F, 1.0F, 1.0F);
-        //RenderSystem.enableTexture();
-        RenderSystem.disableBlend();
     }
 }

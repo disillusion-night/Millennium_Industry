@@ -2,7 +2,7 @@
 .idea/
 .vscode/
 run/
-run-data/
+run-data/logs/
 src/generated/resources/.cache/
 
 *.iml

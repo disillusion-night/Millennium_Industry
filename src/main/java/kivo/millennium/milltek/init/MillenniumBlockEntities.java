@@ -20,6 +20,7 @@ import kivo.millennium.milltek.machine.MeltingFurnace.MeltingFurnaceBE;
 import kivo.millennium.milltek.machine.ResonanceChamber.ResonanceChamberBE;
 import kivo.millennium.milltek.pipe.network.EnergyPipeBE;
 import kivo.millennium.milltek.pipe.network.FluidPipeBE;
+import kivo.millennium.milltek.pipe.network.GasPipeBE;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -101,6 +102,10 @@ public class MillenniumBlockEntities {
     public static final RegistryObject<BlockEntityType<EnergyPipeBE>> ENERGY_PIPE_BE = BLOCK_ENTITIES.register(
             "energy_pipe_be", () -> BlockEntityType.Builder.of(EnergyPipeBE::new,
                     MillenniumBlocks.ENERGY_PIPE.get()).build(null));
+
+    public static final RegistryObject<BlockEntityType<GasPipeBE>> GAS_PIPE_BE = BLOCK_ENTITIES.register(
+            "gas_pipe_be", () -> BlockEntityType.Builder.of(GasPipeBE::new,
+                    MillenniumBlocks.GAS_PIPE.get()).build(null));
 
     public static final RegistryObject<BlockEntityType<FluidPipeBE>> FLUID_PIPE_BE = BLOCK_ENTITIES.register(
             "fluid_pipe_be", () -> BlockEntityType.Builder.of(FluidPipeBE::new,

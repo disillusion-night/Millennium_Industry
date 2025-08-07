@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "milltek:block/pipe/gas_pipe"
+    }
+  }
+}

@@ -129,6 +129,8 @@ public class EnglishProvider extends MillenniumLanguageProvider {
 
         //add(MillenniumBlocks.COPPER_PIPE.get(), "Copper Pipe");
         add(MillenniumBlocks.ENERGY_PIPE.get(), "Energy Pipe");
+        add(MillenniumBlocks.FLUID_PIPE.get(), "Fluid Pipe");
+        add(MillenniumBlocks.GAS_PIPE.get(), "Gas Pipe");
 
         add(MillenniumBlocks.WOLFRAM_STEEL_BLOCK.get(), "Wolfram Steel Block");
         add(MillenniumItems.WOLFRAM_STEEL_INGOT.get(), "Wolfram Steel Ingot");

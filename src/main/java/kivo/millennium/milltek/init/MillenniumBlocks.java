@@ -2,6 +2,7 @@ package kivo.millennium.milltek.init;
 
 import kivo.millennium.milltek.pipe.network.FluidPipeBE;
 import kivo.millennium.milltek.pipe.network.FluidPipeBL;
+import kivo.millennium.milltek.pipe.network.GasPipeBL;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
@@ -157,6 +158,8 @@ public class MillenniumBlocks {
 
     public static final RegistryObject<FluidPipeBL> FLUID_PIPE = registerWithItem("fluid_pipe",
             FluidPipeBL::new, MillenniumItems.ENGINEERING_PARTS);
+    public static final RegistryObject<GasPipeBL> GAS_PIPE = registerWithItem("gas_pipe",
+            GasPipeBL::new, MillenniumItems.ENGINEERING_PARTS);
 
     public static final RegistryObject<CreativeEnergyContainerBL> CREATIVE_ENERGY_CONTAINER = registerWithItem(
             "creative_energy_container",

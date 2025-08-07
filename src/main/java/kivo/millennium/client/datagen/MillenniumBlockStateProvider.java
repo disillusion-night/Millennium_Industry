@@ -60,6 +60,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
 
         pipeBlockWithItem(MillenniumBlocks.ENERGY_PIPE);
         pipeBlockWithItem(MillenniumBlocks.FLUID_PIPE);
+        pipeBlockWithItem(MillenniumBlocks.GAS_PIPE);
     }
 
 
@@ -353,6 +354,7 @@ public class MillenniumBlockStateProvider extends BlockStateProvider {
                 .texture("cross", Main.getRL("block/pipe/" + name + "_cross"))
                 .texture("three", Main.getRL("block/pipe/" + name + "_three"))
                 .texture("corner", Main.getRL("block/pipe/" + name + "_corner"))
+                .renderType(mcLoc("translucent"))
                 .customLoader(
                         (builder, helper) -> new PipeLoaderBuilder(PipeModelLoader.GENERATOR_LOADER, builder, helper)).end();
         // .customData(customData);

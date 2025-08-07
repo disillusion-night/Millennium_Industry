@@ -133,6 +133,8 @@ public class SimplifiedChineseProvider extends MillenniumLanguageProvider {
 
         //add(MillenniumBlocks.COPPER_PIPE.get(), "铜管道");
         add(MillenniumBlocks.ENERGY_PIPE.get(), "能量管线");
+        add(MillenniumBlocks.FLUID_PIPE.get(), "流体管道");
+        add(MillenniumBlocks.GAS_PIPE.get(), "气体管道");
 
         add(MillenniumFluidTypes.ICY_WATER_FLUID_TYPE.get().getDescriptionId(), "冰水");
         add(MillenniumFluidTypes.MOLTEN_ALUMINUM_FT.get().getDescriptionId(), "熔融铝");

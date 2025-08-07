@@ -244,8 +244,7 @@ public class MillenniumGasStorage implements IGasHandler{
         int totalDrained = 0;
         GasStack drainedStack = GasStack.EMPTY;
         for (int tank = size - 1; tank >= 0; tank--) {
-            if (!isForOutput(tank))
-                continue;
+            if (!isForOutput(tank)) continue;
             GasStack internalTankGas = this.gases.get(tank);
             if (!internalTankGas.isEmpty() && internalTankGas.getGas().equals(resource.getGas())) {
                 int canDrainThisTank = Math.min(amountToDrain - totalDrained, internalTankGas.getAmount());

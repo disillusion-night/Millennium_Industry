@@ -33,6 +33,7 @@ public class PipeModelLoader implements IGeometryLoader<PipeModelLoader.PipeMode
     @Override
     public PipeModelGeometry read(JsonObject jsonObject, JsonDeserializationContext deserializationContext) throws JsonParseException {
         JsonObject texture = GsonHelper.getAsJsonObject(jsonObject, "textures");
+        ResourceLocation render_type = new ResourceLocation(GsonHelper.getAsString(jsonObject, "reader_type"));
 
         ResourceLocation normal = new ResourceLocation(GsonHelper.getAsString(texture, "normal"));
         ResourceLocation none = new ResourceLocation(GsonHelper.getAsString(texture, "none"));
@@ -40,7 +41,7 @@ public class PipeModelLoader implements IGeometryLoader<PipeModelLoader.PipeMode
         ResourceLocation three = new ResourceLocation(GsonHelper.getAsString(texture, "three"));
         ResourceLocation corner = new ResourceLocation(GsonHelper.getAsString(texture, "corner"));
 
-        return new PipeModelGeometry(normal, three, corner, none, cross);
+        return new PipeModelGeometry(normal, three, corner, none, cross, render_type);
     }
 
     public static class PipeModelGeometry implements IUnbakedGeometry<PipeModelGeometry> {
@@ -50,13 +51,15 @@ public class PipeModelLoader implements IGeometryLoader<PipeModelLoader.PipeMode
         private final ResourceLocation cross;
         private final ResourceLocation three;
         private final ResourceLocation corner;
+        private final ResourceLocation render_type;
 
-        public PipeModelGeometry(ResourceLocation normal,  ResourceLocation three, ResourceLocation corner, ResourceLocation none, ResourceLocation cross) {
+        public PipeModelGeometry(ResourceLocation normal,  ResourceLocation three, ResourceLocation corner, ResourceLocation none, ResourceLocation cross, ResourceLocation render_type) {
             this.corner = corner;
             this.normal = normal;
             this.none = none;
             this.three = three;
             this.cross = cross;
+            this.render_type = render_type;
         }
 
         @Override

@@ -33,7 +33,7 @@ public class FluidPipeNetwork extends AbstractLevelNetwork implements ICapabilit
 
     public FluidPipeNetwork(CompoundTag tag) {
         super(MillenniumLevelNetworkType.FLUID_PIPE_NETWORK.get(), tag);
-        this.fluidStorage = new PipeFluidStorage(tag.getCompound("fluid"));
+        this.fluidStorage = new PipeFluidStorage(tag.getCompound("capability"));
         this.fluidHandlerLazyOptional = LazyOptional.of(() -> fluidStorage);
     }
 
@@ -49,7 +49,7 @@ public class FluidPipeNetwork extends AbstractLevelNetwork implements ICapabilit
     @Override
     public void writeToNBT(CompoundTag tag) {
         super.writeToNBT(tag);
-        tag.put("fluid", fluidStorage.serializeNBT());
+        tag.put("capability", fluidStorage.serializeNBT());
     }
 
     @Override

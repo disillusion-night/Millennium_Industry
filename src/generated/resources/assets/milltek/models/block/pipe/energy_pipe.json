@@ -1,6 +1,7 @@
 {
   "parent": "minecraft:block/cube",
   "loader": "milltek:pipe_loader",
+  "render_type": "minecraft:translucent",
   "textures": {
     "corner": "milltek:block/pipe/energy_pipe_corner",
     "cross": "milltek:block/pipe/energy_pipe_cross",

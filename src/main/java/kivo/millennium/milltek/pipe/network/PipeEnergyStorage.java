@@ -5,7 +5,7 @@ import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class PipeEnergyStorage implements IEnergyStorage, INBTSerializable<Tag>, IMergeableStorage<PipeEnergyStorage> {
+public class PipeEnergyStorage implements IEnergyStorage, INBTSerializable<Tag>, IPipeStorage<PipeEnergyStorage> {
     private int energy;
     private int capacity;
     private int maxReceive;
@@ -71,11 +71,13 @@ public class PipeEnergyStorage implements IEnergyStorage, INBTSerializable<Tag>,
         this.energy = Math.min(energy, capacity);
     }
 
-    public void setCapacity(int capacity) {
+    @Override
+    public PipeEnergyStorage setCapacity(int capacity) {
         this.capacity = capacity;
         if (energy > capacity) {
             energy = capacity;
         }
+        return this;
     }
 
     public void setMaxReceive(int maxReceive) {
@@ -120,5 +122,10 @@ public class PipeEnergyStorage implements IEnergyStorage, INBTSerializable<Tag>,
         this.capacity = 0;
         this.maxReceive = 0;
         this.maxExtract = 0;
+    }
+
+    @Override
+    public int getCapacity() {
+        return capacity;
     }
 }

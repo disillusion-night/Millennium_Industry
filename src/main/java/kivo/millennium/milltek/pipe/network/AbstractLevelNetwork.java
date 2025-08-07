@@ -1,5 +1,6 @@
 package kivo.millennium.milltek.pipe.network;
 
+import java.security.Provider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,6 +9,7 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.UUID;
 
+import net.minecraftforge.common.util.INBTSerializable;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -96,7 +98,7 @@ public abstract class AbstractLevelNetwork {
         this.pipeDataHashMap.putAll(other.pipeDataHashMap);
 
         // 清理被合并的网络
-        other.remove();
+        other.clear();
 
         // 更新所有管道的网络引用
         updatePipeNetworkReferences(level);
@@ -295,10 +297,6 @@ public abstract class AbstractLevelNetwork {
             pipeDataHashMap.put(pos, pipe);
         }
         setDirty();
-    }
-
-    public void remove(){
-        this.pipeDataHashMap.clear();
     }
 
     public abstract <Cap> LazyOptional<Cap> getCapability(@NotNull Capability<Cap> cap, @Nullable Direction side);

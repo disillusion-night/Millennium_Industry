@@ -1,0 +1,12 @@
+{
+  "parent": "minecraft:block/cube",
+  "loader": "milltek:pipe_loader",
+  "render_type": "minecraft:translucent",
+  "textures": {
+    "corner": "milltek:block/pipe/gas_pipe_corner",
+    "cross": "milltek:block/pipe/gas_pipe_cross",
+    "none": "milltek:block/pipe/gas_pipe_none",
+    "normal": "milltek:block/pipe/gas_pipe_normal",
+    "three": "milltek:block/pipe/gas_pipe_three"
+  }
+}

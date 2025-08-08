@@ -7,9 +7,6 @@ import net.minecraft.Util;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 
-/**
- * 表示一种气体类型，类似于Fluid
- */
 public class Gas {
     private final int color;
 

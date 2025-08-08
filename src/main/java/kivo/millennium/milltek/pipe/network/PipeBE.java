@@ -141,6 +141,10 @@ public abstract class PipeBE<NET extends AbstractLevelNetwork> extends BlockEnti
             BlockEntity neighborBE = level.getBlockEntity(worldPosition.relative(direction));
 
             if (neighborBE instanceof PipeBE<?> neighborPipe) {
+                if (neighborPipe.getNetwork().levelNetworkType != networkType) {
+                    // 如果邻居管道的网络类型与当前管道不同，则不处理
+                    continue;
+                }
                 if (neighborPipe.getPipeData().getStateFromDirection(direction.getOpposite()) != DISCONNECT) {
                     // 如果邻居管道的状态不是断开，且自己没有网络，则加入它的网络
                     if (networkUUID == null) {

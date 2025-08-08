@@ -257,8 +257,6 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
         // 同步所有FluidSlot的流体内容到客户端
         if (player instanceof ServerPlayer sp) {
             for (FluidSlot slot : fluidSlots) {
-                if (slot.getFluidStack().isEmpty())
-                    continue; // 如果槽位为空，则不发送同步包
                 MillenniumNetwork.INSTANCE.send(
                         PacketDistributor.PLAYER.with(() -> sp),
                         new SyncFluidSlotPacket(this.containerId, slot.getTankIndex(), slot.getFluidCapacity(),
@@ -266,8 +264,6 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
             }
 
             for (GasSlot slot : gasSlots) {
-                if (slot.getGasStack().isEmpty())
-                    continue; // 如果槽位为空，则不发送同步包
                 MillenniumNetwork.INSTANCE.send(
                         PacketDistributor.PLAYER.with(() -> sp),
                         new SyncGasSlotPacket(this.containerId, slot.getTankIndex(),
@@ -282,8 +278,6 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
         // 实时同步所有FluidSlot的流体内容到客户端
         if (player instanceof ServerPlayer sp) {
             for (FluidSlot slot : fluidSlots) {
-                if (slot.getFluidStack().isEmpty())
-                    continue; // 如果槽位为空，则不发送同步包
                 MillenniumNetwork.INSTANCE.send(
                         PacketDistributor.PLAYER.with(() -> sp),
                         new SyncFluidSlotPacket(this.containerId, slot.getTankIndex(),
@@ -291,8 +285,6 @@ public abstract class AbstractDeviceMenu<M extends AbstractMachineBE> extends Ab
             }
 
             for (GasSlot slot : gasSlots) {
-                if (slot.getGasStack().isEmpty())
-                    continue; // 如果槽位为空，则不发送同步包
                 MillenniumNetwork.INSTANCE.send(
                         PacketDistributor.PLAYER.with(() -> sp),
                         new SyncGasSlotPacket(this.containerId, slot.getTankIndex(),

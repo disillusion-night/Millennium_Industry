@@ -18,6 +18,7 @@ import java.util.List;
 import javax.annotation.Nullable;
 
 import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.EXECUTE;
+import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIMULATE;
 
 public class FluidPipeNetwork extends AbstractLevelNetwork implements ICapabilityProvider {
     private final PipeFluidStorage fluidStorage;
@@ -76,11 +77,18 @@ public class FluidPipeNetwork extends AbstractLevelNetwork implements ICapabilit
             BlockEntity blockEntity = level.getBlockEntity(ctx.pos.relative(ctx.direction));
             if (blockEntity != null) {
                 LazyOptional<IFluidHandler> fluidCap = blockEntity.getCapability(ForgeCapabilities.FLUID_HANDLER, ctx.direction.getOpposite());
-                fluidCap.ifPresent(fluidHandler -> {
-                    int max_drain = 10000;
-                    int received = this.fluidStorage.fill(fluidHandler.drain(max_drain, EXECUTE), EXECUTE);
-                    if (DEBUG_TICK_LOG && received > 0) {
-                        logger.info("[FluidPipeNetwork] Received " + received + "mb fluid from " + ctx.direction + " at " + ctx.pos);
+                fluidCap.ifPresent(target -> {
+                    if (this.getFluidStorage().isFluidValid(0, target.getFluidInTank(0))) {
+                        FluidStack fluidInPipe = this.getFluidStorage().getFluid();
+                        int max_in = 10000; // 每次最多输入10000mb
+                        FluidStack toFill = target.drain(max_in, SIMULATE);
+                        if (!toFill.isEmpty() ) {
+                            int filled = this.fluidStorage.fill(toFill, EXECUTE);
+                            target.drain(filled, EXECUTE);
+                            if (DEBUG_TICK_LOG) {
+                                logger.info("[FluidPipeNetwork] Filled " + filled + "mb fluid from " + ctx.direction + " at " + ctx.pos);
+                            }
+                        }
                     }
                 });
             }
@@ -91,16 +99,24 @@ public class FluidPipeNetwork extends AbstractLevelNetwork implements ICapabilit
     protected void handleOutput(ServerLevel level, List<TargetContext> outputTargets) {
         int n = outputTargets.size();
         if (n == 0) return;
-        //int totalFluid = this.fluidStorage.getFluidInTank(0).getAmount();
-        //int avgFluid = totalFluid / n;
         for (TargetContext ctx : outputTargets) {
             BlockEntity blockEntity = level.getBlockEntity(ctx.pos.relative(ctx.direction));
             if (blockEntity != null) {
                 LazyOptional<IFluidHandler> fluidCap = blockEntity.getCapability(ForgeCapabilities.FLUID_HANDLER, ctx.direction.getOpposite());
-                fluidCap.ifPresent(fluidHandler -> {
-                    int sent = fluidHandler.fill(getFluidStorage().getFluid(), EXECUTE);
-                    if (DEBUG_TICK_LOG && sent > 0) {
-                        logger.info("[FluidPipeNetwork] Sent " + sent + "mb fluid to " + ctx.direction + " at " + ctx.pos);
+                fluidCap.ifPresent(target -> {
+                    for (int i = 0; i < target.getTanks(); i++) {
+                        FluidStack fluidInPipe = getFluidStorage().getFluid();
+                        if (!fluidInPipe.isEmpty() && this.fluidStorage.isFluidValid(0, fluidInPipe)) {
+                            int max_out = 10000;
+                            int toDrain = target.fill(new FluidStack(fluidInPipe.getFluid(), max_out), SIMULATE);
+                            if (toDrain > 0) {
+                                FluidStack drained = this.fluidStorage.drain(toDrain, EXECUTE);
+                                target.fill(drained, EXECUTE);
+                                if (DEBUG_TICK_LOG) {
+                                    logger.info("[FluidPipeNetwork] Drained " + drained.getAmount() + "mb fluid to " + ctx.direction + " at " + ctx.pos);
+                                }
+                            }
+                        }
                     }
                 });
             }

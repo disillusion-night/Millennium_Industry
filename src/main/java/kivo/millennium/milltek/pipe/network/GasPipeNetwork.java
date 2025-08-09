@@ -27,7 +27,7 @@ import static kivo.millennium.milltek.gas.IGasHandler.GasAction.SIMULATE;
 public class GasPipeNetwork extends AbstractLevelNetwork implements ICapabilityProvider {
     private final PipeGasStorage gasStorage;
     private final LazyOptional<PipeGasStorage> gasHandlerLazyOptional;
-    private static final boolean DEBUG_TICK_LOG = true;
+    private static final boolean DEBUG_TICK_LOG = false;
     private static final Logger logger = LogUtils.getLogger();
 
     public GasPipeNetwork(UUID uuid) {

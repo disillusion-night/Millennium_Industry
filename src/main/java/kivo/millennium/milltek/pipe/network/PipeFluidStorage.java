@@ -105,10 +105,11 @@ public class PipeFluidStorage implements IFluidHandler, INBTSerializable<Compoun
             return FluidStack.EMPTY;
         }
         int drainedAmount = Math.min(resource.getAmount(), fluidStack.getAmount());
+        FluidStack stack_out = new FluidStack(fluidStack, drainedAmount);
         if (action.execute()) {
             fluidStack.shrink(drainedAmount);
         }
-        return new FluidStack(fluidStack, drainedAmount);
+        return stack_out;
     }
 
     @Override
@@ -117,8 +118,9 @@ public class PipeFluidStorage implements IFluidHandler, INBTSerializable<Compoun
             return FluidStack.EMPTY;
         }
         int drainedAmount = Math.min(maxDrain, fluidStack.getAmount());
-        fluidStack.shrink(drainedAmount);
-        return fluidStack;
+        FluidStack stack_out = new FluidStack(this.fluidStack, drainedAmount);
+        if (action.execute()) fluidStack.shrink(drainedAmount);
+        return stack_out;
     }
 
     public PipeFluidStorage setCapacity(int newCapacity) {

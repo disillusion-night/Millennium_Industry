@@ -55,6 +55,10 @@ public class FusionChamberMenu extends AbstractDeviceMenu<FusionChamberBE> {
         });
     }
 
+    public Vector2i getPlayerInvPos() {
+        return new Vector2i(8, 88);
+    }
+
     public int getProgress() {
         return progressAndLit >> 1;
     }

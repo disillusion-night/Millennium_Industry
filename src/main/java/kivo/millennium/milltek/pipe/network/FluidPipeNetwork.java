@@ -23,7 +23,7 @@ import static net.minecraftforge.fluids.capability.IFluidHandler.FluidAction.SIM
 public class FluidPipeNetwork extends AbstractLevelNetwork implements ICapabilityProvider {
     private final PipeFluidStorage fluidStorage;
     private final LazyOptional<IFluidHandler> fluidHandlerLazyOptional;
-    private static final boolean DEBUG_TICK_LOG = false;
+    private static final boolean DEBUG_TICK_LOG = true;
     private static final Logger logger = LogUtils.getLogger();
 
     public FluidPipeNetwork(UUID uuid) {

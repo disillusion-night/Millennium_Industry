@@ -15,7 +15,8 @@ import net.minecraftforge.registries.ForgeRegistries;
  * 气体堆栈，类似于FluidStack，包含气体类型和数量。
  */
 public class GasStack {
-    public static final GasStack EMPTY = new GasStack(MillenniumGases.EMPTY.get(), 0);
+    public static final GasStack EMPTY = new GasStack(MillenniumGases.EMPTY.get(), 0, true);
+    private boolean isEmpty;
     public static final Codec<GasStack> CODEC = RecordCodecBuilder.create(
             instance -> instance.group(
                     ResourceLocation.CODEC.fieldOf("Gas").forGetter(stack -> stack.getGas().getRegistryName()),
@@ -26,9 +27,16 @@ public class GasStack {
     private final Gas gas;
     private int amount;
 
+    private GasStack(@NotNull Gas gas, int amount, boolean isEmpty) {
+        this.gas = gas;
+        this.amount = amount;
+        this.isEmpty = isEmpty;
+    }
+
     public GasStack(@NotNull Gas gas, int amount) {
         this.gas = gas;
         this.amount = amount;
+        this.isEmpty = true;
     }
 
     public void grow(int amount) {
@@ -37,8 +45,7 @@ public class GasStack {
 
     public void shrink(int amount) {
         this.amount -= amount;
-        if (this.amount < 0)
-            this.amount = 0;
+        if (this.amount < 0) this.amount = 0;
     }
 
     @NotNull
@@ -55,7 +62,11 @@ public class GasStack {
     }
 
     public boolean isEmpty() {
-        return amount <= 0;
+        return isEmpty;
+    }
+
+    protected void updateEmpty(){
+        if (isEmpty()) isEmpty = true;
     }
 
     public GasStack copy() {

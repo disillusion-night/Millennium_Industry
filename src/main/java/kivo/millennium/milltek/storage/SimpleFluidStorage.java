@@ -1,4 +1,4 @@
-package kivo.millennium.milltek.pipe.network;
+package kivo.millennium.milltek.storage;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
@@ -7,22 +7,22 @@ import net.minecraftforge.fluids.FluidStack;
 import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.NotNull;
 
-public class PipeFluidStorage implements IFluidHandler, INBTSerializable<CompoundTag>, IPipeStorage<PipeFluidStorage> {
+public class SimpleFluidStorage implements IFluidHandler, INBTSerializable<CompoundTag> {
 
     private int capacity;
     private FluidStack fluidStack;
 
-    public PipeFluidStorage(int capacity) {
+    public SimpleFluidStorage(int capacity) {
         this.capacity = capacity;
         this.fluidStack = FluidStack.EMPTY;
     }
 
-    public PipeFluidStorage(int capacity, FluidStack fluidStack) {
+    public SimpleFluidStorage(int capacity, FluidStack fluidStack) {
         this.capacity = capacity;
         this.fluidStack = fluidStack;
     }
 
-    public PipeFluidStorage(CompoundTag tag) {
+    public SimpleFluidStorage(CompoundTag tag) {
         this.capacity = tag.getInt("capacity");
         if (tag.contains("fluid", Tag.TAG_COMPOUND)) {
             this.fluidStack = FluidStack.loadFluidStackFromNBT(tag.getCompound("fluid"));
@@ -123,7 +123,7 @@ public class PipeFluidStorage implements IFluidHandler, INBTSerializable<Compoun
         return stack_out;
     }
 
-    public PipeFluidStorage setCapacity(int newCapacity) {
+    public SimpleFluidStorage setCapacity(int newCapacity) {
         if (newCapacity < 0) {
             throw new IllegalArgumentException("Capacity cannot be negative");
         }
@@ -131,27 +131,5 @@ public class PipeFluidStorage implements IFluidHandler, INBTSerializable<Compoun
         this.capacity = newCapacity;
         fluidStack.setAmount(Math.min(fluidStack.getAmount(), newCapacity));
         return this;
-    }
-
-    @Override
-    public PipeFluidStorage merge(PipeFluidStorage other) {
-        this.capacity += other.capacity;
-        if (this.fluidStack.isEmpty()) {
-            this.fluidStack = other.fluidStack.copy();
-            other.clear();
-            return this;
-        }
-        if (other.fluidStack.isEmpty()) {
-            return this;
-        }
-        this.fluidStack.setAmount(Math.min(this.fluidStack.getAmount() + other.fluidStack.getAmount(), this.capacity));
-        other.clear();
-        return this;
-    }
-
-    @Override
-    public void clear() {
-        capacity = 0;
-        fluidStack = FluidStack.EMPTY;
     }
 }

@@ -1,6 +1,5 @@
 package kivo.millennium.milltek.pipe.network;
 
-import java.security.Provider;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -9,13 +8,13 @@ import java.util.Set;
 import java.util.Stack;
 import java.util.UUID;
 
-import net.minecraftforge.common.util.INBTSerializable;
+import net.minecraft.world.level.Level;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import kivo.millennium.milltek.init.MillenniumLevelNetworkType;
 import kivo.millennium.milltek.init.MillenniumLevelNetworkType.LevelNetworkType;
-import static kivo.millennium.milltek.pipe.network.EPipeState.DISCONNECT;
+
 import static kivo.millennium.milltek.pipe.network.EPipeState.PIPE;
 
 import kivo.millennium.milltek.world.LevelNetworkSavedData;
@@ -30,6 +29,7 @@ import net.minecraftforge.common.util.LazyOptional;
 
 public abstract class AbstractLevelNetwork {
     protected boolean isDirty = false;
+    protected Level level = null;
     protected final UUID uuid;
     protected final LevelNetworkType<?> levelNetworkType;
     private static final boolean DEBUG_LOG = true; // 控制是否打印调试信息
@@ -75,6 +75,14 @@ public abstract class AbstractLevelNetwork {
         }
     }
 
+    public void setLevel(Level pLevel){
+        this.level = pLevel;
+    }
+
+    public Level getLevel() {
+        return level;
+    }
+
     public static AbstractLevelNetwork createNetwork(String type, UUID uuid) {
         var registryObject = MillenniumLevelNetworkType.LEVEL_NETWORK_TYPES.getEntries().stream()
                 .filter(entry -> entry.getId().getPath().equals(type))
@@ -86,10 +94,10 @@ public abstract class AbstractLevelNetwork {
 
     public abstract boolean canMerge(AbstractLevelNetwork other);
 
-    public <T extends AbstractLevelNetwork> T merge(ServerLevel level, T other){
+    public <T extends AbstractLevelNetwork> T merge(T other){
         // 如果其他网络的管道数据更多，则将当前网络合并到其他网络
         if (other.pipeDataHashMap.size() > this.pipeDataHashMap.size()) {
-            return other.merge(level, (T) this);
+            return other.merge((T) this);
         }
 
         mergeCapabilities(other);
@@ -101,7 +109,7 @@ public abstract class AbstractLevelNetwork {
         other.clear();
 
         // 更新所有管道的网络引用
-        updatePipeNetworkReferences(level);
+        updatePipeNetworkReferences();
 
         setDirty();
         return (T) this;
@@ -115,11 +123,10 @@ public abstract class AbstractLevelNetwork {
     
     /**
      * 更新所有管道的网络引用
-     * @param level 服务器世界
      */
-    private void updatePipeNetworkReferences(ServerLevel level) {
+    private void updatePipeNetworkReferences() {
         for (BlockPos pos : this.pipeDataHashMap.keySet()) {
-            BlockEntity blockEntity = level.getBlockEntity(pos);
+            BlockEntity blockEntity = getLevel().getBlockEntity(pos);
             if (blockEntity instanceof PipeBE<?> pipeBE) {
                 pipeBE.updateNetwork(uuid);
             }
@@ -134,7 +141,7 @@ public abstract class AbstractLevelNetwork {
         return isDirty;
     }
 
-    public void recalculateNetwork(LevelNetworkSavedData savedData, ServerLevel level) {
+    public void recalculateNetwork(LevelNetworkSavedData savedData) {
         // 如果网络为空，直接移除
         if (isEmpty()) {
             savedData.removeNetwork(levelNetworkType, uuid);
@@ -162,7 +169,7 @@ public abstract class AbstractLevelNetwork {
 
         // 创建子网络
         for (List<BlockPos> component : connectedComponents) {
-            createSubNetwork(savedData, level, component);
+            createSubNetwork(savedData,component);
         }
 
         // 清除当前网络并移除
@@ -195,7 +202,7 @@ public abstract class AbstractLevelNetwork {
             }
         }
     }
-    public void createSubNetwork(LevelNetworkSavedData savedData, ServerLevel level, List<BlockPos> network) {
+    public void createSubNetwork(LevelNetworkSavedData savedData, List<BlockPos> network) {
         if (network.isEmpty()) return;
         
         // 创建子网络
@@ -207,7 +214,7 @@ public abstract class AbstractLevelNetwork {
         for (BlockPos pos : network) {
             PipeData pipeData = pipeDataHashMap.get(pos);
             if (pipeData != null) {
-                subNetwork.addPipe(level, pos, pipeData);
+                subNetwork.addPipeData(pos, pipeData);
             }
         }
         // 新增：分配内容到子网络（如能量/流体等），由子类实现
@@ -226,7 +233,7 @@ public abstract class AbstractLevelNetwork {
     /**
      * 通用tick方法：遍历所有管道节点，计算输入/输出目标，并分别调用子类handleInput/handleOutput
      */
-    public void tick(ServerLevel level) {
+    public void tick() {
         List<TargetContext> inputTargets = new ArrayList<>();
         List<TargetContext> outputTargets = new ArrayList<>();
         for (BlockPos pos : pipeDataHashMap.keySet()) {
@@ -240,8 +247,8 @@ public abstract class AbstractLevelNetwork {
                 }
             }
         }
-        handleInput(level, inputTargets);
-        handleOutput(level, outputTargets);
+        handleInput(inputTargets);
+        handleOutput(outputTargets);
         setDirty();
     }
 
@@ -262,17 +269,17 @@ public abstract class AbstractLevelNetwork {
     /**
      * 子类实现：处理所有输入目标
      */
-    protected abstract void handleInput(ServerLevel level, List<TargetContext> inputTargets);
+    protected abstract void handleInput(List<TargetContext> inputTargets);
     /**
      * 子类实现：处理所有输出目标
      */
-    protected abstract void handleOutput(ServerLevel level, List<TargetContext> outputTargets);
+    protected abstract void handleOutput(List<TargetContext> outputTargets);
 
     public void updatePipeData(BlockPos pos, PipeData pipeData) {
         if (pipeDataHashMap.containsKey(pos)) {
             pipeDataHashMap.put(pos, pipeData);
         } else {
-            addPipe(pos, pipeData);
+            addPipeData(pos, pipeData);
         }
         setDirty();
     }
@@ -285,25 +292,24 @@ public abstract class AbstractLevelNetwork {
         return pipeDataHashMap.get(pos);
     }
 
-    public void addPipe(BlockPos pos, PipeData pipe) {
+    public void addPipeData(BlockPos pos, PipeData pipe) {
         pipeDataHashMap.put(pos, pipe);
-        setDirty();
     }
 
-    public void addPipe(ServerLevel level, BlockPos pos, PipeData pipe) {
+    public void addPipe(BlockPos pos, PipeData pipe) {
         if (level.getBlockEntity(pos) instanceof PipeBE<?> pipeBE){
             pipeBE.setNetworkUUID(uuid);
             pipeBE.setPipeData(pipe);
-            pipeDataHashMap.put(pos, pipe);
+            addPipeData(pos, pipe);
         }
         setDirty();
     }
 
     public abstract <Cap> LazyOptional<Cap> getCapability(@NotNull Capability<Cap> cap, @Nullable Direction side);
 
-    public void removePipe(LevelNetworkSavedData savedData, ServerLevel level, BlockPos pos) {
+    public void removePipe(LevelNetworkSavedData savedData,BlockPos pos) {
         pipeDataHashMap.remove(pos);
-        recalculateNetwork(savedData, level);
+        recalculateNetwork(savedData);
     }
 
     public void removePipe(BlockPos pos) {

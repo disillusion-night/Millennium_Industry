@@ -1,9 +1,11 @@
 package kivo.millennium.milltek.pipe.network;
 
+import java.util.List;
 import java.util.UUID;
 
 import javax.annotation.Nullable;
 
+import kivo.millennium.milltek.storage.PipeEnergyStorage;
 import org.slf4j.Logger;
 
 import com.mojang.logging.LogUtils;
@@ -70,13 +72,13 @@ public class EnergyPipeNetwork extends AbstractLevelNetwork implements ICapabili
     }
 
     @Override
-    protected void handleInput(ServerLevel level, java.util.List<TargetContext> inputTargets) {
+    protected void handleInput(List<TargetContext> inputTargets) {
         int n = inputTargets.size();
         if (n == 0) return;
         int totalCapacity = this.energyStorage.getMaxEnergyStored() - this.energyStorage.getEnergyStored();
         int avgCapacity = totalCapacity / n;
         for (TargetContext ctx : inputTargets) {
-            BlockEntity blockEntity = level.getBlockEntity(ctx.pos.relative(ctx.direction));
+            BlockEntity blockEntity = getLevel().getBlockEntity(ctx.pos.relative(ctx.direction));
             if (blockEntity != null) {
                 LazyOptional<IEnergyStorage> energyCap = blockEntity.getCapability(ForgeCapabilities.ENERGY, ctx.direction.getOpposite());
                 energyCap.ifPresent(energyStorage -> {
@@ -96,13 +98,13 @@ public class EnergyPipeNetwork extends AbstractLevelNetwork implements ICapabili
     }
 
     @Override
-    protected void handleOutput(ServerLevel level, java.util.List<TargetContext> outputTargets) {
+    protected void handleOutput(List<TargetContext> outputTargets) {
         int n = outputTargets.size();
         if (n == 0) return;
         int totalEnergy = this.energyStorage.getEnergyStored();
         int avgEnergy = totalEnergy / n;
         for (TargetContext ctx : outputTargets) {
-            BlockEntity blockEntity = level.getBlockEntity(ctx.pos.relative(ctx.direction));
+            BlockEntity blockEntity = getLevel().getBlockEntity(ctx.pos.relative(ctx.direction));
             if (blockEntity instanceof PipeBE<?>) continue;
             if (blockEntity != null) {
                 if (DEBUG_TICK_LOG) {

@@ -1,28 +1,27 @@
-package kivo.millennium.milltek.pipe.network;
+package kivo.millennium.milltek.storage;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.INBTSerializable;
 import net.minecraftforge.energy.IEnergyStorage;
 
-public class PipeEnergyStorage implements IEnergyStorage, INBTSerializable<Tag>, IPipeStorage<PipeEnergyStorage> {
+public class SimpleEnergyStorage implements IEnergyStorage, INBTSerializable<Tag> {
     private int energy;
     private int capacity;
     private int maxReceive;
     private int maxExtract;
-
-    public PipeEnergyStorage(int capacity) {
+    public SimpleEnergyStorage(int capacity) {
         this(capacity, capacity, capacity, 0);
     }
 
-    public PipeEnergyStorage(int capacity, int maxReceive, int maxExtract, int energy) {
+    public SimpleEnergyStorage(int capacity, int maxReceive, int maxExtract, int energy) {
         this.capacity = capacity;
         this.maxReceive = maxReceive;
         this.maxExtract = maxExtract;
         this.energy = Math.min(energy, capacity);
     }
 
-    public PipeEnergyStorage(CompoundTag tag) {
+    public SimpleEnergyStorage(CompoundTag tag) {
         this.capacity = tag.getInt("capacity");
         this.maxReceive = tag.getInt("maxReceive");
         this.maxExtract = tag.getInt("maxExtract");
@@ -71,15 +70,6 @@ public class PipeEnergyStorage implements IEnergyStorage, INBTSerializable<Tag>,
         this.energy = Math.min(energy, capacity);
     }
 
-    @Override
-    public PipeEnergyStorage setCapacity(int capacity) {
-        this.capacity = capacity;
-        if (energy > capacity) {
-            energy = capacity;
-        }
-        return this;
-    }
-
     public void setMaxReceive(int maxReceive) {
         this.maxReceive = maxReceive;
     }
@@ -106,26 +96,5 @@ public class PipeEnergyStorage implements IEnergyStorage, INBTSerializable<Tag>,
             this.maxReceive = tag.getInt("maxReceive");
             this.maxExtract = tag.getInt("maxExtract");
         }
-    }
-
-    @Override
-    public PipeEnergyStorage merge(PipeEnergyStorage other) {
-        this.capacity += other.capacity;
-        this.receiveEnergy(other.getEnergyStored(), false);
-        other.clear();
-        return this;
-    }
-
-    @Override
-    public void clear() {
-        this.energy = 0;
-        this.capacity = 0;
-        this.maxReceive = 0;
-        this.maxExtract = 0;
-    }
-
-    @Override
-    public int getCapacity() {
-        return capacity;
     }
 }

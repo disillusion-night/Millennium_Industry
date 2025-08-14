@@ -145,14 +145,14 @@ public class LevelNetworkSavedData extends SavedData {
      * @param tag 包含数据的CompoundTag。
      * @return 解码后的ModLevelSaveData实例。
      */
-    public static LevelNetworkSavedData decode(CompoundTag tag) {
+    public static LevelNetworkSavedData decode(CompoundTag tag, Level worldIn) {
         logger.info("[LevelNetworkSavedData] Decoding data...");
         LevelNetworkSavedData saveData = LevelNetworkSavedData.create();
-        saveData.load(tag);
+        saveData.load(tag, worldIn);
         return saveData;
     }
 
-    public LevelNetworkSavedData load(CompoundTag compound) {
+    public LevelNetworkSavedData load(CompoundTag compound, Level worldIn) {
         // 清理旧数据
         this.networksByType.clear();
         
@@ -183,6 +183,9 @@ public class LevelNetworkSavedData extends SavedData {
                 CompoundTag networkTag = (CompoundTag) tag;
                 UUID uuid = networkTag.getUUID("uuid");
                 AbstractLevelNetwork network = type.create(networkTag);
+                if (network != null) {
+                    network.setLevel(worldIn);
+                }
                 networks.put(uuid, network);
             }
 
@@ -204,7 +207,7 @@ public class LevelNetworkSavedData extends SavedData {
                 Map<UUID, AbstractLevelNetwork> networks = entry.getValue();
                 for (AbstractLevelNetwork network : networks.values()) {
                     if (network.isEmpty()) continue;
-                    network.tick(lvl);
+                    network.tick();
                 }
             }
         }
@@ -220,18 +223,7 @@ public class LevelNetworkSavedData extends SavedData {
         if (worldIn.isClientSide) {
             throw new IllegalStateException("getLevelNetworkSavedData can only be called on the server side");
         }
-        
-        var server = worldIn.getServer();
-        if (server == null) {
-            throw new IllegalStateException("Server is null");
-        }
-        
-        ServerLevel world = server.getLevel(ServerLevel.OVERWORLD);
-        if (world == null) {
-            throw new IllegalStateException("Overworld is null");
-        }
-        
-        DimensionDataStorage dataStorage = world.getDataStorage();
-        return dataStorage.computeIfAbsent(LevelNetworkSavedData::decode, LevelNetworkSavedData::create, DATA_NAME);
+        DimensionDataStorage dataStorage = ((ServerLevel) worldIn).getDataStorage();
+        return dataStorage.computeIfAbsent((tag) -> LevelNetworkSavedData.decode(tag, worldIn), LevelNetworkSavedData::create, DATA_NAME);
     }
 }

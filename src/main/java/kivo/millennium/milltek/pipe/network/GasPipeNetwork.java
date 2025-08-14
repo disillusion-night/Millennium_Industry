@@ -4,17 +4,14 @@ import kivo.millennium.milltek.gas.GasStack;
 import kivo.millennium.milltek.gas.IGasHandler;
 import kivo.millennium.milltek.init.MillenniumCapabilities;
 import kivo.millennium.milltek.init.MillenniumLevelNetworkType;
-import kivo.millennium.milltek.storage.MillenniumGasStorage;
+import kivo.millennium.milltek.storage.PipeGasStorage;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.capabilities.ForgeCapabilities;
 import net.minecraftforge.common.capabilities.ICapabilityProvider;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.fluids.FluidStack;
-import net.minecraftforge.fluids.capability.IFluidHandler;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import com.mojang.logging.LogUtils;
@@ -59,7 +56,7 @@ public class GasPipeNetwork extends AbstractLevelNetwork implements ICapabilityP
 
     @Override
     public boolean canMerge(AbstractLevelNetwork other) {
-        return other instanceof GasPipeNetwork;
+        return other instanceof GasPipeNetwork && ((GasPipeNetwork) other).getGasStorage().isGasValid(this.gasStorage.getGasStack());
     }
 
     @Override
@@ -73,11 +70,11 @@ public class GasPipeNetwork extends AbstractLevelNetwork implements ICapabilityP
     }
 
     @Override
-    protected void handleInput(ServerLevel level, List<TargetContext> inputTargets) {
+    protected void handleInput(List<TargetContext> inputTargets) {
         int n = inputTargets.size();
         if (n == 0) return;
         for (TargetContext ctx : inputTargets) {
-            BlockEntity blockEntity = level.getBlockEntity(ctx.pos.relative(ctx.direction));
+            BlockEntity blockEntity = getLevel().getBlockEntity(ctx.pos.relative(ctx.direction));
             if (blockEntity != null) {
                 LazyOptional<IGasHandler> gasCap = blockEntity.getCapability(MillenniumCapabilities.GAS, ctx.direction.getOpposite());
                 gasCap.ifPresent(target -> {
@@ -89,7 +86,7 @@ public class GasPipeNetwork extends AbstractLevelNetwork implements ICapabilityP
                             int filled = getGasStorage().fill(toFill, EXECUTE);
                             target.drain(filled, EXECUTE);
                             if (DEBUG_TICK_LOG) {
-                                logger.info("[GasPipeNetwork] Filled " + filled + "mb "+ getGasStorage().getGasStack().getGas().getRegistryName().toString() + "from " + ctx.direction + " at " + ctx.pos);
+                                logger.info("[GasPipeNetwork] Input " + filled + "mb "+ getGasStorage().getGasStack().getGas().getRegistryName().toString() + "from " + ctx.direction + " at " + ctx.pos);
                             }
                         }
                     }
@@ -99,11 +96,11 @@ public class GasPipeNetwork extends AbstractLevelNetwork implements ICapabilityP
     }
 
     @Override
-    protected void handleOutput(ServerLevel level, List<TargetContext> outputTargets) {
+    protected void handleOutput(List<TargetContext> outputTargets) {
         int n = outputTargets.size();
         if (n == 0) return;
         for (TargetContext ctx : outputTargets) {
-            BlockEntity blockEntity = level.getBlockEntity(ctx.pos.relative(ctx.direction));
+            BlockEntity blockEntity = getLevel().getBlockEntity(ctx.pos.relative(ctx.direction));
             if (blockEntity != null) {
                 LazyOptional<IGasHandler> gasCap = blockEntity.getCapability(MillenniumCapabilities.GAS, ctx.direction.getOpposite());
                 gasCap.ifPresent(target -> {
@@ -116,7 +113,7 @@ public class GasPipeNetwork extends AbstractLevelNetwork implements ICapabilityP
                                 GasStack drained = getGasStorage().drain(toDrain, EXECUTE);
                                 target.fill(drained, EXECUTE);
                                 if (DEBUG_TICK_LOG) {
-                                    logger.info("[GasPipeNetwork] Drained " + drained.getAmount() + "mb" + getGasStorage().getGasStack().getGas().getRegistryName() +" to " + ctx.direction + " at " + ctx.pos);
+                                    logger.info("[GasPipeNetwork] Output " + drained.getAmount() + "mb" + getGasStorage().getGasStack().getGas().getRegistryName() +" to " + ctx.direction + " at " + ctx.pos);
                                 }
                             }
                         }

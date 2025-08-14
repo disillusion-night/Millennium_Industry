@@ -1,8 +1,8 @@
-package kivo.millennium.milltek.pipe.network;
+package kivo.millennium.milltek.storage;
 
 import kivo.millennium.milltek.gas.GasStack;
 import kivo.millennium.milltek.gas.IGasHandler;
-import kivo.millennium.milltek.gas.IGasHandler.GasAction;
+import kivo.millennium.milltek.pipe.network.IPipeStorage;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.Tag;
 import net.minecraftforge.common.util.INBTSerializable;
@@ -49,7 +49,11 @@ public class PipeGasStorage implements IGasHandler, INBTSerializable<CompoundTag
 
     @Override
     public boolean isGasValid(int tank, @NotNull GasStack stack) {
-        return tank == 0;
+        return tank == 0 &&( stack.isEmpty() || stack.isGasEqual(stack));
+    }
+
+    public boolean isGasValid( @NotNull GasStack stack) {
+        return stack.isEmpty() || stack.isGasEqual(stack);
     }
 
     @Override

@@ -12,6 +12,7 @@ public class CreativeEnergyContainerBE extends EnergyContainerBE {
         this.energyHandler = LazyOptional.of(this::createEnergyStorage);
     }
 
+
     public static int getMaxEnergyStorage() {
         return Integer.MAX_VALUE;
     }

@@ -116,7 +116,7 @@ public abstract class PipeBE<NET extends AbstractLevelNetwork> extends BlockEnti
         if (networkUUID != null) {
             NET network = getNetwork();
             if (network != null) {
-                network.removePipe(getNetworkData(),serverLevel, worldPosition);
+                network.removePipe(getNetworkData(), worldPosition);
                 if (DEBUG_TICK_LOG) {
                     logger.info("[PipeBE] Removed pipe from network: " + networkUUID);
                 }
@@ -157,7 +157,7 @@ public abstract class PipeBE<NET extends AbstractLevelNetwork> extends BlockEnti
                         }
                     } else {
                         if (networkUUID != ((PipeBE<?>) neighborBE).networkUUID && getNetwork().canMerge(neighborPipe.getNetwork())) {
-                            NET mergedNetwork = (NET) getNetwork().merge(level, neighborPipe.getNetwork());
+                            NET mergedNetwork = (NET) getNetwork().merge(neighborPipe.getNetwork());
                             if (DEBUG_TICK_LOG) {
                                 logger.info("[PipeBE] Merging networks: " + networkUUID + " and " + neighborPipe.networkUUID);
                             }
@@ -181,7 +181,7 @@ public abstract class PipeBE<NET extends AbstractLevelNetwork> extends BlockEnti
             if (DEBUG_TICK_LOG) {
                 logger.info("[PipeBE] Created new network with UUID: " + networkUUID + " at position: " + worldPosition);
             }
-            newNetwork.addPipe(worldPosition, pipeData);
+            newNetwork.addPipeData(worldPosition, pipeData);
         }
         level.setBlock(worldPosition, pState, 2);
     }
@@ -204,7 +204,7 @@ public abstract class PipeBE<NET extends AbstractLevelNetwork> extends BlockEnti
                     }
                 } else {
                     // 网络中没有找到此位置的管道数据，重新添加
-                    network.addPipe(worldPosition, pipeData);
+                    network.addPipeData(worldPosition, pipeData);
                     if (DEBUG_TICK_LOG) {
                         logger.info("[PipeBE] Re-added pipe data to network: " + networkUUID + " at position: " + worldPosition);
                     }
@@ -223,7 +223,7 @@ public abstract class PipeBE<NET extends AbstractLevelNetwork> extends BlockEnti
             return;
         }
         this.networkUUID = network.getUUID();
-        getNetworkData().getNetwork(networkType, networkUUID).addPipe(worldPosition, pipeData);
+        getNetworkData().getNetwork(networkType, networkUUID).addPipeData(worldPosition, pipeData);
 
         if (DEBUG_TICK_LOG) {
             logger.info("[PipeBE] Joined network with UUID: " + networkUUID + " at position: " + worldPosition);
@@ -304,7 +304,7 @@ public abstract class PipeBE<NET extends AbstractLevelNetwork> extends BlockEnti
         }
         NET network = getNetwork();
         if (network != null) {
-            network.recalculateNetwork(getNetworkData(), (ServerLevel) level);
+            network.recalculateNetwork(getNetworkData());
             if (DEBUG_TICK_LOG) {
                 logger.info("[PipeBE] Recalculated network: " + networkUUID + " at position: " + worldPosition);
             }

@@ -62,7 +62,7 @@ public class GasStack {
     }
 
     public boolean isEmpty() {
-        return isEmpty;
+        return isEmpty || (amount <= 0 && gas == MillenniumGases.EMPTY.get());
     }
 
     protected void updateEmpty(){

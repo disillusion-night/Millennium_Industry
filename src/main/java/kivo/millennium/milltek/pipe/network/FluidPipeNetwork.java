@@ -1,5 +1,6 @@
 package kivo.millennium.milltek.pipe.network;
 
+import kivo.millennium.milltek.storage.PipeFluidStorage;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
@@ -55,7 +56,7 @@ public class FluidPipeNetwork extends AbstractLevelNetwork implements ICapabilit
 
     @Override
     public boolean canMerge(AbstractLevelNetwork other) {
-        return other instanceof FluidPipeNetwork;
+        return other instanceof FluidPipeNetwork && ((FluidPipeNetwork) other).getFluidStorage().isFluidValid(this.fluidStorage.getFluid());
     }
 
     @Override
@@ -69,12 +70,12 @@ public class FluidPipeNetwork extends AbstractLevelNetwork implements ICapabilit
     }
 
     @Override
-    protected void handleInput(ServerLevel level, List<TargetContext> inputTargets) {
+    protected void handleInput(List<TargetContext> inputTargets) {
         // 简单平均分配流体输入
         int n = inputTargets.size();
         if (n == 0) return;
         for (TargetContext ctx : inputTargets) {
-            BlockEntity blockEntity = level.getBlockEntity(ctx.pos.relative(ctx.direction));
+            BlockEntity blockEntity = getLevel().getBlockEntity(ctx.pos.relative(ctx.direction));
             if (blockEntity != null) {
                 LazyOptional<IFluidHandler> fluidCap = blockEntity.getCapability(ForgeCapabilities.FLUID_HANDLER, ctx.direction.getOpposite());
                 fluidCap.ifPresent(target -> {
@@ -96,11 +97,11 @@ public class FluidPipeNetwork extends AbstractLevelNetwork implements ICapabilit
     }
 
     @Override
-    protected void handleOutput(ServerLevel level, List<TargetContext> outputTargets) {
+    protected void handleOutput(List<TargetContext> outputTargets) {
         int n = outputTargets.size();
         if (n == 0) return;
         for (TargetContext ctx : outputTargets) {
-            BlockEntity blockEntity = level.getBlockEntity(ctx.pos.relative(ctx.direction));
+            BlockEntity blockEntity = getLevel().getBlockEntity(ctx.pos.relative(ctx.direction));
             if (blockEntity != null) {
                 LazyOptional<IFluidHandler> fluidCap = blockEntity.getCapability(ForgeCapabilities.FLUID_HANDLER, ctx.direction.getOpposite());
                 fluidCap.ifPresent(target -> {

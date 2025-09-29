@@ -99,24 +99,25 @@ public class GroundTacticalMissile extends AbstractMissile {
 
     private void handleArc() {
         if (target == null) {
-            // 没有目标则进入俯冲
             phase = Phase.DIVE;
             return;
         }
 
-        // 计算拦截点：目标正上方 apexHeightOffset 的位置
-        double apexY = Math.max(target.y + apexHeightOffset, this.getY() + 10.0); // 保证比当前高
+        double apexY = Math.max(target.y + apexHeightOffset, this.getY() + 10.0);
         Vec3 intercept = new Vec3(target.x, apexY, target.z);
 
-        // 朝拦截点平滑制导
         steerTowards(intercept, Math.PI / 6.0, cruiseSpeed);
 
-        // 若接近拦截点则进入俯冲
-        double dist = this.position().distanceTo(intercept);
-        if (dist <= arcArriveThreshold) {
+        // 只计算 xz 平面距离
+        double dx = this.getX() - intercept.x;
+        double dz = this.getZ() - intercept.z;
+        double xzDist = Math.sqrt(dx * dx + dz * dz);
+
+        if (xzDist <= 5.0) {
             phase = Phase.DIVE;
         }
     }
+
 
     private void handleDive() {
         // 俯冲阶段：主要向目标点下落，同时进行少量水平修正以命中目标

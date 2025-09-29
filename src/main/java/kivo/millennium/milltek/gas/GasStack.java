@@ -2,18 +2,12 @@ package kivo.millennium.milltek.gas;
 
 import com.mojang.serialization.Codec;
 import com.mojang.serialization.codecs.RecordCodecBuilder;
-import java.util.Optional;
+import kivo.millennium.milltek.init.MillenniumGases;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.resources.ResourceLocation;
 import org.jetbrains.annotations.NotNull;
 
-import kivo.millennium.milltek.init.MillenniumGases;
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraftforge.registries.ForgeRegistries;
-
-/**
- * 气体堆栈，类似于FluidStack，包含气体类型和数量。
- */
 public class GasStack {
     public static final GasStack EMPTY = new GasStack(MillenniumGases.EMPTY.get(), 0, true);
     private boolean isEmpty;

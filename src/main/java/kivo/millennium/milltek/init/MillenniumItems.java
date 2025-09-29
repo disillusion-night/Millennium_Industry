@@ -18,6 +18,7 @@ import kivo.millennium.milltek.item.Wrench;
 import kivo.millennium.milltek.item.Oopart.BAItemLevel;
 import kivo.millennium.milltek.item.Oopart.Oopart;
 import kivo.millennium.milltek.item.battery.BaseBattery;
+import kivo.millennium.milltek.item.MissileLauncherItem;
 
 public class MillenniumItems {
     public static final DeferredRegister<Item> ITEMS = DeferredRegister.create(ForgeRegistries.ITEMS, MODID);
@@ -134,6 +135,13 @@ public class MillenniumItems {
             () -> new AxeItem(Tiers.NETHERITE, 5.0F, -3.0F, (new Item.Properties()).fireResistant()));
     public static final RegistryObject<Item> WOLFRAM_STEEL_HOE = createTool("wolfram_steel_hoe",
             () -> new HoeItem(Tiers.NETHERITE, -4, 0.0F, (new Item.Properties()).fireResistant()));
+
+    // 导弹对应的 Item（用于客户端渲染/模型）
+    public static final RegistryObject<Item> GROUND_TACTICAL_MISSILE_ITEM = createMaterial("ground_tactical_missile_item");
+    public static final RegistryObject<Item> AIR_TO_AIR_MISSILE_ITEM = createMaterial("air_to_air_missile_item");
+
+    public static final RegistryObject<Item> MISSILE_LAUNCHER = createTool("missile_launcher",
+            () -> new MissileLauncherItem(new Item.Properties().stacksTo(1)));
 
     // public static final RegistryObject<Item> CABLE_BLOCK_ITEM =
     // ITEMS.register("cable", () -> new BlockItem(CABLE_BLOCK.get(), new

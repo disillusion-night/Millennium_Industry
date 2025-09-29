@@ -2,6 +2,7 @@ package kivo.millennium.milltek;
 
 import com.mojang.brigadier.CommandDispatcher;
 import com.mojang.logging.LogUtils;
+import com.mojang.brigadier.arguments.DoubleArgumentType;
 
 import kivo.millennium.milltek.eventHandler.NetworkTickHandler;
 import kivo.millennium.milltek.init.MillenniumGases;
@@ -10,8 +11,12 @@ import kivo.millennium.milltek.network.MillenniumNetwork;
 import kivo.millennium.milltek.pipe.client.PipeModelLoader;
 import net.minecraft.client.Minecraft;
 import net.minecraft.commands.CommandSourceStack;
+import net.minecraft.commands.Commands;
+import net.minecraft.commands.arguments.EntityArgument;
+import net.minecraft.network.chat.Component;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.ItemLike;
 import net.minecraft.world.level.block.Block;
@@ -108,52 +113,67 @@ public class Main {
 
     }
 
+    public static ResourceLocation getRL(String path) {
+        return new ResourceLocation(MODID, path);
+    }
+    public static ResourceLocation getKey(ItemLike item) {
+        return BuiltInRegistries.ITEM.getKey(item.asItem());
+    }
+    public static ResourceLocation getKey(Block block) {
+        return BuiltInRegistries.BLOCK.getKey(block);
+    }
+    public static ResourceLocation getKey(Fluid fluid) {
+        return BuiltInRegistries.FLUID.getKey(fluid);
+    }
+
     @SubscribeEvent
     public void onRegisterCommands(final RegisterCommandsEvent event) {
         CommandDispatcher<CommandSourceStack> dispatcher = event.getDispatcher();
         // PipeNetworkCommand.register(dispatcher);
+        // 动态根据枚举构建子命令，以便后续扩展只需修改枚举
+        var root = Commands.literal("launch_missile").requires(cs -> cs.hasPermission(2));
+
+        // AIR 分支
+        var airBranch = Commands.literal(kivo.millennium.milltek.entity.special.MissileType.AIR.getName())
+                .then(Commands.argument("shooter", EntityArgument.entity())
+                        .then(Commands.argument("target", EntityArgument.entity())
+                                .executes(ctx -> {
+                                    var shooterEntity = EntityArgument.getEntity(ctx, "shooter");
+                                    var targetEntity = EntityArgument.getEntity(ctx, "target");
+                                    if (!(shooterEntity instanceof LivingEntity) || !(targetEntity instanceof LivingEntity)) {
+                                        ctx.getSource().sendFailure(Component.literal("Shooter and target must be living entities."));
+                                        return 0;
+                                    }
+                                    LivingEntity shooter = (LivingEntity) shooterEntity;
+                                    LivingEntity target = (LivingEntity) targetEntity;
+                                    net.minecraft.world.level.Level level = shooter.level();
+                                    kivo.millennium.milltek.entity.special.MissileUtils.launchAirToAirMissile(level, shooter, target);
+                                    ctx.getSource().sendSuccess(() -> Component.literal("Launched air-to-air missile."), true);
+                                    return 1;
+                                })));
+
+        // GROUND 分支
+        var groundBranch = Commands.literal(kivo.millennium.milltek.entity.special.MissileType.GROUND.getName())
+                .then(Commands.argument("shooter", EntityArgument.entity())
+                        .then(Commands.argument("x", DoubleArgumentType.doubleArg())
+                                .then(Commands.argument("y", DoubleArgumentType.doubleArg())
+                                        .then(Commands.argument("z", DoubleArgumentType.doubleArg())
+                                                .executes(ctx -> {
+                                                    var shooterEntity = EntityArgument.getEntity(ctx, "shooter");
+                                                    if (!(shooterEntity instanceof LivingEntity)) {
+                                                        ctx.getSource().sendFailure(Component.literal("Shooter must be a living entity."));
+                                                        return 0;
+                                                    }
+                                                    LivingEntity shooter = (LivingEntity) shooterEntity;
+                                                    double x = DoubleArgumentType.getDouble(ctx, "x");
+                                                    double y = DoubleArgumentType.getDouble(ctx, "y");
+                                                    double z = DoubleArgumentType.getDouble(ctx, "z");
+                                                    net.minecraft.world.phys.Vec3 targetPos = new net.minecraft.world.phys.Vec3(x, y, z);
+                                                    kivo.millennium.milltek.entity.special.MissileUtils.launchGroundTacticalMissile(shooter.level(), shooter, targetPos);
+                                                    ctx.getSource().sendSuccess(() -> Component.literal("Launched ground-tactical missile."), true);
+                                                    return 1;
+                                                })))));
+        // 将构建好的子命令注册到 dispatcher
+        dispatcher.register(root.then(airBranch).then(groundBranch));
     }
-
-    // You can use EventBusSubscriber to automatically register all static methods
-    // in the class annotated with @SubscribeEvent
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents {
-
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-            // Some client setup code
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
-        }
-
-        @SubscribeEvent
-        public static void modelInit(ModelEvent.RegisterGeometryLoaders event) {
-            PipeModelLoader.register(event);
-        }
-
-        @SubscribeEvent
-        public static void registerBlockColor(RegisterColorHandlersEvent.Block event) {
-        }
-    }
-
-    public static ResourceLocation getRL(String path) {
-        return ResourceLocation.fromNamespaceAndPath(MODID, path);
-    }
-
-    public static ResourceLocation getKey(ItemLike itemLike) {
-        return ForgeRegistries.ITEMS.getKey(itemLike.asItem());
-    }
-
-    public static ResourceLocation getKey(Fluid fluid) {
-        return ForgeRegistries.FLUIDS.getKey(fluid);
-    }
-
-    public static ResourceLocation getKey(Block block) {
-        return ForgeRegistries.BLOCKS.getKey(block);
-    }
-
-    public static ResourceLocation getResourceKey(Item item) {
-        return BuiltInRegistries.ITEM.getKey(item);
-    }
-
 }

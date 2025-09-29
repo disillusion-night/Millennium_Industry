@@ -1,21 +1,9 @@
 package kivo.millennium.client.render;
 
 import static kivo.millennium.milltek.Main.MODID;
-import static kivo.millennium.milltek.Main.getKey;
 
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import com.mojang.blaze3d.vertex.VertexFormat;
-import net.minecraft.Util;
-import net.minecraft.client.renderer.ShaderInstance;
-import net.minecraft.resources.ResourceLocation;
-import net.minecraftforge.client.event.RegisterShadersEvent;
-import java.io.IOException;
-import java.util.function.Function;
-
-import kivo.millennium.client.render.blockEntity.HDECBERenderer;
-import kivo.millennium.client.render.blockEntity.NetherStarLaserBER;
-import kivo.millennium.client.render.entity.BlackHoleRenderer;
-import kivo.millennium.client.render.entity.NuclearTargetRenderer;
 import kivo.millennium.milltek.Main;
 import kivo.millennium.milltek.init.MillenniumBlockEntities;
 import kivo.millennium.milltek.init.MillenniumEntities;
@@ -29,13 +17,23 @@ import kivo.millennium.milltek.machine.InductionFurnace.InductionFurnaceScreen;
 import kivo.millennium.milltek.machine.MeltingFurnace.MeltingFurnaceScreen;
 import kivo.millennium.milltek.machine.ResonanceChamber.ResonanceChamberBER;
 import kivo.millennium.milltek.machine.ResonanceChamber.ResonanceChamberScreen;
+import net.minecraft.client.renderer.ShaderInstance;
+import net.minecraftforge.client.event.RegisterShadersEvent;
+import java.io.IOException;
+
+import kivo.millennium.client.render.blockEntity.HDECBERenderer;
+import kivo.millennium.client.render.blockEntity.NetherStarLaserBER;
+import kivo.millennium.client.render.entity.BlackHoleRenderer;
+import kivo.millennium.client.render.entity.NuclearTargetRenderer;
+import kivo.millennium.client.render.entity.MissileRenderer;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderer;
 import net.minecraft.client.renderer.entity.EntityRenderers;
-import net.minecraft.world.entity.Entity;
+import net.minecraft.world.item.ItemStack;
+import kivo.millennium.milltek.init.MillenniumItems;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
@@ -53,13 +51,16 @@ public class RendererSetup {
         event.enqueueWork(()->{
             EntityRenderers.register(MillenniumEntities.BLACK_HOLE.get(), BlackHoleRenderer::new);
             EntityRenderers.register(MillenniumEntities.NUCLEAR_TARGET.get(), NuclearTargetRenderer::new);
+            // 使用基于原版箭的实体渲染器渲染导弹实体，传入对应导弹 Item 的 ItemStack 以定制外观
+            EntityRenderers.register(MillenniumEntities.GROUND_TACTICAL_MISSILE.get(), ctx -> new MissileRenderer<>(ctx, new ItemStack(MillenniumItems.GROUND_TACTICAL_MISSILE_ITEM.get())));
+            EntityRenderers.register(MillenniumEntities.AIR_TO_AIR_MISSILE.get(), ctx -> new MissileRenderer<>(ctx, new ItemStack(MillenniumItems.AIR_TO_AIR_MISSILE_ITEM.get())));
             BlockEntityRenderers.register(MillenniumBlockEntities.HDEC_BE.get(), HDECBERenderer::new);
             BlockEntityRenderers.register(MillenniumBlockEntities.NETHER_STAR_LASER_BE.get(), NetherStarLaserBER::new);
             BlockEntityRenderers.register(MillenniumBlockEntities.RESONANCE_CHAMBER_BE.get(), ResonanceChamberBER::new);
             MenuScreens.register(MillenniumMenuTypes.INDUCTION_FURNACE_MENU.get(), InductionFurnaceScreen::new);
+            MenuScreens.register(MillenniumMenuTypes.FUSION_FURNACE_MENU.get(), FusionChamberScreen::new);
             MenuScreens.register(MillenniumMenuTypes.HYDRAULIC_PRESS_MENU.get(), HydraulicPressScreen::new);
             MenuScreens.register(MillenniumMenuTypes.CRUSHER_MENU.get(), CrusherScreen::new);
-            MenuScreens.register(MillenniumMenuTypes.FUSION_FURNACE_MENU.get(), FusionChamberScreen::new);
             MenuScreens.register(MillenniumMenuTypes.CRYSTALLIZER_MENU.get(), CrystallizerScreen::new);
             MenuScreens.register(MillenniumMenuTypes.MELTING_FURNACE_MENU.get(), MeltingFurnaceScreen::new);
             MenuScreens.register(MillenniumMenuTypes.RESONANCE_CHAMBER_MENU.get(), ResonanceChamberScreen::new);
